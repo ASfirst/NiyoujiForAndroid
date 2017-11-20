@@ -1,20 +1,38 @@
 package com.jeramtough.jtandroid.ioc;
 
+
+import android.os.Handler;
+import android.os.Message;
+
 /**
  * @author 11718
  *         on 2017  November 19 Sunday 19:19.
  */
 
-public final class IocContainerImpl implements IocContainer
+public final class IocContainerImpl extends Handler implements IocContainer
 {
+	private static volatile IocContainerImpl iocContainer;
+	
 	private InjectedObjects injectedObjects;
 	private IocContainerListener iocContainerListener;
-	
-	private static volatile IocContainerImpl iocContainer;
+	private Exception exception;
 	
 	private IocContainerImpl()
 	{
+	}
 	
+	@Override
+	public void handleMessage(Message msg)
+	{
+		switch (msg.what)
+		{
+			case 1:
+				iocContainerListener.onInjectedSuccessfully(injectedObjects);
+				break;
+			case 2:
+				iocContainerListener.onInjectedFailed(exception);
+				break;
+		}
 	}
 	
 	@Override
@@ -33,14 +51,15 @@ public final class IocContainerImpl implements IocContainer
 					
 					if (iocContainerListener != null)
 					{
-						iocContainerListener.onInjectedSuccessfully(injectedObjects);
+						IocContainerImpl.this.sendEmptyMessage(1);
 					}
 				}
 				catch (InstantiationException | IllegalAccessException e)
 				{
+					exception = e;
 					if (iocContainerListener != null)
 					{
-						iocContainerListener.onInjectedFailed(e);
+						IocContainerImpl.this.sendEmptyMessage(2);
 					}
 					e.printStackTrace();
 				}
