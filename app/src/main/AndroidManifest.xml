@@ -50,7 +50,7 @@
                 android:label="@string/title_activity_camera"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".controller.activity.PerformActivity">
+        <activity android:name=".controller.activity.CreateTravelnoteActivity">
         </activity>
     </application>
 
