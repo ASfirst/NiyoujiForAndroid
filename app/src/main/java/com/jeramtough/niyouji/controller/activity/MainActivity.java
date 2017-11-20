@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ui.MainNavigation;
 
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity
 		switch (id)
 		{
 			case R.id.imageButton_perform:
+				IntentUtil.toTheOtherActivity(this,PerformActivity.class);
 				break;
 		}
 	}

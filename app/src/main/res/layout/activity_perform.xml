@@ -8,6 +8,44 @@
         tools:context="com.jeramtough.niyouji.controller.activity.PerformActivity"
         android:orientation="vertical">
 
-    
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开启您的游记直播之旅"
+            android:gravity="center"/>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加游记封面"/>
+
+            <ImageView
+                    android:id="@+id/imageView_add_travelnote_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/plussign"
+                    android:scaleType="center"/>
+        </LinearLayout>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:hint="(选填)游记标题"/>
+
+
+    </FrameLayout>
 
 </LinearLayout>

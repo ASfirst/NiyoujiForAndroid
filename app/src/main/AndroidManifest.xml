@@ -48,7 +48,7 @@
                 android:name=".controller.activity.CameraActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_camera"
-                android:theme="@style/FullscreenTheme">
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".controller.activity.PerformActivity">
         </activity>
