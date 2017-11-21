@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    <fragment
+            android:name="com.jeramtough.niyouji.component.ali.MyAliRecorder"
+            android:id="@+id/fragment_my_recorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            />
+
+    <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            app:srcCompat="@drawable/ic_close"/>
+
+    <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+        <android.support.v7.widget.AppCompatImageView
+                xmlns:n3="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/view_music"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                n3:srcCompat="@drawable/ic_music"
+                />
+
+        <android.support.v7.widget.AppCompatImageView
+                xmlns:n4="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/view_beautiful"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                n4:srcCompat="@drawable/ic_beautiful"/>
+
+        <android.support.v7.widget.AppCompatImageView
+                xmlns:n5="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/view_turn"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                n5:srcCompat="@drawable/ic_cached"
+                />
+
+        <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/view_flash"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:srcCompat="@drawable/ic_flash"
+                />
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+            android:layout_gravity="end"
+            android:id="@+id/view_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            app:srcCompat="@drawable/ic_done"
+            />
+
+    <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="bottom|center"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <RadioGroup
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup_select_recorder_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                >
+
+            <RadioButton
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/radioButton_speed_1"
+                    android:background="@drawable/radiobutton_select_record_speed"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:text="极慢"
+                    />
+
+            <RadioButton
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/radioButton_speed_2"
+                    android:background="@drawable/radiobutton_select_record_speed"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:text="慢"
+                    />
+
+            <RadioButton
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/radioButton_speed_3"
+                    android:background="@drawable/radiobutton_select_record_speed"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:text="正常"
+                    />
+
+            <RadioButton
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/radioButton_speed_4"
+                    android:background="@drawable/radiobutton_select_record_speed"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:text="快"
+                    />
+
+            <RadioButton
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/radioButton_speed_5"
+                    android:background="@drawable/radiobutton_select_record_speed"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:text="极快"
+                    />
+        </RadioGroup>
+
+        <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+
+            <com.jeramtough.niyouji.component.ali.RecordTimelineView
+                    android:id="@+id/recordTimeLineView"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1.0"
+                    />
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/view_undo_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+
+                    app:srcCompat="@drawable/ic_undo"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:n9="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/view_select_effects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:alpha="0.7"
+                    n9:srcCompat="@drawable/ic_effects"
+                    />
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:android0="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/view_recorder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:alpha="0.7"
+                    android0:srcCompat="@drawable/ic_recorder"
+                    />
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:android1="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/view_decals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:alpha="0.7"
+                    android1:srcCompat="@drawable/ic_face"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

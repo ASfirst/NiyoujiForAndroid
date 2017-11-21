@@ -58,8 +58,6 @@ public class LaunchService implements LaunchBusiness
 		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory());
 		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
 		
-		P.debug(appDirectory.exists(),appDirectory.getAbsolutePath());
-		
 		if (!appDirectory.exists())
 		{
 			filtersDirectory.mkdirs();
