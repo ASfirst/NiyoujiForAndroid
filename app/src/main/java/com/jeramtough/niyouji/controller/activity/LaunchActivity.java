@@ -1,11 +1,9 @@
 package com.jeramtough.niyouji.controller.activity;
 
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import com.jeramtough.jtandroid.ioc.InjectedObjects;
 import com.jeramtough.jtandroid.ioc.IocContainer;
 import com.jeramtough.jtandroid.ioc.IocContainerImpl;
@@ -42,7 +40,7 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 		if (launchBusiness
 				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
 		{
-			this.goToMainActivity();
+			this.whenGetAllNeededPermissions();
 		}
 	}
 	
@@ -70,18 +68,21 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 						return;
 					}
 				}
-				goToMainActivity();
+				whenGetAllNeededPermissions();
 			}
 			
 		}
 	}
 	
-	private void goToMainActivity()
+	//-----------------------------------------------------
+	protected void whenGetAllNeededPermissions()
 	{
 		IntentUtil.toTheOtherActivity(this, MainActivity.class);
+		launchBusiness.createAppDirectory(this);
 		this.finish();
 	}
 	
+	//*************************************************
 	private void showNotingNoHavePermissionsDialog()
 	{
 		AlertDialog dialog =
