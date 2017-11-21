@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -12,15 +13,15 @@ import com.aliyun.struct.recorder.CameraType;
 import com.aliyun.struct.recorder.MediaInfo;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView;
+import com.jeramtough.niyouji.component.ali.MyRecorder;
 import com.jeramtough.niyouji.component.ali.RecordTimelineView;
 
 /**
  * @author 11718
  */
-public class CameraActivity extends BaseActivity
+public class CameraActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener
 {
-	private final int VIDEO_WIDTH=500;
-	private final int VIDEO_HEIGHT=800;
+	
 	
 	private AliyunVideoGlSurfaceView glSurfaceViewCamera;
 	private AppCompatImageView viewClose;
@@ -41,7 +42,7 @@ public class CameraActivity extends BaseActivity
 	private AppCompatImageView viewRecorder;
 	private AppCompatImageView viewDecals;
 	
-	private AliyunIRecorder aliRecorder;
+	private MyRecorder myRecorder;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -61,12 +62,6 @@ public class CameraActivity extends BaseActivity
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		glSurfaceViewCamera = findViewById(R.id.glSurfaceView_camera);
-		viewClose = findViewById(R.id.view_close);
-		viewMusic = findViewById(R.id.view_music);
-		viewBeautiful = findViewById(R.id.view_beautiful);
-		viewTurn = findViewById(R.id.view_turn);
-		viewFlash = findViewById(R.id.view_flash);
-		viewDone = findViewById(R.id.view_done);
 		radioGroupSelectRecorderSpeed = findViewById(R.id.radioGroup_select_recorder_speed);
 		radioButtonSpeed1 = findViewById(R.id.radioButton_speed_1);
 		radioButtonSpeed2 = findViewById(R.id.radioButton_speed_2);
@@ -74,12 +69,30 @@ public class CameraActivity extends BaseActivity
 		radioButtonSpeed4 = findViewById(R.id.radioButton_speed_4);
 		radioButtonSpeed5 = findViewById(R.id.radioButton_speed_5);
 		recordTimeLineView = findViewById(R.id.recordTimeLineView);
+		viewClose = findViewById(R.id.view_close);
+		viewMusic = findViewById(R.id.view_music);
+		viewBeautiful = findViewById(R.id.view_beautiful);
+		viewTurn = findViewById(R.id.view_turn);
+		viewFlash = findViewById(R.id.view_flash);
+		viewDone = findViewById(R.id.view_done);
 		viewUndoRecord = findViewById(R.id.view_undo_record);
 		viewSelectEffects = findViewById(R.id.view_select_effects);
 		viewRecorder = findViewById(R.id.view_recorder);
 		viewDecals = findViewById(R.id.view_decals);
 		
 		radioButtonSpeed3.setChecked(true);
+		
+		viewClose.setOnClickListener(this);
+		viewMusic.setOnClickListener(this);
+		viewBeautiful.setOnClickListener(this);
+		viewTurn.setOnClickListener(this);
+		viewFlash.setOnClickListener(this);
+		viewDone.setOnClickListener(this);
+		viewUndoRecord.setOnClickListener(this);
+		viewSelectEffects.setOnClickListener(this);
+		viewDecals.setOnClickListener(this);
+		
+		radioGroupSelectRecorderSpeed.setOnCheckedChangeListener(this);
 	}
 	
 	protected void initAliRecorder()
@@ -88,23 +101,78 @@ public class CameraActivity extends BaseActivity
 		System.loadLibrary("QuCore-ThirdParty");
 		System.loadLibrary("QuCore");
 		
-		aliRecorder = AliyunRecorderCreator.getRecorderInstance(this);
+		AliyunIRecorder aliRecorder = AliyunRecorderCreator.getRecorderInstance(this);
 		aliRecorder.setDisplayView(glSurfaceViewCamera);
 		
-		//设置视频宽高
-		MediaInfo mediaInfo = new MediaInfo();
-		mediaInfo.setVideoWidth(VIDEO_WIDTH);
-		mediaInfo.setVideoHeight(VIDEO_HEIGHT);
-		aliRecorder.setMediaInfo(mediaInfo);
-		
-		//设置默认用后置摄像头
-		aliRecorder.setCamera(CameraType.BACK);
+		//设置AliRecorder代理对象
+		myRecorder = new MyRecorder(aliRecorder);
 	}
 	
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		aliRecorder.startPreview();
+		myRecorder.getAliRecorder().startPreview();
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		AliyunRecorderCreator.destroyRecorderInstance();
+	}
+	
+	@Override
+	public void onClick(View view, int viewId)
+	{
+		switch (viewId)
+		{
+			case R.id.view_close:
+				this.finish();
+				break;
+			case R.id.view_music:
+				break;
+			case R.id.view_beautiful:
+				myRecorder.switchBeautyStatus();
+				break;
+			case R.id.view_turn:
+				myRecorder.switchCameraDirection();
+				break;
+			case R.id.view_flash:
+				myRecorder.switchLightMode();
+				break;
+			case R.id.view_done:
+				break;
+			case R.id.view_undo_record:
+				break;
+			case R.id.view_select_effects:
+				break;
+			case R.id.view_decals:
+				break;
+			default:
+		}
+	}
+	
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId)
+	{
+		switch (checkedId)
+		{
+			case R.id.radioButton_speed_1:
+				myRecorder.getAliRecorder().setRate(2f);
+				break;
+			case R.id.radioButton_speed_2:
+				myRecorder.getAliRecorder().setRate(1.5f);
+				break;
+			case R.id.radioButton_speed_3:
+				myRecorder.getAliRecorder().setRate(0.5f);
+				break;
+			case R.id.radioButton_speed_4:
+				myRecorder.getAliRecorder().setRate(0.75f);
+				break;
+			case R.id.radioButton_speed_5:
+				myRecorder.getAliRecorder().setRate(0.5f);
+				break;
+		}
 	}
 }

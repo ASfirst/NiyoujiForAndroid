@@ -7,7 +7,7 @@
         android:layout_height="fill_parent">
 
     <!--  <fragment
-              android:name="com.jeramtough.niyouji.component.ali.MyAliRecorder"
+              android:nacom.jeramtough.niyouji.component.ali.MyRecorderr"
               android:id="@+id/fragment_my_recorder"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
