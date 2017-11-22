@@ -30,6 +30,7 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 		
 		IocContainer iocContainer = IocContainerImpl.getIocContainer();
 		iocContainer.setIocContainerListener(this);
+		iocContainer.injectContext(getApplicationContext());
 		iocContainer.inject(MyInjectedObjects.class);
 	}
 	

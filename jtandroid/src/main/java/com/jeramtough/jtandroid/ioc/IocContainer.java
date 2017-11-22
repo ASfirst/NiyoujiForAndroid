@@ -1,5 +1,7 @@
 package com.jeramtough.jtandroid.ioc;
 
+import android.content.Context;
+
 /**
  * Created by 11718
  * on 2017  November 19 Sunday 17:20.
@@ -8,6 +10,8 @@ package com.jeramtough.jtandroid.ioc;
 
 public interface IocContainer
 {
+	void injectContext(Context context);
+	
 	void inject(Class<? extends InjectedObjects> c);
 	
 	void setIocContainerListener(IocContainerListener iocContainerListener);

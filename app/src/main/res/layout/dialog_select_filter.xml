@@ -11,28 +11,14 @@
             android:layout_height="60dp"
             android:background="@color/colorPrimary"/>
 
-    <LinearLayout
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="选择滤镜"
+            android:gravity="center"
+            android:textSize="20dp"
+            />
 
-        <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="选择录制的背景音乐"
-                android:gravity="center"
-                android:textSize="20sp"/>
-
-        <Button
-                android:id="@+id/btn_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="确定"
-                android:textColor="@color/white"
-                android:background="@drawable/btn_done"
-                android:textSize="20sp"/>
-    </LinearLayout>
 
     <com.jeramtough.jtandroid.ui.HorizontalListView
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,7 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:divider="#f7f7f7"
-            widget:dividerWidth="1dp"
-            android:layout_marginTop="20dp"/>
+            widget:dividerWidth="20dp"
+            android:layout_marginTop="20dp"
+            android:scrollbars="horizontal"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"/>
+
 
 </LinearLayout>

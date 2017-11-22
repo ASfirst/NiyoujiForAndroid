@@ -44,7 +44,7 @@ public class MyInjectedObjects extends InjectedObjects
 	{
 		if (filtersHandler == null)
 		{
-			filtersHandler=new FiltersHandler();
+			filtersHandler=new FiltersHandler(getContext());
 		}
 		return filtersHandler;
 	}

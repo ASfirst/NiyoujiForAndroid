@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,9 +21,11 @@ import com.jeramtough.niyouji.component.ali.FiltersHandler;
  *         on 2017  November 22 Wednesday 19:11.
  */
 
-public class SelectFilterDialog extends BottomPopupDialog implements View.OnClickListener
+public class SelectFilterDialog extends BottomPopupDialog
+		implements AdapterView.OnItemClickListener
 {
 	private FiltersHandler filtersHandler;
+	private SelectFilterListener selectFilterListener;
 	
 	private Button btnDone;
 	private HorizontalListView horizontalListViewFilters;
@@ -40,22 +43,30 @@ public class SelectFilterDialog extends BottomPopupDialog implements View.OnClic
 		LinearLayout linearLayout =
 				(LinearLayout) getInflater().inflate(R.layout.dialog_select_filter, null);
 		
-		btnDone = linearLayout.findViewById(R.id.btn_done);
 		horizontalListViewFilters = linearLayout.findViewById(R.id.horizontalListView_filters);
-		
-		btnDone.setOnClickListener(this);
 		
 		FiltersAdapter adapter =
 				new FiltersAdapter(getContext(), filtersHandler.getCameraFilters());
 		horizontalListViewFilters.setAdapter(adapter);
 		
+		horizontalListViewFilters.setOnItemClickListener(this);
+		
 		setContentView(linearLayout);
 	}
 	
 	@Override
-	public void onClick(View v)
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
+		if (selectFilterListener!=null)
+		{
+			selectFilterListener.selectedFilter(filtersHandler.getCameraFilters().get(position));
+			this.cancel();
+		}
+	}
 	
+	public void setSelectFilterListener(SelectFilterListener selectFilterListener)
+	{
+		this.selectFilterListener = selectFilterListener;
 	}
 	
 	//{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}

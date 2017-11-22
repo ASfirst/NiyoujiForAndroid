@@ -54,8 +54,8 @@ public class LaunchService implements LaunchBusiness
 	{
 		Directory appDirectory = new Directory(AppConfig.getAppDirecotry());
 		
-		Directory filtersDirectory = new Directory(AppConfig.getFiltersDirectory());
-		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory());
+		Directory filtersDirectory = new Directory(AppConfig.getFiltersDirectory(activity));
+		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory(activity));
 		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
 		
 		if (!appDirectory.exists())
@@ -85,6 +85,9 @@ public class LaunchService implements LaunchBusiness
 				
 				extractedZip.extract(filtersDirectory.getAbsolutePath());
 				extractedZip1.extract(musicsDirectory.getAbsolutePath());
+				
+				filtersFile.delete();
+				musicsFile.delete();
 			}
 			catch (IOException e)
 			{

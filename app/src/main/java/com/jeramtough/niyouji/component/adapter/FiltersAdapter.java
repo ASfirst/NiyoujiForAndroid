@@ -1,6 +1,8 @@
 package com.jeramtough.niyouji.component.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,9 @@ public class FiltersAdapter extends BaseAdapter
 			imageViewFilterIcon = viewGroup.findViewById(R.id.imageView_filter_icon);
 			textViewFilterName = viewGroup.findViewById(R.id.textView_filter_name);
 			textViewFilterName.setText(cameraFilter.getName());
+			
+			Bitmap bitmap=BitmapFactory.decodeFile(cameraFilter.getIconPath());
+			imageViewFilterIcon.setImageBitmap(bitmap);
 			
 			layouts[i] = viewGroup;
 		}

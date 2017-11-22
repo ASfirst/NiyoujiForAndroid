@@ -14,17 +14,16 @@ import com.aliyun.struct.recorder.CameraType;
 import com.aliyun.struct.recorder.MediaInfo;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView;
-import com.jeramtough.niyouji.component.ali.FiltersHandler;
-import com.jeramtough.niyouji.component.ali.MyRecorder;
-import com.jeramtough.niyouji.component.ali.RecordTimelineView;
+import com.jeramtough.niyouji.component.ali.*;
+import com.jeramtough.niyouji.component.dialog.SelectDecalDialog;
 import com.jeramtough.niyouji.component.dialog.SelectFilterDialog;
 
 /**
  * @author 11718
  */
 public class CameraActivity extends BaseActivity
-		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener
+		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
+		SelectFilterDialog.SelectFilterListener
 {
 	private AliyunVideoGlSurfaceView glSurfaceViewCamera;
 	private AppCompatImageView viewClose;
@@ -49,6 +48,8 @@ public class CameraActivity extends BaseActivity
 	
 	private FiltersHandler filtersHandler;
 	
+	private SelectFilterDialog selectFilterDialog;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -64,6 +65,9 @@ public class CameraActivity extends BaseActivity
 	protected void initResources()
 	{
 		filtersHandler = getMyInjectedObjects().getFiltersHandler();
+		
+		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
+		selectFilterDialog.setSelectFilterListener(this);
 	}
 	
 	protected void initViews()
@@ -194,11 +198,11 @@ public class CameraActivity extends BaseActivity
 			case R.id.view_undo_record:
 				break;
 			case R.id.view_select_effects:
-				SelectFilterDialog selectFilterDialog =
-						new SelectFilterDialog(this, filtersHandler);
 				selectFilterDialog.show();
 				break;
 			case R.id.view_decals:
+				SelectDecalDialog selectDecalDialog=new SelectDecalDialog(this);
+				selectDecalDialog.show();
 				break;
 			default:
 		}
@@ -227,6 +231,11 @@ public class CameraActivity extends BaseActivity
 		}
 	}
 	
+	@Override
+	public void selectedFilter(CameraFilter cameraFilter)
+	{
+		myRecorder.getAliRecorder().applyFilter(cameraFilter);
+	}
 	
 	//*************************************************************
 	
@@ -261,4 +270,6 @@ public class CameraActivity extends BaseActivity
 		viewSelectEffects.setVisibility(View.VISIBLE);
 		viewDecals.setVisibility(View.VISIBLE);
 	}
+	
+	
 }

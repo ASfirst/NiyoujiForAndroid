@@ -1,6 +1,7 @@
 package com.jeramtough.jtandroid.ioc;
 
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
@@ -16,6 +17,8 @@ public final class IocContainerImpl extends Handler implements IocContainer
 	private InjectedObjects injectedObjects;
 	private IocContainerListener iocContainerListener;
 	private Exception exception;
+	
+	private Context context;
 	
 	private IocContainerImpl()
 	{
@@ -36,37 +39,54 @@ public final class IocContainerImpl extends Handler implements IocContainer
 	}
 	
 	@Override
+	public void injectContext(Context context)
+	{
+		this.context = context;
+	}
+	
+	@Override
 	public void inject(final Class<? extends InjectedObjects> c)
 	{
-		new Thread()
+		if (context == null)
 		{
-			@Override
-			public void run()
+			throw new IllegalStateException("No the instance of context is injected");
+		}
+		else
+		{
+			
+			new Thread()
 			{
-				try
+				@Override
+				public void run()
 				{
-					injectedObjects = c.newInstance();
-					injectedObjects.injectComponents();
-					injectedObjects.injectServices();
+					try
+					{
+						injectedObjects = c.newInstance();
+						
+						injectedObjects.setContext(context);
+						
+						injectedObjects.injectComponents();
+						injectedObjects.injectServices();
+						
+						if (iocContainerListener != null)
+						{
+							IocContainerImpl.this.sendEmptyMessage(1);
+						}
+					}
+					catch (InstantiationException | IllegalAccessException e)
+					{
+						exception = e;
+						if (iocContainerListener != null)
+						{
+							IocContainerImpl.this.sendEmptyMessage(2);
+						}
+						e.printStackTrace();
+					}
 					
-					if (iocContainerListener != null)
-					{
-						IocContainerImpl.this.sendEmptyMessage(1);
-					}
-				}
-				catch (InstantiationException | IllegalAccessException e)
-				{
-					exception = e;
-					if (iocContainerListener != null)
-					{
-						IocContainerImpl.this.sendEmptyMessage(2);
-					}
-					e.printStackTrace();
 				}
 				
-			}
-			
-		}.start();
+			}.start();
+		}
 		
 	}
 	

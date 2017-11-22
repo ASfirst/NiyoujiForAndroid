@@ -1,6 +1,8 @@
 package com.jeramtough.niyouji.component.config;
 
+import android.content.Context;
 import android.os.Environment;
+import com.jeramtough.jtandroid.jtlog2.P;
 
 import java.io.File;
 
@@ -28,13 +30,14 @@ public class AppConfig
 		return getAppDirecotry() + File.separator + "videos";
 	}
 	
-	public static String getFiltersDirectory()
+	public static String getFiltersDirectory(Context context)
 	{
-		return getAppDirecotry() + File.separator + "filters";
+		P.debug(context.getFilesDir() + File.separator + "filters");
+		return context.getFilesDir() + File.separator + "filters";
 	}
 	
-	public static String getMusicsDirectory()
+	public static String getMusicsDirectory(Context context)
 	{
-		return getAppDirecotry() + File.separator + "musics";
+		return context.getFilesDir() + File.separator + "musics";
 	}
 }
