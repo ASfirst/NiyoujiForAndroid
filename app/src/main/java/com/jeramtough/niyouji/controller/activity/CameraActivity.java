@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioButton;
@@ -11,18 +12,20 @@ import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
 import com.aliyun.struct.recorder.CameraType;
 import com.aliyun.struct.recorder.MediaInfo;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView;
+import com.jeramtough.niyouji.component.ali.FiltersHandler;
 import com.jeramtough.niyouji.component.ali.MyRecorder;
 import com.jeramtough.niyouji.component.ali.RecordTimelineView;
+import com.jeramtough.niyouji.component.dialog.SelectFilterDialog;
 
 /**
  * @author 11718
  */
-public class CameraActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener
+public class CameraActivity extends BaseActivity
+		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener
 {
-	
-	
 	private AliyunVideoGlSurfaceView glSurfaceViewCamera;
 	private AppCompatImageView viewClose;
 	private AppCompatImageView viewMusic;
@@ -44,6 +47,8 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 	
 	private MyRecorder myRecorder;
 	
+	private FiltersHandler filtersHandler;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -51,8 +56,14 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 		
 		setContentView(R.layout.activity_camera);
 		
+		this.initResources();
 		this.initViews();
 		this.initAliRecorder();
+	}
+	
+	protected void initResources()
+	{
+		filtersHandler = getMyInjectedObjects().getFiltersHandler();
 	}
 	
 	protected void initViews()
@@ -81,6 +92,7 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 		viewDecals = findViewById(R.id.view_decals);
 		
 		radioButtonSpeed3.setChecked(true);
+		viewUndoRecord.setVisibility(View.INVISIBLE);
 		
 		viewClose.setOnClickListener(this);
 		viewMusic.setOnClickListener(this);
@@ -93,6 +105,8 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 		viewDecals.setOnClickListener(this);
 		
 		radioGroupSelectRecorderSpeed.setOnCheckedChangeListener(this);
+		
+		viewRecorder.setOnTouchListener(this);
 	}
 	
 	protected void initAliRecorder()
@@ -122,6 +136,23 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 		AliyunRecorderCreator.destroyRecorderInstance();
 	}
 	
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		switch (event.getAction())
+		{
+			case MotionEvent.ACTION_DOWN:
+				this.pressRecorderButton();
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+				this.relaxRecorderButton();
+				break;
+		}
+		return true;
+	}
+	
 	@Override
 	public void onClick(View view, int viewId)
 	{
@@ -131,21 +162,41 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 				this.finish();
 				break;
 			case R.id.view_music:
+				
 				break;
 			case R.id.view_beautiful:
 				myRecorder.switchBeautyStatus();
+				if (myRecorder.isBeautyStatus())
+				{
+					viewBeautiful.setImageResource(R.drawable.ic_selected_beautiful);
+				}
+				else
+				{
+					viewBeautiful.setImageResource(R.drawable.ic_beautiful);
+				}
 				break;
 			case R.id.view_turn:
 				myRecorder.switchCameraDirection();
 				break;
 			case R.id.view_flash:
 				myRecorder.switchLightMode();
+				if (myRecorder.isBright())
+				{
+					viewFlash.setImageResource(R.drawable.ic_selected_flash);
+				}
+				else
+				{
+					viewFlash.setImageResource(R.drawable.ic_flash);
+				}
 				break;
 			case R.id.view_done:
 				break;
 			case R.id.view_undo_record:
 				break;
 			case R.id.view_select_effects:
+				SelectFilterDialog selectFilterDialog =
+						new SelectFilterDialog(this, filtersHandler);
+				selectFilterDialog.show();
 				break;
 			case R.id.view_decals:
 				break;
@@ -174,5 +225,40 @@ public class CameraActivity extends BaseActivity implements RadioGroup.OnChecked
 				myRecorder.getAliRecorder().setRate(0.5f);
 				break;
 		}
+	}
+	
+	
+	//*************************************************************
+	
+	private void pressRecorderButton()
+	{
+		viewRecorder.setAlpha(0.7f);
+		radioGroupSelectRecorderSpeed.setVisibility(View.INVISIBLE);
+		viewClose.setVisibility(View.INVISIBLE);
+		viewMusic.setVisibility(View.INVISIBLE);
+		viewBeautiful.setVisibility(View.INVISIBLE);
+		viewTurn.setVisibility(View.INVISIBLE);
+		viewFlash.setVisibility(View.INVISIBLE);
+		viewDone.setVisibility(View.INVISIBLE);
+		viewUndoRecord.setVisibility(View.INVISIBLE);
+		viewSelectEffects.setVisibility(View.INVISIBLE);
+		viewDecals.setVisibility(View.INVISIBLE);
+		
+	}
+	
+	private void relaxRecorderButton()
+	{
+		viewRecorder.setAlpha(1f);
+		
+		radioGroupSelectRecorderSpeed.setVisibility(View.VISIBLE);
+		viewClose.setVisibility(View.VISIBLE);
+		viewMusic.setVisibility(View.VISIBLE);
+		viewBeautiful.setVisibility(View.VISIBLE);
+		viewTurn.setVisibility(View.VISIBLE);
+		viewFlash.setVisibility(View.VISIBLE);
+		viewDone.setVisibility(View.VISIBLE);
+		viewUndoRecord.setVisibility(View.VISIBLE);
+		viewSelectEffects.setVisibility(View.VISIBLE);
+		viewDecals.setVisibility(View.VISIBLE);
 	}
 }

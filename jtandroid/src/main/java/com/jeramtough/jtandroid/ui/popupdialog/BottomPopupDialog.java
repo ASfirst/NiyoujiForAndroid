@@ -4,10 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.*;
-import android.widget.FrameLayout;
 import com.jeramtough.jtandroid.R;
-import com.jeramtough.jtandroid.function.ScreenHandler;
-import com.jeramtough.jtandroid.jtlog2.P;
 
 /**
  * @author 11718
@@ -39,14 +36,26 @@ public abstract class BottomPopupDialog extends Dialog
 		}
 		
 		view = loadView(inflater);
-		setContentView(view);
-		onViewCreated(view);
+		if (view != null)
+		{
+			setContentView(view);
+			onViewIsCreated(view);
+		}
 	}
 	
-	public abstract View loadView(LayoutInflater inflater);
+	public View loadView(LayoutInflater inflater)
+	{
+		return null;
+	}
 	
-	public void onViewCreated(View view)
+	
+	public void onViewIsCreated(View view)
 	{
 	
+	}
+	
+	public LayoutInflater getInflater()
+	{
+		return inflater;
 	}
 }

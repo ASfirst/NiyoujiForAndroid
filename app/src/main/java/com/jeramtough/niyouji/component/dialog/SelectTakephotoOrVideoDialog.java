@@ -37,7 +37,7 @@ public class SelectTakephotoOrVideoDialog extends BottomPopupDialog
 	}
 	
 	@Override
-	public void onViewCreated(View view)
+	public void onViewIsCreated(View view)
 	{
 		imageViewTakephoto = findViewById(R.id.imageView_takephoto);
 		imageViewVideo = findViewById(R.id.imageView_video);
