@@ -32,6 +32,7 @@
                 android:gravity="center">
 
             <ImageView
+                    android:id="@+id/imageView_decal1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/tiezhi1"
@@ -39,6 +40,7 @@
                     android:layout_marginRight="20dp"/>
 
             <ImageView
+                    android:id="@+id/imageView_decal2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/tiezhi2"
@@ -46,6 +48,7 @@
                     android:layout_marginRight="20dp"/>
 
             <ImageView
+                    android:id="@+id/imageView_decal3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/tiezhi3"
@@ -53,9 +56,26 @@
                     android:layout_marginRight="20dp"/>
 
             <ImageView
+                    android:id="@+id/imageView_decal4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/tiezhi4"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+
+            <ImageView
+                    android:id="@+id/imageView_decal5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/tiezhi5"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+
+            <ImageView
+                    android:id="@+id/imageView_decal6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/tiezhi6"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"/>
 

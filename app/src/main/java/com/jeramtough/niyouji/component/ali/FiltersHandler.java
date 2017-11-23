@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.ali;
 
 import android.content.Context;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.component.config.AppConfig;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public class FiltersHandler
 	
 	public FiltersHandler(Context context)
 	{
-		this.context=context;
+		this.context = context;
 		this.cameraFilters = new ArrayList<>();
 		
 		this.addAFilter("chihuang");
@@ -48,8 +49,11 @@ public class FiltersHandler
 	private void addAFilter(String pathName)
 	{
 		String filtersDirectory = AppConfig.getFiltersDirectory(context);
-		CameraFilter cameraFilter =
-				new CameraFilter(filtersDirectory + File.separator + pathName);
+		String path = filtersDirectory + File.separator + pathName;
+		
+		P.debug(path);
+		
+		CameraFilter cameraFilter = new CameraFilter(path);
 		cameraFilters.add(cameraFilter);
 	}
 }

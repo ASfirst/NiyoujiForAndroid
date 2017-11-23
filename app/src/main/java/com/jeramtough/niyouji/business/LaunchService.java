@@ -57,12 +57,18 @@ public class LaunchService implements LaunchBusiness
 		Directory filtersDirectory = new Directory(AppConfig.getFiltersDirectory(activity));
 		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory(activity));
 		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
+		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory());
 		
 		if (!appDirectory.exists())
 		{
+			videosDirectory.mkdirs();
+			imagesDirectory.mkdirs();
+		}
+		
+		if (!filtersDirectory.exists()||!musicsDirectory.exists())
+		{
 			filtersDirectory.mkdirs();
 			musicsDirectory.mkdirs();
-			videosDirectory.mkdirs();
 			
 			String filtersFileName = "filters.zip";
 			String musicsFileName = "musics.zip";
@@ -93,7 +99,6 @@ public class LaunchService implements LaunchBusiness
 			{
 				e.printStackTrace();
 			}
-			
 		}
 		
 	}

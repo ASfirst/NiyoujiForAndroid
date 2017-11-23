@@ -32,7 +32,6 @@ public class AppConfig
 	
 	public static String getFiltersDirectory(Context context)
 	{
-		P.debug(context.getFilesDir() + File.separator + "filters");
 		return context.getFilesDir() + File.separator + "filters";
 	}
 	
