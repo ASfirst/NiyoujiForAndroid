@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraFilter;
 
@@ -42,9 +43,12 @@ public class FiltersAdapter extends BaseAdapter
 			TextView textViewFilterName;
 			imageViewFilterIcon = viewGroup.findViewById(R.id.imageView_filter_icon);
 			textViewFilterName = viewGroup.findViewById(R.id.textView_filter_name);
+			
+			P.debug(cameraFilter.getName());
 			textViewFilterName.setText(cameraFilter.getName());
 			
-			Bitmap bitmap=BitmapFactory.decodeFile(cameraFilter.getIconPath());
+			String iconPath=cameraFilter.getIconPath();
+			Bitmap bitmap=BitmapFactory.decodeFile(iconPath);
 			imageViewFilterIcon.setImageBitmap(bitmap);
 			
 			layouts[i] = viewGroup;

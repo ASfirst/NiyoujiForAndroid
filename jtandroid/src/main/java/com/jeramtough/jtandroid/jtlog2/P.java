@@ -105,6 +105,10 @@ public class P
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Object message : messages)
 		{
+			if (message==null)
+			{
+				message="[null]";
+			}
 			stringBuilder.append(message.toString()).append(" , ");
 		}
 		String message =

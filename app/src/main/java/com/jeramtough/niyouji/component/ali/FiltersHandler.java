@@ -23,6 +23,7 @@ public class FiltersHandler
 		this.context = context;
 		this.cameraFilters = new ArrayList<>();
 		
+		this.addAFilter("wu");
 		this.addAFilter("chihuang");
 		this.addAFilter("fentao");
 		this.addAFilter("hailan");
@@ -51,7 +52,7 @@ public class FiltersHandler
 		String filtersDirectory = AppConfig.getFiltersDirectory(context);
 		String path = filtersDirectory + File.separator + pathName;
 		
-		P.debug(path);
+//		P.debug(path);
 		
 		CameraFilter cameraFilter = new CameraFilter(path);
 		cameraFilters.add(cameraFilter);

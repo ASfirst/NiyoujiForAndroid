@@ -10,13 +10,12 @@ import android.widget.RadioGroup;
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
-import com.aliyun.struct.recorder.CameraType;
-import com.aliyun.struct.recorder.MediaInfo;
+import com.aliyun.struct.effect.EffectFilter;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
-import com.jeramtough.niyouji.component.dialog.SelectDecalDialog;
-import com.jeramtough.niyouji.component.dialog.SelectFilterDialog;
+import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
+import com.jeramtough.niyouji.controller.dialog.SelectFilterDialog;
 
 /**
  * @author 11718
@@ -65,6 +64,9 @@ public class CameraActivity extends BaseActivity
 	protected void initResources()
 	{
 		filtersHandler = getMyInjectedObjects().getFiltersHandler();
+		
+		P.debug(filtersHandler.getCameraFilters().get(1).getIconPath(),
+				filtersHandler.getCameraFilters().get(1).getName());
 		
 		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
 		selectFilterDialog.setSelectFilterListener(this);
@@ -201,7 +203,7 @@ public class CameraActivity extends BaseActivity
 				selectFilterDialog.show();
 				break;
 			case R.id.view_decals:
-				SelectDecalDialog selectDecalDialog=new SelectDecalDialog(this);
+				SelectDecalDialog selectDecalDialog = new SelectDecalDialog(this);
 				selectDecalDialog.show();
 				break;
 			default:

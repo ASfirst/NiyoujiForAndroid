@@ -1,14 +1,11 @@
-package com.jeramtough.niyouji.component.dialog;
+package com.jeramtough.niyouji.controller.dialog;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.HorizontalListView;
 import com.jeramtough.jtandroid.ui.popupdialog.BottomPopupDialog;
 import com.jeramtough.niyouji.R;
@@ -59,7 +56,14 @@ public class SelectFilterDialog extends BottomPopupDialog
 	{
 		if (selectFilterListener!=null)
 		{
-			selectFilterListener.selectedFilter(filtersHandler.getCameraFilters().get(position));
+			if (position!=0)
+			{
+				selectFilterListener.selectedFilter(filtersHandler.getCameraFilters().get(position));
+			}
+			else
+			{
+				selectFilterListener.selectedFilter(new CameraFilter(null));
+			}
 			this.cancel();
 		}
 	}

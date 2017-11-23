@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.dialog.SelectTakephotoOrVideoDialog;
+import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
 /**
  * @author 11718

@@ -1,7 +1,6 @@
-package com.jeramtough.niyouji.component.dialog;
+package com.jeramtough.niyouji.controller.dialog;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
