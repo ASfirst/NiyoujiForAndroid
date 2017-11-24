@@ -5,12 +5,13 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import com.aliyun.common.httpfinal.QupaiHttpFinal;
+import android.widget.Toast;
 import com.aliyun.recorder.AliyunRecorderCreator;
+import com.aliyun.recorder.supply.AliyunIClipManager;
 import com.aliyun.recorder.supply.AliyunIRecorder;
-import com.aliyun.struct.effect.EffectFilter;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
@@ -23,7 +24,8 @@ import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
  */
 public class CameraActivity extends BaseActivity
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
-		SelectFilterDialog.SelectFilterListener, SelectMusicDialog.SelectMusicListener
+		SelectFilterDialog.SelectFilterListener, SelectMusicDialog.SelectMusicListener,
+		MyRecorder.RecorderListener
 {
 	private AliyunVideoGlSurfaceView glSurfaceViewCamera;
 	private AppCompatImageView viewClose;
@@ -43,6 +45,7 @@ public class CameraActivity extends BaseActivity
 	private AppCompatImageView viewSelectEffects;
 	private AppCompatImageView viewRecorder;
 	private AppCompatImageView viewDecals;
+	private ProgressBar progressBarWaitRecodingFinished;
 	
 	private MyRecorder myRecorder;
 	
@@ -51,6 +54,9 @@ public class CameraActivity extends BaseActivity
 	
 	private SelectFilterDialog selectFilterDialog;
 	private SelectMusicDialog selectMusicDialog;
+	
+	private OrientationDetector orientationDetector;
+	private int rotation;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -97,9 +103,15 @@ public class CameraActivity extends BaseActivity
 		viewSelectEffects = findViewById(R.id.view_select_effects);
 		viewRecorder = findViewById(R.id.view_recorder);
 		viewDecals = findViewById(R.id.view_decals);
+		progressBarWaitRecodingFinished = findViewById(R.id.progressBar_wait_recoding_finished);
 		
 		radioButtonSpeed3.setChecked(true);
 		viewUndoRecord.setVisibility(View.INVISIBLE);
+		
+		recordTimeLineView.setMaxDuration(MyRecorder.MAX_RECORD_TIME);
+		recordTimeLineView.setMinDuration(MyRecorder.MIN_RECORD_TIME);
+		recordTimeLineView
+				.setColor(R.color.colorPrimary, R.color.black, R.color.red, R.color.white);
 		
 		viewClose.setOnClickListener(this);
 		viewMusic.setOnClickListener(this);
@@ -123,6 +135,16 @@ public class CameraActivity extends BaseActivity
 		
 		//设置AliRecorder代理对象
 		myRecorder = new MyRecorder(aliRecorder);
+		
+		myRecorder.setRecorderListener(this);
+		
+		//设置摄像机方向
+		orientationDetector = new OrientationDetector(getApplicationContext());
+		orientationDetector.setOrientationChangedListener(() ->
+		{
+			rotation = getPictureRotation();
+			myRecorder.getAliRecorder().setRotation(rotation);
+		});
 	}
 	
 	@Override
@@ -146,11 +168,12 @@ public class CameraActivity extends BaseActivity
 		switch (event.getAction())
 		{
 			case MotionEvent.ACTION_DOWN:
-				this.pressRecorderButton();
+				this.uiOfPressRecorderButton();
+				myRecorder.startRecoding();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
-				this.relaxRecorderButton();
+				this.stopRecoding();
 				break;
 		}
 		return true;
@@ -196,8 +219,28 @@ public class CameraActivity extends BaseActivity
 				}
 				break;
 			case R.id.view_done:
+				if (!myRecorder.isArriveMinRecodingTime())
+				{
+					Toast.makeText(this, "录制时间太短-不足3秒！!", Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					this.uiOfWaitingRecodingFinished();
+					myRecorder.finishRecoding();
+				}
 				break;
 			case R.id.view_undo_record:
+				viewRecorder.setVisibility(View.VISIBLE);
+				
+				recordTimeLineView.deleteLast();
+				
+				myRecorder.deleteLastPart();
+				
+				if (myRecorder.getCountOfRecorderPart() == 0)
+				{
+					viewUndoRecord.setVisibility(View.INVISIBLE);
+				}
+				
 				break;
 			case R.id.view_select_effects:
 				selectFilterDialog.show();
@@ -222,7 +265,7 @@ public class CameraActivity extends BaseActivity
 				myRecorder.getAliRecorder().setRate(1.5f);
 				break;
 			case R.id.radioButton_speed_3:
-				myRecorder.getAliRecorder().setRate(0.5f);
+				myRecorder.getAliRecorder().setRate(1f);
 				break;
 			case R.id.radioButton_speed_4:
 				myRecorder.getAliRecorder().setRate(0.75f);
@@ -245,9 +288,50 @@ public class CameraActivity extends BaseActivity
 		myRecorder.applyMusic(cameraMusic);
 	}
 	
-	//*************************************************************
+	@Override
+	public void onProgress(int duration)
+	{
+		if (!myRecorder.isArriveMaxRecodingTime())
+		{
+			recordTimeLineView.setDuration(duration);
+		}
+		else
+		{
+			//			this.stopRecoding();
+		}
+	}
 	
-	private void pressRecorderButton()
+	@Override
+	public void onAPartComplete(boolean isValidClip, long clipDuration)
+	{
+		
+		if (isValidClip)
+		{
+			recordTimeLineView.setDuration((int) clipDuration);
+			recordTimeLineView.clipComplete();
+			
+			viewUndoRecord.setVisibility(View.VISIBLE);
+			
+			if (myRecorder.isArriveMaxRecodingTime())
+			{
+				Toast.makeText(this, "到达最大，停止录制!", Toast.LENGTH_SHORT).show();
+			}
+		}
+		else
+		{
+			recordTimeLineView.setDuration(0);
+		}
+	}
+	
+	@Override
+	public void onRecodingFinished(String outputPath)
+	{
+		myRecorder.clear();
+		this.finish();
+	}
+	
+	//*************************************************************
+	private void uiOfPressRecorderButton()
 	{
 		viewRecorder.setAlpha(0.7f);
 		radioGroupSelectRecorderSpeed.setVisibility(View.INVISIBLE);
@@ -263,7 +347,7 @@ public class CameraActivity extends BaseActivity
 		
 	}
 	
-	private void relaxRecorderButton()
+	private void uiOfRelaxRecorderButton()
 	{
 		viewRecorder.setAlpha(1f);
 		
@@ -273,10 +357,57 @@ public class CameraActivity extends BaseActivity
 		viewBeautiful.setVisibility(View.VISIBLE);
 		viewTurn.setVisibility(View.VISIBLE);
 		viewFlash.setVisibility(View.VISIBLE);
-		viewDone.setVisibility(View.VISIBLE);
 		viewUndoRecord.setVisibility(View.VISIBLE);
 		viewSelectEffects.setVisibility(View.VISIBLE);
 		viewDecals.setVisibility(View.VISIBLE);
+		viewDone.setVisibility(View.VISIBLE);
+	}
+	
+	private void uiOfWaitingRecodingFinished()
+	{
+		radioGroupSelectRecorderSpeed.setVisibility(View.INVISIBLE);
+		viewClose.setVisibility(View.INVISIBLE);
+		viewMusic.setVisibility(View.INVISIBLE);
+		viewBeautiful.setVisibility(View.INVISIBLE);
+		viewTurn.setVisibility(View.INVISIBLE);
+		viewFlash.setVisibility(View.INVISIBLE);
+		viewDone.setVisibility(View.INVISIBLE);
+		viewUndoRecord.setVisibility(View.INVISIBLE);
+		viewSelectEffects.setVisibility(View.INVISIBLE);
+		viewDecals.setVisibility(View.INVISIBLE);
+		viewRecorder.setVisibility(View.INVISIBLE);
+		recordTimeLineView.setVisibility(View.INVISIBLE);
+		
+		progressBarWaitRecodingFinished .setVisibility(View.VISIBLE);
+	}
+	
+	private void stopRecoding()
+	{
+		myRecorder.getAliRecorder().stopRecording();
+		uiOfRelaxRecorderButton();
+	}
+	
+	private int getPictureRotation()
+	{
+		int orientation = orientationDetector.getOrientation();
+		int rotation = 90;
+		if ((orientation >= 45) && (orientation < 135))
+		{
+			rotation = 180;
+		}
+		if ((orientation >= 135) && (orientation < 225))
+		{
+			rotation = 270;
+		}
+		if ((orientation >= 225) && (orientation < 315))
+		{
+			rotation = 0;
+		}
+		if (rotation != 0)
+		{
+			rotation = 360 - rotation;
+		}
+		return rotation;
 	}
 	
 	

@@ -1,31 +1,39 @@
 package com.jeramtough.niyouji.component.ali;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.aliyun.recorder.supply.AliyunIClipManager;
 import com.aliyun.recorder.supply.AliyunIRecorder;
+import com.aliyun.recorder.supply.RecordCallback;
 import com.aliyun.struct.recorder.CameraType;
 import com.aliyun.struct.recorder.FlashType;
 import com.aliyun.struct.recorder.MediaInfo;
 import com.jeramtough.jtandroid.jtlog2.P;
+import com.jeramtough.niyouji.component.config.AppConfig;
+
+import java.io.File;
 
 /**
  * @author 11718
  *         on 2017  November 21 Tuesday 18:21.
  */
 
-public class MyRecorder
+public class MyRecorder implements RecordCallback
 {
-	private static final int MIN_RECORD_TIME = 3*1000;
-	private static final int MAX_RECORD_TIME = 15 * 1000;
+	public static final int MIN_RECORD_TIME = 3 * 1000;
+	public static final int MAX_RECORD_TIME = 15 * 1000;
 	
 	private final static int VIDEO_WIDTH = 500;
 	private final static int VIDEO_HEIGHT = 800;
 	
 	private AliyunIRecorder aliRecorder;
+	private RecorderListener recorderListener;
 	
 	private boolean isBeautyStatus = false;
 	private boolean isBright = false;
@@ -44,6 +52,11 @@ public class MyRecorder
 		aliRecorder.setCamera(CameraType.BACK);
 		aliRecorder.setBeautyLevel(90);
 		aliRecorder.setBeautyStatus(isBeautyStatus);
+		
+		aliRecorder.getClipManager().setMaxDuration(MAX_RECORD_TIME);
+		aliRecorder.getClipManager().setMinDuration(MIN_RECORD_TIME);
+		
+		aliRecorder.setRecordCallback(this);
 	}
 	
 	public void switchCameraDirection()
@@ -73,8 +86,141 @@ public class MyRecorder
 	
 	public void applyMusic(CameraMusic cameraMusic)
 	{
-		aliRecorder.setMusic(cameraMusic.getPath(),0,MAX_RECORD_TIME);
+		aliRecorder.setMusic(cameraMusic.getPath(), 0, MAX_RECORD_TIME);
 	}
+	
+	public void startRecoding()
+	{
+		String videoPath =
+				AppConfig.getVideosDirectory() + File.separator + System.currentTimeMillis() +
+						"" + ".mp4";
+		aliRecorder.setOutputPath(videoPath);
+		aliRecorder.startRecording();
+	}
+	
+	public int getCountOfRecorderPart()
+	{
+		return aliRecorder.getClipManager().getPartCount();
+	}
+	
+	public void deleteLastPart()
+	{
+		aliRecorder.getClipManager().deletePart();
+	}
+	
+	public void setRecorderListener(RecorderListener recorderListener)
+	{
+		this.recorderListener = recorderListener;
+	}
+	
+	public boolean isArriveMaxRecodingTime()
+	{
+		if (aliRecorder.getClipManager().getDuration() >=
+				aliRecorder.getClipManager().getMaxDuration())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public boolean isArriveMinRecodingTime()
+	{
+		if (aliRecorder.getClipManager().getDuration() >=
+				aliRecorder.getClipManager().getMinDuration())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public void finishRecoding()
+	{
+		new AsyncTask()
+		{
+			@Override
+			protected Object doInBackground(Object[] params)
+			{
+				aliRecorder.finishRecording();
+				return null;
+			}
+		}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	}
+	
+	public void clear()
+	{
+		aliRecorder.stopPreview();
+		aliRecorder.getClipManager().deleteAllPart();
+	}
+	
+	@Override
+	public void onComplete(boolean isValidClip, long clipDuration)
+	{
+		if (recorderListener != null)
+		{
+			recorderListener.onAPartComplete(isValidClip, clipDuration);
+		}
+	}
+	
+	@Override
+	public void onFinish(String outputPath)
+	{
+		if (recorderListener != null)
+		{
+			recorderListener.onRecodingFinished(outputPath);
+		}
+	}
+	
+	@Override
+	public void onProgress(long duration)
+	{
+		if (recorderListener != null)
+		{
+			recorderListener.onProgress((int) duration);
+		}
+		
+	}
+	
+	@Override
+	public void onMaxDuration()
+	{
+	
+	}
+	
+	@Override
+	public void onError(int i)
+	{
+	
+	}
+	
+	@Override
+	public void onInitReady()
+	{
+	
+	}
+	
+	@Override
+	public void onDrawReady()
+	{
+	
+	}
+	
+	@Override
+	public void onPictureBack(Bitmap bitmap)
+	{
+	
+	}
+	
+	@Override
+	public void onPictureDataBack(byte[] bytes)
+	{
+	}
+	
 	//GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 	
 	public boolean isBeautyStatus()
@@ -90,5 +236,15 @@ public class MyRecorder
 	public boolean isBright()
 	{
 		return isBright;
+	}
+	
+	//{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+	public interface RecorderListener
+	{
+		void onProgress(int duration);
+		
+		void onAPartComplete(boolean isValidClip, long clipDuration);
+		
+		void onRecodingFinished(String outputPath);
 	}
 }
