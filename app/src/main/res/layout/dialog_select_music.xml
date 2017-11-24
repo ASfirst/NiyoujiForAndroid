@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colorPrimary"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="选择录制的背景音乐"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+        <Button
+                android:id="@+id/btn_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_done"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="20sp"/>
+
+    </LinearLayout>
+
+    <ListView
+            android:id="@+id/listView_musics"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:dividerHeight="10dp"
+            />
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#7463ff6e"/>
+
+</LinearLayout>

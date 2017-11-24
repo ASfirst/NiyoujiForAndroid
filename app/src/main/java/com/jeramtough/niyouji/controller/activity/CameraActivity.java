@@ -16,13 +16,14 @@ import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectFilterDialog;
+import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 /**
  * @author 11718
  */
 public class CameraActivity extends BaseActivity
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
-		SelectFilterDialog.SelectFilterListener
+		SelectFilterDialog.SelectFilterListener, SelectMusicDialog.SelectMusicListener
 {
 	private AliyunVideoGlSurfaceView glSurfaceViewCamera;
 	private AppCompatImageView viewClose;
@@ -46,8 +47,10 @@ public class CameraActivity extends BaseActivity
 	private MyRecorder myRecorder;
 	
 	private FiltersHandler filtersHandler;
+	private MusicsHandler musicsHandler;
 	
 	private SelectFilterDialog selectFilterDialog;
+	private SelectMusicDialog selectMusicDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -64,9 +67,7 @@ public class CameraActivity extends BaseActivity
 	protected void initResources()
 	{
 		filtersHandler = getMyInjectedObjects().getFiltersHandler();
-		
-		P.debug(filtersHandler.getCameraFilters().get(1).getIconPath(),
-				filtersHandler.getCameraFilters().get(1).getName());
+		musicsHandler = getMyInjectedObjects().getMusicsHandler();
 		
 		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
 		selectFilterDialog.setSelectFilterListener(this);
@@ -117,10 +118,6 @@ public class CameraActivity extends BaseActivity
 	
 	protected void initAliRecorder()
 	{
-		QupaiHttpFinal.getInstance().initOkHttpFinal();
-		System.loadLibrary("QuCore-ThirdParty");
-		System.loadLibrary("QuCore");
-		
 		AliyunIRecorder aliRecorder = AliyunRecorderCreator.getRecorderInstance(this);
 		aliRecorder.setDisplayView(glSurfaceViewCamera);
 		
@@ -168,7 +165,10 @@ public class CameraActivity extends BaseActivity
 				this.finish();
 				break;
 			case R.id.view_music:
-				
+				selectMusicDialog =
+						new SelectMusicDialog(this, musicsHandler.getCameraMusics());
+				selectMusicDialog.setSelectMusicListener(this);
+				selectMusicDialog.show();
 				break;
 			case R.id.view_beautiful:
 				myRecorder.switchBeautyStatus();
@@ -237,6 +237,12 @@ public class CameraActivity extends BaseActivity
 	public void selectedFilter(CameraFilter cameraFilter)
 	{
 		myRecorder.getAliRecorder().applyFilter(cameraFilter);
+	}
+	
+	@Override
+	public void selectMusic(CameraMusic cameraMusic)
+	{
+		myRecorder.applyMusic(cameraMusic);
 	}
 	
 	//*************************************************************

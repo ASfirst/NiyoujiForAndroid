@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.business;
 
 import android.Manifest;
 import android.app.Activity;
+import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.jeramtough.jtandroid.function.PermissionManager;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.jtandroid.java.ExtractedZip;

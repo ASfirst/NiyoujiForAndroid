@@ -10,21 +10,14 @@ public class Test
 	@org.junit.Test
 	public void test()
 	{
+		String name="abc.aac";
+		name=name.split("\\.")[0];
+		System.out.println(name);
 	}
 	
 	@org.junit.Test
 	public void test1()
 	{
-		try
-		{
-			ZipUtil.unZip(
-					"E:\\codes\\AndroidStudentCodes\\NiYouJi\\app\\src\\test\\lalala\\filters.zip",
-					"E:\\codes\\AndroidStudentCodes\\NiYouJi\\app\\src\\test\\lalala\\abc");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	@org.junit.Test

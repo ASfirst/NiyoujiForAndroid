@@ -19,6 +19,9 @@ import com.jeramtough.jtandroid.jtlog2.P;
 
 public class MyRecorder
 {
+	private static final int MIN_RECORD_TIME = 3*1000;
+	private static final int MAX_RECORD_TIME = 15 * 1000;
+	
 	private final static int VIDEO_WIDTH = 500;
 	private final static int VIDEO_HEIGHT = 800;
 	
@@ -66,6 +69,11 @@ public class MyRecorder
 			aliRecorder.setLight(FlashType.OFF);
 			isBright = false;
 		}
+	}
+	
+	public void applyMusic(CameraMusic cameraMusic)
+	{
+		aliRecorder.setMusic(cameraMusic.getPath(),0,MAX_RECORD_TIME);
 	}
 	//GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 	

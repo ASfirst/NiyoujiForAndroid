@@ -5,6 +5,7 @@ import com.jeramtough.jtandroid.ioc.InjectedObjects;
 import com.jeramtough.niyouji.business.LaunchBusiness;
 import com.jeramtough.niyouji.business.LaunchService;
 import com.jeramtough.niyouji.component.ali.FiltersHandler;
+import com.jeramtough.niyouji.component.ali.MusicsHandler;
 
 /**
  * @author 11718
@@ -16,6 +17,7 @@ public class MyInjectedObjects extends InjectedObjects
 	//Components
 	private PermissionManager permissionManager;
 	private FiltersHandler filtersHandler;
+	private MusicsHandler musicsHandler;
 	
 	//Businesses
 	private LaunchBusiness launchBusiness;
@@ -47,5 +49,14 @@ public class MyInjectedObjects extends InjectedObjects
 			filtersHandler=new FiltersHandler(getContext());
 		}
 		return filtersHandler;
+	}
+	
+	public MusicsHandler getMusicsHandler()
+	{
+		if (musicsHandler == null)
+		{
+			musicsHandler=new MusicsHandler(getContext());
+		}
+		return musicsHandler;
 	}
 }

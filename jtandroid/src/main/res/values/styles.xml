@@ -7,6 +7,7 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">#ffffff</item>
         <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation
         </item>
     </style>

@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.jeramtough.jtandroid.ioc.InjectedObjects;
 import com.jeramtough.jtandroid.ioc.IocContainer;
 import com.jeramtough.jtandroid.ioc.IocContainerImpl;
@@ -35,6 +36,15 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 	}
 	
 	@Override
+	public void onBeforeInject()
+	{
+		//初始化阿里短视频SDK库
+		QupaiHttpFinal.getInstance().initOkHttpFinal();
+		System.loadLibrary("QuCore-ThirdParty");
+		System.loadLibrary("QuCore");
+	}
+	
+	@Override
 	public void onInjectedSuccessfully(InjectedObjects injectedObjects)
 	{
 		launchBusiness = getMyInjectedObjects().getLaunchBusiness();
@@ -48,7 +58,7 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 	@Override
 	public void onInjectedFailed(Exception e)
 	{
-	
+		e.printStackTrace();
 	}
 	
 	@Override

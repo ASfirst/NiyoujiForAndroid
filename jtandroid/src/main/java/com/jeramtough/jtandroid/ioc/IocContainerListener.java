@@ -10,6 +10,12 @@ package com.jeramtough.jtandroid.ioc;
 public interface IocContainerListener
 {
 	/**
+	 * call before objects will is injected , this thread<br/>
+	 * isn't main thread.
+	 */
+	void onBeforeInject();
+	
+	/**
 	 * call when all objects is injected successfully
 	 * @param injectedObjects instance of injected objects
 	 */

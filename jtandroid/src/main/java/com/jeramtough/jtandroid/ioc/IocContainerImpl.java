@@ -53,6 +53,10 @@ public final class IocContainerImpl extends Handler implements IocContainer
 		}
 		else
 		{
+			if (iocContainerListener != null)
+			{
+				iocContainerListener.onBeforeInject();
+			}
 			
 			new Thread()
 			{

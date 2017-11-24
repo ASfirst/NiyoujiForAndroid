@@ -24,7 +24,6 @@ public class SelectFilterDialog extends BottomPopupDialog
 	private FiltersHandler filtersHandler;
 	private SelectFilterListener selectFilterListener;
 	
-	private Button btnDone;
 	private HorizontalListView horizontalListViewFilters;
 	
 	public SelectFilterDialog(@NonNull Context context, FiltersHandler filtersHandler)

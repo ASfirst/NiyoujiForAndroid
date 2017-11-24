@@ -44,7 +44,6 @@ public class FiltersAdapter extends BaseAdapter
 			imageViewFilterIcon = viewGroup.findViewById(R.id.imageView_filter_icon);
 			textViewFilterName = viewGroup.findViewById(R.id.textView_filter_name);
 			
-			P.debug(cameraFilter.getName());
 			textViewFilterName.setText(cameraFilter.getName());
 			
 			String iconPath=cameraFilter.getIconPath();

@@ -17,6 +17,7 @@ public interface LaunchBusiness
 	 */
 	boolean requestNeededPermission(Activity activity,int requestCode);
 	
+	
 	/**
 	 * @param activity  请求权限的activity实例
 	 */
