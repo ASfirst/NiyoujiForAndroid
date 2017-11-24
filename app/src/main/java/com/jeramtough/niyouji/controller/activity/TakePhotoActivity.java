@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.jeramtough.niyouji.R;
 
+/**
+ * @author 11718
+ */
 public class TakePhotoActivity extends AppCompatActivity
 {
 	

@@ -1,10 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.jeramtough.niyouji.controller.activity.TakePhotoActivity">
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/glSurfaceView_camera"/>
+
+    <ProgressBar
+            android:id="@+id/progressBar_wait_recoding_finished"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
+
+    <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            app:srcCompat="@drawable/ic_close"/>
+
+    <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+        <android.support.v7.widget.AppCompatImageView
+                xmlns:n4="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/view_beautiful"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                n4:srcCompat="@drawable/ic_beautiful"/>
+
+        <android.support.v7.widget.AppCompatImageView
+                xmlns:n5="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/view_turn"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                n5:srcCompat="@drawable/ic_cached"
+                />
+
+        <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/view_flash"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:srcCompat="@drawable/ic_flash"
+                />
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+            android:layout_gravity="end"
+            android:id="@+id/view_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            app:srcCompat="@drawable/ic_done"
+            />
+
+    <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="bottom|center"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:n9="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/view_select_effects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:alpha="0.7"
+                    n9:srcCompat="@drawable/ic_effects"
+                    />
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:android0="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/view_recorder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:alpha="0.7"
+                    android0:srcCompat="@drawable/ic_recorder"
+                    />
+
+            <android.support.v7.widget.AppCompatImageView
+                    xmlns:android1="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/view_decals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:alpha="0.7"
+                    android1:srcCompat="@drawable/ic_face"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

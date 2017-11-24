@@ -246,6 +246,7 @@ public class VideoActivity extends BaseActivity
 				if (myRecorder.getCountOfRecorderPart() == 0)
 				{
 					viewUndoRecord.setVisibility(View.INVISIBLE);
+					viewMusic.setVisibility(View.VISIBLE);
 				}
 				
 				break;
@@ -302,10 +303,6 @@ public class VideoActivity extends BaseActivity
 		{
 			recordTimeLineView.setDuration(duration);
 		}
-		else
-		{
-			//			this.stopRecoding();
-		}
 	}
 	
 	@Override
@@ -317,7 +314,14 @@ public class VideoActivity extends BaseActivity
 			recordTimeLineView.setDuration((int) clipDuration);
 			recordTimeLineView.clipComplete();
 			
-			viewUndoRecord.setVisibility(View.VISIBLE);
+			if (viewUndoRecord.getVisibility()==View.INVISIBLE)
+			{
+				viewUndoRecord.setVisibility(View.VISIBLE);
+			}
+			if (viewMusic.getVisibility()==View.VISIBLE)
+			{
+				viewMusic.setVisibility(View.INVISIBLE);
+			}
 			
 			if (myRecorder.isArriveMaxRecodingTime())
 			{
