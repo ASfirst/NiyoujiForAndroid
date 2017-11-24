@@ -39,35 +39,32 @@
             >
 
         <android.support.v7.widget.AppCompatImageView
-                xmlns:n3="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/view_music"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.7"
-                n3:srcCompat="@drawable/ic_music"
+                app:srcCompat="@drawable/ic_music"
                 />
 
         <android.support.v7.widget.AppCompatImageView
-                xmlns:n4="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/view_beautiful"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.6"
-                n4:srcCompat="@drawable/ic_beautiful"/>
+                app:srcCompat="@drawable/ic_beautiful"/>
 
         <android.support.v7.widget.AppCompatImageView
-                xmlns:n5="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/view_turn"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.7"
-                n5:srcCompat="@drawable/ic_cached"
+                app:srcCompat="@drawable/ic_cached"
                 />
 
         <android.support.v7.widget.AppCompatImageView
@@ -198,7 +195,6 @@
                     />
 
             <android.support.v7.widget.AppCompatImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/view_undo_record"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -215,36 +211,33 @@
                 >
 
             <android.support.v7.widget.AppCompatImageView
-                    xmlns:n9="http://schemas.android.com/apk/res-auto"
                     android:layout_gravity="bottom"
                     android:id="@+id/view_select_effects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:alpha="0.7"
-                    n9:srcCompat="@drawable/ic_effects"
+                    app:srcCompat="@drawable/ic_effects"
                     />
 
             <android.support.v7.widget.AppCompatImageView
-                    xmlns:android0="http://schemas.android.com/apk/res-auto"
                     android:layout_gravity="bottom"
                     android:id="@+id/view_recorder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:alpha="0.7"
-                    android0:srcCompat="@drawable/ic_recorder"
+                    app:srcCompat="@drawable/ic_recorder"
                     />
 
             <android.support.v7.widget.AppCompatImageView
-                    xmlns:android1="http://schemas.android.com/apk/res-auto"
                     android:layout_gravity="bottom"
                     android:id="@+id/view_decals"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:alpha="0.7"
-                    android1:srcCompat="@drawable/ic_face"
+                    app:srcCompat="@drawable/ic_face"
                     />
         </LinearLayout>
     </LinearLayout>
