@@ -103,7 +103,8 @@ public class CameraActivity extends BaseActivity
 		viewSelectEffects = findViewById(R.id.view_select_effects);
 		viewRecorder = findViewById(R.id.view_recorder);
 		viewDecals = findViewById(R.id.view_decals);
-		progressBarWaitRecodingFinished = findViewById(R.id.progressBar_wait_recoding_finished);
+		progressBarWaitRecodingFinished =
+				findViewById(R.id.progressBar_wait_recoding_finished);
 		
 		radioButtonSpeed3.setChecked(true);
 		viewUndoRecord.setVisibility(View.INVISIBLE);
@@ -208,15 +209,23 @@ public class CameraActivity extends BaseActivity
 				myRecorder.switchCameraDirection();
 				break;
 			case R.id.view_flash:
-				myRecorder.switchLightMode();
-				if (myRecorder.isBright())
+				if (myRecorder.getCameraDirection()==MyRecorder.CAMERA_DIRECTION_BACK)
 				{
-					viewFlash.setImageResource(R.drawable.ic_selected_flash);
+					myRecorder.switchLightMode();
+					if (myRecorder.isBright())
+					{
+						viewFlash.setImageResource(R.drawable.ic_selected_flash);
+					}
+					else
+					{
+						viewFlash.setImageResource(R.drawable.ic_flash);
+					}
 				}
 				else
 				{
-					viewFlash.setImageResource(R.drawable.ic_flash);
+					Toast.makeText(this,"前置摄像头无法开灯！",Toast.LENGTH_SHORT).show();
 				}
+				
 				break;
 			case R.id.view_done:
 				if (!myRecorder.isArriveMinRecodingTime())
@@ -378,7 +387,7 @@ public class CameraActivity extends BaseActivity
 		viewRecorder.setVisibility(View.INVISIBLE);
 		recordTimeLineView.setVisibility(View.INVISIBLE);
 		
-		progressBarWaitRecodingFinished .setVisibility(View.VISIBLE);
+		progressBarWaitRecodingFinished.setVisibility(View.VISIBLE);
 	}
 	
 	private void stopRecoding()

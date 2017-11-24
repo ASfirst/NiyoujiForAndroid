@@ -52,9 +52,9 @@ public class SelectTakephotoOrVideoDialog extends BottomPopupDialog
 		switch (id)
 		{
 			case R.id.imageView_takephoto:
-				IntentUtil.toTheOtherActivity(activity, CameraActivity.class);
 				break;
 			case R.id.imageView_video:
+				IntentUtil.toTheOtherActivity(activity, CameraActivity.class);
 				break;
 		}
 		cancel();

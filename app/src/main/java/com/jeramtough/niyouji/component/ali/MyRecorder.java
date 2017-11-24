@@ -26,6 +26,9 @@ import java.io.File;
 
 public class MyRecorder implements RecordCallback
 {
+	public static final int CAMERA_DIRECTION_BACK = 0;
+	public static final int CAMERA_DIRECTION_FRONT = 1;
+	
 	public static final int MIN_RECORD_TIME = 3 * 1000;
 	public static final int MAX_RECORD_TIME = 15 * 1000;
 	
@@ -37,6 +40,8 @@ public class MyRecorder implements RecordCallback
 	
 	private boolean isBeautyStatus = false;
 	private boolean isBright = false;
+	
+	private int currentCameraDirection=CAMERA_DIRECTION_BACK;
 	
 	public MyRecorder(AliyunIRecorder aliRecorder)
 	{
@@ -62,6 +67,12 @@ public class MyRecorder implements RecordCallback
 	public void switchCameraDirection()
 	{
 		aliRecorder.switchCamera();
+		currentCameraDirection=currentCameraDirection==1?0:1;
+	}
+	
+	public int getCameraDirection()
+	{
+		return currentCameraDirection;
 	}
 	
 	public void switchBeautyStatus()
