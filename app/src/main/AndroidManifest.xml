@@ -59,7 +59,10 @@
         </activity>
         <activity android:name=".controller.activity.CreateTravelnoteActivity">
         </activity>
-        <activity android:name=".controller.activity.TakePhotoActivity">
+        <activity
+                android:name=".controller.activity.TakePhotoActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
     </application>
 

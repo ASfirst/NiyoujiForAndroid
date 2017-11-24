@@ -10,36 +10,19 @@ import com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView;
 /**
  * @author 11718
  */
-public class TakePhotoActivity extends AppCompatActivity
+public class TakePhotoActivity extends AliCameraActivity
 {
-	private AliyunVideoGlSurfaceView glSurfaceViewCamera;
-	private ProgressBar progressBarWaitRecodingFinished;
-	private AppCompatImageView viewClose;
-	private AppCompatImageView viewBeautiful;
-	private AppCompatImageView viewTurn;
-	private AppCompatImageView viewFlash;
-	private AppCompatImageView viewDone;
-	private AppCompatImageView viewSelectEffects;
-	private AppCompatImageView viewTakephoto;
-	private AppCompatImageView viewDecals;
-	
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_take_photo);
 		
-		glSurfaceViewCamera = findViewById(R.id.glSurfaceView_camera);
-		progressBarWaitRecodingFinished = findViewById(R.id.progressBar_wait_recoding_finished);
-		viewClose = findViewById(R.id.view_close);
-		viewBeautiful = findViewById(R.id.view_beautiful);
-		viewTurn = findViewById(R.id.view_turn);
-		viewFlash = findViewById(R.id.view_flash);
-		viewDone = findViewById(R.id.view_done);
-		viewSelectEffects = findViewById(R.id.view_select_effects);
-		viewTakephoto = findViewById(R.id.view_takephoto);
-		viewDecals = findViewById(R.id.view_decals);
+	}
+	
+	@Override
+	public int loadLayout()
+	{
+		return R.layout.activity_take_photo;
 	}
 }
