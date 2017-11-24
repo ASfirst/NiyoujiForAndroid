@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.jeramtough.niyouji">
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.jeramtough.niyouji"
+        >
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -21,7 +23,8 @@
     <uses-feature android:name="android.hardware.location.gps"/>
     <uses-feature
             android:name="android.hardware.camera"
-            android:required="false"/>
+            android:required="false"
+            />
 
     <application
             android:allowBackup="true"
@@ -29,15 +32,18 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            >
         <activity
                 android:name=".controller.activity.MainActivity"
                 android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.LaunchActivity"
-                android:label="@string/app_name">
+                android:label="@string/app_name"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -45,12 +51,15 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".controller.activity.CameraActivity"
+                android:name=".controller.activity.VideoActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_camera"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity android:name=".controller.activity.CreateTravelnoteActivity">
+        </activity>
+        <activity android:name=".controller.activity.TakePhotoActivity">
         </activity>
     </application>
 

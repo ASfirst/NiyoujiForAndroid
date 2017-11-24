@@ -10,9 +10,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.aliyun.recorder.AliyunRecorderCreator;
-import com.aliyun.recorder.supply.AliyunIClipManager;
 import com.aliyun.recorder.supply.AliyunIRecorder;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
@@ -22,7 +20,7 @@ import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 /**
  * @author 11718
  */
-public class CameraActivity extends BaseActivity
+public class VideoActivity extends BaseActivity
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
 		SelectFilterDialog.SelectFilterListener, SelectMusicDialog.SelectMusicListener,
 		MyRecorder.RecorderListener
@@ -63,7 +61,7 @@ public class CameraActivity extends BaseActivity
 	{
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_camera);
+		setContentView(R.layout.activity_video);
 		
 		this.initResources();
 		this.initViews();

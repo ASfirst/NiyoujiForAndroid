@@ -8,7 +8,8 @@ import android.widget.ImageView;
 import com.jeramtough.jtandroid.ui.popupdialog.BottomPopupDialog;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.controller.activity.CameraActivity;
+import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
+import com.jeramtough.niyouji.controller.activity.VideoActivity;
 
 /**
  * @author 11718
@@ -52,9 +53,10 @@ public class SelectTakephotoOrVideoDialog extends BottomPopupDialog
 		switch (id)
 		{
 			case R.id.imageView_takephoto:
+				IntentUtil.toTheOtherActivity(activity, TakePhotoActivity.class);
 				break;
 			case R.id.imageView_video:
-				IntentUtil.toTheOtherActivity(activity, CameraActivity.class);
+				IntentUtil.toTheOtherActivity(activity, VideoActivity.class);
 				break;
 		}
 		cancel();
