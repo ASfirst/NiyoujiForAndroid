@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -24,7 +26,8 @@ import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
  */
 
 public abstract class AliCameraActivity extends BaseActivity
-		implements SelectFilterDialog.SelectFilterListener
+		implements SelectFilterDialog.SelectFilterListener,
+		ScaleGestureDetector.OnScaleGestureListener
 {
 	
 	protected AliyunVideoGlSurfaceView glSurfaceViewCamera;
@@ -44,7 +47,10 @@ public abstract class AliCameraActivity extends BaseActivity
 	protected SelectMusicDialog selectMusicDialog;
 	
 	protected OrientationDetector orientationDetector;
+	
 	protected int rotation;
+	private float lastScaleFactor;
+	private float scaleFactor;
 	
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -115,6 +121,21 @@ public abstract class AliCameraActivity extends BaseActivity
 	{
 		super.onResume();
 		myRecorder.getAliRecorder().startPreview();
+		myRecorder.getAliRecorder().setZoom(scaleFactor);
+		if (orientationDetector != null && orientationDetector.canDetectOrientation())
+		{
+			orientationDetector.enable();
+		}
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		if (orientationDetector != null)
+		{
+			orientationDetector.disable();
+		}
 	}
 	
 	@Override
@@ -125,9 +146,35 @@ public abstract class AliCameraActivity extends BaseActivity
 	}
 	
 	@Override
+	public boolean onScale(ScaleGestureDetector detector)
+	{
+		Log.e(TAG, "factor..." + detector.getScaleFactor());
+		float factorOffset = detector.getScaleFactor() - lastScaleFactor;
+		scaleFactor += factorOffset;
+		lastScaleFactor = detector.getScaleFactor();
+		if (scaleFactor < 0)
+		{
+			scaleFactor = 0;
+		}
+		if (scaleFactor > 1)
+		{
+			scaleFactor = 1;
+		}
+		recorder.setZoom(scaleFactor);
+		return false;
+	}
+	
+	@Override
+	public boolean onScaleBegin(ScaleGestureDetector detector)
+	{
+		lastScaleFactor = detector.getScaleFactor();
+		return true;
+	}
+	
+	@Override
 	public void onClick(View view, int viewId)
 	{
-		super.onClick(view,viewId);
+		super.onClick(view, viewId);
 		switch (viewId)
 		{
 			case R.id.view_close:
@@ -148,7 +195,7 @@ public abstract class AliCameraActivity extends BaseActivity
 				myRecorder.switchCameraDirection();
 				break;
 			case R.id.view_flash:
-				if (myRecorder.getCameraDirection()==MyRecorder.CAMERA_DIRECTION_BACK)
+				if (myRecorder.getCameraDirection() == MyRecorder.CAMERA_DIRECTION_BACK)
 				{
 					myRecorder.switchLightMode();
 					if (myRecorder.isBright())
@@ -162,7 +209,7 @@ public abstract class AliCameraActivity extends BaseActivity
 				}
 				else
 				{
-					Toast.makeText(this,"前置摄像头无法开灯！",Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "前置摄像头无法开灯！", Toast.LENGTH_SHORT).show();
 				}
 				
 				break;

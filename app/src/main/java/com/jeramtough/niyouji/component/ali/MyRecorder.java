@@ -37,11 +37,12 @@ public class MyRecorder implements RecordCallback
 	
 	private AliyunIRecorder aliRecorder;
 	private RecorderListener recorderListener;
+	private TakephotoListener takephotoListener;
 	
 	private boolean isBeautyStatus = false;
 	private boolean isBright = false;
 	
-	private int currentCameraDirection=CAMERA_DIRECTION_BACK;
+	private int currentCameraDirection = CAMERA_DIRECTION_BACK;
 	
 	public MyRecorder(AliyunIRecorder aliRecorder)
 	{
@@ -67,7 +68,7 @@ public class MyRecorder implements RecordCallback
 	public void switchCameraDirection()
 	{
 		aliRecorder.switchCamera();
-		currentCameraDirection=currentCameraDirection==1?0:1;
+		currentCameraDirection = currentCameraDirection == 1 ? 0 : 1;
 	}
 	
 	public int getCameraDirection()
@@ -122,6 +123,11 @@ public class MyRecorder implements RecordCallback
 	public void setRecorderListener(RecorderListener recorderListener)
 	{
 		this.recorderListener = recorderListener;
+	}
+	
+	public void setTakephotoListener(TakephotoListener takephotoListener)
+	{
+		this.takephotoListener = takephotoListener;
 	}
 	
 	public boolean isArriveMaxRecodingTime()
@@ -224,12 +230,19 @@ public class MyRecorder implements RecordCallback
 	@Override
 	public void onPictureBack(Bitmap bitmap)
 	{
-	
+		if (takephotoListener != null)
+		{
+			takephotoListener.onPictureBack(bitmap);
+		}
 	}
 	
 	@Override
 	public void onPictureDataBack(byte[] bytes)
 	{
+		if (takephotoListener != null)
+		{
+			takephotoListener.onPictureDataBack(bytes);
+		}
 	}
 	
 	//GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
@@ -257,5 +270,12 @@ public class MyRecorder implements RecordCallback
 		void onAPartComplete(boolean isValidClip, long clipDuration);
 		
 		void onRecodingFinished(String outputPath);
+	}
+	
+	public interface TakephotoListener
+	{
+		void onPictureBack(Bitmap bitmap);
+		
+		void onPictureDataBack(byte[] bytes);
 	}
 }
