@@ -5,15 +5,14 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
-import android.view.ScaleGestureDetector;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
@@ -26,8 +25,8 @@ import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
  */
 
 public abstract class AliCameraActivity extends BaseActivity
-		implements SelectFilterDialog.SelectFilterListener,
-		ScaleGestureDetector.OnScaleGestureListener
+		implements SelectFilterDialog.SelectFilterListener, GestureDetector.OnGestureListener,
+		ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener
 {
 	
 	protected AliyunVideoGlSurfaceView glSurfaceViewCamera;
@@ -47,6 +46,8 @@ public abstract class AliCameraActivity extends BaseActivity
 	protected SelectMusicDialog selectMusicDialog;
 	
 	protected OrientationDetector orientationDetector;
+	private GestureDetector gestureDetector;
+	private ScaleGestureDetector scaleGestureDetector;
 	
 	protected int rotation;
 	private float lastScaleFactor;
@@ -97,6 +98,12 @@ public abstract class AliCameraActivity extends BaseActivity
 		viewFlash.setOnClickListener(this);
 		viewSelectEffects.setOnClickListener(this);
 		viewDecals.setOnClickListener(this);
+		
+		glSurfaceViewCamera.setOnTouchListener(this);
+		
+		//缩放监听
+		gestureDetector = new GestureDetector(this, this);
+		scaleGestureDetector = new ScaleGestureDetector(this, this);
 	}
 	
 	protected void initAliRecorder()
@@ -148,7 +155,6 @@ public abstract class AliCameraActivity extends BaseActivity
 	@Override
 	public boolean onScale(ScaleGestureDetector detector)
 	{
-		Log.e(TAG, "factor..." + detector.getScaleFactor());
 		float factorOffset = detector.getScaleFactor() - lastScaleFactor;
 		scaleFactor += factorOffset;
 		lastScaleFactor = detector.getScaleFactor();
@@ -160,7 +166,8 @@ public abstract class AliCameraActivity extends BaseActivity
 		{
 			scaleFactor = 1;
 		}
-		recorder.setZoom(scaleFactor);
+		P.debug(scaleFactor);
+		myRecorder.getAliRecorder().setZoom(scaleFactor);
 		return false;
 	}
 	
@@ -169,6 +176,12 @@ public abstract class AliCameraActivity extends BaseActivity
 	{
 		lastScaleFactor = detector.getScaleFactor();
 		return true;
+	}
+	
+	@Override
+	public void onScaleEnd(ScaleGestureDetector detector)
+	{
+	
 	}
 	
 	@Override
@@ -230,6 +243,55 @@ public abstract class AliCameraActivity extends BaseActivity
 		myRecorder.getAliRecorder().applyFilter(cameraFilter);
 	}
 	
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		if (v == glSurfaceViewCamera)
+		{
+			gestureDetector.onTouchEvent(event);
+			scaleGestureDetector.onTouchEvent(event);
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean onDown(MotionEvent e)
+	{
+		return false;
+	}
+	
+	@Override
+	public void onShowPress(MotionEvent e)
+	{
+	
+	}
+	
+	@Override
+	public boolean onSingleTapUp(MotionEvent e)
+	{
+		float x = e.getX() / glSurfaceViewCamera.getWidth();
+		float y = e.getY() / glSurfaceViewCamera.getHeight();
+		myRecorder.getAliRecorder().setFocus(x, y);
+		return false;
+	}
+	
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+	{
+		return false;
+	}
+	
+	@Override
+	public void onLongPress(MotionEvent e)
+	{
+	
+	}
+	
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+	{
+		return false;
+	}
 	
 	//***************************************
 	private int getPictureRotation()
@@ -254,4 +316,6 @@ public abstract class AliCameraActivity extends BaseActivity
 		}
 		return rotation;
 	}
+	
+	
 }

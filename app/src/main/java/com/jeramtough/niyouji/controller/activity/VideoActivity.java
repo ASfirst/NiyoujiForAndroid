@@ -100,6 +100,27 @@ public class VideoActivity extends AliCameraActivity
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
+		if (v == viewRecorder)
+		{
+			switch (event.getAction())
+			{
+				case MotionEvent.ACTION_DOWN:
+					this.uiOfPressRecorderButton();
+					P.arrive();
+					myRecorder.startRecoding();
+					break;
+				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_CANCEL:
+					this.stopRecoding();
+					break;
+			}
+		}
+		return super.onTouch(v, event);
+	}
+	
+	/*	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
 		switch (event.getAction())
 		{
 			case MotionEvent.ACTION_DOWN:
@@ -113,7 +134,7 @@ public class VideoActivity extends AliCameraActivity
 				break;
 		}
 		return true;
-	}
+	}*/
 	
 	@Override
 	public void onClick(View view, int viewId)
@@ -285,6 +306,5 @@ public class VideoActivity extends AliCameraActivity
 		myRecorder.getAliRecorder().stopRecording();
 		uiOfRelaxRecorderButton();
 	}
-	
 	
 }

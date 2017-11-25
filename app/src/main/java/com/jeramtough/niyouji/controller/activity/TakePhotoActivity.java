@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -103,4 +104,5 @@ public class TakePhotoActivity extends AliCameraActivity
 	{
 	
 	}
+
 }
