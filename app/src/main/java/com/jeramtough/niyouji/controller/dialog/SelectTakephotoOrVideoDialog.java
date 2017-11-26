@@ -26,7 +26,7 @@ public class SelectTakephotoOrVideoDialog extends BottomPopupDialog
 	public SelectTakephotoOrVideoDialog(@NonNull Activity activity)
 	{
 		super(activity);
-		this.activity=activity;
+		this.activity = activity;
 	}
 	
 	@Override
@@ -49,14 +49,16 @@ public class SelectTakephotoOrVideoDialog extends BottomPopupDialog
 	@Override
 	public void onClick(View v)
 	{
-		int id=v.getId();
+		int id = v.getId();
 		switch (id)
 		{
 			case R.id.imageView_takephoto:
-				IntentUtil.toTheOtherActivity(activity, TakePhotoActivity.class);
+				IntentUtil.toTheOtherActivity(activity, TakePhotoActivity.class,
+						TakePhotoActivity.TAKE_PHOTO_RESULT_CODE);
 				break;
 			case R.id.imageView_video:
-				IntentUtil.toTheOtherActivity(activity, VideoActivity.class);
+				IntentUtil.toTheOtherActivity(activity, VideoActivity.class,
+						VideoActivity.VIDEO_RESULT_CODE);
 				break;
 		}
 		cancel();

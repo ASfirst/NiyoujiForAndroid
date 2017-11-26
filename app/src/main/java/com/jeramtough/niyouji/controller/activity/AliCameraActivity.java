@@ -1,23 +1,17 @@
 package com.jeramtough.niyouji.controller.activity;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.view.*;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectFilterDialog;
-import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 /**
  * @author 11718
@@ -43,7 +37,6 @@ public abstract class AliCameraActivity extends BaseActivity
 	protected FiltersHandler filtersHandler;
 	
 	protected SelectFilterDialog selectFilterDialog;
-	protected SelectMusicDialog selectMusicDialog;
 	
 	protected OrientationDetector orientationDetector;
 	private GestureDetector gestureDetector;
@@ -166,7 +159,6 @@ public abstract class AliCameraActivity extends BaseActivity
 		{
 			scaleFactor = 1;
 		}
-		P.debug(scaleFactor);
 		myRecorder.getAliRecorder().setZoom(scaleFactor);
 		return false;
 	}

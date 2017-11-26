@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
@@ -22,6 +23,9 @@ public class VideoActivity extends AliCameraActivity
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
 		SelectMusicDialog.SelectMusicListener, MyRecorder.RecorderListener
 {
+	public static final int VIDEO_RESULT_CODE=0X333;
+	public static final String VIDEO_PATH_NAME="videoPath";
+	
 	private AppCompatImageView viewMusic;
 	private AppCompatImageView viewDone;
 	private RadioGroup radioGroupSelectRecorderSpeed;
@@ -117,24 +121,6 @@ public class VideoActivity extends AliCameraActivity
 		}
 		return super.onTouch(v, event);
 	}
-	
-	/*	@Override
-	public boolean onTouch(View v, MotionEvent event)
-	{
-		switch (event.getAction())
-		{
-			case MotionEvent.ACTION_DOWN:
-				this.uiOfPressRecorderButton();
-				P.arrive();
-				myRecorder.startRecoding();
-				break;
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_CANCEL:
-				this.stopRecoding();
-				break;
-		}
-		return true;
-	}*/
 	
 	@Override
 	public void onClick(View view, int viewId)
@@ -247,6 +233,9 @@ public class VideoActivity extends AliCameraActivity
 	public void onRecodingFinished(String outputPath)
 	{
 		myRecorder.clear();
+		Intent intent=getIntent();
+		intent.putExtra(VIDEO_PATH_NAME, outputPath);
+		setResult(VIDEO_RESULT_CODE, intent);
 		this.finish();
 	}
 	

@@ -16,4 +16,11 @@ public class IntentUtil
 		Intent intent = new Intent(currentActivity, theOtherActivityClass);
 		currentActivity.startActivity(intent);
 	}
+	
+	public static void toTheOtherActivity(Activity currentActivity,
+			Class theOtherActivityClass, int requestCode)
+	{
+		Intent intent = new Intent(currentActivity, theOtherActivityClass);
+		currentActivity.startActivityForResult(intent, requestCode);
+	}
 }
