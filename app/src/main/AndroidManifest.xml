@@ -46,7 +46,6 @@
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -57,7 +56,10 @@
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
-        <activity android:name=".controller.activity.CreateTravelnoteActivity">
+        <activity
+                android:name=".controller.activity.CreateTravelnoteActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.TakePhotoActivity"

@@ -32,7 +32,7 @@ public class MyRecorder implements RecordCallback
 	public static final int MIN_RECORD_TIME = 3 * 1000;
 	public static final int MAX_RECORD_TIME = 10 * 1000;
 	
-	public final static int VIDEO_WIDTH = 500;
+	public final static int VIDEO_WIDTH = 600;
 	public final static int VIDEO_HEIGHT = 800;
 	
 	private AliyunIRecorder aliRecorder;

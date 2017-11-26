@@ -3,11 +3,14 @@ package com.jeramtough.niyouji.controller.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
+import com.aliyun.struct.recorder.CameraType;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
@@ -302,9 +305,12 @@ public abstract class AliCameraActivity extends BaseActivity
 		{
 			rotation = 0;
 		}
-		if (rotation != 0)
+		if (myRecorder.getCameraDirection() == MyRecorder.CAMERA_DIRECTION_FRONT)
 		{
-			rotation = 360 - rotation;
+			if (rotation != 0)
+			{
+				rotation = 360 - rotation;
+			}
 		}
 		return rotation;
 	}
