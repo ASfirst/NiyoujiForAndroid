@@ -12,7 +12,7 @@ import android.view.ViewGroup;
  *         on 2017  November 20 Monday 11:41.
  */
 
-public abstract class BaseFragment extends Fragment
+public abstract class BaseFragment extends Fragment implements View.OnClickListener
 {
 	private View view;
 	
@@ -30,5 +30,17 @@ public abstract class BaseFragment extends Fragment
 	public View findViewById(int viewId)
 	{
 		return view.findViewById(viewId);
+	}
+	
+	@Deprecated
+	@Override
+	public void onClick(View v)
+	{
+		onClick(v, v.getId());
+	}
+	
+	public void onClick(View v, int viewId)
+	{
+	
 	}
 }

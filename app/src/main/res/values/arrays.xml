@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="indicator_colors">
-        <item>#55B3C2</item>
-        <item>#64A4A4</item>
+        <item>#80ca09</item>
+        <item>#55c278</item>
         <item>#66D7B9</item>
-        <item>#FDBC7D</item>
+        <item>#de9f63</item>
     </array>
 </resources>

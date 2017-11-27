@@ -9,16 +9,13 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.jeramtough.jtandroid.adapter.JtItemAdapter;
-import com.jeramtough.jtandroid.jtlog2.P;
+import com.jeramtough.jtandroid.adapter.JtTextItemAdapter;
 import com.jeramtough.jtandroid.ui.popupdialog.BottomPopupDialog;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -37,7 +34,7 @@ public class SelectMusicDialog extends BottomPopupDialog
 	
 	private CameraMusic cameraMusic;
 	
-	private JtItemAdapter adapter;
+	private JtTextItemAdapter adapter;
 	
 	private SelectMusicListener selectMusicListener;
 	
@@ -70,7 +67,7 @@ public class SelectMusicDialog extends BottomPopupDialog
 			musicNames[i] = cameraMusics.get(i).getName();
 		}
 		
-		adapter = new JtItemAdapter(getContext(), musicNames);
+		adapter = new JtTextItemAdapter(getContext(), musicNames);
 		listViewMusics.setAdapter(adapter);
 		
 		this.setContentView(viewGroup);
