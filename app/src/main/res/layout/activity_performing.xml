@@ -7,17 +7,6 @@
         tools:context="com.jeramtough.niyouji.controller.activity.PerformingActivity"
         android:orientation="vertical">
 
-    <com.jeramtough.jtandroid.ui.springindicator.SpringIndicator
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:siTextSize="20sp"
-            app:siIndicatorColors="@array/indicator_colors"
-            app:siTextColor="@color/black"
-            app:siSelectedTextColor="@android:color/white"
-            app:siIndicatorColor="@color/darkcyan"
-            android:id="@+id/indicator"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/colorPrimary"/>
 
     <com.jeramtough.jtandroid.ui.JtViewPager
             android:id="@+id/viewPager_travelnote_pages"
