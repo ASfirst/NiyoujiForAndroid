@@ -1,17 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.jeramtough.niyouji.controller.activity.PerformingActivity"
-        android:orientation="vertical">
-
+        tools:context="com.jeramtough.niyouji.controller.activity.PerformingActivity">
 
     <com.jeramtough.jtandroid.ui.JtViewPager
             android:id="@+id/viewPager_travelnote_pages"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <!--弹幕,作者头像，观众，页数-->
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginRight="@dimen/travelnote_page_right"
+                android:background="@mipmap/backgroup2">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/roundrect"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="5dp">
+
+                <com.jeramtough.jtandroid.ui.RoundImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@mipmap/surface_image"
+                        android:scaleType="center"/>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="JeramTough"
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="1"
+                            android:shadowDy="1"
+                            android:shadowDx="1"/>
+
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="关注:"
+                                android:gravity="top"
+                                android:textColor="@color/red"
+                                android:shadowColor="@color/white"
+                                android:shadowRadius="1"
+                                android:shadowDy="1"
+                                android:shadowDx="1"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="top"
+                                android:textColor="@color/white"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="1"
+                                android:shadowDy="1"
+                                android:shadowDx="1"
+                                android:layout_marginLeft="5dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/roundrect"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:layout_gravity="bottom">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P"
+                        android:textColor="@color/colorPrimary"
+                        android:shadowColor="@color/white"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="1"
+                        android:textStyle="bold"
+                        android:layout_marginRight="5dp"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0/0"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowRadius="1"
+                        android:shadowDy="1"
+                        android:shadowDx="1"
+                        android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/roundrect"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="4dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:layout_gravity="bottom">
+
+                <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@mipmap/person"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1224"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowRadius="1"
+                        android:shadowDy="1"
+                        android:shadowDx="1"
+                        android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!--留下个弹幕效果-->
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginBottom="60dp">
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_shutdown"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="结束"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:shadowColor="@color/black"
+                    android:shadowRadius="2"
+                    android:shadowDx="1"
+                    android:shadowDy="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>
