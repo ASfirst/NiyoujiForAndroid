@@ -80,6 +80,7 @@
                                 android:shadowDx="1"/>
 
                         <TextView
+                                android:id="@+id/textView_attentions_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
@@ -123,9 +124,10 @@
                         android:layout_marginRight="5dp"/>
 
                 <TextView
+                        android:id="@+id/textView_pages_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0/0"
+                        android:text="-/-"
                         android:textColor="@color/white"
                         android:shadowColor="@color/black"
                         android:shadowRadius="1"
@@ -155,9 +157,10 @@
                         android:background="@mipmap/person"/>
 
                 <TextView
+                        android:id="@+id/textView_audiences_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1224"
+                        android:text="0"
                         android:textColor="@color/white"
                         android:shadowColor="@color/black"
                         android:shadowRadius="1"
@@ -178,6 +181,7 @@
 
 
         <LinearLayout
+                android:id="@+id/layout_shutdown_for_live"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -186,6 +190,7 @@
                 android:layout_marginBottom="60dp">
 
             <ImageButton
+                    android:id="@+id/btn_shutdown_for_live"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_shutdown"/>

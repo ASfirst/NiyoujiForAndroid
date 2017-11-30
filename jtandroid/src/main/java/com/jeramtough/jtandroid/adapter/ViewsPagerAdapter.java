@@ -3,6 +3,7 @@ package com.jeramtough.jtandroid.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import com.jeramtough.jtandroid.jtlog2.P;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class ViewsPagerAdapter extends PagerAdapter
 {
 	private List<? extends View> views;
+	private boolean isForceUpdateMode=false;
 	
 	public ViewsPagerAdapter(List<? extends View> views)
 	{
@@ -42,6 +44,33 @@ public class ViewsPagerAdapter extends PagerAdapter
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object)
 	{
-		container.removeView(views.get(position));
+		P.debug(position < views.size(),position,views.size());
+		if (position < views.size())
+		{
+			container.removeView(views.get(position));
+		}
+	}
+	
+	@Override
+	public int getItemPosition(Object object)
+	{
+		if (isForceUpdateMode)
+		{
+			return POSITION_NONE;
+		}
+		else
+		{
+			return POSITION_UNCHANGED;
+		}
+	}
+	
+	public boolean isForceUpdateMode()
+	{
+		return isForceUpdateMode;
+	}
+	
+	public void setForceUpdateMode(boolean forceUpdateMode)
+	{
+		isForceUpdateMode = forceUpdateMode;
 	}
 }

@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.ui;
+package com.jeramtough.niyouji.controller.handler;
 
 import android.graphics.Color;
 import android.support.v4.app.FragmentManager;

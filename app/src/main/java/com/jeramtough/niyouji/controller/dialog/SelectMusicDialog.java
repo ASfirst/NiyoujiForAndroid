@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.JtTextItemAdapter;
-import com.jeramtough.jtandroid.ui.popupdialog.BottomPopupDialog;
+import com.jeramtough.jtandroid.controller.dialog.BottomPopupDialog;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 

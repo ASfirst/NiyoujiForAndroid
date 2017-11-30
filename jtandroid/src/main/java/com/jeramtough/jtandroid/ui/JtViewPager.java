@@ -30,7 +30,7 @@ public class JtViewPager extends ViewPager
 		this.initResources();
 	}
 	
-	public void initResources()
+	protected void initResources()
 	{
 		this.addOnPageChangeListener(new OnPageChangeListener()
 		{
@@ -38,7 +38,8 @@ public class JtViewPager extends ViewPager
 			public void onPageScrolled(int position, float positionOffset,
 					int positionOffsetPixels)
 			{
-				if ((isLastPage||getChildCount()==1) && isDragPage && positionOffsetPixels == 0)
+				if ((isLastPage || getChildCount() == 1) && isDragPage &&
+						positionOffsetPixels == 0)
 				{
 					//当前页是最后一页，并且是拖动状态，并且像素偏移量为0
 					if (canJumpPage)
@@ -76,7 +77,7 @@ public class JtViewPager extends ViewPager
 	//************************************
 	private void jumpToLast()
 	{
-		if (jumpToLastCaller!=null)
+		if (jumpToLastCaller != null)
 		{
 			jumpToLastCaller.jumpToLast();
 		}

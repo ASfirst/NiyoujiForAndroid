@@ -15,7 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ui.MainNavigation;
+import com.jeramtough.niyouji.controller.handler.MainNavigation;
 
 /**
  * @author 11718
