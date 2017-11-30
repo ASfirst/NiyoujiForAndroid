@@ -5,7 +5,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:scrollbars="vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true">
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:background="@color/white">
 
     <LinearLayout
             android:layout_width="match_parent"
