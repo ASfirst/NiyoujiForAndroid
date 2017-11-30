@@ -75,11 +75,15 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 				break;
 			
 			case DELETE_ACTION:
-				P.debug(viewPagerTravelnotePages.getCurrentItem(),
-						liveTravelnotePageViews.size());
-				liveTravelnotePageViews.remove(viewPagerTravelnotePages.getCurrentItem());
-				this.updateViewPagerUI(true);
-				this.updatePagesCount();
+				/*P.debug(viewPagerTravelnotePages.getCurrentItem(),
+						liveTravelnotePageViews.size());*/
+				if (viewPagerTravelnotePages.getCurrentItem() < liveTravelnotePageViews.size())
+				{
+					liveTravelnotePageViews.remove(viewPagerTravelnotePages.getCurrentItem());
+					this.updateViewPagerUI(true);
+					this.updatePagesCount();
+				}
+				
 				break;
 		}
 	}
