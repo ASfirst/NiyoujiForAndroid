@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:scrollbars="vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:background="@color/white">
 
-    <LinearLayout
+    <ScrollView
+            android:id="@+id/scrollView_picandword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@mipmap/ic_delete"
-                android:id="@+id/btn_delete_page"
-                android:layout_gravity="right"/>
-
-
-        <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:background="@mipmap/ic_launcher"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            >
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+            <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@mipmap/ic_delete"
+                    android:id="@+id/btn_delete_page"
+                    android:layout_gravity="right"/>
+
+
+            <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/view_picture_of_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/plussign"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="25dp"/>
 
             <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:inputType="text"
-                    android:hint="写点什么。。。"/>
-
-            <Button
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="主题"/>
-
-            <Button
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="音乐"/>
-
-            <Button
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="表情"/>
-
+                    android:id="@+id/edit_travelnote_page_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
         </LinearLayout>
 
-
-    </LinearLayout>
-
-
-</ScrollView>
+    </ScrollView>
 
 
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/boomMenuButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bmb_buttonEnum="textInsideCircle"
+                app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
+                app:bmb_buttonPlaceEnum="buttonPlace_sc_3_3"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="15dp"/>
+
+    </FrameLayout>
 
 
-
+</FrameLayout>

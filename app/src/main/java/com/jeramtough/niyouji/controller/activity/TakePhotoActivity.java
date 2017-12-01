@@ -44,6 +44,8 @@ public class TakePhotoActivity extends AliCameraActivity
 		return R.layout.activity_take_photo;
 	}
 	
+	
+	
 	@Override
 	protected void initViews()
 	{
@@ -56,6 +58,14 @@ public class TakePhotoActivity extends AliCameraActivity
 		viewDone.setOnClickListener(this);
 		viewTakephoto.setOnClickListener(this);
 		viewDeletePhoto.setOnClickListener(this);
+	}
+	
+	@Override
+	protected void initResources()
+	{
+		super.initResources();
+		Intent intent = this.getIntent();
+		TakePhotoActivity.this.setResult(TAKE_PHOTO_RESULT_CODE, intent);
 	}
 	
 	@Override
