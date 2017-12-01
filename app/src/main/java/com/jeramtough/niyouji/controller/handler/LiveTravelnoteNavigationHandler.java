@@ -184,13 +184,11 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 						lastLiveTravelnotePageView.getViewPictureOfPage();
 				if (imageView != null && imageView.getDrawable() != null)
 				{
+					//释放图片资源
 					BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-					Bitmap bitmap = bitmapDrawable.getBitmap();
-					P.debug("recycleLastPage");
+					P.verbose("Recycle resource of image of the travelnote page.");
 					BitmapUtil.releaseDrawableResouce(bitmapDrawable);
 					imageView.setImageDrawable(null);
-					P.debug(bitmap.isRecycled());
-					//					viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
 				}
 			}
 		}
@@ -210,7 +208,7 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 			String resourcePath = liveTravelnotePageView.getResourcePath();
 			if (resourcePath != null)
 			{
-				P.debug("resetCurrentPage");
+				P.verbose("Reset resource of image of the travelnote page.");
 				liveTravelnotePageView.getViewPictureOfPage().setImageBitmap(
 						BitmapFactory.decodeFile(liveTravelnotePageView.getResourcePath()));
 			}
