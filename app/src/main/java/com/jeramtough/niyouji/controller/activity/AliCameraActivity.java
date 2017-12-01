@@ -146,7 +146,11 @@ public abstract class AliCameraActivity extends BaseActivity
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		AliyunRecorderCreator.destroyRecorderInstance();
+		myRecorder.clearMemory();
+		if (orientationDetector != null)
+		{
+			orientationDetector.setOrientationChangedListener(null);
+		}
 	}
 	
 	@Override

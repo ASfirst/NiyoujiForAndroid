@@ -2,19 +2,12 @@ package com.jeramtough.niyouji.component.ali;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import com.aliyun.recorder.supply.AliyunIClipManager;
+import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
 import com.aliyun.recorder.supply.RecordCallback;
 import com.aliyun.struct.recorder.CameraType;
 import com.aliyun.struct.recorder.FlashType;
 import com.aliyun.struct.recorder.MediaInfo;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.component.config.AppConfig;
 
 import java.io.File;
@@ -64,6 +57,74 @@ public class MyRecorder implements RecordCallback
 		
 		aliRecorder.setRecordCallback(this);
 	}
+	
+	
+	@Override
+	public void onComplete(boolean isValidClip, long clipDuration)
+	{
+		if (recorderListener != null)
+		{
+			recorderListener.onAPartComplete(isValidClip, clipDuration);
+		}
+	}
+	
+	@Override
+	public void onFinish(String outputPath)
+	{
+		if (recorderListener != null)
+		{
+			recorderListener.onRecodingFinished(outputPath);
+		}
+	}
+	
+	@Override
+	public void onProgress(long duration)
+	{
+		if (recorderListener != null)
+		{
+			recorderListener.onProgress((int) duration);
+		}
+		
+	}
+	
+	@Override
+	public void onMaxDuration()
+	{
+	
+	}
+	
+	@Override
+	public void onError(int i)
+	{
+	
+	}
+	
+	@Override
+	public void onInitReady()
+	{
+	
+	}
+	
+	@Override
+	public void onDrawReady()
+	{
+	
+	}
+	
+	@Override
+	public void onPictureBack(Bitmap bitmap)
+	{
+		if (takephotoListener != null)
+		{
+			takephotoListener.onPictureBack(bitmap);
+		}
+	}
+	
+	@Override
+	public void onPictureDataBack(byte[] bytes)
+	{
+	}
+	
 	
 	public void switchCameraDirection()
 	{
@@ -169,76 +230,16 @@ public class MyRecorder implements RecordCallback
 		}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 	
-	public void clear()
+	public void clearVideoParts()
 	{
 		aliRecorder.stopPreview();
 		aliRecorder.getClipManager().deleteAllPart();
 	}
 	
-	@Override
-	public void onComplete(boolean isValidClip, long clipDuration)
+	public void clearMemory()
 	{
-		if (recorderListener != null)
-		{
-			recorderListener.onAPartComplete(isValidClip, clipDuration);
-		}
-	}
-	
-	@Override
-	public void onFinish(String outputPath)
-	{
-		if (recorderListener != null)
-		{
-			recorderListener.onRecodingFinished(outputPath);
-		}
-	}
-	
-	@Override
-	public void onProgress(long duration)
-	{
-		if (recorderListener != null)
-		{
-			recorderListener.onProgress((int) duration);
-		}
-		
-	}
-	
-	@Override
-	public void onMaxDuration()
-	{
-	
-	}
-	
-	@Override
-	public void onError(int i)
-	{
-	
-	}
-	
-	@Override
-	public void onInitReady()
-	{
-	
-	}
-	
-	@Override
-	public void onDrawReady()
-	{
-	
-	}
-	
-	@Override
-	public void onPictureBack(Bitmap bitmap)
-	{
-		if (takephotoListener != null)
-		{
-			takephotoListener.onPictureBack(bitmap);
-		}
-	}
-	
-	@Override
-	public void onPictureDataBack(byte[] bytes)
-	{
+		aliRecorder.destroy();
+		AliyunRecorderCreator.destroyRecorderInstance();
 	}
 	
 	//GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
