@@ -33,7 +33,7 @@ public class BasicLogger implements Logger
 	{
 		if (logInformation.getMessage()==null)
 		{
-			logInformation.setMessage("null");
+			logInformation.setMessage("[null]");
 		}
 		getPrinter().setLogInformation(logInformation);
 	}

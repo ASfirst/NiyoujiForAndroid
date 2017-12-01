@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
@@ -231,7 +230,7 @@ public class VideoActivity extends AliCameraActivity
 	@Override
 	public void onRecodingFinished(String outputPath)
 	{
-		myRecorder.clear();
+		myRecorder.clearVideoParts();
 		Intent intent=getIntent();
 		intent.putExtra(VIDEO_PATH_NAME, outputPath);
 		setResult(VIDEO_RESULT_CODE, intent);

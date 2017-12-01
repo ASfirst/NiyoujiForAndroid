@@ -32,6 +32,19 @@ public class BitmapUtil
 		return bitmap;
 	}
 	
+	public static void releaseDrawableResouce(Drawable drawable)
+	{
+		if (drawable != null && drawable instanceof BitmapDrawable)
+		{
+			BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+			Bitmap bitmap = bitmapDrawable.getBitmap();
+			if (bitmap != null && !bitmap.isRecycled())
+			{
+				bitmap.recycle();
+			}
+		}
+	}
+	
 	/**
 	 * MD，这个方法没有卵用
 	 */
@@ -61,7 +74,7 @@ public class BitmapUtil
 		return d;
 	}
 	
-	public static void saveBitmapToLocal(Bitmap bitmap, File file,int quality)
+	public static void saveBitmapToLocal(Bitmap bitmap, File file, int quality)
 	{
 		try
 		{

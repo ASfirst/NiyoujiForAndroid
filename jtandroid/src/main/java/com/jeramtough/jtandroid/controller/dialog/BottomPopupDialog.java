@@ -1,4 +1,4 @@
-package com.jeramtough.jtandroid.ui.popupdialog;
+package com.jeramtough.jtandroid.controller.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

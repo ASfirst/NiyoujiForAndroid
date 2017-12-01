@@ -56,21 +56,14 @@ public abstract class AliCameraActivity extends BaseActivity
 		
 		setContentView(loadLayout());
 		
-		this.initResources();
 		this.initViews();
+		this.initResources();
 		this.initAliRecorder();
 	}
 	
 	
 	public abstract int loadLayout();
 	
-	protected void initResources()
-	{
-		filtersHandler = getMyInjectedObjects().getFiltersHandler();
-		
-		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
-		selectFilterDialog.setSelectFilterListener(this);
-	}
 	
 	protected void initViews()
 	{
@@ -100,6 +93,14 @@ public abstract class AliCameraActivity extends BaseActivity
 		//缩放监听
 		gestureDetector = new GestureDetector(this, this);
 		scaleGestureDetector = new ScaleGestureDetector(this, this);
+	}
+	
+	protected void initResources()
+	{
+		filtersHandler = getMyInjectedObjects().getFiltersHandler();
+		
+		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
+		selectFilterDialog.setSelectFilterListener(this);
 	}
 	
 	protected void initAliRecorder()
@@ -145,7 +146,11 @@ public abstract class AliCameraActivity extends BaseActivity
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		AliyunRecorderCreator.destroyRecorderInstance();
+		myRecorder.clearMemory();
+		if (orientationDetector != null)
+		{
+			orientationDetector.setOrientationChangedListener(null);
+		}
 	}
 	
 	@Override

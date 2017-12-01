@@ -62,4 +62,5 @@ dependencies {
     implementation(name: 'AliyunSdk-RC', ext: 'aar')
 
     //第三方控件
+    compile 'com.nightonke:boommenu:2.1.1'
 }

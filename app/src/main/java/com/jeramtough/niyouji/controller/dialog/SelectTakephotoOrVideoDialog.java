@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import com.jeramtough.jtandroid.ui.popupdialog.BottomPopupDialog;
+import com.jeramtough.jtandroid.controller.dialog.BottomPopupDialog;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
