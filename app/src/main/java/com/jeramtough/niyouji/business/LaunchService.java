@@ -2,13 +2,10 @@ package com.jeramtough.niyouji.business;
 
 import android.Manifest;
 import android.app.Activity;
-import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.jeramtough.jtandroid.function.PermissionManager;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.jtandroid.java.ExtractedZip;
-import com.jeramtough.jtandroid.jtlog2.P;
-import com.jeramtough.niyouji.component.config.AppConfig;
-import org.apache.commons.io.FileUtils;
+import com.jeramtough.niyouji.component.app.AppConfig;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;

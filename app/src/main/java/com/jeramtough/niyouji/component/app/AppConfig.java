@@ -1,8 +1,7 @@
-package com.jeramtough.niyouji.component.config;
+package com.jeramtough.niyouji.component.app;
 
 import android.content.Context;
 import android.os.Environment;
-import com.jeramtough.jtandroid.jtlog2.P;
 
 import java.io.File;
 

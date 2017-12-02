@@ -8,7 +8,7 @@ import com.aliyun.recorder.supply.RecordCallback;
 import com.aliyun.struct.recorder.CameraType;
 import com.aliyun.struct.recorder.FlashType;
 import com.aliyun.struct.recorder.MediaInfo;
-import com.jeramtough.niyouji.component.config.AppConfig;
+import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.io.File;
 

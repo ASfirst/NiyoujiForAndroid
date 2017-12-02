@@ -50,7 +50,6 @@ dependencies {
 
     //java开源jar
     compile 'com.google.code.findbugs:jsr305:3.0.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'pub.devrel:easypermissions:0.2.1'
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
@@ -58,7 +57,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 
-    //阿里云段视频SDK
+    //阿里云短视频SDK
     implementation(name: 'AliyunSdk-RC', ext: 'aar')
 
     //第三方控件

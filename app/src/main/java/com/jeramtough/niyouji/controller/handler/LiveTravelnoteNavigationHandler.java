@@ -4,13 +4,23 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestFutureTarget;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
 import com.jeramtough.jtandroid.jtlog2.P;
@@ -24,6 +34,9 @@ import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
 import com.jeramtough.niyouji.controller.activity.VideoActivity;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -162,8 +175,10 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 			{
 				//设置图文页的图片
 				liveTravelnotePageView.getViewPictureOfPage().setClickable(true);
-				liveTravelnotePageView.getViewPictureOfPage()
-						.setImageBitmap(BitmapFactory.decodeFile(path));
+				com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> builder =
+						Glide.with(getContext()).load(new File(path));
+				
+				builder.into(liveTravelnotePageView.getViewPictureOfPage());
 				
 				//回滚到顶部
 				liveTravelnotePageView.getScrollViewPicandword().scrollTo(0, 0);
@@ -184,10 +199,10 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 				if (imageView != null && imageView.getDrawable() != null)
 				{
 					//释放图片资源
-					BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+					//BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
 					P.verbose("Recycle resource of image of the travelnote page.");
-					BitmapUtil.releaseDrawableResouce(bitmapDrawable);
-					imageView.setImageDrawable(null);
+					//BitmapUtil.releaseDrawableResouce(bitmapDrawable);
+					//imageView.setImageDrawable(null);
 				}
 			}
 		}

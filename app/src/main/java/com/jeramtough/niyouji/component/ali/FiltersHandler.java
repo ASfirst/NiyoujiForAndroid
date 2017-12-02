@@ -1,8 +1,7 @@
 package com.jeramtough.niyouji.component.ali;
 
 import android.content.Context;
-import com.jeramtough.jtandroid.jtlog2.P;
-import com.jeramtough.niyouji.component.config.AppConfig;
+import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.io.File;
 import java.util.ArrayList;

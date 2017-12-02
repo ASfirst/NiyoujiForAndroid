@@ -8,11 +8,10 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.MyRecorder;
-import com.jeramtough.niyouji.component.config.AppConfig;
+import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.io.File;
 
