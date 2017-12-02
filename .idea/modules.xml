@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://E:\codes\AndroidStudentCodes\NiYouJi1\NiYouJi.iml" filepath="E:\codes\AndroidStudentCodes\NiYouJi1\NiYouJi.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/NiYouJi1.iml" filepath="$PROJECT_DIR$/.idea/NiYouJi1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/jtandroid/jtandroid.iml" filepath="$PROJECT_DIR$/jtandroid/jtandroid.iml" />

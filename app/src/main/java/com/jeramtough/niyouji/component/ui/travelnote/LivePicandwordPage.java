@@ -1,12 +1,17 @@
 package com.jeramtough.niyouji.component.ui.travelnote;
 
 import android.graphics.Rect;
+import android.os.Handler;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -15,23 +20,38 @@ import com.nightonke.boommenu.BoomMenuButton;
  *         on 2017  December 01 Friday 18:36.
  */
 
-public class LivePicandwordPage
+public class LivePicandwordPage implements View.OnClickListener
 {
+	private Handler handler;
+	
 	private ViewGroup viewGroup;
 	private BoomMenuButton boomMenuButton;
 	private EditText editTravelnotePageContent;
 	private AppCompatImageView viewPictureOfPage;
+	private ScrollView scrollViewPicandword;
+	private ImageButton btnDeletePage;
+	private TextView textViewReminderWriting;
 	
-	public LivePicandwordPage(ViewGroup viewGroup)
+	
+	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
 	{
-		this.viewGroup = viewGroup;
+		this.viewGroup = viewGroupPicandwordPage;
+		this.handler = handler;
 		
 		boomMenuButton = viewGroup.findViewById(R.id.boomMenuButton);
 		editTravelnotePageContent = viewGroup.findViewById(R.id.edit_travelnote_page_content);
 		viewPictureOfPage = viewGroup.findViewById(R.id.view_picture_of_page);
+		scrollViewPicandword = viewGroup.findViewById(R.id.scrollView_picandword);
+		btnDeletePage = viewGroup.findViewById(R.id.btn_delete_page);
+		textViewReminderWriting = viewGroup.findViewById(R.id.textView_reminder_writing);
 		
-		editTravelnotePageContent.setVisibility(View.INVISIBLE);
+		editTravelnotePageContent.setVisibility(View.GONE);
+		textViewReminderWriting.setVisibility(View.GONE);
+		
 		viewPictureOfPage.setClickable(false);
+		
+		btnDeletePage.setOnClickListener(this);
+		viewPictureOfPage.setOnClickListener(this);
 		
 		initResources();
 	}
@@ -65,4 +85,47 @@ public class LivePicandwordPage
 		}
 	}
 	
+	
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.view_picture_of_page:
+				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.TAKE_PHOTO_ACTION);
+				break;
+			case R.id.btn_delete_page:
+				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
+				break;
+		}
+	}
+	
+	public EditText getEditTravelnotePageContent()
+	{
+		return editTravelnotePageContent;
+	}
+	
+	public AppCompatImageView getViewPictureOfPage()
+	{
+		return viewPictureOfPage;
+	}
+	
+	public ScrollView getScrollViewPicandword()
+	{
+		return scrollViewPicandword;
+	}
+	
+	public ImageButton getBtnDeletePage()
+	{
+		return btnDeletePage;
+	}
+	
+	public void reminderWriting()
+	{
+		textViewReminderWriting.setVisibility(View.VISIBLE);
+		textViewReminderWriting.postDelayed(() ->
+		{
+			textViewReminderWriting.setVisibility(View.GONE);
+		}, 3000);
+	}
 }

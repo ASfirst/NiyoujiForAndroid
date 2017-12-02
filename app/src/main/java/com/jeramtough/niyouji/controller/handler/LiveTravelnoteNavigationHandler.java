@@ -1,26 +1,17 @@
 package com.jeramtough.niyouji.controller.handler;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestFutureTarget;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
 import com.jeramtough.jtandroid.jtlog2.P;
@@ -34,9 +25,6 @@ import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
 import com.jeramtough.niyouji.controller.activity.VideoActivity;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -115,6 +103,7 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 					liveTravelnotePageViews.remove(viewPagerTravelnotePages.getCurrentItem());
 					this.updateViewPagerUI(true);
 					this.updatePagesCount();
+					this.resetCurrentPage();
 				}
 				break;
 			
@@ -164,24 +153,34 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	public void setPageResourcePath(String path)
 	{
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
-		if (path != null)
+		
+		LiveTravelnotePageView liveTravelnotePageView =
+				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
+		
+		
+		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.PICANDWORD)
 		{
-			LiveTravelnotePageView liveTravelnotePageView =
-					liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
-			liveTravelnotePageView.setResourcePath(path);
+			//设置图文页的图片可以点击
+			liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage()
+					.setClickable(true);
 			
-			if (liveTravelnotePageView.getLiveTravelnotePageType() ==
-					LiveTravelnotePageType.PICANDWORD)
+			if (path != null)
 			{
-				//设置图文页的图片
-				liveTravelnotePageView.getViewPictureOfPage().setClickable(true);
-				com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> builder =
-						Glide.with(getContext()).load(new File(path));
+				//保存下资源路径
+				liveTravelnotePageView.setResourcePath(path);
+				//加载刚才拍照的图片
+				liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage()
+						.setImageBitmap(BitmapFactory.decodeFile(path));
+				//焦点到编辑框
+				EditText editText = liveTravelnotePageView.getLivePicandwordPage()
+						.getEditTravelnotePageContent();
+				editText.setVisibility(View.VISIBLE);
+				editText.requestFocus();
 				
-				builder.into(liveTravelnotePageView.getViewPictureOfPage());
+				//what do you want to write
+				liveTravelnotePageView.getLivePicandwordPage().reminderWriting();
 				
-				//回滚到顶部
-				liveTravelnotePageView.getScrollViewPicandword().scrollTo(0, 0);
 			}
 		}
 	}
@@ -195,14 +194,15 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 					LiveTravelnotePageType.PICANDWORD)
 			{
 				AppCompatImageView imageView =
-						lastLiveTravelnotePageView.getViewPictureOfPage();
+						lastLiveTravelnotePageView.getLivePicandwordPage()
+								.getViewPictureOfPage();
 				if (imageView != null && imageView.getDrawable() != null)
 				{
 					//释放图片资源
-					//BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
 					P.verbose("Recycle resource of image of the travelnote page.");
-					//BitmapUtil.releaseDrawableResouce(bitmapDrawable);
-					//imageView.setImageDrawable(null);
+					BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+					BitmapUtil.releaseDrawableResouce(bitmapDrawable);
+					imageView.setImageDrawable(null);
 				}
 			}
 		}
@@ -212,7 +212,6 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	
 	private void resetCurrentPage()
 	{
-		
 		LiveTravelnotePageView liveTravelnotePageView =
 				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
 		
@@ -220,11 +219,12 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 				LiveTravelnotePageType.PICANDWORD)
 		{
 			String resourcePath = liveTravelnotePageView.getResourcePath();
+			
 			if (resourcePath != null)
 			{
 				P.verbose("Reset resource of image of the travelnote page.");
-				liveTravelnotePageView.getViewPictureOfPage().setImageBitmap(
-						BitmapFactory.decodeFile(liveTravelnotePageView.getResourcePath()));
+				liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage()
+						.setImageBitmap(BitmapFactory.decodeFile(resourcePath));
 			}
 		}
 	}

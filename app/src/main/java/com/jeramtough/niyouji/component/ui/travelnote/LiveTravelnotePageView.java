@@ -24,10 +24,6 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 	private FrameLayout layoutSelectWhichPage;
 	private ImageView imageViewPicandwordPage;
 	private ImageView imageViewVideoPage;
-	private ImageButton btnDeletePage;
-	private AppCompatImageView viewPictureOfPage;
-	private VideoView videoViewVideoOfPage;
-	private ScrollView scrollViewPicandword;
 	
 	private LivePicandwordPage livePicandwordPage;
 	
@@ -74,21 +70,13 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 				case R.id.imageView_picandword_page:
 					//设置游记页种类
 					liveTravelnotePageType = LiveTravelnotePageType.PICANDWORD;
-					//实例化图文页的内容
+					//实例化图文页的对象
 					ViewGroup viewGroupPicandwordPage = (ViewGroup) inflater
 							.inflate(R.layout.view_live_travelnote_picandword_page, null);
 					this.addView(viewGroupPicandwordPage);
-					livePicandwordPage = new LivePicandwordPage(viewGroupPicandwordPage);
 					
-					//图文页的删除按钮
-					btnDeletePage = viewGroupPicandwordPage.findViewById(R.id.btn_delete_page);
-					
-					//图文页的一些控件
-					viewPictureOfPage =
-							viewGroupPicandwordPage.findViewById(R.id.view_picture_of_page);
-					viewPictureOfPage.setOnClickListener(this);
-					scrollViewPicandword =
-							viewGroupPicandwordPage.findViewById(R.id.scrollView_picandword);
+					livePicandwordPage = new LivePicandwordPage(viewGroupPicandwordPage,
+							handler);
 					
 					//回调更新Activity动作
 					handler.sendEmptyMessage(
@@ -101,27 +89,12 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 							.inflate(R.layout.view_live_travelnote_video_page, null);
 					this.addView(viewGroupVideoPage);
 					
-					btnDeletePage = viewGroupVideoPage.findViewById(R.id.btn_delete_page);
 					handler.sendEmptyMessage(
 							LiveTravelnoteNavigationHandler.ACTIVATE_VIDEO_ACTION);
 					break;
 			}
 			isActivated = true;
-			btnDeletePage.setOnClickListener(this);
 			this.removeView(layoutSelectWhichPage);
-		}
-		else
-		{
-			switch (viewId)
-			{
-				case R.id.btn_delete_page:
-					handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
-					break;
-				case R.id.view_picture_of_page:
-					handler.sendEmptyMessage(
-							LiveTravelnoteNavigationHandler.TAKE_PHOTO_ACTION);
-					break;
-			}
 		}
 	}
 	
@@ -130,23 +103,21 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 		return liveTravelnotePageType;
 	}
 	
-	public AppCompatImageView getViewPictureOfPage()
-	{
-		return viewPictureOfPage;
-	}
 	
 	public String getResourcePath()
 	{
 		return resourcePath;
 	}
 	
-	public ScrollView getScrollViewPicandword()
+	public LivePicandwordPage getLivePicandwordPage()
 	{
-		return scrollViewPicandword;
+		return livePicandwordPage;
 	}
 	
 	public void setResourcePath(String resourcePath)
 	{
 		this.resourcePath = resourcePath;
 	}
+	
+	//**********************************
 }

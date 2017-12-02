@@ -7,4 +7,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="top_navigation_height">40dp</dimen>
     <dimen name="travelnote_page_right">65dp</dimen>
+    <dimen name="image_background_stroke">12dp</dimen>
 </resources>
