@@ -169,7 +169,6 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 				liveTravelnotePageView.getScrollViewPicandword().scrollTo(0, 0);
 			}
 		}
-		
 	}
 	
 	//************************************
