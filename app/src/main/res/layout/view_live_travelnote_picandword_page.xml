@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:fitsSystemWindows="true">
+        android:background="@color/white">
+
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -20,20 +19,21 @@
                 android:id="@+id/btn_delete_page"
                 android:layout_gravity="right"/>
 
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="30dp">
 
             <ScrollView
                     android:id="@+id/scrollView_picandword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:scrollbars="vertical"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    >
+                    android:scrollbarAlwaysDrawVerticalTrack="true">
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -43,8 +43,8 @@
                     <FrameLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="30dp">
+                            android:layout_gravity="center">
+
 
                         <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/view_picture_of_page"
@@ -63,55 +63,89 @@
                                 android:text="要说点什么~"
                                 android:textColor="@color/white"
                                 android:textSize="20sp"
-                                android:paddingBottom="30dp"
+                                android:paddingBottom="32dp"
                                 android:paddingTop="20dp"
                                 android:paddingLeft="15dp"
-                                android:paddingRight="15dp"
-                                android:shadowColor="@color/black"
-                                android:shadowDy="1"
-                                android:shadowDx="1"
-                                android:shadowRadius="1"
-                                />
-
+                                android:paddingRight="15dp"/>
                     </FrameLayout>
-
 
                     <EditText
                             android:id="@+id/edit_travelnote_page_content"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
+                            android:hint="要说点什么~"/>
                 </LinearLayout>
 
             </ScrollView>
-
         </LinearLayout>
+
         <LinearLayout
+                android:id="@+id/layout_word_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="bottom">
+                android:dividerPadding="10dp">
 
-            <Button
+            <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="aaa"/>
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@android:drawable/btn_default"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_expression"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="插入表情"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@android:drawable/btn_default"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_keyboard_voice"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="语音输入"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-
-
 
     <com.nightonke.boommenu.BoomMenuButton
             android:id="@+id/boomMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bmb_buttonEnum="textInsideCircle"
-            app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
-            app:bmb_buttonPlaceEnum="buttonPlace_sc_3_3"
+            app:bmb_piecePlaceEnum="piecePlace_dot_4_2"
+            app:bmb_buttonPlaceEnum="buttonPlace_sc_4_2"
             android:layout_gravity="bottom|right"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginRight="15dp"/>
-
-
 </FrameLayout>

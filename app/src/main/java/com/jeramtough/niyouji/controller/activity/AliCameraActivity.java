@@ -198,10 +198,12 @@ public abstract class AliCameraActivity extends BaseActivity
 				if (myRecorder.isBeautyStatus())
 				{
 					viewBeautiful.setImageResource(R.drawable.ic_selected_beautiful);
+					Toast.makeText(this,"美颜开启",Toast.LENGTH_SHORT).show();
 				}
 				else
 				{
 					viewBeautiful.setImageResource(R.drawable.ic_beautiful);
+					Toast.makeText(this,"美颜关闭",Toast.LENGTH_SHORT).show();
 				}
 				break;
 			case R.id.view_turn:

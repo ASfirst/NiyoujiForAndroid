@@ -4,9 +4,10 @@
     <color name="colorPrimaryDark">#10c410</color>
     <color name="colorAccent">#8e9aff</color>
     <color name="colorAccentDark">#3547de</color>
-    <color name="menu_color1">#4254ea</color>
-    <color name="menu_color2">#10c410</color>
-    <color name="menu_color3">#eabf21</color>
+    <color name="menu_color1">#de1c0e</color>
+    <color name="menu_color2">#4254ea</color>
+    <color name="menu_color3">#0bac0b</color>
+    <color name="menu_color4">#c9a009</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>

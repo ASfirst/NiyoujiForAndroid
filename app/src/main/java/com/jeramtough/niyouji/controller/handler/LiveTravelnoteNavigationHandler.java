@@ -178,6 +178,10 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 				editText.setVisibility(View.VISIBLE);
 				editText.requestFocus();
 				
+				//文字工具栏可见
+				liveTravelnotePageView.getLivePicandwordPage().getLayoutWordToolbar()
+						.setVisibility(View.VISIBLE);
+				
 				//what do you want to write
 				liveTravelnotePageView.getLivePicandwordPage().reminderWriting();
 				
