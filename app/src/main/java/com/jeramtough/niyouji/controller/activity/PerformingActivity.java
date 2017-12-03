@@ -31,6 +31,7 @@ public class PerformingActivity extends JtBaseActivity
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
+		
 		if (requestCode == TAKE_PHOTO_REQUEST_CODE &&
 				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
 		{
@@ -40,7 +41,8 @@ public class PerformingActivity extends JtBaseActivity
 		else if (requestCode == VIDEO_REQUEST_CODE &&
 				resultCode == VideoActivity.VIDEO_RESULT_CODE)
 		{
-		
+			String path=data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
+			liveTravelnoteNavigationHandler.setPageResourcePath(path);
 		}
 	}
 }

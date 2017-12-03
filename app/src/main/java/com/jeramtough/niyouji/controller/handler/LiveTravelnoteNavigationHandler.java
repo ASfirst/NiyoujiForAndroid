@@ -8,14 +8,13 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.JtViewPager;
+import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
@@ -47,6 +46,8 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	private TextView textViewAudiencesCount;
 	private LinearLayout layoutShutdownForLive;
 	private ProgressBar progressBarWaitTakephotoOrVideo;
+	private TimedCloseTextView textViewNotification;
+	
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
@@ -61,7 +62,9 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 		layoutShutdownForLive = findViewById(R.id.layout_shutdown_for_live);
 		progressBarWaitTakephotoOrVideo =
 				findViewById(R.id.progressBar_wait_takephoto_or_video);
+		textViewNotification = findViewById(R.id.textView_notification);
 		
+		textViewNotification.setVisibility(View.INVISIBLE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
 		
 		viewPagerTravelnotePages.addOnPageChangeListener(this);
@@ -87,28 +90,39 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 		switch (msg.what)
 		{
 			case ACTIVATE_IMAGE_ACTION:
+				textViewNotification.setText("正在打开照相机。。。。。。");
+				textViewNotification.closeDelayed(1300);
 				whenActivateNewPage();
 				gotoTakephoto();
 				break;
 			
 			case ACTIVATE_VIDEO_ACTION:
+				textViewNotification.setText("正在打开摄像机。。。。。。");
+				textViewNotification.closeDelayed(1300);
 				whenActivateNewPage();
-				IntentUtil.toTheOtherActivity(getActivity(), VideoActivity.class,
-						PerformingActivity.VIDEO_REQUEST_CODE);
+				gotoVideo();
 				break;
 			
 			case DELETE_ACTION:
 				if (viewPagerTravelnotePages.getCurrentItem() < liveTravelnotePageViews.size())
 				{
-					liveTravelnotePageViews.remove(viewPagerTravelnotePages.getCurrentItem());
+					this.clearAndRemoveResource();
+					
+					int position = viewPagerTravelnotePages.getCurrentItem();
 					this.updateViewPagerUI(true);
 					this.updatePagesCount();
 					this.resetCurrentPage();
+					textViewNotification.setText(String.format("删除第%d页成功！", position + 1));
+					textViewNotification.closeDelayed(1000);
 				}
 				break;
 			
 			case TAKE_PHOTO_ACTION:
 				gotoTakephoto();
+				break;
+				
+			case VIDEO_ACTION:
+				gotoVideo();
 				break;
 		}
 	}
@@ -184,12 +198,61 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 				
 				//what do you want to write
 				liveTravelnotePageView.getLivePicandwordPage().reminderWriting();
-				
+			}
+		}
+		else if (liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.VIDEO)
+		{
+			//设置视频可以点击
+			liveTravelnotePageView.getLiveVideoPage().setTouchable(true);
+			if (path != null)
+			{
+				//保存下资源路径
+				liveTravelnotePageView.setResourcePath(path);
+				//加载刚才拍摄的视频
+				liveTravelnotePageView.getLiveVideoPage().displayVideo(path);
 			}
 		}
 	}
 	
+	
 	//************************************
+	private void clearAndRemoveResource()
+	{
+		int position=viewPagerTravelnotePages.getCurrentItem();
+		
+		LiveTravelnotePageView liveTravelnotePageView=liveTravelnotePageViews.get(position);
+		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.PICANDWORD)
+		{
+			AppCompatImageView imageView =
+					liveTravelnotePageView.getLivePicandwordPage()
+							.getViewPictureOfPage();
+			if (imageView != null && imageView.getDrawable() != null)
+			{
+				//释放图片资源
+				P.verbose("Recycle resource of image of the travelnote page.");
+				BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+				BitmapUtil.releaseDrawableResouce(bitmapDrawable);
+				imageView.setImageDrawable(null);
+			}
+		}
+		else if (liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.VIDEO)
+		{
+			VideoView videoView = liveTravelnotePageView.getLiveVideoPage()
+					.getVideoViewTravelnotePage();
+			if (videoView.isPlaying())
+			{
+				P.verbose("Recycle resource of video of the travelnote page.");
+				videoView.stopPlayback();
+				videoView.destroyDrawingCache();
+			}
+		}
+		
+		liveTravelnotePageViews.remove(position);
+	}
+	
 	private void recycleLastPage()
 	{
 		if (lastLiveTravelnotePageView != null)
@@ -209,6 +272,18 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 					imageView.setImageDrawable(null);
 				}
 			}
+			else if (lastLiveTravelnotePageView.getLiveTravelnotePageType() ==
+					LiveTravelnotePageType.VIDEO)
+			{
+				VideoView videoView = lastLiveTravelnotePageView.getLiveVideoPage()
+						.getVideoViewTravelnotePage();
+				if (videoView.isPlaying())
+				{
+					P.verbose("Recycle resource of video of the travelnote page.");
+					videoView.stopPlayback();
+					videoView.destroyDrawingCache();
+				}
+			}
 		}
 		lastLiveTravelnotePageView =
 				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
@@ -219,11 +294,11 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 		LiveTravelnotePageView liveTravelnotePageView =
 				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
 		
+		String resourcePath = liveTravelnotePageView.getResourcePath();
+		
 		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
 				LiveTravelnotePageType.PICANDWORD)
 		{
-			String resourcePath = liveTravelnotePageView.getResourcePath();
-			
 			if (resourcePath != null)
 			{
 				P.verbose("Reset resource of image of the travelnote page.");
@@ -231,17 +306,32 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 						.setImageBitmap(BitmapFactory.decodeFile(resourcePath));
 			}
 		}
+		else if ((liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.VIDEO))
+		{
+			if (resourcePath != null)
+			{
+				P.verbose("Reset resource of video of the travelnote page.");
+				liveTravelnotePageView.getLiveVideoPage().displayVideo(resourcePath);
+			}
+		}
 	}
 	
 	private void gotoTakephoto()
 	{
-		progressBarWaitTakephotoOrVideo.setVisibility(View.VISIBLE);
 		IntentUtil.toTheOtherActivity(getActivity(), TakePhotoActivity.class,
 				PerformingActivity.TAKE_PHOTO_REQUEST_CODE);
 	}
 	
+	private void gotoVideo()
+	{
+		IntentUtil.toTheOtherActivity(getActivity(), VideoActivity.class,
+				PerformingActivity.VIDEO_REQUEST_CODE);
+	}
+	
 	private void whenActivateNewPage()
 	{
+		progressBarWaitTakephotoOrVideo.setVisibility(View.VISIBLE);
 		layoutShutdownForLive.setVisibility(View.INVISIBLE);
 		
 		this.addPageViewToList();

@@ -13,9 +13,11 @@
             android:id="@+id/btn_delete_page"
             android:layout_gravity="right"/>
 
-    <VideoView
+    <com.jeramtough.jtandroid.ui.FullScreenVideoView
+            android:id="@+id/videoView_travelnote_page"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_gravity="center"/>
 </LinearLayout>
 

@@ -172,6 +172,16 @@
 
         </LinearLayout>
 
+
+        <com.jeramtough.jtandroid.ui.TimedCloseTextView
+                android:id="@+id/textView_notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/white"/>
+
         <!--留下个弹幕效果-->
         <FrameLayout
                 android:layout_width="match_parent"

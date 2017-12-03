@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.VideoView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
@@ -55,6 +56,10 @@ public class VideoActivity extends AliCameraActivity
 	protected void initResources()
 	{
 		super.initResources();
+		
+		Intent intent = this.getIntent();
+		VideoActivity.this.setResult(VIDEO_RESULT_CODE, intent);
+		
 		
 		musicsHandler = getMyInjectedObjects().getMusicsHandler();
 	}

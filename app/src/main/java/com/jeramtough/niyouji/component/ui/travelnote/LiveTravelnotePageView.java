@@ -24,10 +24,10 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 	private FrameLayout layoutSelectWhichPage;
 	private ImageView imageViewPicandwordPage;
 	private ImageView imageViewVideoPage;
-	
-	private LivePicandwordPage livePicandwordPage;
-	
 	private String resourcePath;
+	
+	private LiveVideoPage liveVideoPage;
+	private LivePicandwordPage livePicandwordPage;
 	
 	private LiveTravelnotePageType liveTravelnotePageType;
 	
@@ -75,8 +75,8 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 							.inflate(R.layout.view_live_travelnote_picandword_page, null);
 					this.addView(viewGroupPicandwordPage);
 					
-					livePicandwordPage = new LivePicandwordPage(viewGroupPicandwordPage,
-							handler);
+					livePicandwordPage =
+							new LivePicandwordPage(viewGroupPicandwordPage, handler);
 					
 					//回调更新Activity动作
 					handler.sendEmptyMessage(
@@ -88,6 +88,8 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 					ViewGroup viewGroupVideoPage = (ViewGroup) inflater
 							.inflate(R.layout.view_live_travelnote_video_page, null);
 					this.addView(viewGroupVideoPage);
+					
+					liveVideoPage=new LiveVideoPage(viewGroupVideoPage,handler);
 					
 					handler.sendEmptyMessage(
 							LiveTravelnoteNavigationHandler.ACTIVATE_VIDEO_ACTION);
@@ -112,6 +114,11 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 	public LivePicandwordPage getLivePicandwordPage()
 	{
 		return livePicandwordPage;
+	}
+	
+	public LiveVideoPage getLiveVideoPage()
+	{
+		return liveVideoPage;
 	}
 	
 	public void setResourcePath(String resourcePath)

@@ -2,12 +2,14 @@ package com.jeramtough.jtandroid.ioc;
 
 import android.content.Context;
 
+import java.io.Serializable;
+
 /**
  * Created by 11718
  * on 2017  November 19 Sunday 18:22.
  */
 
-public abstract class InjectedObjects
+public abstract class InjectedObjects implements Serializable
 {
 	private Context context;
 	

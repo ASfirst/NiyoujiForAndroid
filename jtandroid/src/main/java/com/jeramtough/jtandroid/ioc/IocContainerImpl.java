@@ -4,15 +4,16 @@ package com.jeramtough.jtandroid.ioc;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import com.jeramtough.jtandroid.jtlog2.P;
 
 /**
  * @author 11718
- *         on 2017  November 19 Sunday 19:19.
+ * on 2017  November 19 Sunday 19:19.
  */
 
 public final class IocContainerImpl extends Handler implements IocContainer
 {
-	private static volatile IocContainerImpl iocContainer;
+	private static volatile IocContainer iocContainer;
 	
 	private InjectedObjects injectedObjects;
 	private IocContainerListener iocContainerListener;
@@ -118,6 +119,7 @@ public final class IocContainerImpl extends Handler implements IocContainer
 			{
 				if (iocContainer == null)
 				{
+					P.verbose("Instance a new IocContainer object");
 					iocContainer = new IocContainerImpl();
 				}
 			}
