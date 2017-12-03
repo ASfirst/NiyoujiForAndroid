@@ -1,6 +1,5 @@
 package com.jeramtough.niyouji.controller.handler;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,7 +7,6 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
