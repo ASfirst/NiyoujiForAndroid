@@ -217,6 +217,7 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	
 	
 	//************************************
+	
 	private void clearAndRemoveResource()
 	{
 		int position=viewPagerTravelnotePages.getCurrentItem();
