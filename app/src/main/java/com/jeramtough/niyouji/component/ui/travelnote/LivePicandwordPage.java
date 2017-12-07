@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.component.ali.MusicsHandler;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
@@ -30,6 +31,8 @@ public class LivePicandwordPage implements View.OnClickListener
 	private ImageButton btnDeletePage;
 	private TextView textViewReminderWriting;
 	private LinearLayout layoutWordToolbar;
+	
+	private MusicsHandler musicsHandler;
 	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
@@ -59,6 +62,8 @@ public class LivePicandwordPage implements View.OnClickListener
 	
 	protected void initResources()
 	{
+		
+		
 		for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++)
 		{
 			TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder();
@@ -77,6 +82,11 @@ public class LivePicandwordPage implements View.OnClickListener
 					builder.normalImageRes(R.drawable.ic_music);
 					builder.normalColorRes(R.color.menu_color2);
 					builder.normalText("添加背景音乐");
+					builder.listener(index ->
+					{
+						handler.sendEmptyMessage(LiveTravelnoteNavigationHandler
+								.SELECT_MUSIC_ACTION);
+					});
 					break;
 				case 2:
 					builder.normalImageRes(R.drawable.ic_send_voice);

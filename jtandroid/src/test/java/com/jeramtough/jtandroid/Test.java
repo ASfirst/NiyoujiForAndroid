@@ -14,11 +14,14 @@ public class Test
 	@org.junit.Test
 	public void test()
 	{
-		ExtractedZip extractedZip = new ExtractedZip(new File(
-				"E:\\codes\\AndroidStudentCodes\\NiYouJi\\jtandroid\\src\\test\\lalala" +
-						"\\musics" + ".zip"));
-		extractedZip.extract(
-				"E:\\codes\\AndroidStudentCodes\\NiYouJi\\jtandroid\\src\\test\\lalala\\abc");
+		try
+		{
+			Class.forName("com.jeramtough.jtandroid.MyInjectedObjects").newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException | ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.view.View;
+import com.jeramtough.jtandroid.ioc.InjectedObjects;
+import com.jeramtough.jtandroid.ioc.IocContainerImpl;
 
 /**
  * @author 11718
@@ -35,4 +37,8 @@ public class JtBaseHandler extends Handler
 		return activity;
 	}
 	
+	public InjectedObjects getInjectedObjects()
+	{
+		return IocContainerImpl.getDiscardIocContainer().getInjectedObjects();
+	}
 }

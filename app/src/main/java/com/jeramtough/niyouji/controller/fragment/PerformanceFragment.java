@@ -3,6 +3,7 @@ package com.jeramtough.niyouji.controller.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
@@ -29,6 +30,7 @@ public class PerformanceFragment extends BaseFragment
 	{
 		btnTest = (Button) findViewById(R.id.btn_test);
 		btnTest.setOnClickListener(this);
+		
 	}
 	
 	@Override

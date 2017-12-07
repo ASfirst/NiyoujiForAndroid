@@ -43,11 +43,11 @@ public class SelectMusicDialog extends BottomPopupDialog
 		super(context);
 		this.cameraMusics = cameraMusics;
 		
-		initReources();
+		initResources();
 		initView();
 	}
 	
-	protected void initReources()
+	protected void initResources()
 	{
 		
 		mediaPlayer = new MediaPlayer();

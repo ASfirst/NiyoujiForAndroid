@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
-import com.jeramtough.jtandroid.ioc.InjectedObjects;
-import com.jeramtough.jtandroid.ioc.IocContainer;
-import com.jeramtough.jtandroid.ioc.IocContainerImpl;
-import com.jeramtough.jtandroid.ioc.IocContainerListener;
+import com.jeramtough.jtandroid.ioc.*;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LaunchBusiness;
@@ -29,10 +26,14 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
 		
-		IocContainer iocContainer = IocContainerImpl.getIocContainer();
-		iocContainer.setIocContainerListener(this);
-		iocContainer.injectContext(getApplicationContext());
-		iocContainer.inject(MyInjectedObjects.class);
+		DiscardIocContainer discardIocContainer = IocContainerImpl.getDiscardIocContainer();
+		discardIocContainer.setIocContainerListener(this);
+		discardIocContainer.injectContext(getApplicationContext());
+		discardIocContainer.inject(MyInjectedObjects.class);
+		
+		IocContainer iocContainer = JtIocContainer.getIocContainer();
+		MyInjectedObjects myInjectedObjects =
+				(MyInjectedObjects) iocContainer.getInjectedObjects(this);
 	}
 	
 	@Override

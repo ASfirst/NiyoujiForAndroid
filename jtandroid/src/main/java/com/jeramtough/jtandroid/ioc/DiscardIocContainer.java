@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author 11718
  */
 
-public interface IocContainer extends Serializable
+public interface DiscardIocContainer extends Serializable
 {
 	void injectContext(Context context);
 	

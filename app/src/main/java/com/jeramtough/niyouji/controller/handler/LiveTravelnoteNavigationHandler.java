@@ -3,6 +3,9 @@ package com.jeramtough.niyouji.controller.handler;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
@@ -10,18 +13,25 @@ import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
+import com.jeramtough.jtandroid.ioc.IocContainerImpl;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.component.ali.CameraMusic;
+import com.jeramtough.niyouji.component.ali.MusicsHandler;
+import com.jeramtough.niyouji.component.ioc.MyInjectedObjects;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageType;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
 import com.jeramtough.niyouji.controller.activity.VideoActivity;
+import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,13 +40,14 @@ import java.util.ArrayList;
  */
 
 public class LiveTravelnoteNavigationHandler extends JtBaseHandler
-		implements ViewPager.OnPageChangeListener
+		implements ViewPager.OnPageChangeListener, SelectMusicDialog.SelectMusicListener
 {
 	public final static int ACTIVATE_IMAGE_ACTION = 0X1;
 	public final static int ACTIVATE_VIDEO_ACTION = 0X3;
 	public final static int DELETE_ACTION = 0X2;
 	public final static int TAKE_PHOTO_ACTION = 0X4;
 	public final static int VIDEO_ACTION = 0X5;
+	public final static int SELECT_MUSIC_ACTION = 0X6;
 	
 	private JtViewPager viewPagerTravelnotePages;
 	private TextView textViewAttentionsCount;
@@ -49,6 +60,10 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
+	
+	private MusicsHandler musicsHandler;
+	
+	private MediaPlayer mediaPlayer;
 	
 	public LiveTravelnoteNavigationHandler(Activity activity)
 	{
@@ -73,6 +88,11 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	protected void initResources()
 	{
 		liveTravelnotePageViews = new ArrayList<>();
+		mediaPlayer = new MediaPlayer();
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		
+		MyInjectedObjects myInjectedObjects = (MyInjectedObjects) getInjectedObjects();
+		musicsHandler = myInjectedObjects.getMusicsHandler();
 		
 		this.addPageViewToList();
 		
@@ -118,9 +138,12 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 			case TAKE_PHOTO_ACTION:
 				gotoTakephoto();
 				break;
-				
+			
 			case VIDEO_ACTION:
 				gotoVideo();
+				break;
+			case SELECT_MUSIC_ACTION:
+				popupChoiceMusicDialog();
 				break;
 		}
 	}
@@ -160,6 +183,28 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	@Override
 	public void onPageScrollStateChanged(int state)
 	{
+	}
+	
+	@Override
+	public void selectMusic(CameraMusic cameraMusic)
+	{
+		Uri uri = Uri.fromFile(new File(cameraMusic.getPath()));
+		try
+		{
+			if (mediaPlayer.isPlaying())
+			{
+				mediaPlayer.stop();
+				mediaPlayer.reset();
+			}
+			
+			mediaPlayer.setDataSource(getContext(), uri);
+			mediaPlayer.prepare();
+			mediaPlayer.start();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public void setPageResourcePath(String path)
@@ -215,18 +260,24 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	
 	
 	//************************************
+	private void popupChoiceMusicDialog()
+	{
+		SelectMusicDialog selectMusicDialog =
+				new SelectMusicDialog(getContext(), musicsHandler.getCameraMusics());
+		selectMusicDialog.setSelectMusicListener(this);
+		selectMusicDialog.show();
+	}
 	
 	private void clearAndRemoveResource()
 	{
-		int position=viewPagerTravelnotePages.getCurrentItem();
+		int position = viewPagerTravelnotePages.getCurrentItem();
 		
-		LiveTravelnotePageView liveTravelnotePageView=liveTravelnotePageViews.get(position);
+		LiveTravelnotePageView liveTravelnotePageView = liveTravelnotePageViews.get(position);
 		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
 				LiveTravelnotePageType.PICANDWORD)
 		{
 			AppCompatImageView imageView =
-					liveTravelnotePageView.getLivePicandwordPage()
-							.getViewPictureOfPage();
+					liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage();
 			if (imageView != null && imageView.getDrawable() != null)
 			{
 				//释放图片资源
@@ -239,8 +290,8 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 		else if (liveTravelnotePageView.getLiveTravelnotePageType() ==
 				LiveTravelnotePageType.VIDEO)
 		{
-			VideoView videoView = liveTravelnotePageView.getLiveVideoPage()
-					.getVideoViewTravelnotePage();
+			VideoView videoView =
+					liveTravelnotePageView.getLiveVideoPage().getVideoViewTravelnotePage();
 			if (videoView.isPlaying())
 			{
 				P.verbose("Recycle resource of video of the travelnote page.");
@@ -374,4 +425,6 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 					.setText((position + 1) + "/" + (liveTravelnotePageViews.size() - 1));
 		}
 	}
+	
+	
 }

@@ -3,8 +3,8 @@ package com.jeramtough.jtandroid.controller.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import com.jeramtough.jtandroid.ioc.DiscardIocContainer;
 import com.jeramtough.jtandroid.ioc.InjectedObjects;
-import com.jeramtough.jtandroid.ioc.IocContainer;
 import com.jeramtough.jtandroid.ioc.IocContainerImpl;
 
 /**
@@ -14,20 +14,20 @@ import com.jeramtough.jtandroid.ioc.IocContainerImpl;
 
 public abstract class JtBaseActivity extends AppCompatActivity implements View.OnClickListener
 {
-	private IocContainer iocContainer;
+	private DiscardIocContainer discardIocContainer;
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		outState.putSerializable("iocContainer",iocContainer);
+		outState.putSerializable("discardIocContainer", discardIocContainer);
 	}
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);
-		iocContainer= (IocContainer) savedInstanceState.getSerializable("iocContainer");
+		discardIocContainer = (DiscardIocContainer) savedInstanceState.getSerializable("discardIocContainer");
 	}
 	
 	@Override
@@ -39,11 +39,11 @@ public abstract class JtBaseActivity extends AppCompatActivity implements View.O
 	
 	public InjectedObjects getInjectedObjects()
 	{
-		if (iocContainer==null)
+		if (discardIocContainer ==null)
 		{
-			iocContainer = IocContainerImpl.getIocContainer();
+			discardIocContainer = IocContainerImpl.getDiscardIocContainer();
 		}
-		return iocContainer.getInjectedObjects();
+		return discardIocContainer.getInjectedObjects();
 	}
 	
 	public void onClick(View view, int viewId)
