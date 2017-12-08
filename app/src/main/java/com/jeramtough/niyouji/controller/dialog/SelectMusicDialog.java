@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.JtTextItemAdapter;
 import com.jeramtough.jtandroid.controller.dialog.BottomPopupDialog;
+import com.jeramtough.jtandroid.function.MusicPlayer;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 
@@ -30,7 +31,7 @@ public class SelectMusicDialog extends BottomPopupDialog
 	private Button btnDone;
 	private ListView listViewMusics;
 	
-	private MediaPlayer mediaPlayer;
+	private MusicPlayer musicPlayer;
 	
 	private CameraMusic cameraMusic;
 	
@@ -49,9 +50,7 @@ public class SelectMusicDialog extends BottomPopupDialog
 	
 	protected void initResources()
 	{
-		
-		mediaPlayer = new MediaPlayer();
-		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		musicPlayer = new MusicPlayer(this.getContext());
 	}
 	
 	protected void initView()
@@ -79,7 +78,7 @@ public class SelectMusicDialog extends BottomPopupDialog
 	@Override
 	public void onClick(View v)
 	{
-		if (cameraMusic!=null)
+		if (cameraMusic != null)
 		{
 			if (selectMusicListener != null)
 			{
@@ -100,40 +99,14 @@ public class SelectMusicDialog extends BottomPopupDialog
 		
 		cameraMusic = cameraMusics.get(position);
 		
-		Uri uri = Uri.fromFile(new File(cameraMusic.getPath()));
-		try
-		{
-			if (mediaPlayer.isPlaying())
-			{
-				mediaPlayer.stop();
-				mediaPlayer.reset();
-			}
-			
-			mediaPlayer.setDataSource(getContext(), uri);
-			mediaPlayer.prepare();
-			mediaPlayer.start();
-			
-			if (selectMusicListener != null)
-			{
-				selectMusicListener.selectMusic(cameraMusic);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
+		musicPlayer.playMusic(cameraMusic.getPath(),true);
 	}
 	
 	@Override
 	public void cancel()
 	{
 		super.cancel();
-		if (mediaPlayer.isPlaying())
-		{
-			mediaPlayer.stop();
-		}
-		mediaPlayer.release();
+		musicPlayer.end();
 	}
 	
 	public void setSelectMusicListener(SelectMusicListener selectMusicListener)
@@ -141,7 +114,7 @@ public class SelectMusicDialog extends BottomPopupDialog
 		this.selectMusicListener = selectMusicListener;
 	}
 	
-	//{{{{{{{{{{{{{{}]]]]]]]]]]]]]]]]]
+	//{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}
 	public interface SelectMusicListener
 	{
 		void selectMusic(CameraMusic cameraMusic);

@@ -44,4 +44,11 @@ public class PerformingActivity extends JtBaseActivity
 			liveTravelnoteNavigationHandler.setPageResourcePath(path);
 		}
 	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		liveTravelnoteNavigationHandler.onDestroy();
+	}
 }

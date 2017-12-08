@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import com.jeramtough.jtandroid.ioc.IocContainer;
 import com.jeramtough.jtandroid.ioc.JtIocContainer;
-import com.jeramtough.jtandroid.ioc.annotation.JtObject;
+import com.jeramtough.jtandroid.ioc.annotation.JtController;
 
 /**
  * @author 11718
  *         on 2017  December 07 Thursday 16:53.
  */
-@JtObject
+@JtController
 public abstract class JtIocActivity extends JtBaseActivity
 {
 	

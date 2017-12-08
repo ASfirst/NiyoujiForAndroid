@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface JtComponent {
-
+public @interface JtComponent
+{
+	JtObjectType pattern() default JtObjectType.Singleton;
 }

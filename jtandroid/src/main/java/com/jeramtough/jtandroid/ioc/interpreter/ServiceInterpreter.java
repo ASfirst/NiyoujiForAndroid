@@ -30,7 +30,7 @@ public class ServiceInterpreter implements Interpreter
 	}
 	
 	@Override
-	public Object getFieldObject(Field field)
+	public Object getFieldValueObject(Field field)
 	{
 		Object fieldObject = null;
 		

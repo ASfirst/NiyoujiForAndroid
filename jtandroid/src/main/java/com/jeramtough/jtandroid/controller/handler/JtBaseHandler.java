@@ -35,4 +35,8 @@ public class JtBaseHandler extends Handler
 		return activity;
 	}
 	
+	public void onDestroy()
+	{
+	
+	}
 }

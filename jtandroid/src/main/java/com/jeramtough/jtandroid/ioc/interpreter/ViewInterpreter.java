@@ -27,7 +27,7 @@ public class ViewInterpreter implements Interpreter
 	}
 	
 	@Override
-	public Object getFieldObject(Field field)
+	public Object getFieldValueObject(Field field)
 	{
 		InjectView annotation=field.getAnnotation(InjectView.class);
 		return viewGroup.findViewById(annotation.value());

@@ -32,7 +32,7 @@ public class LivePicandwordPage implements View.OnClickListener
 	private TextView textViewReminderWriting;
 	private LinearLayout layoutWordToolbar;
 	
-	private MusicsHandler musicsHandler;
+	private String musicPath;
 	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
@@ -51,6 +51,7 @@ public class LivePicandwordPage implements View.OnClickListener
 		editTravelnotePageContent.setVisibility(View.GONE);
 		textViewReminderWriting.setVisibility(View.GONE);
 		layoutWordToolbar.setVisibility(View.GONE);
+		boomMenuButton.setVisibility(View.GONE);
 		
 		viewPictureOfPage.setClickable(false);
 		
@@ -84,8 +85,8 @@ public class LivePicandwordPage implements View.OnClickListener
 					builder.normalText("添加背景音乐");
 					builder.listener(index ->
 					{
-						handler.sendEmptyMessage(LiveTravelnoteNavigationHandler
-								.SELECT_MUSIC_ACTION);
+						handler.sendEmptyMessage(
+								LiveTravelnoteNavigationHandler.SELECT_MUSIC_ACTION);
 					});
 					break;
 				case 2:
@@ -146,6 +147,21 @@ public class LivePicandwordPage implements View.OnClickListener
 		return layoutWordToolbar;
 	}
 	
+	public BoomMenuButton getBoomMenuButton()
+	{
+		return boomMenuButton;
+	}
+	
+	public String getMusicPath()
+	{
+		return musicPath;
+	}
+	
+	public void setMusicPath(String musicPath)
+	{
+		this.musicPath = musicPath;
+	}
+	
 	public void reminderWriting()
 	{
 		textViewReminderWriting.setVisibility(View.VISIBLE);
@@ -154,4 +170,6 @@ public class LivePicandwordPage implements View.OnClickListener
 			textViewReminderWriting.setVisibility(View.GONE);
 		}, 3000);
 	}
+	
+	
 }

@@ -14,5 +14,5 @@ public interface Interpreter
 	 * @param field injected field
 	 * @return instance of field
 	 */
-	Object getFieldObject(Field field);
+	Object getFieldValueObject(Field field);
 }

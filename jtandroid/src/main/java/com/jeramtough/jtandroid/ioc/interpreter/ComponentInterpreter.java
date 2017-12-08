@@ -25,7 +25,7 @@ public class ComponentInterpreter implements Interpreter
 	}
 	
 	@Override
-	public Object getFieldObject(Field field)
+	public Object getFieldValueObject(Field field)
 	{
 		return this.instanceFieldObject(field.getType());
 	}

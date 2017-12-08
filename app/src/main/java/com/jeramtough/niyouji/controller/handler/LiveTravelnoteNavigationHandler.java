@@ -3,17 +3,14 @@ package com.jeramtough.niyouji.controller.handler;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
-import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
+import com.jeramtough.jtandroid.function.MusicPlayer;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.JtViewPager;
@@ -30,8 +27,6 @@ import com.jeramtough.niyouji.controller.activity.TakePhotoActivityApp;
 import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -63,8 +58,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	@InjectComponent
 	private MusicsHandler musicsHandler;
-	
-	private MediaPlayer mediaPlayer;
+	@InjectComponent
+	private MusicPlayer musicPlayer;
 	
 	public LiveTravelnoteNavigationHandler(Activity activity)
 	{
@@ -89,8 +84,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	protected void initResources()
 	{
 		liveTravelnotePageViews = new ArrayList<>();
-		mediaPlayer = new MediaPlayer();
-		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		
 		this.addPageViewToList();
 		
@@ -127,7 +120,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					int position = viewPagerTravelnotePages.getCurrentItem();
 					this.updateViewPagerUI(true);
 					this.updatePagesCount();
-					this.resetCurrentPage();
+					this.resetCurrentImgOrVideoOfPage();
 					textViewNotification.setText(String.format("删除第%d页成功！", position + 1));
 					textViewNotification.closeDelayed(1000);
 				}
@@ -159,8 +152,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		if (position == liveTravelnotePageViews.size() - 1)
 		{
 			layoutShutdownForLive.setVisibility(View.VISIBLE);
+			pauseMusicIf();
 		}
-		else
+		else//不是最后一页
 		{
 			//让结束按钮消失
 			if (layoutShutdownForLive.getVisibility() == View.VISIBLE)
@@ -168,7 +162,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				layoutShutdownForLive.setVisibility(View.INVISIBLE);
 			}
 			
-			resetCurrentPage();
+			resetCurrentImgOrVideoOfPage();
+			resetCurrentMusicOfPage();
 		}
 		
 		//回收上个Page的内存
@@ -186,23 +181,21 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	@Override
 	public void selectMusic(CameraMusic cameraMusic)
 	{
-		Uri uri = Uri.fromFile(new File(cameraMusic.getPath()));
-		try
+		musicPlayer.playMusic(cameraMusic.getPath(), true);
+		LiveTravelnotePageView liveTravelnotePageView =
+				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
+		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.PICANDWORD)
 		{
-			if (mediaPlayer.isPlaying())
-			{
-				mediaPlayer.stop();
-				mediaPlayer.reset();
-			}
-			
-			mediaPlayer.setDataSource(getContext(), uri);
-			mediaPlayer.prepare();
-			mediaPlayer.start();
+			liveTravelnotePageView.getLivePicandwordPage().setMusicPath(cameraMusic.getPath());
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+	}
+	
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		musicPlayer.end();
 	}
 	
 	public void setPageResourcePath(String path)
@@ -235,6 +228,10 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				
 				//文字工具栏可见
 				liveTravelnotePageView.getLivePicandwordPage().getLayoutWordToolbar()
+						.setVisibility(View.VISIBLE);
+				
+				//底部悬浮按钮可见
+				liveTravelnotePageView.getLivePicandwordPage().getBoomMenuButton()
 						.setVisibility(View.VISIBLE);
 				
 				//what do you want to write
@@ -337,7 +334,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
 	}
 	
-	private void resetCurrentPage()
+	private void resetCurrentImgOrVideoOfPage()
 	{
 		LiveTravelnotePageView liveTravelnotePageView =
 				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
@@ -363,6 +360,30 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				liveTravelnotePageView.getLiveVideoPage().displayVideo(resourcePath);
 			}
 		}
+	}
+	
+	private void resetCurrentMusicOfPage()
+	{
+		LiveTravelnotePageView liveTravelnotePageView =
+				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
+		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
+				LiveTravelnotePageType.PICANDWORD)
+		{
+			String musicPath = liveTravelnotePageView.getLivePicandwordPage().getMusicPath();
+			if (musicPath != null)
+			{
+				musicPlayer.playMusic(musicPath, true);
+			}
+			else
+			{
+				musicPlayer.getMediaPlayer().pause();
+			}
+		}
+	}
+	
+	private void pauseMusicIf()
+	{
+		musicPlayer.getMediaPlayer().pause();
 	}
 	
 	private void gotoTakephoto()

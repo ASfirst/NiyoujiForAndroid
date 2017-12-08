@@ -2,10 +2,7 @@ package com.jeramtough.jtandroid.ioc;
 
 import android.app.Activity;
 import android.content.Context;
-import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
-import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.ioc.annotation.InjectView;
-import com.jeramtough.jtandroid.ioc.annotation.JtObject;
+import com.jeramtough.jtandroid.ioc.annotation.*;
 import com.jeramtough.jtandroid.ioc.filter.FieldsFilter;
 import com.jeramtough.jtandroid.ioc.filter.FieldsFilterFactory;
 import com.jeramtough.jtandroid.ioc.injector.Injector;
@@ -42,12 +39,12 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 		//be used to inject value of field to object.
 		Injector injector = new Injector(object);
 		
-		//traverse all the JtObject
+		//traverse all the JtController
 		ArrayList<Class> classes = new ArrayList<>();
 		Class c = object.getClass();
 		while (c.getSuperclass() != null)
 		{
-			if (c.getAnnotation(JtObject.class) != null)
+			if (c.getAnnotation(JtController.class) != null)
 			{
 				classes.add(c);
 			}
@@ -90,12 +87,12 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 		//be used to inject value of field to object.
 		Injector injector = new Injector(object);
 		
-		//traverse all the JtObject
+		//traverse all the JtController
 		ArrayList<Class> classes = new ArrayList<>();
 		Class c = object.getClass();
 		while (c.getSuperclass() != null)
 		{
-			if (c.getAnnotation(JtObject.class) != null)
+			if (c.getAnnotation(JtController.class) != null)
 			{
 				classes.add(c);
 			}
@@ -154,9 +151,23 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 				filedValueObject = injectedComponents.get(fieldKeyName);
 				if (filedValueObject == null)
 				{
-					ComponentInterpreter componentInjector = new ComponentInterpreter(context);
-					filedValueObject = componentInjector.getFieldObject(jtField.getField());
-					injectedComponents.put(fieldKeyName, filedValueObject);
+					ComponentInterpreter componentInterpreter =
+							new ComponentInterpreter(context);
+					filedValueObject =
+							componentInterpreter.getFieldValueObject(jtField.getField());
+					
+					JtComponent jtComponentAnnotation =
+							filedValueObject.getClass().getAnnotation(JtComponent.class);
+					
+					if (jtComponentAnnotation.pattern() == JtObjectType.Singleton)
+					{
+						injectedComponents.put(fieldKeyName, filedValueObject);
+					}
+					else if (jtComponentAnnotation.pattern() == JtObjectType.Prototype)
+					{
+						newInjectedObjectsCount--;
+					}
+					
 				}
 				else
 				{
@@ -166,7 +177,7 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 			else if (jtField.getAnnotation() instanceof InjectView)
 			{
 				ViewInterpreter viewInterpreter = new ViewInterpreter((Activity) context);
-				filedValueObject = viewInterpreter.getFieldObject(jtField.getField());
+				filedValueObject = viewInterpreter.getFieldValueObject(jtField.getField());
 				if (filedValueObject != null)
 				{
 					newInjectedViewsCount++;
@@ -181,8 +192,20 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 					ServiceInterpreter serviceInterpreter =
 							new ServiceInterpreter(context, injectedComponents);
 					serviceInterpreter.setNeededComponentCaller(this);
-					filedValueObject = serviceInterpreter.getFieldObject(jtField.getField());
-					injectedServices.put(fieldKeyName, filedValueObject);
+					filedValueObject =
+							serviceInterpreter.getFieldValueObject(jtField.getField());
+					
+					JtService jtServiceAnnotation =
+							filedValueObject.getClass().getAnnotation(JtService.class);
+					if (jtServiceAnnotation.pattern() == JtObjectType.Singleton)
+					{
+						injectedServices.put(fieldKeyName, filedValueObject);
+					}
+					else if (jtServiceAnnotation.pattern() == JtObjectType.Prototype)
+					{
+						newInjectedObjectsCount--;
+					}
+					
 				}
 				else
 				{
@@ -192,7 +215,6 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 			
 			if (filedValueObject != null)
 			{
-//				P.debug(jtField.getField().getName() + " vvvv");
 				injector.injectObjectToField(jtField.getField(), filedValueObject);
 				newInjectedObjectsCount++;
 			}
