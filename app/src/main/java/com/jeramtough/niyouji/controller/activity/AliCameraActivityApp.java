@@ -96,8 +96,6 @@ public abstract class AliCameraActivityApp extends AppBaseActivity
 	
 	protected void initResources()
 	{
-		this.getIocContainer().injectObjects(this);
-		
 		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
 		selectFilterDialog.setSelectFilterListener(this);
 	}

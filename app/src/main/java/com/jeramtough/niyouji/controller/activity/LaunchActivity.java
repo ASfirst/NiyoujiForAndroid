@@ -28,8 +28,6 @@ public class LaunchActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
 		
-		getIocContainer().injectObjects(this);
-		
 		//初始化阿里短视频SDK库
 		QupaiHttpFinal.getInstance().initOkHttpFinal();
 		System.loadLibrary("QuCore-ThirdParty");

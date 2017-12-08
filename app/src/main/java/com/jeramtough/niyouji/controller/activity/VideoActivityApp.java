@@ -58,7 +58,6 @@ public class VideoActivityApp extends AliCameraActivityApp
 	protected void initResources()
 	{
 		super.initResources();
-		getIocContainer().injectObjects(this);
 		
 		Intent intent = this.getIntent();
 		VideoActivityApp.this.setResult(VIDEO_RESULT_CODE, intent);
