@@ -3,6 +3,7 @@ package com.jeramtough.niyouji.business;
 import android.Manifest;
 import android.app.Activity;
 import com.jeramtough.jtandroid.function.PermissionManager;
+import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.jtandroid.java.ExtractedZip;
 import com.jeramtough.niyouji.component.app.AppConfig;
@@ -16,7 +17,7 @@ import java.io.IOException;
  * @author 11718
  *         on 2017  November 20 Monday 23:42.
  */
-
+@JtService
 public class LaunchService implements LaunchBusiness
 {
 	private final PermissionManager permissionManager;

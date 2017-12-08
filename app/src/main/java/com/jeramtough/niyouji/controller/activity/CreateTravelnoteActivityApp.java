@@ -4,19 +4,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
 /**
  * @author 11718
  */
-public class CreateTravelnoteActivity extends BaseActivity
+public class CreateTravelnoteActivityApp extends AppBaseActivity
 {
 	public final static String COVER_PATH_NAME="coverPath";
 	public final static String TITLE_NAME="title";
@@ -87,9 +85,9 @@ public class CreateTravelnoteActivity extends BaseActivity
 	{  
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == resultCode &&
-				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
+				resultCode == TakePhotoActivityApp.TAKE_PHOTO_RESULT_CODE)
 		{
-			String photoPath = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
+			String photoPath = data.getStringExtra(TakePhotoActivityApp.PHOTO_PATH_NAME);
 			
 			this.coverPath=photoPath;
 			
@@ -102,9 +100,9 @@ public class CreateTravelnoteActivity extends BaseActivity
 			
 			btnStartPerform.setVisibility(View.VISIBLE);
 		}
-		else if (requestCode == resultCode && resultCode == VideoActivity.VIDEO_RESULT_CODE)
+		else if (requestCode == resultCode && resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
 		{
-			String videoPath = data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
+			String videoPath = data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
 			this.coverPath=videoPath;
 			
 			editTravelnoteTitle.setBackgroundResource(R.mipmap.title_background);

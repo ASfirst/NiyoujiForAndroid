@@ -13,7 +13,8 @@ import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
-import com.jeramtough.jtandroid.ioc.IocContainerImpl;
+import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
@@ -22,12 +23,11 @@ import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
-import com.jeramtough.niyouji.component.ioc.MyInjectedObjects;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageType;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
-import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
-import com.jeramtough.niyouji.controller.activity.VideoActivity;
+import com.jeramtough.niyouji.controller.activity.TakePhotoActivityApp;
+import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 import java.io.File;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
  *         on 2017  November 30 Thursday 14:45.
  */
 
-public class LiveTravelnoteNavigationHandler extends JtBaseHandler
+public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		implements ViewPager.OnPageChangeListener, SelectMusicDialog.SelectMusicListener
 {
 	public final static int ACTIVATE_IMAGE_ACTION = 0X1;
@@ -61,6 +61,7 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
 	
+	@InjectComponent
 	private MusicsHandler musicsHandler;
 	
 	private MediaPlayer mediaPlayer;
@@ -90,9 +91,6 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 		liveTravelnotePageViews = new ArrayList<>();
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		
-		MyInjectedObjects myInjectedObjects = (MyInjectedObjects) getInjectedObjects();
-		musicsHandler = myInjectedObjects.getMusicsHandler();
 		
 		this.addPageViewToList();
 		
@@ -369,13 +367,13 @@ public class LiveTravelnoteNavigationHandler extends JtBaseHandler
 	
 	private void gotoTakephoto()
 	{
-		IntentUtil.toTheOtherActivity(getActivity(), TakePhotoActivity.class,
+		IntentUtil.toTheOtherActivity(getActivity(), TakePhotoActivityApp.class,
 				PerformingActivity.TAKE_PHOTO_REQUEST_CODE);
 	}
 	
 	private void gotoVideo()
 	{
-		IntentUtil.toTheOtherActivity(getActivity(), VideoActivity.class,
+		IntentUtil.toTheOtherActivity(getActivity(), VideoActivityApp.class,
 				PerformingActivity.VIDEO_REQUEST_CODE);
 	}
 	

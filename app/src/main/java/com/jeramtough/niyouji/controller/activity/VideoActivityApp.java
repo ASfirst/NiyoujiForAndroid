@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import android.widget.VideoView;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
+import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
@@ -19,7 +20,7 @@ import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 /**
  * @author 11718
  */
-public class VideoActivity extends AliCameraActivity
+public class VideoActivityApp extends AliCameraActivityApp
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
 		SelectMusicDialog.SelectMusicListener, MyRecorder.RecorderListener
 {
@@ -38,6 +39,7 @@ public class VideoActivity extends AliCameraActivity
 	private AppCompatImageView viewUndoRecord;
 	private AppCompatImageView viewRecorder;
 	
+	@InjectComponent
 	private MusicsHandler musicsHandler;
 	
 	@Override
@@ -56,12 +58,10 @@ public class VideoActivity extends AliCameraActivity
 	protected void initResources()
 	{
 		super.initResources();
+		getIocContainer().injectObjects(this);
 		
 		Intent intent = this.getIntent();
-		VideoActivity.this.setResult(VIDEO_RESULT_CODE, intent);
-		
-		
-		musicsHandler = getMyInjectedObjects().getMusicsHandler();
+		VideoActivityApp.this.setResult(VIDEO_RESULT_CODE, intent);
 	}
 	
 	@Override

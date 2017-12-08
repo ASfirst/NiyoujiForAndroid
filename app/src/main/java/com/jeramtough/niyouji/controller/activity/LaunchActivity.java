@@ -5,19 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
-import com.jeramtough.jtandroid.ioc.*;
+import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LaunchBusiness;
-import com.jeramtough.niyouji.component.ioc.MyInjectedObjects;
+import com.jeramtough.niyouji.business.LaunchService;
 
 /**
  * @author 11718
  */
-public class LaunchActivity extends BaseActivity implements IocContainerListener
+public class LaunchActivity extends AppBaseActivity
 {
 	private final int REQUEST_NEEDED_PERMISSIONS_CALLER_CODE = 0;
 	
+	@InjectService(service = LaunchService.class)
 	private LaunchBusiness launchBusiness;
 	
 	@Override
@@ -26,40 +28,18 @@ public class LaunchActivity extends BaseActivity implements IocContainerListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
 		
-		DiscardIocContainer discardIocContainer = IocContainerImpl.getDiscardIocContainer();
-		discardIocContainer.setIocContainerListener(this);
-		discardIocContainer.injectContext(getApplicationContext());
-		discardIocContainer.inject(MyInjectedObjects.class);
+		getIocContainer().injectObjects(this);
 		
-		IocContainer iocContainer = JtIocContainer.getIocContainer();
-		MyInjectedObjects myInjectedObjects =
-				(MyInjectedObjects) iocContainer.getInjectedObjects(this);
-	}
-	
-	@Override
-	public void onBeforeInject()
-	{
 		//初始化阿里短视频SDK库
 		QupaiHttpFinal.getInstance().initOkHttpFinal();
 		System.loadLibrary("QuCore-ThirdParty");
 		System.loadLibrary("QuCore");
-	}
-	
-	@Override
-	public void onInjectedSuccessfully(InjectedObjects injectedObjects)
-	{
-		launchBusiness = getMyInjectedObjects().getLaunchBusiness();
+		
 		if (launchBusiness
 				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
 		{
 			this.whenGetAllNeededPermissions();
 		}
-	}
-	
-	@Override
-	public void onInjectedFailed(Exception e)
-	{
-		e.printStackTrace();
 	}
 	
 	@Override

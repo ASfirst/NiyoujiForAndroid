@@ -7,6 +7,17 @@ package com.jeramtough.jtandroid.jtlog2;
 
 public class P
 {
+	
+	static
+	{
+		StringBuilder text= new StringBuilder();
+		for (int i = 0; i< Configuration.getConfiguration().getMaxNumberOfRow()*2; i++)
+		{
+			text.append("-");
+		}
+		P.p(text.toString());
+	}
+	
 	private P()
 	{
 		
@@ -105,9 +116,9 @@ public class P
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Object message : messages)
 		{
-			if (message==null)
+			if (message == null)
 			{
-				message="[null]";
+				message = "[null]";
 			}
 			stringBuilder.append(message.toString()).append(" , ");
 		}

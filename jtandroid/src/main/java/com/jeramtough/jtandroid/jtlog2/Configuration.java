@@ -8,7 +8,7 @@ public class Configuration
 {
 	private boolean isColouredMode=false;
 	private static volatile Configuration configuration;
-	private int maxNumberOfRow=110;
+	private int maxNumberOfRow=130;
 	
 	private Configuration()
 	{

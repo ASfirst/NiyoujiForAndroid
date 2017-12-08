@@ -3,7 +3,6 @@ package com.jeramtough.jtandroid.ui;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import com.jeramtough.jtandroid.jtlog2.P;
 
 /**
  * @author 11718

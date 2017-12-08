@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author 11718
  *         on 2017  November 20 Monday 23:45.
  */
-
+@JtComponent
 public class PermissionManager
 {
 	private ArrayList<String> permissions;

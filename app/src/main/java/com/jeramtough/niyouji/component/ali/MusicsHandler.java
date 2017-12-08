@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.ali;
 
 import android.content.Context;
+import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author 11718
  *         on 2017  November 23 Thursday 16:42.
  */
-
+@JtComponent
 public class MusicsHandler
 {
 	private Context context;

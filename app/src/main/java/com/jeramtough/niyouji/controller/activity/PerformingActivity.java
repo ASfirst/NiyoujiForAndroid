@@ -2,7 +2,6 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import com.jeramtough.jtandroid.controller.activity.JtBaseActivity;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
@@ -33,15 +32,15 @@ public class PerformingActivity extends JtBaseActivity
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if (requestCode == TAKE_PHOTO_REQUEST_CODE &&
-				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
+				resultCode == TakePhotoActivityApp.TAKE_PHOTO_RESULT_CODE)
 		{
-			String path=data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
+			String path=data.getStringExtra(TakePhotoActivityApp.PHOTO_PATH_NAME);
 			liveTravelnoteNavigationHandler.setPageResourcePath(path);
 		}
 		else if (requestCode == VIDEO_REQUEST_CODE &&
-				resultCode == VideoActivity.VIDEO_RESULT_CODE)
+				resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
 		{
-			String path=data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
+			String path=data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
 			liveTravelnoteNavigationHandler.setPageResourcePath(path);
 		}
 	}

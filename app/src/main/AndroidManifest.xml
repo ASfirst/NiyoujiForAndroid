@@ -51,19 +51,19 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".controller.activity.VideoActivity"
+                android:name=".controller.activity.VideoActivityApp"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_camera"
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
         <activity
-                android:name=".controller.activity.CreateTravelnoteActivity"
+                android:name=".controller.activity.CreateTravelnoteActivityApp"
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
         <activity
-                android:name=".controller.activity.TakePhotoActivity"
+                android:name=".controller.activity.TakePhotoActivityApp"
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>

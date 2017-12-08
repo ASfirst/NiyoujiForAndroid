@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.ali;
 
 import android.content.Context;
+import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.io.File;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * @author 11718
  *         on 2017  November 22 Wednesday 19:47.
  */
-
+@JtComponent
 public class FiltersHandler
 {
 	private Context context;

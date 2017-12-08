@@ -3,14 +3,12 @@ package com.jeramtough.niyouji.controller.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
-import com.aliyun.struct.recorder.CameraType;
-import com.jeramtough.jtandroid.jtlog2.P;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
@@ -21,7 +19,7 @@ import com.jeramtough.niyouji.controller.dialog.SelectFilterDialog;
  *         on 2017  November 24 Friday 22:04.
  */
 
-public abstract class AliCameraActivity extends BaseActivity
+public abstract class AliCameraActivityApp extends AppBaseActivity
 		implements SelectFilterDialog.SelectFilterListener, GestureDetector.OnGestureListener,
 		ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener
 {
@@ -37,6 +35,7 @@ public abstract class AliCameraActivity extends BaseActivity
 	
 	protected MyRecorder myRecorder;
 	
+	@InjectComponent
 	protected FiltersHandler filtersHandler;
 	
 	protected SelectFilterDialog selectFilterDialog;
@@ -97,7 +96,7 @@ public abstract class AliCameraActivity extends BaseActivity
 	
 	protected void initResources()
 	{
-		filtersHandler = getMyInjectedObjects().getFiltersHandler();
+		this.getIocContainer().injectObjects(this);
 		
 		selectFilterDialog = new SelectFilterDialog(this, filtersHandler);
 		selectFilterDialog.setSelectFilterListener(this);
