@@ -28,11 +28,6 @@ public class LaunchActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
 		
-		//初始化阿里短视频SDK库
-		QupaiHttpFinal.getInstance().initOkHttpFinal();
-		System.loadLibrary("QuCore-ThirdParty");
-		System.loadLibrary("QuCore");
-		
 		if (launchBusiness
 				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
 		{

@@ -6,6 +6,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
@@ -102,6 +103,11 @@ public abstract class AliCameraActivityApp extends AppBaseActivity
 	
 	protected void initAliRecorder()
 	{
+		//初始化阿里短视频SDK库
+		QupaiHttpFinal.getInstance().initOkHttpFinal();
+		System.loadLibrary("QuCore-ThirdParty");
+		System.loadLibrary("QuCore");
+		
 		AliyunIRecorder aliRecorder = AliyunRecorderCreator.getRecorderInstance(this);
 		aliRecorder.setDisplayView(glSurfaceViewCamera);
 		
