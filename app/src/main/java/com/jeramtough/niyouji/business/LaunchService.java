@@ -76,7 +76,8 @@ public class LaunchService implements LaunchBusiness
 			String musicsFileName = "musics.zip";
 			unZipFile(activity, musicsDirectory, musicsFileName);
 		}
-		if (!pwThemesDirectory.exists())
+		//!pwThemesDirectory.exists()
+		if (true)
 		{
 			String pwthemesFileName = "pwthemes.zip";
 			unZipFile(activity, pwThemesDirectory, pwthemesFileName);
