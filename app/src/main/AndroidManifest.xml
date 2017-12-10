@@ -73,6 +73,11 @@
                 android:windowSoftInputMode="adjustPan"
                 >
         </activity>
+        <activity
+                android:name=".controller.activity.TestActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                >
+        </activity>
     </application>
 
 </manifest>

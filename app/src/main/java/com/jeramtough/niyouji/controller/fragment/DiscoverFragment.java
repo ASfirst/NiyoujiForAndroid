@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import com.jeramtough.jtandroid.adapter.ViewsAdapter;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.pullrefreshing.PullToRefreshView;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
  *         on 2017  November 20 Monday 12:00.
  */
 
-public class DiscoverFragment extends BaseFragment
+public class DiscoverFragment extends AppBaseFragment
 		implements PullToRefreshView.OnRefreshListener
 {
 	private PullToRefreshView pullToRefresh;

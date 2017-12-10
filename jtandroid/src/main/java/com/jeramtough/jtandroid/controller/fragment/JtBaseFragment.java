@@ -1,6 +1,7 @@
 package com.jeramtough.jtandroid.controller.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,8 +28,7 @@ public abstract class JtBaseFragment extends Fragment implements View.OnClickLis
 	
 	public abstract int loadFragmentLayoutId();
 	
-	public View findViewById(int viewId)
-	{
+	public final <T extends View> T findViewById(@IdRes int viewId) {
 		return view.findViewById(viewId);
 	}
 	

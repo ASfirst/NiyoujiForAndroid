@@ -55,6 +55,7 @@ public class LaunchService implements LaunchBusiness
 		
 		Directory filtersDirectory = new Directory(AppConfig.getFiltersDirectory(activity));
 		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory(activity));
+		Directory pwThemesDirectory = new Directory(AppConfig.getPwThemesDirectory(activity));
 		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
 		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory());
 		
@@ -64,41 +65,44 @@ public class LaunchService implements LaunchBusiness
 			imagesDirectory.mkdirs();
 		}
 		
-		if (!filtersDirectory.exists()||!musicsDirectory.exists())
+		
+		if (!filtersDirectory.exists())
 		{
-			filtersDirectory.mkdirs();
-			musicsDirectory.mkdirs();
-			
 			String filtersFileName = "filters.zip";
+			unZipFile(activity, filtersDirectory, filtersFileName);
+		}
+		if (!musicsDirectory.exists())
+		{
 			String musicsFileName = "musics.zip";
-			File filtersFile =
-					new File(AppConfig.getAppDirecotry() + File.separator + filtersFileName);
-			File musicsFile =
-					new File(AppConfig.getAppDirecotry() + File.separator + musicsFileName);
-			try
-			{
-				filtersFile.createNewFile();
-				musicsFile.createNewFile();
-				
-				IOUtils.copy(activity.getResources().getAssets().open(filtersFileName),
-						new FileOutputStream(filtersFile));
-				IOUtils.copy(activity.getResources().getAssets().open(musicsFileName),
-						new FileOutputStream(musicsFile));
-				
-				ExtractedZip extractedZip=new ExtractedZip(filtersFile);
-				ExtractedZip extractedZip1=new ExtractedZip(musicsFile);
-				
-				extractedZip.extract(filtersDirectory.getAbsolutePath());
-				extractedZip1.extract(musicsDirectory.getAbsolutePath());
-				
-				filtersFile.delete();
-				musicsFile.delete();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			unZipFile(activity, musicsDirectory, musicsFileName);
+		}
+		if (!pwThemesDirectory.exists())
+		{
+			String pwthemesFileName = "pwthemes.zip";
+			unZipFile(activity, pwThemesDirectory, pwthemesFileName);
 		}
 		
+	}
+	
+	//***************************
+	private void unZipFile(Activity activity, Directory resourceDirectory, String zipFileName)
+	{
+		resourceDirectory.mkdirs();
+		
+		File zipFile = new File(AppConfig.getAppDirecotry() + File.separator + zipFileName);
+		try
+		{
+			zipFile.createNewFile();
+			IOUtils.copy(activity.getResources().getAssets().open(zipFileName),
+					new FileOutputStream(zipFile));
+			ExtractedZip extractedZip = new ExtractedZip(zipFile);
+			extractedZip.extract(resourceDirectory.getAbsolutePath());
+			
+			zipFile.delete();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -38,4 +38,9 @@ public class AppConfig
 	{
 		return context.getFilesDir() + File.separator + "musics";
 	}
+	
+	public static String getPwThemesDirectory(Context context)
+	{
+		return context.getFilesDir() + File.separator + "pwthemes";
+	}
 }
