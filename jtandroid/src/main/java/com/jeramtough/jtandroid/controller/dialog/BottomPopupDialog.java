@@ -11,7 +11,7 @@ import com.jeramtough.jtandroid.R;
  *         on 2017  November 20 Monday 20:08.
  */
 
-public abstract class BottomPopupDialog extends Dialog
+public abstract class BottomPopupDialog extends JtIocDialog
 {
 	private LayoutInflater inflater;
 	private View view;

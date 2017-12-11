@@ -69,6 +69,8 @@ public class PicAndWordResourcesHandler
 			{
 				e.printStackTrace();
 			}
+			
+			picAndWordResources.add(picAndWordResource);
 		}
 	}
 	

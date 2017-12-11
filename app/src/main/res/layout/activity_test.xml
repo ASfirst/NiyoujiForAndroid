@@ -1,7 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-</LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@mipmap/ic_delete"
+                android:id="@+id/btn_delete_page"
+                android:layout_gravity="right"/>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+            <ScrollView
+                    android:id="@+id/scrollView_picandword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:scrollbarAlwaysDrawVerticalTrack="true">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center">
+
+
+                        <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/view_picture_of_page"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/plussign"
+                                android:scaleType="centerCrop"
+                                android:src="@mipmap/temp3"
+                                android:layout_margin="10dp"/>
+
+                        <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/imageView_frame"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+
+                    </FrameLayout>
+
+                    <EditText
+                            android:id="@+id/edit_travelnote_page_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
+                            android:hint="要说点什么~"
+                            android:textColor="#adfdf8"
+                            android:shadowColor="@color/white"
+                            android:shadowRadius="1"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:paddingTop="10dp"/>
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/layout_word_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:dividerPadding="10dp">
+
+            <LinearLayout
+                    android:id="@+id/layout_word_function1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@android:drawable/btn_default"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_expression"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="插入表情"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/layout_word_function2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@android:drawable/btn_default"
+                    android:clickable="true"
+                    android:focusable="true"
+                    >
+
+                <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_keyboard_voice"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="语音输入"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/black"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/boomMenuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="40dp"
+            android:layout_marginRight="15dp"
+            android:background="#f7116d"/>
+</FrameLayout>
