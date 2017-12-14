@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.ali;
 
 import android.content.Context;
+import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.niyouji.component.app.AppConfig;
@@ -19,6 +20,7 @@ public class MusicsHandler
 	private Context context;
 	private List<CameraMusic> cameraMusics;
 	
+	@IocAutowire
 	public MusicsHandler(Context context)
 	{
 		this.context = context;

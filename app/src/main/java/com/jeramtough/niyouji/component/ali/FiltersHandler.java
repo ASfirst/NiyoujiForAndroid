@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.ali;
 
 import android.content.Context;
+import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
@@ -18,6 +19,7 @@ public class FiltersHandler
 	
 	private ArrayList<CameraFilter> cameraFilters;
 	
+	@IocAutowire
 	public FiltersHandler(Context context)
 	{
 		this.context = context;

@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.picandword;
 
 import android.content.Context;
+import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.niyouji.component.app.AppConfig;
@@ -23,6 +24,7 @@ public class PicAndWordResourcesHandler
 	private Context context;
 	private ArrayList<PicAndWordResource> picAndWordResources;
 	
+	@IocAutowire
 	public PicAndWordResourcesHandler(Context context)
 	{
 		this.context = context;
