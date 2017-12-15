@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.ioc.annotation.JtObjectType;
 
@@ -23,6 +24,7 @@ public class MusicPlayer implements MediaPlayer.OnCompletionListener
 	private boolean isRepeated = false;
 	private String currentMusicPath;
 	
+	@IocAutowire
 	public MusicPlayer(Context context)
 	{
 		this.context = context;

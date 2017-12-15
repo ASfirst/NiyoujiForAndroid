@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.component.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -8,37 +10,36 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.picandword.PicAndWordResource;
 
-import java.util.List;
+import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.component.picandword.PwResourcePosition;
 
 /**
- * @author 11718
- *         on 2017  December 11 Monday 12:12.
+ * @author 11718 on 2017 December 11 Monday 12:12.
  */
 public class PwThemeSurfacesAdapter extends BaseAdapter
 {
 	private Context context;
-	private List<PicAndWordResource> picAndWordResources;
+	private List<PwResourcePosition> pwResourcePositions;
 	
 	public PwThemeSurfacesAdapter(Context context,
-			List<PicAndWordResource> picAndWordResources)
+			List<PwResourcePosition> pwResourcePositions)
 	{
+		super();
 		this.context = context;
-		this.picAndWordResources = picAndWordResources;
+		this.pwResourcePositions = pwResourcePositions;
 	}
 	
 	@Override
 	public int getCount()
 	{
-		return picAndWordResources.size();
+		return pwResourcePositions.size();
 	}
 	
 	@Override
 	public Object getItem(int position)
 	{
-		return picAndWordResources.get(position);
+		return pwResourcePositions.get(position);
 	}
 	
 	@Override
@@ -67,16 +68,15 @@ public class PwThemeSurfacesAdapter extends BaseAdapter
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		
-		PicAndWordResource picAndWordResource = picAndWordResources.get(position);
+		PwResourcePosition pwResourcePosition = pwResourcePositions.get(position);
 		viewHolder.imageViewSurface
-				.setImageBitmap(BitmapFactory.decodeFile(picAndWordResource.getSurfacePath()));
-		viewHolder.textViewThemeName.setText(picAndWordResource.getThemeName());
+				.setImageBitmap(BitmapFactory.decodeFile(pwResourcePosition.getSurfacePath()));
+		viewHolder.textViewThemeName.setText(pwResourcePosition.getThemeName());
 		
-	
 		return convertView;
 	}
 	
-	//{{{{{{{{}}}}}}}}}
+	// {{{{{{{{}}}}}}}}}
 	class ViewHolder
 	{
 		ImageView imageViewSurface;

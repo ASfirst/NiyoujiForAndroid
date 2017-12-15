@@ -1,4 +1,4 @@
-package com.jeramtough.jtandroid.ui.listener;
+package com.jeramtough.jtandroid.listener;
 
 import android.view.View;
 import android.widget.AbsListView;

@@ -1,22 +1,32 @@
 package com.jeramtough.niyouji.controller.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.ImageButton;
-import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
-import com.jeramtough.jtandroid.jtlog2.P;
+import android.view.ViewGroup;
+import android.widget.*;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.picandword.PicAndWordResourcesHandler;
+import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 
 /**
  * @author 11718
  */
 public class TestActivity extends AppBaseActivity
+		implements SelectPwThemeDialog.SelectPwthemeListener
 {
+	private ViewGroup viewGroup;
 	private ImageButton btnDeletePage;
-	@InjectComponent
-	private PicAndWordResourcesHandler picAndWordResourcesHandler;
+	private ScrollView scrollViewPicandword;
+	private AppCompatImageView viewPictureOfPage;
+	private AppCompatImageView imageViewFrame;
+	private EditText editTravelnotePageContent;
+	private LinearLayout layoutWordToolbar;
+	private LinearLayout layoutWordFunction1;
+	private LinearLayout layoutWordFunction2;
+	private Button boomMenuButton;
+	
+	private SelectPwThemeDialog selectPwThemeDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -24,8 +34,23 @@ public class TestActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
 		
+		viewGroup =
+				findViewById(R.id.layout_travelnote_page_picandword_page_main);
 		btnDeletePage = findViewById(R.id.btn_delete_page);
-		btnDeletePage.setOnClickListener(this);
+		scrollViewPicandword = findViewById(R.id.scrollView_picandword);
+		viewPictureOfPage = findViewById(R.id.view_picture_of_page);
+		editTravelnotePageContent = findViewById(R.id.edit_travelnote_page_content);
+		layoutWordToolbar = findViewById(R.id.layout_word_toolbar);
+		imageViewFrame = findViewById(R.id.imageView_frame);
+		layoutWordFunction1 = findViewById(R.id.layout_word_function1);
+		layoutWordFunction2 = findViewById(R.id.layout_word_function2);
+		boomMenuButton = findViewById(R.id.boomMenuButton);
+		
+		boomMenuButton.setOnClickListener(this);
+		
+		selectPwThemeDialog = new SelectPwThemeDialog(this);
+		selectPwThemeDialog.setSelectPwthemeListener(this);
+		selectPwThemeDialog.selectTheme(0);
 	}
 	
 	@Override
@@ -33,10 +58,20 @@ public class TestActivity extends AppBaseActivity
 	{
 		switch (viewId)
 		{
-			case R.id.btn_delete_page:
-				SelectPwThemeDialog dialog = new SelectPwThemeDialog(this);
-				dialog.show();
+			case R.id.boomMenuButton:
+				selectPwThemeDialog.show();
 				break;
 		}
+	}
+	
+	@Override
+	public void onSelectedPicAndWordTheme(PicAndWordTheme picAndWordTheme)
+	{
+		picAndWordTheme.setDeleteButton(btnDeletePage);
+		picAndWordTheme.setMainBackground(viewGroup);
+		picAndWordTheme.setFunctionButton(layoutWordFunction1);
+		picAndWordTheme.setFunctionButton(layoutWordFunction2);
+		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
+		picAndWordTheme.setFrame(imageViewFrame);
 	}
 }

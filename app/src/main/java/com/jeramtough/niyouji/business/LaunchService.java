@@ -61,9 +61,12 @@ public class LaunchService implements LaunchBusiness
 		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
 		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory());
 		
-		if (!appDirectory.exists())
+		if (!videosDirectory.exists())
 		{
 			videosDirectory.mkdirs();
+		}
+		if (!imagesDirectory.exists())
+		{
 			imagesDirectory.mkdirs();
 		}
 		

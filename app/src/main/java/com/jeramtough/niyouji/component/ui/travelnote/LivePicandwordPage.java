@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
+import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
+import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
@@ -19,7 +21,8 @@ import com.nightonke.boommenu.BoomMenuButton;
  *         on 2017  December 01 Friday 18:36.
  */
 
-public class LivePicandwordPage implements View.OnClickListener
+public class LivePicandwordPage
+		implements View.OnClickListener, SelectPwThemeDialog.SelectPwthemeListener
 {
 	private Handler handler;
 	
@@ -31,8 +34,13 @@ public class LivePicandwordPage implements View.OnClickListener
 	private ImageButton btnDeletePage;
 	private TextView textViewReminderWriting;
 	private LinearLayout layoutWordToolbar;
+	private AppCompatImageView imageViewFrame;
+	private LinearLayout layoutWordFunction1;
+	private LinearLayout layoutWordFunction2;
 	
 	private String musicPath;
+	
+	private SelectPwThemeDialog selectPwThemeDialog;
 	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
@@ -47,6 +55,9 @@ public class LivePicandwordPage implements View.OnClickListener
 		btnDeletePage = viewGroup.findViewById(R.id.btn_delete_page);
 		textViewReminderWriting = viewGroup.findViewById(R.id.textView_reminder_writing);
 		layoutWordToolbar = viewGroup.findViewById(R.id.layout_word_toolbar);
+		imageViewFrame = viewGroup.findViewById(R.id.imageView_frame);
+		layoutWordFunction1 = viewGroup.findViewById(R.id.layout_word_function1);
+		layoutWordFunction2 = viewGroup.findViewById(R.id.layout_word_function2);
 		
 		editTravelnotePageContent.setVisibility(View.GONE);
 		textViewReminderWriting.setVisibility(View.GONE);
@@ -54,7 +65,6 @@ public class LivePicandwordPage implements View.OnClickListener
 		boomMenuButton.setVisibility(View.GONE);
 		
 		viewPictureOfPage.setClickable(false);
-		
 		btnDeletePage.setOnClickListener(this);
 		viewPictureOfPage.setOnClickListener(this);
 		
@@ -63,7 +73,9 @@ public class LivePicandwordPage implements View.OnClickListener
 	
 	protected void initResources()
 	{
-		
+		selectPwThemeDialog = new SelectPwThemeDialog(viewGroup.getContext());
+		selectPwThemeDialog.setSelectPwthemeListener(this);
+		selectPwThemeDialog.selectTheme(0);
 		
 		for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++)
 		{
@@ -93,12 +105,19 @@ public class LivePicandwordPage implements View.OnClickListener
 					builder.normalImageRes(R.drawable.ic_send_voice);
 					builder.normalColorRes(R.color.menu_color3);
 					builder.normalText("发送主播弹幕");
+					builder.listener(index ->
+					{
+					});
 					
 					break;
 				case 3:
 					builder.normalImageRes(R.drawable.ic_picandword);
 					builder.normalColorRes(R.color.menu_color4);
 					builder.normalText("更换主题");
+					builder.listener(index ->
+					{
+						selectPwThemeDialog.show();
+					});
 					break;
 			}
 			builder.imagePadding(new Rect(30, 30, 30, 30));
@@ -120,6 +139,17 @@ public class LivePicandwordPage implements View.OnClickListener
 				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
 				break;
 		}
+	}
+	
+	@Override
+	public void onSelectedPicAndWordTheme(PicAndWordTheme picAndWordTheme)
+	{
+		picAndWordTheme.setDeleteButton(btnDeletePage);
+		picAndWordTheme.setMainBackground(viewGroup);
+		picAndWordTheme.setFunctionButton(layoutWordFunction1);
+		picAndWordTheme.setFunctionButton(layoutWordFunction2);
+		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
+		picAndWordTheme.setFrame(imageViewFrame);
 	}
 	
 	public EditText getEditTravelnotePageContent()

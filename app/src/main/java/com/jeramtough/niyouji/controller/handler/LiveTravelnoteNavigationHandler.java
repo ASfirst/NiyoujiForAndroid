@@ -220,6 +220,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				//加载刚才拍照的图片
 				liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage()
 						.setImageBitmap(BitmapFactory.decodeFile(path));
+				
 				//焦点到编辑框
 				EditText editText = liveTravelnotePageView.getLivePicandwordPage()
 						.getEditTravelnotePageContent();
