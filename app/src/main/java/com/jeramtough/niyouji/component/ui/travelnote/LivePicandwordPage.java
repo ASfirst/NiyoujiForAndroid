@@ -4,6 +4,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -42,6 +43,8 @@ public class LivePicandwordPage
 	
 	private SelectPwThemeDialog selectPwThemeDialog;
 	
+	private int currentThemePosition = 0;
+	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
 	{
@@ -75,7 +78,7 @@ public class LivePicandwordPage
 	{
 		selectPwThemeDialog = new SelectPwThemeDialog(viewGroup.getContext());
 		selectPwThemeDialog.setSelectPwthemeListener(this);
-		selectPwThemeDialog.selectTheme(0);
+		selectPwThemeDialog.selectTheme(currentThemePosition);
 		
 		for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++)
 		{
@@ -142,8 +145,10 @@ public class LivePicandwordPage
 	}
 	
 	@Override
-	public void onSelectedPicAndWordTheme(PicAndWordTheme picAndWordTheme)
+	public void onSelectedPicAndWordTheme(int position, PicAndWordTheme picAndWordTheme)
 	{
+		this.currentThemePosition = position;
+		
 		picAndWordTheme.setDeleteButton(btnDeletePage);
 		picAndWordTheme.setMainBackground(viewGroup);
 		picAndWordTheme.setFunctionButton(layoutWordFunction1);
@@ -199,6 +204,23 @@ public class LivePicandwordPage
 		{
 			textViewReminderWriting.setVisibility(View.GONE);
 		}, 3000);
+	}
+	
+	public void clearTheme()
+	{
+		btnDeletePage.setImageResource(R.color.transparent);
+		viewGroup.setBackgroundResource(R.color.transparent);
+		layoutWordFunction1.setBackgroundResource(R.color.transparent);
+		layoutWordFunction2.setBackgroundResource(R.color.transparent);
+		imageViewFrame.setImageResource(R.color.transparent);
+		
+		layoutWordFunction1.setOnTouchListener((v, event) -> false);
+		layoutWordFunction2.setOnTouchListener((v, event) -> false);
+	}
+	
+	public void resetTheme()
+	{
+		selectPwThemeDialog.selectTheme(currentThemePosition);
 	}
 	
 	

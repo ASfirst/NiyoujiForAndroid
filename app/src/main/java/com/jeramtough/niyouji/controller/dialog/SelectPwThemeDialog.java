@@ -88,14 +88,14 @@ public class SelectPwThemeDialog extends BottomPopupDialog implements OnItemClic
 		
 		if (selectPwthemeListener != null)
 		{
-			selectPwthemeListener.onSelectedPicAndWordTheme(picAndWordTheme);
+			selectPwthemeListener.onSelectedPicAndWordTheme(position,picAndWordTheme);
 		}
 	}
 	
 	// {{{{{{{{}}}}}}}}}}}}}}}}}}}
 	public interface SelectPwthemeListener
 	{
-		void onSelectedPicAndWordTheme(PicAndWordTheme picAndWordTheme);
+		void onSelectedPicAndWordTheme(int position,PicAndWordTheme picAndWordTheme);
 	}
 	
 }

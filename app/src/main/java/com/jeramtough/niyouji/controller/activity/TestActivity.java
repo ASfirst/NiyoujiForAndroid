@@ -65,7 +65,7 @@ public class TestActivity extends AppBaseActivity
 	}
 	
 	@Override
-	public void onSelectedPicAndWordTheme(PicAndWordTheme picAndWordTheme)
+	public void onSelectedPicAndWordTheme(int position,PicAndWordTheme picAndWordTheme)
 	{
 		picAndWordTheme.setDeleteButton(btnDeletePage);
 		picAndWordTheme.setMainBackground(viewGroup);
@@ -74,4 +74,6 @@ public class TestActivity extends AppBaseActivity
 		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
 		picAndWordTheme.setFrame(imageViewFrame);
 	}
+	
+	
 }

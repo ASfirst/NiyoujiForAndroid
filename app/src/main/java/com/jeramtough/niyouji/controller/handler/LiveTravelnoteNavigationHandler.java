@@ -317,6 +317,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					BitmapUtil.releaseDrawableResouce(bitmapDrawable);
 					imageView.setImageDrawable(null);
 				}
+				
+				//当初上个PageView的主题资源
+				lastLiveTravelnotePageView.getLivePicandwordPage().clearTheme();
 			}
 			else if (lastLiveTravelnotePageView.getLiveTravelnotePageType() ==
 					LiveTravelnotePageType.VIDEO)
@@ -351,6 +354,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage()
 						.setImageBitmap(BitmapFactory.decodeFile(resourcePath));
 			}
+			
+			//恢复主题效果
+			liveTravelnotePageView.getLivePicandwordPage().resetTheme();
 		}
 		else if ((liveTravelnotePageView.getLiveTravelnotePageType() ==
 				LiveTravelnotePageType.VIDEO))
