@@ -20,6 +20,7 @@ import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
+import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageType;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
@@ -28,6 +29,7 @@ import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author 11718
@@ -51,7 +53,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private LinearLayout layoutShutdownForLive;
 	private ProgressBar progressBarWaitTakephotoOrVideo;
 	private TimedCloseTextView textViewNotification;
-	
+	private AppraisalAreaView appraisalAreaView;
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
@@ -72,8 +74,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		progressBarWaitTakephotoOrVideo =
 				findViewById(R.id.progressBar_wait_takephoto_or_video);
 		textViewNotification = findViewById(R.id.textView_notification);
+		appraisalAreaView = findViewById(R.id.appraisalAreaView);
 		
-		textViewNotification.setVisibility(View.INVISIBLE);
+		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
 		
 		viewPagerTravelnotePages.addOnPageChangeListener(this);
@@ -91,6 +94,24 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		viewPagerTravelnotePages.setAdapter(adapter);
 		
 		this.recycleLastPage();
+		
+		for (int i = 0; i < 7; i++)
+		{
+			int finalI = i;
+			appraisalAreaView.postDelayed(() ->
+			{
+				if (finalI % 2 == 0)
+				{
+					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 1);
+				}
+				else
+				{
+					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 2);
+				}
+			}, 1500*i);
+			
+		}
+		
 	}
 	
 	@Override

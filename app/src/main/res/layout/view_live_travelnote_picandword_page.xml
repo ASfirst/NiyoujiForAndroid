@@ -67,7 +67,7 @@
                                 android:layout_gravity="start|bottom"
                                 android:gravity="center"
                                 android:background="@mipmap/dialog"
-                                android:text="要说点什么~"
+                                android:text="要写点什么~"
                                 android:textColor="@color/white"
                                 android:textSize="20sp"
                                 android:paddingBottom="32dp"
@@ -104,7 +104,9 @@
                     android:gravity="center"
                     android:background="@android:drawable/btn_default"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="3dp">
 
                 <android.support.v7.widget.AppCompatImageView
                         android:layout_width="wrap_content"
@@ -130,7 +132,9 @@
                     android:gravity="center"
                     android:background="@android:drawable/btn_default"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="3dp">
 
                 <android.support.v7.widget.AppCompatImageView
                         android:layout_width="wrap_content"
