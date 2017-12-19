@@ -71,9 +71,10 @@
                         <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="关注:"
+                                android:text="点亮:"
+                                android:textStyle="bold"
                                 android:gravity="top"
-                                android:textColor="@color/red"
+                                android:textColor="#f92828"
                                 android:shadowColor="@color/white"
                                 android:shadowRadius="1"
                                 android:shadowDy="1"
@@ -254,5 +255,12 @@
             android:layout_gravity="center"
             style="?android:attr/progressBarStyleLarge"
             />
+
+    <com.jeramtough.heartlayout.HeartLayout
+            android:id="@+id/heart_layout"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginBottom="60dp"/>
 
 </FrameLayout>

@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.*;
+import com.jeramtough.heartlayout.HeartLayout;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
 import com.jeramtough.jtandroid.function.MusicPlayer;
@@ -47,13 +48,14 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public final static int SELECT_MUSIC_ACTION = 0X6;
 	
 	private JtViewPager viewPagerTravelnotePages;
-	private TextView textViewAttentionsCount;
+	
 	private TextView textViewPagesCount;
-	private TextView textViewAudiencesCount;
+	
 	private LinearLayout layoutShutdownForLive;
 	private ProgressBar progressBarWaitTakephotoOrVideo;
 	private TimedCloseTextView textViewNotification;
 	private AppraisalAreaView appraisalAreaView;
+	
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
@@ -67,14 +69,13 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	{
 		super(activity);
 		viewPagerTravelnotePages = findViewById(R.id.viewPager_travelnote_pages);
-		textViewAttentionsCount = findViewById(R.id.textView_attentions_count);
 		textViewPagesCount = findViewById(R.id.textView_pages_count);
-		textViewAudiencesCount = findViewById(R.id.textView_audiences_count);
 		layoutShutdownForLive = findViewById(R.id.layout_shutdown_for_live);
 		progressBarWaitTakephotoOrVideo =
 				findViewById(R.id.progressBar_wait_takephoto_or_video);
 		textViewNotification = findViewById(R.id.textView_notification);
 		appraisalAreaView = findViewById(R.id.appraisalAreaView);
+		
 		
 		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
@@ -95,6 +96,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		
 		this.recycleLastPage();
 		
+		//一些模拟操作，到时候会删掉的
 		for (int i = 0; i < 7; i++)
 		{
 			int finalI = i;
@@ -108,7 +110,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				{
 					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 2);
 				}
-			}, 1500*i);
+			}, 1500 * i);
 			
 		}
 		
@@ -274,7 +276,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			}
 		}
 	}
-	
 	
 	//************************************
 	private void popupChoiceMusicDialog()

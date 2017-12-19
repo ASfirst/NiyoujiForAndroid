@@ -45,9 +45,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //导入本地module
     implementation project(':jtandroid')
     implementation project(':pullrefreshing')
-
+    implementation project(':heartlayout')
     //java开源jar
     implementation 'com.google.code.findbugs:jsr305:3.0.0'
     implementation 'pub.devrel:easypermissions:0.2.1'
@@ -56,8 +57,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.12.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'commons-io:commons-io:2.6'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.3'
-
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.3'
     //阿里云短视频SDK
     implementation(name: 'AliyunSdk-RC', ext: 'aar')
     //第三方控件
@@ -66,4 +66,5 @@ dependencies {
     //图片缓存框架
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+
 }
