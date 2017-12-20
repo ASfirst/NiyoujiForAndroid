@@ -68,7 +68,7 @@ public class PicAndWordThemeImpl implements PicAndWordTheme {
 							.getPwResourcePosition().getDefaultFunctionColor());
 					break;
 				}
-				return true;
+				return false;
 			}
 		});
 	}

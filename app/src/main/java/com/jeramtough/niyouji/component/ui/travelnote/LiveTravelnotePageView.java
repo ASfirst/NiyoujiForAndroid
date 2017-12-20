@@ -3,6 +3,7 @@ package com.jeramtough.niyouji.component.ui.travelnote;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler
 public class LiveTravelnotePageView extends FrameLayout implements View.OnClickListener
 {
 	private Handler handler;
+	private FragmentManager fragmentManager;
+	
 	private LayoutInflater inflater;
 	private FrameLayout layoutSelectWhichPage;
 	private ImageView imageViewPicandwordPage;
@@ -33,9 +36,11 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 	
 	private boolean isActivated = false;
 	
-	public LiveTravelnotePageView(@NonNull Context context, Handler handler)
+	public LiveTravelnotePageView(@NonNull Context context, Handler handler,
+			FragmentManager fragmentManager)
 	{
 		super(context);
+		this.fragmentManager = fragmentManager;
 		this.handler = handler;
 		inflater = (LayoutInflater) getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,7 +81,8 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 					this.addView(viewGroupPicandwordPage);
 					
 					livePicandwordPage =
-							new LivePicandwordPage(viewGroupPicandwordPage, handler);
+							new LivePicandwordPage(viewGroupPicandwordPage, handler,
+									fragmentManager);
 					
 					//回调更新Activity动作
 					handler.sendEmptyMessage(
@@ -89,7 +95,7 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 							.inflate(R.layout.view_live_travelnote_video_page, null);
 					this.addView(viewGroupVideoPage);
 					
-					liveVideoPage=new LiveVideoPage(viewGroupVideoPage,handler);
+					liveVideoPage = new LiveVideoPage(viewGroupVideoPage, handler);
 					
 					handler.sendEmptyMessage(
 							LiveTravelnoteNavigationHandler.ACTIVATE_VIDEO_ACTION);

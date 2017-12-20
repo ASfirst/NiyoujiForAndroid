@@ -83,8 +83,14 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:hint="要说点什么~"/>
-                </LinearLayout>
 
+                    <FrameLayout
+                            android:id="@+id/frameLayout_emoji_keyboard"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp">
+                    </FrameLayout>
+
+                </LinearLayout>
             </ScrollView>
         </LinearLayout>
 
@@ -151,6 +157,8 @@
 
             </LinearLayout>
         </LinearLayout>
+
+
     </LinearLayout>
 
     <com.nightonke.boommenu.BoomMenuButton

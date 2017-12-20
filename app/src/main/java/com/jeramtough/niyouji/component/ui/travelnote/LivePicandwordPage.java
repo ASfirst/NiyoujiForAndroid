@@ -2,18 +2,17 @@ package com.jeramtough.niyouji.component.ui.travelnote;
 
 import android.graphics.Rect;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ali.MusicsHandler;
 import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -26,6 +25,7 @@ public class LivePicandwordPage
 		implements View.OnClickListener, SelectPwThemeDialog.SelectPwthemeListener
 {
 	private Handler handler;
+	private FragmentManager fragmentManager;
 	
 	private ViewGroup viewGroup;
 	private BoomMenuButton boomMenuButton;
@@ -38,6 +38,8 @@ public class LivePicandwordPage
 	private AppCompatImageView imageViewFrame;
 	private LinearLayout layoutWordFunction1;
 	private LinearLayout layoutWordFunction2;
+	private FrameLayout frameLayoutEmojiKeyboard;
+	
 	
 	private String musicPath;
 	
@@ -46,10 +48,12 @@ public class LivePicandwordPage
 	private int currentThemePosition = 0;
 	
 	
-	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
+	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler,
+			FragmentManager fragmentManager)
 	{
 		this.viewGroup = viewGroupPicandwordPage;
 		this.handler = handler;
+		this.fragmentManager = fragmentManager;
 		
 		boomMenuButton = viewGroup.findViewById(R.id.boomMenuButton);
 		editTravelnotePageContent = viewGroup.findViewById(R.id.edit_travelnote_page_content);
@@ -61,6 +65,7 @@ public class LivePicandwordPage
 		imageViewFrame = viewGroup.findViewById(R.id.imageView_frame);
 		layoutWordFunction1 = viewGroup.findViewById(R.id.layout_word_function1);
 		layoutWordFunction2 = viewGroup.findViewById(R.id.layout_word_function2);
+		frameLayoutEmojiKeyboard = viewGroup.findViewById(R.id.frameLayout_emoji_keyboard);
 		
 		editTravelnotePageContent.setVisibility(View.GONE);
 		textViewReminderWriting.setVisibility(View.GONE);
@@ -70,6 +75,8 @@ public class LivePicandwordPage
 		viewPictureOfPage.setClickable(false);
 		btnDeletePage.setOnClickListener(this);
 		viewPictureOfPage.setOnClickListener(this);
+		layoutWordFunction1.setOnClickListener(this);
+		layoutWordFunction2.setOnClickListener(this);
 		
 		initResources();
 	}
@@ -126,6 +133,7 @@ public class LivePicandwordPage
 			builder.imagePadding(new Rect(30, 30, 30, 30));
 			builder.textGravity(Gravity.CENTER | Gravity.BOTTOM);
 			boomMenuButton.addBuilder(builder);
+			
 		}
 	}
 	
@@ -140,6 +148,11 @@ public class LivePicandwordPage
 				break;
 			case R.id.btn_delete_page:
 				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
+				break;
+			case R.id.layout_word_function1:
+				P.arrive();
+				break;
+			case R.id.layout_word_function2:
 				break;
 		}
 	}

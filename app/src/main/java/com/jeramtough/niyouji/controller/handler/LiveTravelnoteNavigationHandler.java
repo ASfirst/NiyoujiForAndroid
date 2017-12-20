@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Message;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.jeramtough.niyouji.component.ali.MusicsHandler;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageType;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageView;
+import com.jeramtough.niyouji.controller.activity.AppBaseActivity;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivityApp;
 import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
@@ -47,6 +49,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public final static int VIDEO_ACTION = 0X5;
 	public final static int SELECT_MUSIC_ACTION = 0X6;
 	
+	private FragmentManager fragmentManager;
+	
 	private JtViewPager viewPagerTravelnotePages;
 	
 	private TextView textViewPagesCount;
@@ -65,9 +69,12 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	@InjectComponent
 	private MusicPlayer musicPlayer;
 	
-	public LiveTravelnoteNavigationHandler(Activity activity)
+	public LiveTravelnoteNavigationHandler(Activity activity, FragmentManager fragmentManager)
 	{
 		super(activity);
+		
+		this.fragmentManager = fragmentManager;
+		
 		viewPagerTravelnotePages = findViewById(R.id.viewPager_travelnote_pages);
 		textViewPagesCount = findViewById(R.id.textView_pages_count);
 		layoutShutdownForLive = findViewById(R.id.layout_shutdown_for_live);
@@ -440,7 +447,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	private void addPageViewToList()
 	{
-		LiveTravelnotePageView page = new LiveTravelnotePageView(getContext(), this);
+		LiveTravelnotePageView page =
+				new LiveTravelnotePageView(getContext(), this, fragmentManager);
 		liveTravelnotePageViews.add(page);
 	}
 	
