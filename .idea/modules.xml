@@ -4,9 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/NiYouJiAndroid.iml" filepath="$PROJECT_DIR$/.idea/NiYouJiAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/emojicon/emojicon.iml" filepath="$PROJECT_DIR$/emojicon/emojicon.iml" />
       <module fileurl="file://$PROJECT_DIR$/heartlayout/heartlayout.iml" filepath="$PROJECT_DIR$/heartlayout/heartlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/jtandroid/jtandroid.iml" filepath="$PROJECT_DIR$/jtandroid/jtandroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jtemoji/jtemoji.iml" filepath="$PROJECT_DIR$/jtemoji/jtemoji.iml" />
       <module fileurl="file://$PROJECT_DIR$/pullrefreshing/pullrefreshing.iml" filepath="$PROJECT_DIR$/pullrefreshing/pullrefreshing.iml" />
     </modules>
   </component>

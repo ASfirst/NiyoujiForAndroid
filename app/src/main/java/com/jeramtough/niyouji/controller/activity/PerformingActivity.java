@@ -2,20 +2,15 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import com.jeramtough.jtandroid.controller.activity.JtBaseActivity;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.jeramtough.niyouji.controller.handler.TravelnoteWithAudiencesHandler;
-import io.github.rockerhieu.emojicon.EmojiconGridFragment;
-import io.github.rockerhieu.emojicon.EmojiconsFragment;
-import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
 /**
  * @author 11718
  */
-public class PerformingActivity extends JtBaseActivity implements EmojiconsFragment
-		.OnEmojiconBackspaceClickedListener,EmojiconGridFragment.OnEmojiconClickedListener
+public class PerformingActivity extends JtBaseActivity
 {
 	public static final int TAKE_PHOTO_REQUEST_CODE = 0X1;
 	public static final int VIDEO_REQUEST_CODE = 0X2;
@@ -59,17 +54,5 @@ public class PerformingActivity extends JtBaseActivity implements EmojiconsFragm
 	{
 		super.onDestroy();
 		liveTravelnoteNavigationHandler.onDestroy();
-	}
-	
-	@Override
-	public void onEmojiconBackspaceClicked(View v)
-	{
-	
-	}
-	
-	@Override
-	public void onEmojiconClicked(Emojicon emojicon)
-	{
-	
 	}
 }

@@ -49,7 +49,7 @@ dependencies {
     implementation project(':jtandroid')
     implementation project(':pullrefreshing')
     implementation project(':heartlayout')
-    implementation project(':emojicon')
+    implementation project(':jtemoji')
     //java开源jar
     implementation 'com.google.code.findbugs:jsr305:3.0.0'
     implementation 'pub.devrel:easypermissions:0.2.1'

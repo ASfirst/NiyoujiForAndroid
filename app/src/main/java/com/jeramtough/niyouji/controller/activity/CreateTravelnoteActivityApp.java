@@ -16,8 +16,8 @@ import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
  */
 public class CreateTravelnoteActivityApp extends AppBaseActivity
 {
-	public final static String COVER_PATH_NAME="coverPath";
-	public final static String TITLE_NAME="title";
+	public final static String COVER_PATH_NAME = "coverPath";
+	public final static String TITLE_NAME = "title";
 	
 	private ImageView imageViewAddTravelnoteCover;
 	private ImageView imageViewTravelnoteCover;
@@ -61,20 +61,20 @@ public class CreateTravelnoteActivityApp extends AppBaseActivity
 				break;
 			case R.id.btn_start_perform:
 				title = editTravelnoteTitle.getText().toString();
-				if (title.length() ==0)
+				if (title.length() == 0)
 				{
 					Toast.makeText(this, "请输入游记标题！", Toast.LENGTH_SHORT).show();
 					break;
 				}
-				if (coverPath.length()==0)
+				if (coverPath.length() == 0)
 				{
 					Toast.makeText(this, "没有拍摄游记封面哦！", Toast.LENGTH_SHORT).show();
 					break;
 				}
 				
 				Intent intent = new Intent(this, PerformingActivity.class);
-				intent.putExtra(COVER_PATH_NAME,coverPath);
-				intent.putExtra(TITLE_NAME,title);
+				intent.putExtra(COVER_PATH_NAME, coverPath);
+				intent.putExtra(TITLE_NAME, title);
 				startActivity(intent);
 				break;
 		}
@@ -82,14 +82,14 @@ public class CreateTravelnoteActivityApp extends AppBaseActivity
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{  
+	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == resultCode &&
 				resultCode == TakePhotoActivityApp.TAKE_PHOTO_RESULT_CODE)
 		{
 			String photoPath = data.getStringExtra(TakePhotoActivityApp.PHOTO_PATH_NAME);
 			
-			this.coverPath=photoPath;
+			this.coverPath = photoPath;
 			
 			Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
 			imageViewTravelnoteCover.setImageBitmap(bitmap);
@@ -103,17 +103,20 @@ public class CreateTravelnoteActivityApp extends AppBaseActivity
 		else if (requestCode == resultCode && resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
 		{
 			String videoPath = data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
-			this.coverPath=videoPath;
-			
-			editTravelnoteTitle.setBackgroundResource(R.mipmap.title_background);
-			editTravelnoteTitle.setTextColor(Color.WHITE);
-			editTravelnoteTitle.setGravity(Gravity.BOTTOM | Gravity.CENTER);
-			
-			btnStartPerform.setVisibility(View.VISIBLE);
-			videoViewTravelnoteCover.setVisibility(View.VISIBLE);
-			
-			videoViewTravelnoteCover.setVideoPath(videoPath);
-			videoViewTravelnoteCover.start();
+			if (videoPath != null)
+			{
+				this.coverPath = videoPath;
+				
+				editTravelnoteTitle.setBackgroundResource(R.mipmap.title_background);
+				editTravelnoteTitle.setTextColor(Color.WHITE);
+				editTravelnoteTitle.setGravity(Gravity.BOTTOM | Gravity.CENTER);
+				
+				btnStartPerform.setVisibility(View.VISIBLE);
+				videoViewTravelnoteCover.setVisibility(View.VISIBLE);
+				
+				videoViewTravelnoteCover.setVideoPath(videoPath);
+				videoViewTravelnoteCover.start();
+			}
 		}
 	}
 }

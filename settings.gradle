@@ -1,1 +1,1 @@
-include ':app', ':jtandroid', ':heartlayout', ':emojicon', ':pullrefreshing'
+include ':app', ':jtandroid', ':heartlayout', ':pullrefreshing', ':jtemoji'
