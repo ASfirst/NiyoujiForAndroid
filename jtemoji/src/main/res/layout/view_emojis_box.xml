@@ -9,8 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/background"
-            android:padding="5dp">
+            android:background="#ffffff">
 
         <LinearLayout
                 android:id="@+id/linearLayout_select_emojis_page"

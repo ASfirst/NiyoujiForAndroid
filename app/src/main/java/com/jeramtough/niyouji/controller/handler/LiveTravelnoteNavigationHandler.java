@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.*;
-import com.jeramtough.heartlayout.HeartLayout;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
 import com.jeramtough.jtandroid.function.MusicPlayer;
@@ -19,20 +18,19 @@ import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtemoji.JtEmojiCachesManager;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageType;
 import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageView;
-import com.jeramtough.niyouji.controller.activity.AppBaseActivity;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivityApp;
 import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * @author 11718
@@ -60,7 +58,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private TimedCloseTextView textViewNotification;
 	private AppraisalAreaView appraisalAreaView;
 	
-	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
 	
@@ -82,7 +79,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				findViewById(R.id.progressBar_wait_takephoto_or_video);
 		textViewNotification = findViewById(R.id.textView_notification);
 		appraisalAreaView = findViewById(R.id.appraisalAreaView);
-		
 		
 		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
@@ -226,6 +222,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	{
 		super.onDestroy();
 		musicPlayer.end();
+		JtEmojiCachesManager.getJtEmojiCachesManager().clearAllCaches();
 	}
 	
 	public void setPageResourcePath(String path)

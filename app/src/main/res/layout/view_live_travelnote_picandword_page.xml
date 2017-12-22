@@ -84,12 +84,12 @@
                             android:gravity="center"
                             android:hint="要说点什么~"/>
 
-                    <com.jeramtough.jtemoji.JtEmojisLayout
-                            android:id="@+id/jtEmojisLayout"
+                    <FrameLayout
+                            android:id="@+id/layout_jtemojis_container"
                             android:layout_width="match_parent"
-                            android:layout_height="250dp"
-                            android:visibility="gone">
-                    </com.jeramtough.jtemoji.JtEmojisLayout>
+                            android:layout_height="250dp">
+
+                    </FrameLayout>
 
                 </LinearLayout>
             </ScrollView>

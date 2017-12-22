@@ -4,14 +4,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
-
 
 /**
  * @author 11718
