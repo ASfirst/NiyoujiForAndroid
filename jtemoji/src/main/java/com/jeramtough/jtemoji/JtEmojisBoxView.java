@@ -50,8 +50,8 @@ public class JtEmojisBoxView extends FrameLayout
 	
 	protected void initViews()
 	{
-		ViewGroup viewGroup= (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout
-				.view_emojis_box,null);
+		ViewGroup viewGroup = (ViewGroup) LayoutInflater.from(getContext())
+				.inflate(R.layout.view_emojis_box, this, false);
 		this.addView(viewGroup);
 		
 		viewFlipperShowEmojis = this.findViewById(R.id.viewFlipper_show_emojis);

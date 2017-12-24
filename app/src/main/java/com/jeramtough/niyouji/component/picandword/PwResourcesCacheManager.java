@@ -47,8 +47,6 @@ public class PwResourcesCacheManager
 		
 		lastPwResourcePosition = pwResourcePosition;
 		
-		P.debug(pwResourceCachesMap.size());
-		
 		return pwResourceCache;
 	}
 	

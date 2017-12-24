@@ -12,6 +12,7 @@ import android.widget.*;
 import com.jeramtough.jtemoji.*;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
+import com.jeramtough.niyouji.component.ui.RecognizerPanelView;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
@@ -24,7 +25,7 @@ import com.nightonke.boommenu.BoomMenuButton;
 
 public class LivePicandwordPage
 		implements View.OnClickListener, SelectPwThemeDialog.SelectPwthemeListener,
-		OnClickEmojiListener
+		OnClickEmojiListener, RecognizerPanelView.RecognizerPanelListener
 {
 	private Handler handler;
 	private FragmentManager fragmentManager;
@@ -40,13 +41,16 @@ public class LivePicandwordPage
 	private AppCompatImageView imageViewFrame;
 	private LinearLayout layoutWordFunction1;
 	private LinearLayout layoutWordFunction2;
-	private FrameLayout layoutJtemojisContainer;
+	private FrameLayout layoutFunctionsContainer;
 	
 	private String musicPath;
 	
 	private SelectPwThemeDialog selectPwThemeDialog;
 	
 	private int currentThemePosition = 0;
+	
+	private String currentText;
+	private String voiseText;
 	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler,
@@ -66,13 +70,13 @@ public class LivePicandwordPage
 		imageViewFrame = viewGroup.findViewById(R.id.imageView_frame);
 		layoutWordFunction1 = viewGroup.findViewById(R.id.layout_word_function1);
 		layoutWordFunction2 = viewGroup.findViewById(R.id.layout_word_function2);
-		layoutJtemojisContainer = viewGroup.findViewById(R.id.layout_jtemojis_container);
+		layoutFunctionsContainer = viewGroup.findViewById(R.id.layout_functions_container);
 		
 		editTravelnotePageContent.setVisibility(View.GONE);
 		textViewReminderWriting.setVisibility(View.GONE);
 		layoutWordToolbar.setVisibility(View.GONE);
 		boomMenuButton.setVisibility(View.GONE);
-		layoutJtemojisContainer.setVisibility(View.GONE);
+		layoutFunctionsContainer.setVisibility(View.GONE);
 		
 		viewPictureOfPage.setClickable(false);
 		btnDeletePage.setOnClickListener(this);
@@ -152,20 +156,41 @@ public class LivePicandwordPage
 				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
 				break;
 			case R.id.layout_word_function1:
-				layoutJtemojisContainer.setVisibility(View.VISIBLE);
-				boomMenuButton.setVisibility(View.GONE);
-				
-				//添加表情面板
-				JtEmojisBoxView jtEmojisBoxView=new JtEmojisBoxView(viewGroup.getContext());
-				layoutJtemojisContainer.addView(jtEmojisBoxView);
-				jtEmojisBoxView.setOnClickEmojiListener(this);
-				
-				scrollViewPicandword.post(() ->
+				if (layoutFunctionsContainer.getChildCount() == 0)
 				{
-					scrollViewPicandword.fullScroll(View.FOCUS_DOWN);
-				});
+					layoutFunctionsContainer.setVisibility(View.VISIBLE);
+					boomMenuButton.setVisibility(View.GONE);
+					
+					//添加表情面板
+					JtEmojisBoxView jtEmojisBoxView =
+							new JtEmojisBoxView(viewGroup.getContext());
+					layoutFunctionsContainer.addView(jtEmojisBoxView);
+					jtEmojisBoxView.setOnClickEmojiListener(this);
+					
+					scrollViewPicandword.post(() ->
+					{
+						scrollViewPicandword.fullScroll(View.FOCUS_DOWN);
+					});
+				}
 				break;
 			case R.id.layout_word_function2:
+				if (layoutFunctionsContainer.getChildCount() == 0)
+				{
+					layoutFunctionsContainer.setVisibility(View.VISIBLE);
+					boomMenuButton.setVisibility(View.GONE);
+					
+					//添加语音识别控件面板
+					RecognizerPanelView recognizerPanelView =
+							new RecognizerPanelView(viewGroup.getContext());
+					layoutFunctionsContainer.addView(recognizerPanelView);
+					recognizerPanelView.setRecognizerPanelListener(this);
+					recognizerPanelView.startRecognize();
+					
+					scrollViewPicandword.post(() ->
+					{
+						scrollViewPicandword.fullScroll(View.FOCUS_DOWN);
+					});
+				}
 				break;
 		}
 	}
@@ -199,7 +224,35 @@ public class LivePicandwordPage
 	@Override
 	public void onCancelEmojisLayout()
 	{
-		cancelEmojisBox();
+		cancelFunctionsLayout();
+	}
+	
+	@Override
+	public void onRecognizePartial(String text)
+	{
+		voiseText = text;
+		if (currentText == null)
+		{
+			currentText = editTravelnotePageContent.getText().toString();
+		}
+		editTravelnotePageContent.setText(currentText + voiseText);
+		
+		editTravelnotePageContent.setSelection(editTravelnotePageContent.getText().length());
+	}
+	
+	@Override
+	public void onRecognizeFinish(String text)
+	{
+		currentText = currentText + text + "，";
+		editTravelnotePageContent.setText(currentText);
+		
+		editTravelnotePageContent.setSelection(editTravelnotePageContent.getText().length());
+	}
+	
+	@Override
+	public void onRecognizeCancel()
+	{
+		cancelFunctionsLayout();
 	}
 	
 	public EditText getEditTravelnotePageContent()
@@ -262,7 +315,7 @@ public class LivePicandwordPage
 		layoutWordFunction1.setOnTouchListener((v, event) -> false);
 		layoutWordFunction2.setOnTouchListener((v, event) -> false);
 		
-		cancelEmojisBox();
+		cancelFunctionsLayout();
 	}
 	
 	public void resetTheme()
@@ -272,10 +325,12 @@ public class LivePicandwordPage
 	
 	
 	//*****************************
-	private void cancelEmojisBox()
+	private void cancelFunctionsLayout()
 	{
-		layoutJtemojisContainer.removeAllViews();
-		layoutJtemojisContainer.setVisibility(View.GONE);
+		layoutFunctionsContainer.removeAllViews();
+		layoutFunctionsContainer.setVisibility(View.GONE);
 		boomMenuButton.setVisibility(View.VISIBLE);
 	}
+	
+	
 }
