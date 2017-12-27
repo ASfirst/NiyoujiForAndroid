@@ -52,7 +52,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private JtViewPager viewPagerTravelnotePages;
 	
 	private TextView textViewPagesCount;
-	
 	private LinearLayout layoutShutdownForLive;
 	private ProgressBar progressBarWaitTakephotoOrVideo;
 	private TimedCloseTextView textViewNotification;
