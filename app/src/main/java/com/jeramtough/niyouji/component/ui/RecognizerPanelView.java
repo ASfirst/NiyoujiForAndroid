@@ -109,9 +109,9 @@ public class RecognizerPanelView extends FrameLayout
 	}
 	
 	@Override
-	public void onRecognizeError()
+	public void onRecognizeError(String errorMessage)
 	{
-		textViewRecognisingInfo.setText("语音引擎不支持您的手机 T.T");
+		textViewRecognisingInfo.setText(errorMessage);
 	}
 	
 	public void startRecognize()
