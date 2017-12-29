@@ -82,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
-                            android:hint="要说点什么~"/>
+                            android:hint="要写点什么~"/>
 
                     <FrameLayout
                             android:id="@+id/layout_functions_container"
