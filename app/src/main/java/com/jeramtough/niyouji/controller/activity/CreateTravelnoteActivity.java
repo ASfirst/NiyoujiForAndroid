@@ -4,23 +4,27 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
+import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
-import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
+import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 
 /**
  * @author 11718
  */
-public class TestActivity extends AppBaseActivity
+public class CreateTravelnoteActivity extends AppBaseActivity implements View.OnTouchListener
 {
+	private static final int COVER_TYPE_NONE = 0;
+	private static final int COVER_TYPE_PHOTO = 1;
+	private static final int COVER_TYPE_VIDEO = 2;
+	
 	private TextView textViewTjyjfm;
 	private ImageView imageViewAddTravelnoteCover;
 	private EditText editTravelnoteTitle;
@@ -30,12 +34,13 @@ public class TestActivity extends AppBaseActivity
 	
 	private String coverPath;
 	private String title;
+	private int coverType = COVER_TYPE_NONE;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_test);
+		setContentView(R.layout.activity_create_travelnote);
 		
 		textViewTjyjfm = findViewById(R.id.textView_tjyjfm);
 		imageViewAddTravelnoteCover = findViewById(R.id.imageView_add_travelnote_cover);
@@ -44,13 +49,16 @@ public class TestActivity extends AppBaseActivity
 		videoViewTravelnoteCover = findViewById(R.id.videoView_travelnote_cover);
 		imageViewTravelnoteCover = findViewById(R.id.imageView_travelnote_cover);
 		
-		videoViewTravelnoteCover.setClickable(false);
 		imageViewTravelnoteCover.setClickable(false);
 		
 		imageViewAddTravelnoteCover.setOnClickListener(this);
 		imageViewTravelnoteCover.setOnClickListener(this);
-		videoViewTravelnoteCover.setOnClickListener(this);
 		btnStartPerforming.setOnClickListener(this);
+		videoViewTravelnoteCover.setOnTouchListener(this);
+		videoViewTravelnoteCover.setOnCompletionListener(mp ->
+		{
+			videoViewTravelnoteCover.start();
+		});
 	}
 	
 	
@@ -59,7 +67,6 @@ public class TestActivity extends AppBaseActivity
 	{
 		switch (viewId)
 		{
-			case R.id.videoView_travelnote_cover:
 			case R.id.imageView_travelnote_cover:
 			case R.id.imageView_add_travelnote_cover:
 				SelectTakephotoOrVideoDialog dialog = new SelectTakephotoOrVideoDialog(this);
@@ -72,7 +79,7 @@ public class TestActivity extends AppBaseActivity
 					Toast.makeText(this, "请输入游记标题！", Toast.LENGTH_SHORT).show();
 					break;
 				}
-				if (coverPath.length() == 0)
+				if (coverPath == null)
 				{
 					Toast.makeText(this, "没有拍摄游记封面哦！", Toast.LENGTH_SHORT).show();
 					break;
@@ -82,6 +89,17 @@ public class TestActivity extends AppBaseActivity
 				startActivity(intent);
 				break;
 		}
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		if (event.getAction() == MotionEvent.ACTION_UP)
+		{
+			SelectTakephotoOrVideoDialog dialog = new SelectTakephotoOrVideoDialog(this);
+			dialog.show();
+		}
+		return true;
 	}
 	
 	@Override
@@ -96,6 +114,8 @@ public class TestActivity extends AppBaseActivity
 			this.coverPath = photoPath;
 			if (coverPath != null)
 			{
+				recycleTheCoverResource();
+				
 				Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
 				imageViewTravelnoteCover.setImageBitmap(bitmap);
 				imageViewTravelnoteCover.setVisibility(View.VISIBLE);
@@ -103,6 +123,8 @@ public class TestActivity extends AppBaseActivity
 				textViewTjyjfm.setVisibility(View.INVISIBLE);
 				imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
 				imageViewTravelnoteCover.setClickable(true);
+				
+				coverType = COVER_TYPE_PHOTO;
 			}
 		}
 		else if (requestCode == resultCode && resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
@@ -110,6 +132,8 @@ public class TestActivity extends AppBaseActivity
 			String videoPath = data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
 			if (videoPath != null)
 			{
+				recycleTheCoverResource();
+				
 				this.coverPath = videoPath;
 				videoViewTravelnoteCover.setVisibility(View.VISIBLE);
 				videoViewTravelnoteCover.setVideoPath(videoPath);
@@ -117,8 +141,28 @@ public class TestActivity extends AppBaseActivity
 				
 				textViewTjyjfm.setVisibility(View.INVISIBLE);
 				imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
-				videoViewTravelnoteCover.setClickable(true);
+				
+				
+				coverType = COVER_TYPE_VIDEO;
 			}
 		}
 	}
+	
+	//************************************
+	private void recycleTheCoverResource()
+	{
+		if (coverType == COVER_TYPE_PHOTO)
+		{
+			BitmapUtil.releaseDrawableResouce(imageViewTravelnoteCover.getDrawable());
+			imageViewTravelnoteCover.setImageResource(R.color.transparent);
+			imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
+		}
+		else if (coverType == COVER_TYPE_VIDEO)
+		{
+			videoViewTravelnoteCover.stopPlayback();
+			videoViewTravelnoteCover.destroyDrawingCache();
+		}
+	}
+	
+	
 }

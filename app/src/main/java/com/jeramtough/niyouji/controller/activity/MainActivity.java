@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 		switch (id)
 		{
 			case R.id.imageButton_perform:
-				IntentUtil.toTheOtherActivity(this,CreateTravelnoteActivityApp.class);
+				IntentUtil.toTheOtherActivity(this,CreateTravelnoteActivity.class);
 				break;
 		}
 	}

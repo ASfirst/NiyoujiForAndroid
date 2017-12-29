@@ -1,93 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.jeramtough.niyouji.controller.activity.CreateTravelnoteActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.jeramtough.niyouji.controller.activity.CreateTravelnoteActivityApp"
-        android:orientation="vertical">
+        android:background="@drawable/background5">
 
-    <TextView
+    <com.jeramtough.jtandroid.ui.FullScreenVideoView
+            android:id="@+id/videoView_travelnote_cover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="开启您的游记直播之旅"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:layout_gravity="center"/>
 
-    <FrameLayout
+    <ImageView
+            android:id="@+id/imageView_travelnote_cover"
+            android:visibility="invisible"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:gravity="center">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="添加游记封面"
-                    android:textSize="20sp"/>
-
-            <ImageView
-                    android:id="@+id/imageView_add_travelnote_cover"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/plussign"
-                    android:scaleType="center"/>
-        </LinearLayout>
-
-        <ImageView
-                android:id="@+id/imageView_travelnote_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:layout_marginBottom="20dp"/>
-
-        <com.jeramtough.jtandroid.ui.FullScreenVideoView
-                android:id="@+id/videoView_travelnote_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:visibility="invisible"
-                android:layout_gravity="center"/>
-
-        <EditText
-                android:id="@+id/edit_travelnote_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:gravity="center"
-                android:hint="游记标题"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
-
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"/>
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@color/colorPrimary">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="开启新的游记！"
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="开启您的游记直播之旅!"
                 android:gravity="center"
-                android:layout_gravity="center|bottom"
-                android:id="@+id/btn_start_perform"
-                android:background="@drawable/btn_done"
-                android:textColor="@color/white"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"/>
+                android:textColor="@color/blue"
+                android:shadowColor="@color/white"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:textSize="21sp"/>
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+                <TextView
+                        android:id="@+id/textView_tjyjfm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加游记封面"
+                        android:textColor="@color/colorAccentDark"
+                        android:shadowColor="@color/white"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="1"/>
+
+                <ImageView
+                        android:id="@+id/imageView_add_travelnote_cover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/plussign_white"/>
+
+                <EditText
+                        android:id="@+id/edit_travelnote_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="       请输入游记标题       "
+                        android:textColor="@color/colorAccentDark"
+                        android:textSize="23sp"
+                        android:shadowColor="@color/white"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="1"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:maxLength="13"
+                        />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+            <Button
+                    android:id="@+id/btn_start_performing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="开启游记"
+                    android:textSize="25dp"
+                    android:gravity="center"
+                    android:layout_gravity="center|bottom"
+                    android:background="@drawable/btn3"
+                    android:textColor="@color/white"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 
 
-</LinearLayout>
+</FrameLayout>
