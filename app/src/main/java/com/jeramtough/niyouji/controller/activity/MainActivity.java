@@ -15,35 +15,24 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.controller.handler.LeftPanelHandler;
 import com.jeramtough.niyouji.controller.handler.MainNavigation;
 
 /**
  * @author 11718
  */
-public class MainActivity extends AppCompatActivity
-		implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener
+public class MainActivity extends AppBaseActivity
 {
 	private MainNavigation mainNavigation;
 	private ImageButton imageButtonPerform;
+	
+	private LeftPanelHandler leftPanelHandler;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Toolbar toolbar = findViewById(R.id.toolbar);
-		toolbar.setTitle("");
-		setSupportActionBar(toolbar);
-		
-		
-		DrawerLayout drawer = findViewById(R.id.drawer_layout);
-		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-				R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-		drawer.addDrawerListener(toggle);
-		toggle.syncState();
-		
-		NavigationView navigationView = findViewById(R.id.nav_view);
-		navigationView.setNavigationItemSelectedListener(this);
 		
 		RadioGroup radioGroupMainNavigation = findViewById(R.id.radioGroup_main_navigation);
 		RadioButton radioButton0 = findViewById(R.id.radioButton_0);
@@ -54,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 		mainNavigation =
 				new MainNavigation(getSupportFragmentManager(), radioGroupMainNavigation,
 						radioButton0, radioButton1, viewPagerMainNavigation);
+		leftPanelHandler = new LeftPanelHandler(this);
 		
 		imageButtonPerform.setOnClickListener(this);
 	}
@@ -73,51 +63,13 @@ public class MainActivity extends AppCompatActivity
 	}
 	
 	
-	@SuppressWarnings("StatementWithEmptyBody")
 	@Override
-	public boolean onNavigationItemSelected(MenuItem item)
+	public void onClick(View v, int viewId)
 	{
-		int id = item.getItemId();
-		
-		if (id == R.id.nav_camera)
-		{
-			// Handle the camera action
-		}
-		else if (id == R.id.nav_gallery)
-		{
-		
-		}
-		else if (id == R.id.nav_slideshow)
-		{
-		
-		}
-		else if (id == R.id.nav_manage)
-		{
-		
-		}
-		else if (id == R.id.nav_share)
-		{
-		
-		}
-		else if (id == R.id.nav_send)
-		{
-		
-		}
-		
-		DrawerLayout drawer = findViewById(R.id.drawer_layout);
-		drawer.closeDrawer(GravityCompat.START);
-		return true;
-	}
-	
-	
-	@Override
-	public void onClick(View v)
-	{
-		int id = v.getId();
-		switch (id)
+		switch (viewId)
 		{
 			case R.id.imageButton_perform:
-				IntentUtil.toTheOtherActivity(this,CreateTravelnoteActivity.class);
+				IntentUtil.toTheOtherActivity(this, CreateTravelnoteActivity.class);
 				break;
 		}
 	}

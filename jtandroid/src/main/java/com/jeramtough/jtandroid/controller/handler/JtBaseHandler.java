@@ -11,7 +11,7 @@ import android.view.View;
  *         on 2017  November 30 Thursday 15:05.
  */
 
-public class JtBaseHandler extends Handler
+public class JtBaseHandler extends Handler implements View.OnClickListener
 {
 	private Activity activity;
 	
@@ -36,6 +36,18 @@ public class JtBaseHandler extends Handler
 	}
 	
 	public void onDestroy()
+	{
+	
+	}
+	
+	@Override
+	@Deprecated
+	public void onClick(View v)
+	{
+		onClick(v, v.getId());
+	}
+	
+	public void onClick(View view, int viewId)
 	{
 	
 	}
