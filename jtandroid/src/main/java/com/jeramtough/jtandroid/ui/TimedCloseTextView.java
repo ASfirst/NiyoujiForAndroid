@@ -1,6 +1,7 @@
 package com.jeramtough.jtandroid.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -40,5 +41,26 @@ public class TimedCloseTextView extends android.support.v7.widget.AppCompatTextV
 				TimedCloseTextView.this.setVisibility(View.GONE);
 			}
 		}, time);
+	}
+	
+	public void setPrimaryMessage(String message)
+	{
+		this.setBackgroundColor(Color.BLUE);
+		this.setTextColor(Color.WHITE);
+		this.setText(message);
+	}
+	
+	public void setErrorMessage(String message)
+	{
+		this.setBackgroundColor(Color.RED);
+		this.setTextColor(Color.WHITE);
+		this.setText(message);
+	}
+	
+	public void setNiceMessage(String message)
+	{
+		this.setBackgroundColor(Color.GREEN);
+		this.setTextColor(Color.WHITE);
+		this.setText(message);
 	}
 }

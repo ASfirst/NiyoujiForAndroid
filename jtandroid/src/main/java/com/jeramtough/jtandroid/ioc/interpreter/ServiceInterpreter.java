@@ -45,7 +45,8 @@ public class ServiceInterpreter implements Interpreter
 				{
 					for (Constructor constructor : serverClass.getConstructors())
 					{
-						if (constructor.getAnnotation(IocAutowire.class) != null)
+						if (constructor.getAnnotation(IocAutowire.class) != null ||
+								constructor.getParameterTypes().length == 0)
 						{
 							ArrayList<Object> constructorParameters = new ArrayList<>();
 							for (Class<?> c : constructor.getParameterTypes())

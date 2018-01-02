@@ -1,5 +1,9 @@
 package com.jeramtough.jtandroid.jtlog2;
 
+import android.app.Activity;
+import android.content.Context;
+import android.widget.Toast;
+
 /**
  * Created by 11718
  * on 2017  October 14 Saturday 17:18.
@@ -167,6 +171,11 @@ public class P
 	{
 		LogInformation logInformation = new LogInformation("");
 		MyLoggerFactory.getVerboseLogger().println(logInformation);
+	}
+	
+	public static void arriveWithToast(Context context)
+	{
+		Toast.makeText(context, "arrive", Toast.LENGTH_SHORT).show();
 	}
 	
 }

@@ -24,7 +24,7 @@
             android:name="android.hardware.camera"
             android:required="false"/>
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!-- To auto-complete the email text field in setPrimaryInfoOfUserogin form with primaryInfoOfUseruser's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -89,6 +89,10 @@
         </activity>
         <activity
                 android:name=".controller.activity.LoginActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+                android:name=".controller.activity.RegisterActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

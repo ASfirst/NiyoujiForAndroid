@@ -49,7 +49,8 @@ public class ComponentInterpreter implements Interpreter
 						}
 						else
 						{
-							if (constructor.getAnnotation(IocAutowire.class) != null)
+							if (constructor.getAnnotation(IocAutowire.class) != null ||
+									constructor.getParameterTypes().length == 0)
 							{
 								ArrayList<Object> contructorParameter = new ArrayList<>();
 								for (Class<?> c1 : constructor.getParameterTypes())

@@ -11,10 +11,10 @@
 
 
     <com.jeramtough.jtandroid.ui.RoundImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher_round"
             android:id="@+id/imageView_surface"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_launcher_round"
             android:layout_marginTop="40dp"/>
 
     <FrameLayout

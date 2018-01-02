@@ -16,6 +16,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_arrow_back"/>
+
+        <com.jeramtough.jtandroid.ui.TimedCloseTextView
+                android:id="@+id/timedCloseTextView_show_message"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -42,7 +50,7 @@
                     android:background="@mipmap/logo"/>
 
             <EditText
-                    android:id="@+id/edit_account"
+                    android:id="@+id/edit_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
@@ -101,18 +109,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
-                <CheckBox
-                        android:id="@+id/checkBox_has_automatically_login"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"/>
-
                 <TextView
-                        android:id="@+id/textView_automatically_login"
+                        android:id="@+id/textView_forget_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="自动登录"
+                        android:text="@string/forget_password"
                         android:textSize="20sp"
+                        android:autoLink="all"
                         android:textColor="@color/white"/>
             </LinearLayout>
         </LinearLayout>

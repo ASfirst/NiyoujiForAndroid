@@ -10,10 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import com.jeramtough.jtandroid.controller.handler.JtBaseHandler;
+import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.RoundImageView;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.LeftPanelBusiness;
+import com.jeramtough.niyouji.business.LeftPanelService;
 import com.jeramtough.niyouji.controller.activity.AppBaseActivity;
 import com.jeramtough.niyouji.controller.activity.LoginActivity;
 
@@ -22,14 +25,18 @@ import com.jeramtough.niyouji.controller.activity.LoginActivity;
  *         on 2017  December 30 Saturday 01:12.
  */
 
-public class LeftPanelHandler extends JtBaseHandler
+public class LeftPanelHandler extends JtIocHandler
 		implements NavigationView.OnNavigationItemSelectedListener
 {
+	public static final int ACTIVITY_REQUEST_CODE_LOGIN = 0;
+	
 	private RoundImageView imageViewSurface;
 	private TextView textViewLoginOrRegister;
 	private TextView textViewUsername;
 	private TextView textViewGoldCount;
 	
+	@InjectService(service = LeftPanelService.class)
+	private LeftPanelBusiness leftPanelBusiness;
 	
 	public LeftPanelHandler(Activity activity)
 	{
@@ -61,6 +68,18 @@ public class LeftPanelHandler extends JtBaseHandler
 		
 		navigationView.setNavigationItemSelectedListener(this);
 		textViewLoginOrRegister.setOnClickListener(this);
+		
+		initResources();
+	}
+	
+	protected void initResources()
+	{
+		boolean hasLogined = leftPanelBusiness.hasLogined();
+		if (hasLogined)
+		{
+			//将这句注释掉就是自动登录了
+//			loginFinally();
+		}
 	}
 	
 	
@@ -74,6 +93,7 @@ public class LeftPanelHandler extends JtBaseHandler
 		}
 		else if (id == R.id.nav_clear_caches)
 		{
+			leftPanelBusiness.clearTravelnoteCaches(getContext());
 		}
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
@@ -86,8 +106,17 @@ public class LeftPanelHandler extends JtBaseHandler
 		switch (viewId)
 		{
 			case R.id.textView_login_or_register:
-				IntentUtil.toTheOtherActivity(getActivity(), LoginActivity.class);
+				IntentUtil.toTheOtherActivity(getActivity(), LoginActivity.class,
+						ACTIVITY_REQUEST_CODE_LOGIN);
 				break;
 		}
+	}
+	
+	public void loginFinally()
+	{
+		textViewLoginOrRegister.setVisibility(View.INVISIBLE);
+		textViewUsername.setVisibility(View.VISIBLE);
+		textViewUsername.setText(leftPanelBusiness.getUserNickname());
+		imageViewSurface.setImageResource(R.mipmap.surface_image);
 	}
 }

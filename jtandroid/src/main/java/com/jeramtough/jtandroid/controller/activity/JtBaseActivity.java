@@ -1,5 +1,9 @@
 package com.jeramtough.jtandroid.controller.activity;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -10,6 +14,14 @@ import android.view.View;
 
 public abstract class JtBaseActivity extends AppCompatActivity implements View.OnClickListener
 {
+	private ActivityUiHandler activityUiHandler;
+	
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		activityUiHandler = new ActivityUiHandler();
+	}
 	
 	@Override
 	@Deprecated
@@ -21,5 +33,25 @@ public abstract class JtBaseActivity extends AppCompatActivity implements View.O
 	public void onClick(View view, int viewId)
 	{
 	
+	}
+	
+	public void handleActivityMessage(Message message)
+	{
+	}
+	
+	public Handler getActivityUiHandler()
+	{
+		return activityUiHandler;
+	}
+	
+	//{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}
+	private class ActivityUiHandler extends Handler
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			super.handleMessage(msg);
+			handleActivityMessage(msg);
+		}
 	}
 }
