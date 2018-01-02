@@ -7,9 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.bean.landr.InputtingLegality;
+import com.jeramtough.niyouji.bean.landr.RegisterInfo;
 import com.jeramtough.niyouji.business.RegisterBusiness;
 import com.jeramtough.niyouji.business.RegisterService;
 
@@ -22,10 +25,15 @@ import java.util.TimerTask;
 public class RegisterActivity extends AppBaseActivity
 {
 	public static final int BUSINESS_CODE_SENT_VERIFICATION_CODE_SUCCESSFULLY = 0;
+	public static final int BUSINESS_CODE_SENT_VERIFICATION_CODE_FAILED = 1;
+	public static final int BUSINESS_CODE_REGISTERED_SUCCESSFULLY = 2;
+	public static final int BUSINESS_CODE_REGISTERED_FAILED = 3;
+	
+	public static final int ACTIVITY_SESULT_CODE_REGISTER = 0;
 	
 	private AppCompatImageView viewBack;
 	private TimedCloseTextView timedCloseTextViewShowMessage;
-	private EditText editAccount;
+	private EditText editPhoneNumber;
 	private EditText editPassword;
 	private EditText editRepeatPassword;
 	private EditText editVerificationCode;
@@ -44,7 +52,7 @@ public class RegisterActivity extends AppBaseActivity
 		
 		viewBack = findViewById(R.id.view_back);
 		timedCloseTextViewShowMessage = findViewById(R.id.timedCloseTextView_show_message);
-		editAccount = findViewById(R.id.edit_account);
+		editPhoneNumber = findViewById(R.id.edit_phone_number);
 		editPassword = findViewById(R.id.edit_password);
 		editRepeatPassword = findViewById(R.id.edit_repeat_password);
 		editVerificationCode = findViewById(R.id.edit_verification_code);
@@ -68,9 +76,29 @@ public class RegisterActivity extends AppBaseActivity
 				this.finish();
 				break;
 			case R.id.button_request_verification_code:
+				registerBusiness.requestVerificationCode(editPhoneNumber.getText().toString(),
+						getActivityUiHandler());
 				afterSentVerificationCode();
 				break;
 			case R.id.button_register_user:
+				RegisterInfo registerInfo = new RegisterInfo();
+				registerInfo.setPhoneNumber(editPhoneNumber.getText().toString());
+				registerInfo.setPassword(editPassword.getText().toString());
+				registerInfo.setRepeatPassword(editRepeatPassword.getText().toString());
+				InputtingLegality inputtingLegality =
+						registerBusiness.checkInputtingIsLegal(registerInfo);
+				if (inputtingLegality.isPassed())
+				{
+					registerInfo
+							.setVerificationCode(editVerificationCode.getText().toString());
+					registerBusiness.registerNewUser(registerInfo, getActivityUiHandler());
+				}
+				else
+				{
+					timedCloseTextViewShowMessage
+							.setErrorMessage(inputtingLegality.getIllegalMessage());
+					timedCloseTextViewShowMessage.closeDelayed(3000);
+				}
 				break;
 		}
 	}
@@ -80,8 +108,23 @@ public class RegisterActivity extends AppBaseActivity
 	{
 		switch (message.what)
 		{
+			case BUSINESS_CODE_SENT_VERIFICATION_CODE_FAILED:
+				String errorMessage = message.getData().getString("errorMessage");
+				timedCloseTextViewShowMessage.setErrorMessage("发送失败!" + errorMessage);
+				timedCloseTextViewShowMessage.closeDelayed(3000);
+				break;
 			case BUSINESS_CODE_SENT_VERIFICATION_CODE_SUCCESSFULLY:
 				timedCloseTextViewShowMessage.setNiceMessage("发送成功");
+				timedCloseTextViewShowMessage.closeDelayed(3000);
+				break;
+			case BUSINESS_CODE_REGISTERED_FAILED:
+				break;
+			case BUSINESS_CODE_REGISTERED_SUCCESSFULLY:
+				Toast.makeText(this, "注册成功~", Toast.LENGTH_SHORT).show();
+				setResult(ACTIVITY_SESULT_CODE_REGISTER, getIntent());
+				getIntent().putExtra("phoneNumber",editPhoneNumber.getText().toString());
+				getIntent().putExtra("password",editPassword.getText().toString());
+				this.finish();
 				break;
 		}
 	}

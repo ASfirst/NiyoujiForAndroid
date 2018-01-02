@@ -75,7 +75,7 @@ public class MainActivity extends AppBaseActivity
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == LeftPanelHandler.ACTIVITY_REQUEST_CODE_LOGIN &&
-				resultCode == LoginActivity.ACTIVITY_RESULTE_CODE_LOGIN)
+				resultCode == LoginActivity.ACTIVITY_RESULT_CODE_LOGIN)
 		{
 			leftPanelHandler.loginFinally();
 		}

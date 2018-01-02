@@ -42,6 +42,14 @@ public class LoginService implements LoginBusiness
 			return inputtingLegality;
 		}
 		
+		if (loginInfo.getPassword().length()<6)
+		{
+			inputtingLegality.setPassed(false);
+			inputtingLegality.setIllegalMessage("密码长度6位及以上！");
+			return inputtingLegality;
+			
+		}
+		
 		if (CommonValidatorUtil.isPassword(loginInfo.getPassword()) == false)
 		{
 			inputtingLegality.setPassed(false);

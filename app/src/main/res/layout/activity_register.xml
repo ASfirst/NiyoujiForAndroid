@@ -63,12 +63,12 @@
                     android:textColor="#FFFFFF"/>
 
             <EditText
-                    android:id="@+id/edit_account"
+                    android:id="@+id/edit_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#ffffff"
                     android:hint="您的手机号"
-                    android:maxLength="12"
+                    android:maxLength="11"
                     android:padding="10dp"
                     android:textColor="#000000"
                     android:inputType="phone"/>
@@ -90,17 +90,19 @@
                     android:inputType="none"
                     android:padding="10dp"
                     android:text="密码"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    />
 
             <EditText
                     android:id="@+id/edit_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#ffffff"
-                    android:hint="数字，英文"
+                    android:hint="数字，英文，6位长度及以上"
                     android:maxLength="12"
                     android:padding="10dp"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000"
+                    android:inputType="textPassword"/>
         </LinearLayout>
 
         <LinearLayout
@@ -129,7 +131,8 @@
                     android:hint="重复密码"
                     android:maxLength="12"
                     android:padding="10dp"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000"
+                    android:inputType="textPassword"/>
         </LinearLayout>
 
         <LinearLayout

@@ -51,4 +51,12 @@ public class RegisterInfo
 	{
 		this.verificationCode = verificationCode;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "RegisterInfo{" + "phoneNumber='" + phoneNumber + '\'' + ", password='" +
+				password + '\'' + ", repeatPassword='" + repeatPassword + '\'' +
+				", verificationCode='" + verificationCode + '\'' + '}';
+	}
 }

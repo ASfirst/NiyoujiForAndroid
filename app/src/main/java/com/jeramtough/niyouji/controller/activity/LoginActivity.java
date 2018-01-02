@@ -1,11 +1,13 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
@@ -21,7 +23,7 @@ import com.jeramtough.niyouji.business.LoginService;
  */
 public class LoginActivity extends AppBaseActivity
 {
-	public static final int ACTIVITY_RESULTE_CODE_LOGIN = 0;
+	public static final int ACTIVITY_RESULT_CODE_LOGIN = 0;
 	
 	public static final int BUSINESS_CODE_LOGIN_SUCCESSFULLY = 0;
 	public static final int BUSINESS_CODE_LOGIN_FAILED = 1;
@@ -109,11 +111,25 @@ public class LoginActivity extends AppBaseActivity
 		{
 			case BUSINESS_CODE_LOGIN_SUCCESSFULLY:
 				Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
-				setResult(ACTIVITY_RESULTE_CODE_LOGIN, getIntent());
+				setResult(ACTIVITY_RESULT_CODE_LOGIN, getIntent());
 				this.finish();
 				break;
 			case BUSINESS_CODE_LOGIN_FAILED:
 				break;
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (requestCode == ACTIVITY_REQUEST_CODE_REGISTER &&
+				resultCode == RegisterActivity.ACTIVITY_SESULT_CODE_REGISTER)
+		{
+			String phoneNumber=data.getStringExtra("phoneNumber");
+			String password=data.getStringExtra("password");
+			
+			editPhoneNumber.setText(phoneNumber);
+			editPassword.setText(password);
 		}
 	}
 }

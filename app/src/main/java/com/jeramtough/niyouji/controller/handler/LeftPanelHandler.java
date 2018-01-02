@@ -59,6 +59,7 @@ public class LeftPanelHandler extends JtIocHandler
 		toggle.syncState();
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		
+		
 		imageViewSurface =
 				navigationView.getHeaderView(0).findViewById(R.id.imageView_surface);
 		textViewLoginOrRegister =
@@ -135,5 +136,7 @@ public class LeftPanelHandler extends JtIocHandler
 		textViewUsername.setVisibility(View.VISIBLE);
 		textViewUsername.setText(leftPanelBusiness.getUserNickname());
 		imageViewSurface.setImageResource(R.mipmap.surface_image);
+		
+		textViewGoldCount.setText(leftPanelBusiness.getGoldCount());
 	}
 }
