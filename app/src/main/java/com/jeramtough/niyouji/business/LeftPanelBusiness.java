@@ -1,7 +1,9 @@
 package com.jeramtough.niyouji.business;
 
 import android.content.Context;
+import android.os.Handler;
 import com.jeramtough.niyouji.bean.user.PrimaryInfoOfUser;
+
 
 /**
  * @author 11718
@@ -21,5 +23,5 @@ public interface LeftPanelBusiness
 	/**
 	 * 清除游记图片和视频缓存
 	 */
-	void clearTravelnoteCaches(Context context);
+	void clearTravelnoteCaches(Handler handler);
 }

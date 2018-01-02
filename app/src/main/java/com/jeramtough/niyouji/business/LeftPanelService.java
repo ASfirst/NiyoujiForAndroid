@@ -1,16 +1,20 @@
 package com.jeramtough.niyouji.business;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.niyouji.component.app.AppConfig;
 import com.jeramtough.niyouji.component.app.AppUser;
+import com.jeramtough.niyouji.controller.handler.LeftPanelHandler;
 
 import java.io.File;
-import java.util.concurrent.*;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 11718
@@ -52,43 +56,75 @@ public class LeftPanelService implements LeftPanelBusiness
 	}
 	
 	@Override
-	public void clearTravelnoteCaches(Context context)
+	public void clearTravelnoteCaches(Handler handler)
 	{
-		ThreadPoolExecutor threadPool =
+		final ThreadPoolExecutor threadPool =
 				new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
 						new SynchronousQueue<>());
 		
 		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
 		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory());
 		
-		int totalSpace = 0;
-		if (videosDirectory.exists())
+		final int totalTaskCount =
+				videosDirectory.listFiles().length + imagesDirectory.listFiles().length;
+		final int[] completedTaskCount = {0};
+		final long[] totalSpace = {0};
+		
+		if (totalTaskCount>0)
 		{
-			totalSpace =
-					totalSpace + (int) (videosDirectory.getTotalSpace() / 1080 / 1080 / 1080);
-			for (File file : videosDirectory.listFiles())
-			{
-				threadPool.execute(() ->
-				{
-					file.delete();
-				});
-			}
 			
-		}
-		if (imagesDirectory.exists())
-		{
-			totalSpace =
-					totalSpace + (int) (videosDirectory.getTotalSpace() / 1080 / 1080 / 1080);
-			for (File file : imagesDirectory.listFiles())
+			if (videosDirectory.exists())
 			{
-				threadPool.execute(() ->
+				for (File file : videosDirectory.listFiles())
 				{
-					file.delete();
-				});
+					threadPool.execute(() ->
+					{
+						totalSpace[0] = totalSpace[0] + file.length();
+						file.delete();
+						completedTaskCount[0] = completedTaskCount[0] + 1;
+						if (completedTaskCount[0] == totalTaskCount)
+						{
+							int size = (int) (totalSpace[0] / 1080 / 1080);
+							Message message = new Message();
+							message.what = LeftPanelHandler.BUSINESS_CODE_CLEAR_CACHES;
+							message.getData().putInt("size", size);
+							handler.sendMessage(message);
+						}
+					});
+				}
+				
 			}
+			if (imagesDirectory.exists())
+			{
+				for (File file : imagesDirectory.listFiles())
+				{
+					threadPool.execute(() ->
+					{
+						totalSpace[0] = totalSpace[0] + file.length();
+						file.delete();
+						completedTaskCount[0] = completedTaskCount[0] + 1;
+						if (completedTaskCount[0] == totalTaskCount)
+						{
+							int size = (int) (totalSpace[0] / 1080 / 1080);
+							Message message = new Message();
+							message.what = LeftPanelHandler.BUSINESS_CODE_CLEAR_CACHES;
+							message.getData().putInt("size", size);
+							handler.sendMessage(message);
+						}
+					});
+				}
+			}
+		}
+		else
+		{
+			int size = 0;
+			Message message = new Message();
+			message.what = LeftPanelHandler.BUSINESS_CODE_CLEAR_CACHES;
+			message.getData().putInt("size", size);
+			handler.sendMessage(message);
 		}
 		threadPool.shutdown();
-		Toast.makeText(context, "清除了" + totalSpace + "MB缓存", Toast.LENGTH_SHORT).show();
+		
 	}
 	
 }

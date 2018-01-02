@@ -3,6 +3,7 @@ package com.jeramtough.jtandroid.controller.handler;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.IdRes;
 import android.view.View;
 

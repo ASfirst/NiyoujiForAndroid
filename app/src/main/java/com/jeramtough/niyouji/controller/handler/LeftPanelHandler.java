@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.RoundImageView;
@@ -29,6 +31,8 @@ public class LeftPanelHandler extends JtIocHandler
 		implements NavigationView.OnNavigationItemSelectedListener
 {
 	public static final int ACTIVITY_REQUEST_CODE_LOGIN = 0;
+	
+	public static final int BUSINESS_CODE_CLEAR_CACHES = 0;
 	
 	private RoundImageView imageViewSurface;
 	private TextView textViewLoginOrRegister;
@@ -78,7 +82,7 @@ public class LeftPanelHandler extends JtIocHandler
 		if (hasLogined)
 		{
 			//将这句注释掉就是自动登录了
-//			loginFinally();
+			//			loginFinally();
 		}
 	}
 	
@@ -93,7 +97,7 @@ public class LeftPanelHandler extends JtIocHandler
 		}
 		else if (id == R.id.nav_clear_caches)
 		{
-			leftPanelBusiness.clearTravelnoteCaches(getContext());
+			leftPanelBusiness.clearTravelnoteCaches(this);
 		}
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
@@ -108,6 +112,19 @@ public class LeftPanelHandler extends JtIocHandler
 			case R.id.textView_login_or_register:
 				IntentUtil.toTheOtherActivity(getActivity(), LoginActivity.class,
 						ACTIVITY_REQUEST_CODE_LOGIN);
+				break;
+		}
+	}
+	
+	@Override
+	public void handleMessage(Message msg)
+	{
+		switch (msg.what)
+		{
+			case BUSINESS_CODE_CLEAR_CACHES:
+				int size = msg.getData().getInt("size");
+				Toast.makeText(getContext(), "清除了" + size + "MB的缓存", Toast.LENGTH_SHORT)
+						.show();
 				break;
 		}
 	}
