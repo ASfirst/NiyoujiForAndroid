@@ -85,7 +85,7 @@ public class RecognizerPanelView extends FrameLayout
 	@Override
 	public void onRecognizeBegin()
 	{
-		textViewRecognisingInfo.setText("检测到正在说话");
+		textViewRecognisingInfo.setText("检测到正在说话，识别中。。。");
 	}
 	
 	@Override

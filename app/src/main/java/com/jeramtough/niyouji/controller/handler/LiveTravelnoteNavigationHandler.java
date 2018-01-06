@@ -109,7 +109,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			int finalI = i;
 			appraisalAreaView.postDelayed(() ->
 			{
-				P.arrive();
 				if (finalI % 2 == 0)
 				{
 					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 1);
@@ -189,11 +188,12 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	@Override
 	public void onPageSelected(int position)
 	{
+		pauseMusicIf();
+		
 		//如果是最后一页
 		if (position == liveTravelnotePageViews.size() - 1)
 		{
 			layoutShutdownForLive.setVisibility(View.VISIBLE);
-			pauseMusicIf();
 		}
 		else//不是最后一页
 		{
@@ -337,6 +337,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			}
 		}
 		
+		//如果正在播放音乐就暂停
+		pauseMusicIf();
+		
 		liveTravelnotePageViews.remove(position);
 	}
 	
@@ -431,7 +434,10 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	private void pauseMusicIf()
 	{
-		musicPlayer.getMediaPlayer().pause();
+		if (musicPlayer.getMediaPlayer().isPlaying())
+		{
+			musicPlayer.getMediaPlayer().pause();
+		}
 	}
 	
 	private void gotoTakephoto()
