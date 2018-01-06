@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
@@ -23,8 +24,9 @@ import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
-import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageType;
-import com.jeramtough.niyouji.component.ui.travelnote.LiveTravelnotePageView;
+import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageType;
+import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
+import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivityApp;
 import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
@@ -46,6 +48,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public final static int TAKE_PHOTO_ACTION = 0X4;
 	public final static int VIDEO_ACTION = 0X5;
 	public final static int SELECT_MUSIC_ACTION = 0X6;
+	public final static int SENT_BARRAGE_ACTION = 0X7;
 	
 	private FragmentManager fragmentManager;
 	
@@ -56,6 +59,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private ProgressBar progressBarWaitTakephotoOrVideo;
 	private TimedCloseTextView textViewNotification;
 	private AppraisalAreaView appraisalAreaView;
+	private DanmakuLayout layoutDanmaku;
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
@@ -78,6 +82,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				findViewById(R.id.progressBar_wait_takephoto_or_video);
 		textViewNotification = findViewById(R.id.textView_notification);
 		appraisalAreaView = findViewById(R.id.appraisalAreaView);
+		layoutDanmaku = findViewById(R.id.layout_danmaku);
 		
 		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
@@ -104,6 +109,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			int finalI = i;
 			appraisalAreaView.postDelayed(() ->
 			{
+				P.arrive();
 				if (finalI % 2 == 0)
 				{
 					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 1);
@@ -160,6 +166,16 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				break;
 			case SELECT_MUSIC_ACTION:
 				popupChoiceMusicDialog();
+				break;
+			case SENT_BARRAGE_ACTION:
+				String barrageContent = msg.getData().getString("barrageContent");
+				TextView textView = new TextView(getContext());
+				textView.setBackgroundResource(R.color.colorPrimary);
+				textView.setPadding(10, 10, 10, 10);
+				textView.setText(barrageContent);
+				
+				layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
+				appraisalAreaView.addAppraisal("JeramTough", barrageContent, 2);
 				break;
 		}
 	}

@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.ui.travelnote;
+package com.jeramtough.niyouji.component.travelnote;
 
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -6,9 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 import android.widget.VideoView;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;

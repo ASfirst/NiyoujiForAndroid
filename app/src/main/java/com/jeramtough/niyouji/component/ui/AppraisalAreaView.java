@@ -9,8 +9,10 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
@@ -23,7 +25,7 @@ import java.util.TimerTask;
  *         on 2017  December 18 Monday 14:16.
  */
 
-public class AppraisalAreaView extends LinearLayout implements View.OnTouchListener
+public class AppraisalAreaView extends ScrollView implements View.OnTouchListener
 {
 	public static final int STYLE_1 = 1;
 	public static final int STYLE_2 = 2;
@@ -32,6 +34,8 @@ public class AppraisalAreaView extends LinearLayout implements View.OnTouchListe
 	private boolean isTiming = false;
 	private final int howLong = 5;
 	private int time = 0;
+	
+	private LinearLayout linearLayout;
 	
 	public AppraisalAreaView(Context context)
 	{
@@ -48,7 +52,14 @@ public class AppraisalAreaView extends LinearLayout implements View.OnTouchListe
 	protected void initResources()
 	{
 		this.setOnTouchListener(this);
+		linearLayout=new LinearLayout(getContext());
+		ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams
+				.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		linearLayout.setLayoutParams(params);
+		linearLayout.setOrientation(LinearLayout.VERTICAL);
+		this.addView(linearLayout);
 	}
+	
 	
 	Handler handler = new Handler()
 	{
@@ -69,7 +80,7 @@ public class AppraisalAreaView extends LinearLayout implements View.OnTouchListe
 		TextView textViewContent = new TextView(getContext());
 		
 		LinearLayout.LayoutParams params =
-				new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		frameLayout.setLayoutParams(params);
 		params.setMargins(0, 0, 0, 10);
 		
@@ -94,7 +105,7 @@ public class AppraisalAreaView extends LinearLayout implements View.OnTouchListe
 			textViewContent.setPadding(10, 5, 10, 5);
 			textViewContent.setShadowLayer(1, 1, 1, Color.BLACK);
 		}
-		else
+		else if (style==STYLE_2)
 		{
 			textViewName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 			textViewName.setPadding(10, 5, 10, 5);
@@ -110,7 +121,11 @@ public class AppraisalAreaView extends LinearLayout implements View.OnTouchListe
 		
 		frameLayout.addView(textViewContent);
 		frameLayout.addView(textViewName);
-		this.addView(frameLayout);
+		linearLayout.addView(frameLayout);
+		this.post(() ->
+		{
+			this.fullScroll(View.FOCUS_DOWN);
+		});
 		
 		//开始定时，当五秒无弹幕后自动淡化
 		startTiming();

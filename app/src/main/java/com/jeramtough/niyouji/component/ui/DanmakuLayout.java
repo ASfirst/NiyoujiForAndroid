@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -20,7 +21,15 @@ import com.jeramtough.jtandroid.animation.AnimationFactory;
 
 public class DanmakuLayout extends FrameLayout
 {
+	
+	/**
+	 * 从左到右的弹幕
+	 */
 	public static final int ANIMATION_STYLE1 = 1;
+	
+	/**
+	 * 从下到上的弹幕
+	 */
 	public static final int ANIMATION_STYLE2 = 2;
 	
 	private int animationDuration = 7000;
@@ -46,6 +55,10 @@ public class DanmakuLayout extends FrameLayout
 	
 	public void addViewWithAnimation(View view, int animationStyle)
 	{
+		FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(LayoutParams
+				.WRAP_CONTENT, LayoutParams .WRAP_CONTENT);
+		params.gravity= Gravity.CENTER|Gravity.TOP;
+		view.setLayoutParams(params);
 		addView(view);
 		
 		AnimationSet animationSet = precessAnimationSet(view);
@@ -58,7 +71,8 @@ public class DanmakuLayout extends FrameLayout
 			case ANIMATION_STYLE2:
 				animationSet
 						.addAnimation(AnimationFactory.getTranslateAnimationFromBottomToTop());
-				animationSet.addAnimation(AnimationFactory.getScaleAnimationFromSmallToLarge());
+				animationSet
+						.addAnimation(AnimationFactory.getScaleAnimationFromSmallToLarge());
 				break;
 			default:
 		}
@@ -84,13 +98,9 @@ public class DanmakuLayout extends FrameLayout
 			public void onAnimationEnd(Animation animation)
 			{
 				animation.reset();
-				handler.post(new Runnable()
+				handler.post(() ->
 				{
-					@Override
-					public void run()
-					{
-						DanmakuLayout.this.removeView(view);
-					}
+					DanmakuLayout.this.removeView(view);
 				});
 				
 			}

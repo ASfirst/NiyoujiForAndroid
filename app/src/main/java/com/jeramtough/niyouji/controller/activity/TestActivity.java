@@ -13,6 +13,7 @@ import android.widget.*;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
+import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
@@ -21,15 +22,7 @@ import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
  */
 public class TestActivity extends AppBaseActivity
 {
-	private TextView textViewTjyjfm;
-	private ImageView imageViewAddTravelnoteCover;
-	private EditText editTravelnoteTitle;
-	private Button btnStartPerforming;
-	private FullScreenVideoView videoViewTravelnoteCover;
-	private ImageView imageViewTravelnoteCover;
-	
-	private String coverPath;
-	private String title;
+	private DanmakuLayout layoutDanmaku;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -37,20 +30,17 @@ public class TestActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
 		
-		textViewTjyjfm = findViewById(R.id.textView_tjyjfm);
-		imageViewAddTravelnoteCover = findViewById(R.id.imageView_add_travelnote_cover);
-		editTravelnoteTitle = findViewById(R.id.edit_travelnote_title);
-		btnStartPerforming = findViewById(R.id.btn_start_performing);
-		videoViewTravelnoteCover = findViewById(R.id.videoView_travelnote_cover);
-		imageViewTravelnoteCover = findViewById(R.id.imageView_travelnote_cover);
+		layoutDanmaku = findViewById(R.id.layout_danmaku);
 		
-		videoViewTravelnoteCover.setClickable(false);
-		imageViewTravelnoteCover.setClickable(false);
+		TextView textView = new TextView(this);
+		textView.setText("第三方的说法苏打粉撒");
+		layoutDanmaku.addViewWithAnimation(textView,
+				DanmakuLayout.ANIMATION_STYLE2);
 		
-		imageViewAddTravelnoteCover.setOnClickListener(this);
-		imageViewTravelnoteCover.setOnClickListener(this);
-		videoViewTravelnoteCover.setOnClickListener(this);
-		btnStartPerforming.setOnClickListener(this);
+		TextView textView1 = new TextView(this);
+		textView1.setText("dfsdaf sdfsadf");
+		layoutDanmaku.addViewWithAnimation(textView1,
+				DanmakuLayout.ANIMATION_STYLE1);
 	}
 	
 	
@@ -59,66 +49,7 @@ public class TestActivity extends AppBaseActivity
 	{
 		switch (viewId)
 		{
-			case R.id.videoView_travelnote_cover:
-			case R.id.imageView_travelnote_cover:
-			case R.id.imageView_add_travelnote_cover:
-				SelectTakephotoOrVideoDialog dialog = new SelectTakephotoOrVideoDialog(this);
-				dialog.show();
-				break;
-			case R.id.btn_start_performing:
-				title = editTravelnoteTitle.getText().toString();
-				if (title.length() == 0)
-				{
-					Toast.makeText(this, "请输入游记标题！", Toast.LENGTH_SHORT).show();
-					break;
-				}
-				if (coverPath.length() == 0)
-				{
-					Toast.makeText(this, "没有拍摄游记封面哦！", Toast.LENGTH_SHORT).show();
-					break;
-				}
-				
-				Intent intent = new Intent(this, PerformingActivity.class);
-				startActivity(intent);
-				break;
 		}
 	}
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == resultCode &&
-				resultCode == TakePhotoActivityApp.TAKE_PHOTO_RESULT_CODE)
-		{
-			String photoPath = data.getStringExtra(TakePhotoActivityApp.PHOTO_PATH_NAME);
-			
-			this.coverPath = photoPath;
-			if (coverPath != null)
-			{
-				Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-				imageViewTravelnoteCover.setImageBitmap(bitmap);
-				imageViewTravelnoteCover.setVisibility(View.VISIBLE);
-				
-				textViewTjyjfm.setVisibility(View.INVISIBLE);
-				imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
-				imageViewTravelnoteCover.setClickable(true);
-			}
-		}
-		else if (requestCode == resultCode && resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
-		{
-			String videoPath = data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
-			if (videoPath != null)
-			{
-				this.coverPath = videoPath;
-				videoViewTravelnoteCover.setVisibility(View.VISIBLE);
-				videoViewTravelnoteCover.setVideoPath(videoPath);
-				videoViewTravelnoteCover.start();
-				
-				textViewTjyjfm.setVisibility(View.INVISIBLE);
-				imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
-				videoViewTravelnoteCover.setClickable(true);
-			}
-		}
-	}
 }

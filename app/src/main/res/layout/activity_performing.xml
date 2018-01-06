@@ -191,22 +191,15 @@
                 android:orientation="horizontal"
                 android:focusable="false">
 
-            <ScrollView
+
+            <com.jeramtough.niyouji.component.ui.AppraisalAreaView
+                    android:id="@+id/appraisalAreaView"
                     android:layout_width="0dp"
                     android:layout_height="175dp"
                     android:orientation="vertical"
                     android:layout_weight="7"
-                    android:paddingLeft="10dp"
-                    android:focusable="false">
+                    android:paddingLeft="10dp"/>
 
-                <com.jeramtough.niyouji.component.ui.AppraisalAreaView
-                        android:id="@+id/appraisalAreaView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:focusable="false"/>
-
-            </ScrollView>
 
             <FrameLayout
                     android:layout_width="0dp"
@@ -247,6 +240,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <com.jeramtough.niyouji.component.ui.DanmakuLayout
+            android:id="@+id/layout_danmaku"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="50dp"/>
 
     <ProgressBar
             android:id="@+id/progressBar_wait_takephoto_or_video"

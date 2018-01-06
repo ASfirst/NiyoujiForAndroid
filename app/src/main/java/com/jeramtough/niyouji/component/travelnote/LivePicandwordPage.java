@@ -1,7 +1,10 @@
-package com.jeramtough.niyouji.component.ui.travelnote;
+package com.jeramtough.niyouji.component.travelnote;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.SpannableString;
@@ -9,10 +12,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtemoji.*;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
+import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 import com.jeramtough.niyouji.component.ui.RecognizerPanelView;
+import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
@@ -123,6 +129,16 @@ public class LivePicandwordPage
 					builder.normalText("发送主播弹幕");
 					builder.listener(index ->
 					{
+						EditBarrageDialog editBarrageDialog =
+								new EditBarrageDialog(viewGroup.getContext());
+						editBarrageDialog.setEditBarrageListener((String content) ->
+						{
+							Message message=new Message();
+							message.what=LiveTravelnoteNavigationHandler.SENT_BARRAGE_ACTION;
+							message.getData().putString("barrageContent",content);
+							handler.sendMessage(message);
+						});
+						editBarrageDialog.show();
 					});
 					
 					break;

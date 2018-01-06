@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +32,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private Button btnStartPerforming;
 	private FullScreenVideoView videoViewTravelnoteCover;
 	private ImageView imageViewTravelnoteCover;
+	private AppCompatImageView viewBack;
 	
 	private String coverPath;
 	private String title;
@@ -48,12 +50,14 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 		btnStartPerforming = findViewById(R.id.btn_start_performing);
 		videoViewTravelnoteCover = findViewById(R.id.videoView_travelnote_cover);
 		imageViewTravelnoteCover = findViewById(R.id.imageView_travelnote_cover);
+		viewBack = findViewById(R.id.view_back);
 		
 		imageViewTravelnoteCover.setClickable(false);
 		
 		imageViewAddTravelnoteCover.setOnClickListener(this);
 		imageViewTravelnoteCover.setOnClickListener(this);
 		btnStartPerforming.setOnClickListener(this);
+		viewBack.setOnClickListener(this);
 		videoViewTravelnoteCover.setOnTouchListener(this);
 		videoViewTravelnoteCover.setOnCompletionListener(mp ->
 		{
@@ -67,6 +71,10 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	{
 		switch (viewId)
 		{
+			case R.id.view_back:
+				this.finish();
+				break;
+			
 			case R.id.imageView_travelnote_cover:
 			case R.id.imageView_add_travelnote_cover:
 				SelectTakephotoOrVideoDialog dialog = new SelectTakephotoOrVideoDialog(this);

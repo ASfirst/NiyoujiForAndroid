@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.ui.travelnote;
+package com.jeramtough.niyouji.component.travelnote;
 
 /**
  * @author 11718

@@ -102,7 +102,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:dividerPadding="10dp">
+                android:dividerPadding="10dp"
+                android:baselineAligned="false">
 
             <LinearLayout
                     android:id="@+id/layout_word_function1"
@@ -161,8 +162,12 @@
             </LinearLayout>
         </LinearLayout>
 
-
     </LinearLayout>
+
+    <com.jeramtough.niyouji.component.ui.DanmakuLayout
+            android:id="@+id/layout_danmaku"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <com.nightonke.boommenu.BoomMenuButton
             android:id="@+id/boomMenuButton"

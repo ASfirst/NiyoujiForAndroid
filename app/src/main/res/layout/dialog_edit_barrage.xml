@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/background7">
+
+    <EditText
+            android:id="@+id/edit_barrage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="主播弹幕内容"
+            android:textSize="19sp"
+            android:layout_marginTop="35dp"
+            android:maxLength="20"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="35dp">
+
+        <Button
+                android:id="@+id/button_cancel_barrage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_done"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
+
+        <Button
+                android:id="@+id/button_send_barrage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_done"
+                android:text="发送"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
