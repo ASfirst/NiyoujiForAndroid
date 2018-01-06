@@ -183,7 +183,6 @@
                 android:textSize="15sp"
                 android:textColor="@color/white"/>
 
-        <!--留下个弹幕效果-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -219,8 +218,20 @@
                 android:gravity="center"
                 android:layout_marginBottom="60dp">
 
+            <TextView
+                    android:id="@+id/textView_shutdown_reminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="长按结束按钮3秒后结束直播：3s"
+                    android:background="@drawable/background7"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textColor="@color/red"/>
+
             <ImageButton
-                    android:id="@+id/btn_shutdown_for_live"
+                    android:id="@+id/button_shutdown_for_live"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_shutdown"/>

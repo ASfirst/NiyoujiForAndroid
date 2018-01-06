@@ -55,4 +55,11 @@ public class PerformingActivity extends JtBaseActivity
 		super.onDestroy();
 		liveTravelnoteNavigationHandler.onDestroy();
 	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		//super.onBackPressed();
+		liveTravelnoteNavigationHandler.shutdownForLiveByUseingDialog();
+	}
 }

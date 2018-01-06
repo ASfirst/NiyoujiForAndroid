@@ -1,6 +1,9 @@
 package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,6 +11,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
@@ -33,6 +37,8 @@ import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author 11718
@@ -40,7 +46,8 @@ import java.util.ArrayList;
  */
 
 public class LiveTravelnoteNavigationHandler extends JtIocHandler
-		implements ViewPager.OnPageChangeListener, SelectMusicDialog.SelectMusicListener
+		implements ViewPager.OnPageChangeListener, SelectMusicDialog.SelectMusicListener,
+		View.OnTouchListener
 {
 	public final static int ACTIVATE_IMAGE_ACTION = 0X1;
 	public final static int ACTIVATE_VIDEO_ACTION = 0X3;
@@ -60,6 +67,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private TimedCloseTextView textViewNotification;
 	private AppraisalAreaView appraisalAreaView;
 	private DanmakuLayout layoutDanmaku;
+	private TextView textViewShutdownReminder;
+	private ImageButton buttonShutdownForLive;
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
@@ -68,6 +77,10 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private MusicsHandler musicsHandler;
 	@InjectComponent
 	private MusicPlayer musicPlayer;
+	
+	private TimerTask timerTaskForShutdown;
+	private int countdownShutdown = 3;
+	private boolean hasCounting = false;
 	
 	public LiveTravelnoteNavigationHandler(Activity activity, FragmentManager fragmentManager)
 	{
@@ -83,11 +96,15 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		textViewNotification = findViewById(R.id.textView_notification);
 		appraisalAreaView = findViewById(R.id.appraisalAreaView);
 		layoutDanmaku = findViewById(R.id.layout_danmaku);
+		textViewShutdownReminder = findViewById(R.id.textView_shutdown_reminder);
+		buttonShutdownForLive = findViewById(R.id.button_shutdown_for_live);
 		
 		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
+		textViewShutdownReminder.setVisibility(View.INVISIBLE);
 		
 		viewPagerTravelnotePages.addOnPageChangeListener(this);
+		buttonShutdownForLive.setOnTouchListener(this);
 		
 		this.initResources();
 	}
@@ -183,6 +200,51 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 	{
 	
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		int viewId = v.getId();
+		switch (viewId)
+		{
+			case R.id.button_shutdown_for_live:
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					textViewShutdownReminder.setVisibility(View.VISIBLE);
+					
+					timerTaskForShutdown = new TimerTask()
+					{
+						@Override
+						public void run()
+						{
+							countdownShutdown = countdownShutdown - 1;
+							if (countdownShutdown == 0)
+							{
+								shutdownForLive();
+							}
+							String reminder = "长按结束按钮3秒后结束直播:" + countdownShutdown + "s";
+							textViewShutdownReminder.post(() ->
+							{
+								textViewShutdownReminder.setText(reminder);
+							});
+						}
+					};
+					
+					new Timer().schedule(timerTaskForShutdown, 1000, 1000);
+				}
+				else if (event.getAction() == MotionEvent.ACTION_UP ||
+						event.getAction() == MotionEvent.ACTION_CANCEL)
+				{
+					textViewShutdownReminder.setVisibility(View.INVISIBLE);
+					timerTaskForShutdown.cancel();
+					countdownShutdown = 3;
+					String reminder = "长按结束按钮3秒后结束直播:" + countdownShutdown + "s";
+					textViewShutdownReminder.setText(reminder);
+				}
+				break;
+		}
+		return false;
 	}
 	
 	@Override
@@ -295,6 +357,19 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			}
 		}
 	}
+	
+	public void shutdownForLiveByUseingDialog()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setMessage("是否想要立刻结束游记直播？").setNegativeButton("取消", (dialog, which) ->
+		{
+		
+		}).setPositiveButton("确定", (dialog, which) ->
+		{
+			shutdownForLive();
+		}).create().show();
+	}
+	
 	
 	//************************************
 	private void popupChoiceMusicDialog()
@@ -500,5 +575,12 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		}
 	}
 	
-	
+	private void shutdownForLive()
+	{
+		if (timerTaskForShutdown != null)
+		{
+			timerTaskForShutdown.cancel();
+		}
+		P.arrive();
+	}
 }

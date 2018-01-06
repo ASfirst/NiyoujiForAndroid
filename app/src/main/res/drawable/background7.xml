@@ -7,11 +7,7 @@
 
     <stroke
             android:width="3dip"
-            android:color="#0ed63a"
-            />
-    <size
-            android:width="300dp"
-            android:height="70dp"
+            android:color="@color/colorPrimary"
             />
 </shape>
 
