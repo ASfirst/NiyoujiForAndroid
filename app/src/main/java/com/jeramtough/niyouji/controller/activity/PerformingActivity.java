@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.jeramtough.jtandroid.controller.activity.JtBaseActivity;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.jeramtough.niyouji.controller.handler.TravelnoteWithAudiencesHandler;
 
 /**
  * @author 11718
  */
-public class PerformingActivity extends JtBaseActivity
+public class PerformingActivity extends JtBaseActivity implements LiveTravelnoteEventsCaller
 {
 	public static final int TAKE_PHOTO_REQUEST_CODE = 0X1;
 	public static final int VIDEO_REQUEST_CODE = 0X2;
@@ -28,6 +29,8 @@ public class PerformingActivity extends JtBaseActivity
 		liveTravelnoteNavigationHandler =
 				new LiveTravelnoteNavigationHandler(this, getSupportFragmentManager());
 		travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
+		
+		liveTravelnoteNavigationHandler.setLiveTravelnoteEventsCaller(this);
 	}
 	
 	@Override
@@ -61,5 +64,65 @@ public class PerformingActivity extends JtBaseActivity
 	{
 		//super.onBackPressed();
 		liveTravelnoteNavigationHandler.shutdownForLiveByUseingDialog();
+	}
+	
+	@Override
+	public void onTravelnoteSelectedPage()
+	{
+	
+	}
+	
+	@Override
+	public void onTravelnoteAddedPage()
+	{
+	
+	}
+	
+	@Override
+	public void onTravelnoteDeletedPage()
+	{
+	
+	}
+	
+	@Override
+	public void onPageSetPicture()
+	{
+	
+	}
+	
+	@Override
+	public void onPageSetVideo()
+	{
+	
+	}
+	
+	@Override
+	public void onPageContentChanged()
+	{
+	
+	}
+	
+	@Override
+	public void onPageSetTheme()
+	{
+	
+	}
+	
+	@Override
+	public void onPageSetBackgroundMusic()
+	{
+	
+	}
+	
+	@Override
+	public void onTravelnoteSentPerformerBarrage()
+	{
+	
+	}
+	
+	@Override
+	public void onTravelnoteEnd()
+	{
+	
 	}
 }

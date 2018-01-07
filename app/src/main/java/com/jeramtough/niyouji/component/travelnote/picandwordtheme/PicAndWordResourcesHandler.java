@@ -1,11 +1,10 @@
-package com.jeramtough.niyouji.component.picandword;
+package com.jeramtough.niyouji.component.travelnote.picandwordtheme;
 
 import android.content.Context;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
 import org.apache.commons.io.IOUtils;

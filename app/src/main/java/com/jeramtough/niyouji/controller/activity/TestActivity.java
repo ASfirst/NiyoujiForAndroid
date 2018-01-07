@@ -1,21 +1,10 @@
 package com.jeramtough.niyouji.controller.activity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatImageView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
-import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
-import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
-import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
 /**
  * @author 11718

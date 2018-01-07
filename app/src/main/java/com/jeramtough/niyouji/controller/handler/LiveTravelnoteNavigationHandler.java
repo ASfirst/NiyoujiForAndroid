@@ -27,6 +27,7 @@ import com.jeramtough.jtemoji.JtEmojiCachesManager;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ali.CameraMusic;
 import com.jeramtough.niyouji.component.ali.MusicsHandler;
+import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
@@ -81,6 +82,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private TimerTask timerTaskForShutdown;
 	private int countdownShutdown = 3;
 	private boolean hasCounting = false;
+	
+	private LiveTravelnoteEventsCaller liveTravelnoteEventsCaller;
 	
 	public LiveTravelnoteNavigationHandler(Activity activity, FragmentManager fragmentManager)
 	{
@@ -370,6 +373,11 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		}).create().show();
 	}
 	
+	public void setLiveTravelnoteEventsCaller(
+			LiveTravelnoteEventsCaller liveTravelnoteEventsCaller)
+	{
+		this.liveTravelnoteEventsCaller = liveTravelnoteEventsCaller;
+	}
 	
 	//************************************
 	private void popupChoiceMusicDialog()
@@ -583,4 +591,5 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		}
 		P.arrive();
 	}
+	
 }

@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.picandword;
+package com.jeramtough.niyouji.component.travelnote.picandwordtheme;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -13,12 +13,12 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ui.HorizontalListView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.adapter.PwThemeSurfacesAdapter;
-import com.jeramtough.niyouji.component.picandword.PicAndWordResourcesHandler;
-import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
-import com.jeramtough.niyouji.component.picandword.PicAndWordThemeImpl;
-import com.jeramtough.niyouji.component.picandword.PwResourceCache;
-import com.jeramtough.niyouji.component.picandword.PwResourcePosition;
-import com.jeramtough.niyouji.component.picandword.PwResourcesCacheManager;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordResourcesHandler;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordTheme;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordThemeImpl;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PwResourceCache;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PwResourcePosition;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PwResourcesCacheManager;
 
 /**
  * @author 11718 on 2017 December 11 Monday 12:05.

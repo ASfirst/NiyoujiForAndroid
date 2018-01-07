@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.picandword.PwResourcePosition;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PwResourcePosition;
 
 /**
  * @author 11718 on 2017 December 11 Monday 12:12.

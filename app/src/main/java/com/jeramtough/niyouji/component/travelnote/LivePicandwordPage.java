@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtemoji.*;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.picandword.PicAndWordTheme;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordTheme;
 import com.jeramtough.niyouji.component.ui.RecognizerPanelView;
 import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;

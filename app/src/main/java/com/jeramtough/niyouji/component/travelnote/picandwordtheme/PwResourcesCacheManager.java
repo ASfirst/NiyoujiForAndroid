@@ -1,9 +1,8 @@
-package com.jeramtough.niyouji.component.picandword;
+package com.jeramtough.niyouji.component.travelnote.picandwordtheme;
 
 import java.util.HashMap;
 
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtandroid.jtlog2.P;
 
 @JtComponent
 public class PwResourcesCacheManager
