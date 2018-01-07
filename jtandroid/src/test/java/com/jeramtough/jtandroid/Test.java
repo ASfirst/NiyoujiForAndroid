@@ -18,8 +18,8 @@ public class Test
 	public void test()
 	{
 		String text = "aaa第三方的说法";
-		
-		System.out.println(CommonValidatorUtil.isPassword(text));
+		String headText=text.substring(0,3);
+		String extremeText=text.substring(3,text.length());
 	}
 }
 

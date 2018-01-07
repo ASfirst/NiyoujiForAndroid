@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.jeramtough.jtandroid.listener.OnTextChangedListner;
 import com.jeramtough.jtemoji.*;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordTheme;
@@ -85,6 +86,7 @@ public class LivePicandwordPage
 		viewPictureOfPage.setOnClickListener(this);
 		layoutWordFunction1.setOnClickListener(this);
 		layoutWordFunction2.setOnClickListener(this);
+		editTravelnotePageContent.addTextChangedListener(new MyTextChangedListenter());
 		
 		initResources();
 	}
@@ -129,9 +131,9 @@ public class LivePicandwordPage
 								new EditBarrageDialog(viewGroup.getContext());
 						editBarrageDialog.setEditBarrageListener((String content) ->
 						{
-							Message message=new Message();
-							message.what=LiveTravelnoteNavigationHandler.SENT_BARRAGE_ACTION;
-							message.getData().putString("barrageContent",content);
+							Message message = new Message();
+							message.what = LiveTravelnoteNavigationHandler.SENT_BARRAGE_ACTION;
+							message.getData().putString("barrageContent", content);
 							handler.sendMessage(message);
 						});
 						editBarrageDialog.show();
@@ -218,13 +220,18 @@ public class LivePicandwordPage
 		picAndWordTheme.setFunctionButton(layoutWordFunction2);
 		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
 		picAndWordTheme.setFrame(imageViewFrame);
+		
+		Message message = new Message();
+		message.what = LiveTravelnoteNavigationHandler.SELECT_PICANDWORD_THEME_ACTION;
+		message.getData().putInt("themePosition", position);
+		handler.sendMessage(message);
 	}
 	
 	@Override
 	public void onClickEmoji(int position, JtEmoji jtEmoji)
 	{
-		this.setTravelnoteContentWithEmojiStr(editTravelnotePageContent.getText().toString() +
-				jtEmoji.getPlaceholder());
+		this.setTravelnoteContentWithEmojiStr(
+				editTravelnotePageContent.getText().toString() + jtEmoji.getPlaceholder());
 	}
 	
 	@Override
@@ -255,6 +262,22 @@ public class LivePicandwordPage
 	public void onRecognizeCancel()
 	{
 		cancelFunctionsLayout();
+	}
+	
+	public class MyTextChangedListenter extends OnTextChangedListner
+	{
+		
+		@Override
+		public void onAddWords(String words, int start)
+		{
+			handler.sendMessage(processMessageOfChangingText(true, words, start));
+		}
+		
+		@Override
+		public void onDeletedWords(String words, int start)
+		{
+			handler.sendMessage(processMessageOfChangingText(false, words, start));
+		}
 	}
 	
 	public EditText getEditTravelnotePageContent()
@@ -347,4 +370,14 @@ public class LivePicandwordPage
 		editTravelnotePageContent.setSelection(editTravelnotePageContent.getText().length());
 	}
 	
+	private Message processMessageOfChangingText(boolean isAdded, String words, int start)
+	{
+		Message message = new Message();
+		message.what = LiveTravelnoteNavigationHandler.CHANGED_PICANDWORD_CONTENT_ACTION;
+		message.getData().putBoolean("isAdded", false);
+		message.getData().putString("words", words);
+		message.getData().putInt("start", start);
+		
+		return message;
+	}
 }

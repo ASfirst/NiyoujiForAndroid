@@ -2,10 +2,7 @@ package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
@@ -57,6 +54,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public final static int VIDEO_ACTION = 0X5;
 	public final static int SELECT_MUSIC_ACTION = 0X6;
 	public final static int SENT_BARRAGE_ACTION = 0X7;
+	public final static int SELECT_PICANDWORD_THEME_ACTION = 0X8;
+	public final static int CHANGED_PICANDWORD_CONTENT_ACTION = 0X9;
 	
 	private FragmentManager fragmentManager;
 	
@@ -81,7 +80,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	private TimerTask timerTaskForShutdown;
 	private int countdownShutdown = 3;
-	private boolean hasCounting = false;
 	
 	private LiveTravelnoteEventsCaller liveTravelnoteEventsCaller;
 	
@@ -195,6 +193,22 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				
 				layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
 				appraisalAreaView.addAppraisal("JeramTough", barrageContent, 2);
+				
+				//回调发送主播弹幕事件
+				liveTravelnoteEventsCaller.onTravelnoteSentPerformerBarrage(barrageContent);
+				break;
+			case SELECT_PICANDWORD_THEME_ACTION:
+				//回调选择游记页主题事件
+				int themePosition = msg.getData().getInt("themePosition");
+				int position = viewPagerTravelnotePages.getCurrentItem();
+				liveTravelnoteEventsCaller.onPageSetTheme(position, themePosition);
+				break;
+			case CHANGED_PICANDWORD_CONTENT_ACTION:
+				//回调当游记页文字内容发生改变
+				boolean isAdded = msg.getData().getBoolean("isAdded");
+				String words = msg.getData().getString("words");
+				int start = msg.getData().getInt("start");
+				liveTravelnoteEventsCaller.onPageContentChanged(isAdded, words, start);
 				break;
 		}
 	}
@@ -268,6 +282,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				layoutShutdownForLive.setVisibility(View.INVISIBLE);
 			}
 			
+			liveTravelnoteEventsCaller.onTravelnoteSelectedPage(position);
+			
 			resetCurrentImgOrVideoOfPage();
 			resetCurrentMusicOfPage();
 		}
@@ -288,12 +304,19 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public void selectMusic(CameraMusic cameraMusic)
 	{
 		musicPlayer.playMusic(cameraMusic.getPath(), true);
-		LiveTravelnotePageView liveTravelnotePageView =
-				liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem());
+		
+		int position = viewPagerTravelnotePages.getCurrentItem();
+		LiveTravelnotePageView liveTravelnotePageView = liveTravelnotePageViews.get(position);
+		
 		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
 				LiveTravelnotePageType.PICANDWORD)
 		{
-			liveTravelnotePageView.getLivePicandwordPage().setMusicPath(cameraMusic.getPath());
+			String musicPath = cameraMusic.getPath();
+			
+			liveTravelnotePageView.getLivePicandwordPage().setMusicPath(musicPath);
+			
+			//回调当设置了游记页背景音乐
+			liveTravelnoteEventsCaller.onPageSetBackgroundMusic(position, musicPath);
 		}
 	}
 	
@@ -392,6 +415,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	{
 		int position = viewPagerTravelnotePages.getCurrentItem();
 		
+		//回调删除游记页事件
+		liveTravelnoteEventsCaller.onTravelnoteDeletedPage(position);
+		
 		LiveTravelnotePageView liveTravelnotePageView = liveTravelnotePageViews.get(position);
 		if (liveTravelnotePageView.getLiveTravelnotePageType() ==
 				LiveTravelnotePageType.PICANDWORD)
@@ -401,7 +427,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			if (imageView != null && imageView.getDrawable() != null)
 			{
 				//释放图片资源
-				P.verbose("Recycle resource of image of the travelnote page.");
 				BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
 				BitmapUtil.releaseDrawableResouce(bitmapDrawable);
 				imageView.setImageDrawable(null);
@@ -414,7 +439,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					liveTravelnotePageView.getLiveVideoPage().getVideoViewTravelnotePage();
 			if (videoView.isPlaying())
 			{
-				P.verbose("Recycle resource of video of the travelnote page.");
 				videoView.stopPlayback();
 				videoView.destroyDrawingCache();
 			}
@@ -439,7 +463,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				if (imageView != null && imageView.getDrawable() != null)
 				{
 					//释放图片资源
-					P.verbose("Recycle resource of image of the travelnote page.");
 					BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
 					BitmapUtil.releaseDrawableResouce(bitmapDrawable);
 					imageView.setImageDrawable(null);
@@ -477,7 +500,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		{
 			if (resourcePath != null)
 			{
-				P.verbose("Reset resource of image of the travelnote page.");
 				liveTravelnotePageView.getLivePicandwordPage().getViewPictureOfPage()
 						.setImageBitmap(BitmapFactory.decodeFile(resourcePath));
 			}
@@ -540,6 +562,14 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		progressBarWaitTakephotoOrVideo.setVisibility(View.VISIBLE);
 		layoutShutdownForLive.setVisibility(View.INVISIBLE);
 		
+		//回调添加新的page事件
+		int position = viewPagerTravelnotePages.getCurrentItem();
+		LiveTravelnotePageView pageView = liveTravelnotePageViews.get(position);
+		liveTravelnoteEventsCaller.onTravelnoteAddedPage(pageView);
+		//回调选中刚才新添加的page
+		liveTravelnoteEventsCaller.onTravelnoteSelectedPage(position);
+		
+		//添加新的待激活的page到栈堆
 		this.addPageViewToList();
 		this.updatePagesCount();
 		
@@ -589,7 +619,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		{
 			timerTaskForShutdown.cancel();
 		}
-		P.arrive();
+		
+		liveTravelnoteEventsCaller.onTravelnoteEnd();
 	}
 	
 }

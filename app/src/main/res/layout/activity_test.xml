@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         tools:context="com.jeramtough.niyouji.controller.activity.CreateTravelnoteActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background5">
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <com.jeramtough.niyouji.component.ui.DanmakuLayout
+    <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/layout_danmaku"/>
-</FrameLayout>
+            android:layout_height="wrap_content"
+            android:id="@+id/editText1"/>
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText2"
+            android:layout_marginTop="50dp"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:id="@+id/btn1"/>
+
+</LinearLayout>

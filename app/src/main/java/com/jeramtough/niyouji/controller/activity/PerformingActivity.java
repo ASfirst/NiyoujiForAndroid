@@ -3,8 +3,10 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.jeramtough.jtandroid.controller.activity.JtBaseActivity;
+import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
+import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 import com.jeramtough.niyouji.controller.handler.TravelnoteWithAudiencesHandler;
 
@@ -62,26 +64,25 @@ public class PerformingActivity extends JtBaseActivity implements LiveTravelnote
 	@Override
 	public void onBackPressed()
 	{
-		//super.onBackPressed();
 		liveTravelnoteNavigationHandler.shutdownForLiveByUseingDialog();
 	}
 	
 	@Override
-	public void onTravelnoteSelectedPage()
+	public void onTravelnoteSelectedPage(int position)
 	{
-	
+		P.debug("select " + position);
 	}
 	
 	@Override
-	public void onTravelnoteAddedPage()
+	public void onTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView)
 	{
-	
+		P.debug("add a page");
 	}
 	
 	@Override
-	public void onTravelnoteDeletedPage()
+	public void onTravelnoteDeletedPage(int position)
 	{
-	
+		P.debug("delete " + position);
 	}
 	
 	@Override
@@ -97,32 +98,32 @@ public class PerformingActivity extends JtBaseActivity implements LiveTravelnote
 	}
 	
 	@Override
-	public void onPageContentChanged()
+	public void onPageContentChanged(boolean isAdded, String words, int start)
 	{
 	
 	}
 	
 	@Override
-	public void onPageSetTheme()
+	public void onPageSetTheme(int position, int themePosition)
 	{
-	
+		P.debug(position,themePosition);
 	}
 	
 	@Override
-	public void onPageSetBackgroundMusic()
+	public void onPageSetBackgroundMusic(int position, String musicPath)
 	{
-	
+		P.debug(position,musicPath);
 	}
 	
 	@Override
-	public void onTravelnoteSentPerformerBarrage()
+	public void onTravelnoteSentPerformerBarrage(String barrageContent)
 	{
-	
+		P.debug("sent a barrage"+barrageContent);
 	}
 	
 	@Override
 	public void onTravelnoteEnd()
 	{
-	
+		P.debug("shutdown");
 	}
 }

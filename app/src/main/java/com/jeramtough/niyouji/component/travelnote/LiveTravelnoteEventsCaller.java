@@ -8,23 +8,23 @@ package com.jeramtough.niyouji.component.travelnote;
 
 public interface LiveTravelnoteEventsCaller
 {
-	void onTravelnoteSelectedPage();
+	void onTravelnoteSelectedPage(int position);
 	
-	void onTravelnoteAddedPage();
+	void onTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView);
 	
-	void onTravelnoteDeletedPage();
+	void onTravelnoteDeletedPage(int position);
 	
 	void onPageSetPicture();
 	
 	void onPageSetVideo();
 	
-	void onPageContentChanged();
+	void onPageContentChanged(boolean isAdded, String words, int start);
 	
-	void onPageSetTheme();
+	void onPageSetTheme(int position,int themePosition);
 	
-	void onPageSetBackgroundMusic();
+	void onPageSetBackgroundMusic(int position, String musicPath);
 	
-	void onTravelnoteSentPerformerBarrage();
+	void onTravelnoteSentPerformerBarrage(String barrageContent);
 	
 	void onTravelnoteEnd();
 }
