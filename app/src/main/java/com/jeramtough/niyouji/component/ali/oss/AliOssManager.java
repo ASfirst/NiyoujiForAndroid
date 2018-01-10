@@ -58,7 +58,7 @@ public class AliOssManager
 		oss = new OSSClient(context, endpoint, credentialProvider);
 	}
 	
-	public void updateImageFile(String filename, String imageFilePath)
+	public void uploadImageFile(String filename, String imageFilePath)
 	{
 		PutObjectRequest put =
 				new PutObjectRequest(bucketName, ossImagesDirectoryPath + filename,
@@ -66,7 +66,7 @@ public class AliOssManager
 		startPutObjectToOss(filename, put);
 	}
 	
-	public void updateVideoFile(String filename, String videoFilePath)
+	public void uploadVideoFile(String filename, String videoFilePath)
 	{
 		PutObjectRequest put =
 				new PutObjectRequest(bucketName, ossvideosDirectoryPath + filename,

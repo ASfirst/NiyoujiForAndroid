@@ -1,19 +1,22 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.*;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.listener.OnTextChangedListner;
-import com.jeramtough.jtemoji.JtEmojiCachesManager;
+import com.jeramtough.jtandroid.jtlog2.P;
+import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.PerformingBusiness;
 import com.jeramtough.niyouji.business.PerformingService;
+import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
+import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppConfig;
-import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 
 import java.io.File;
 
@@ -22,8 +25,6 @@ import java.io.File;
  */
 public class TestActivity extends AppBaseActivity
 {
-	private EditText editText1;
-	private EditText editText2;
 	private Button btn1;
 	
 	@InjectService(service = PerformingService.class)
@@ -36,6 +37,52 @@ public class TestActivity extends AppBaseActivity
 		setContentView(R.layout.activity_test);
 		
 		btn1 = findViewById(R.id.btn1);
+		/*new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				
+				{
+					AssumeRoleResponse.Credentials credentials =
+							niyoujiStsManager.getCredentials();
+					aliOssManager.connect(credentials.getAccessKeyId(),
+							credentials.getAccessKeySecret(), credentials.getSecurityToken());
+					aliOssManager
+							.setPuttingTaskCallback(new AliOssManager.PuttingTaskCallback()
+							{
+								@Override
+								public void onPutProgress(String filename, long currentSize,
+										long totalSize, float percent)
+								{
+								
+								}
+								
+								@Override
+								public void onPutSuccess(String filename)
+								{
+									P.arrive();
+								}
+								
+								@Override
+								public void onPutFailure(String filename,
+										com.alibaba.sdk.android.oss.ClientException clientException,
+										ServiceException serviceException)
+								{
+								
+								}
+							});
+				}
+				catch (ClientException e)
+				
+				{
+					e.printStackTrace();
+				}
+			}
+		}.start();*/
+		
+		IntentUtil.toTheOtherActivity(this,TakePhotoActivity.class,0);
 		
 		btn1.setOnClickListener(this);
 		
@@ -43,13 +90,29 @@ public class TestActivity extends AppBaseActivity
 	
 	
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
+		performingBusiness.uploadImageFile(this,"e.jpg",path,null);
+	}
+	
+	@Override
 	public void onClick(View view, int viewId)
 	{
 		switch (viewId)
 		{
 			case R.id.btn1:
+				
 				String imageFilePath =
 						AppConfig.getAppDirecotry() + File.separator + "test.jpg";
+				String imageFilePath1
+						="/storage/emulated/0/niyouji/images/JPEG_1515598406791.jpg";
+				String videoFilePath =
+						AppConfig.getAppDirecotry() + File.separator + "test.mp4";
+				
+//				aliOssManager.uploadVideoFile("a.mp4",videoFilePath);
 				break;
 		}
 	}

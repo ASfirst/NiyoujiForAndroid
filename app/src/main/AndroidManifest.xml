@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".controller.activity.VideoActivityApp"
+                android:name=".controller.activity.VideoActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_camera"
                 android:theme="@style/AppTheme.NoActionBar">
@@ -75,7 +75,7 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".controller.activity.TakePhotoActivityApp"
+                android:name=".controller.activity.TakePhotoActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity

@@ -3,8 +3,12 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.jeramtough.jtandroid.controller.activity.JtBaseActivity;
+import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.PerformingBusiness;
+import com.jeramtough.niyouji.business.PerformingService;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
@@ -13,7 +17,7 @@ import com.jeramtough.niyouji.controller.handler.TravelnoteWithAudiencesHandler;
 /**
  * @author 11718
  */
-public class PerformingActivity extends JtBaseActivity implements LiveTravelnoteEventsCaller
+public class PerformingActivity extends AppBaseActivity implements LiveTravelnoteEventsCaller
 {
 	public static final int TAKE_PHOTO_REQUEST_CODE = 0X1;
 	public static final int VIDEO_REQUEST_CODE = 0X2;
@@ -21,6 +25,8 @@ public class PerformingActivity extends JtBaseActivity implements LiveTravelnote
 	private LiveTravelnoteNavigationHandler liveTravelnoteNavigationHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
 	
+	@InjectService(service = PerformingService.class)
+	private PerformingBusiness performingBusiness;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -41,15 +47,18 @@ public class PerformingActivity extends JtBaseActivity implements LiveTravelnote
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if (requestCode == TAKE_PHOTO_REQUEST_CODE &&
-				resultCode == TakePhotoActivityApp.TAKE_PHOTO_RESULT_CODE)
+				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
 		{
-			String path = data.getStringExtra(TakePhotoActivityApp.PHOTO_PATH_NAME);
+			String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
+			
+			performingBusiness.uploadImageFile(this,"f.jpg",path,null);
 			liveTravelnoteNavigationHandler.setPageResourcePath(path);
+			
 		}
 		else if (requestCode == VIDEO_REQUEST_CODE &&
-				resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
+				resultCode == VideoActivity.VIDEO_RESULT_CODE)
 		{
-			String path = data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
+			String path = data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
 			liveTravelnoteNavigationHandler.setPageResourcePath(path);
 		}
 	}

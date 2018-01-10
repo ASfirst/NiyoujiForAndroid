@@ -19,7 +19,7 @@ import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 /**
  * @author 11718
  */
-public class VideoActivityApp extends AliCameraActivityApp
+public class VideoActivity extends AliCameraActivity
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
 		SelectMusicDialog.SelectMusicListener, MyRecorder.RecorderListener
 {
@@ -59,7 +59,7 @@ public class VideoActivityApp extends AliCameraActivityApp
 		super.initResources();
 		
 		Intent intent = this.getIntent();
-		VideoActivityApp.this.setResult(VIDEO_RESULT_CODE, intent);
+		VideoActivity.this.setResult(VIDEO_RESULT_CODE, intent);
 	}
 	
 	@Override

@@ -20,7 +20,7 @@ import com.jeramtough.niyouji.controller.dialog.SelectFilterDialog;
  *         on 2017  November 24 Friday 22:04.
  */
 
-public abstract class AliCameraActivityApp extends AppBaseActivity
+public abstract class AliCameraActivity extends AppBaseActivity
 		implements SelectFilterDialog.SelectFilterListener, GestureDetector.OnGestureListener,
 		ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener
 {

@@ -11,6 +11,9 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
@@ -28,6 +31,8 @@ import com.jeramtough.niyouji.business.PerformingBusiness;
 import com.jeramtough.niyouji.business.PerformingService;
 import com.jeramtough.niyouji.component.ali.camera.CameraMusic;
 import com.jeramtough.niyouji.component.ali.camera.MusicsHandler;
+import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
+import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.ProcessNameOfCloud;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
@@ -35,8 +40,8 @@ import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
-import com.jeramtough.niyouji.controller.activity.TakePhotoActivityApp;
-import com.jeramtough.niyouji.controller.activity.VideoActivityApp;
+import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
+import com.jeramtough.niyouji.controller.activity.VideoActivity;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 import java.util.ArrayList;
@@ -414,6 +419,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		JtEmojiCachesManager.getJtEmojiCachesManager().clearAllCaches();
 	}
 	
+	
 	public void setPageResourcePath(String path)
 	{
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
@@ -449,8 +455,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						.processImageFileName(travelnoteId, liveTravelnotePageView);
 				
 				//上传图片到云端
-				performingBusiness.uploadImageFile(ossImageFileName, path,
-						new BusinessCaller(this, BUSINESS_CODE_UPDATE_IMAGE_FILE));
+			/*	performingBusiness.uploadImageFile(getContext(), ossImageFileName, path,
+						new BusinessCaller(this, BUSINESS_CODE_UPDATE_IMAGE_FILE));*/
 				
 				//设置不可滑动到下一页
 				viewPagerTravelnotePages.setScrollble(false);
@@ -663,7 +669,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	private void gotoTakephoto()
 	{
-		IntentUtil.toTheOtherActivity(getActivity(), TakePhotoActivityApp.class,
+		IntentUtil.toTheOtherActivity(getActivity(), TakePhotoActivity.class,
 				PerformingActivity.TAKE_PHOTO_REQUEST_CODE);
 		
 		//设置图文页的图片不可以点击
@@ -675,7 +681,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	{
 		liveTravelnotePageViews.get(viewPagerTravelnotePages.getCurrentItem())
 				.getLiveVideoPage().setTouchable(false);
-		IntentUtil.toTheOtherActivity(getActivity(), VideoActivityApp.class,
+		IntentUtil.toTheOtherActivity(getActivity(), VideoActivity.class,
 				PerformingActivity.VIDEO_REQUEST_CODE);
 	}
 	

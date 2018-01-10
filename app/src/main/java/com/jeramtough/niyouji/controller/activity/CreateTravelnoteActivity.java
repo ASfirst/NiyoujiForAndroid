@@ -3,11 +3,8 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -15,7 +12,6 @@ import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
-import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 
 /**
  * @author 11718
@@ -115,9 +111,9 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == resultCode &&
-				resultCode == TakePhotoActivityApp.TAKE_PHOTO_RESULT_CODE)
+				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
 		{
-			String photoPath = data.getStringExtra(TakePhotoActivityApp.PHOTO_PATH_NAME);
+			String photoPath = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
 			
 			this.coverPath = photoPath;
 			if (coverPath != null)
@@ -135,9 +131,9 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				coverType = COVER_TYPE_PHOTO;
 			}
 		}
-		else if (requestCode == resultCode && resultCode == VideoActivityApp.VIDEO_RESULT_CODE)
+		else if (requestCode == resultCode && resultCode == VideoActivity.VIDEO_RESULT_CODE)
 		{
-			String videoPath = data.getStringExtra(VideoActivityApp.VIDEO_PATH_NAME);
+			String videoPath = data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
 			if (videoPath != null)
 			{
 				recycleTheCoverResource();

@@ -18,7 +18,7 @@ import java.io.File;
 /**
  * @author 11718
  */
-public class TakePhotoActivityApp extends AliCameraActivityApp
+public class TakePhotoActivity extends AliCameraActivity
 		implements MyRecorder.TakephotoListener
 {
 	public final static int TAKE_PHOTO_RESULT_CODE = 0x8879;
@@ -64,7 +64,7 @@ public class TakePhotoActivityApp extends AliCameraActivityApp
 	{
 		super.initResources();
 		Intent intent = this.getIntent();
-		TakePhotoActivityApp.this.setResult(TAKE_PHOTO_RESULT_CODE, intent);
+		TakePhotoActivity.this.setResult(TAKE_PHOTO_RESULT_CODE, intent);
 	}
 	
 	@Override
@@ -95,7 +95,7 @@ public class TakePhotoActivityApp extends AliCameraActivityApp
 					
 					Intent intent = this.getIntent();
 					intent.putExtra(PHOTO_PATH_NAME, file.getAbsolutePath());
-					TakePhotoActivityApp.this.setResult(TAKE_PHOTO_RESULT_CODE, intent);
+					TakePhotoActivity.this.setResult(TAKE_PHOTO_RESULT_CODE, intent);
 					
 					this.finish();
 				}
