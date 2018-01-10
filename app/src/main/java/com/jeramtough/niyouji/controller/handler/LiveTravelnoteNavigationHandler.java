@@ -11,9 +11,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
-import com.alibaba.sdk.android.oss.ServiceException;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
@@ -31,8 +28,6 @@ import com.jeramtough.niyouji.business.PerformingBusiness;
 import com.jeramtough.niyouji.business.PerformingService;
 import com.jeramtough.niyouji.component.ali.camera.CameraMusic;
 import com.jeramtough.niyouji.component.ali.camera.MusicsHandler;
-import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
-import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.ProcessNameOfCloud;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
@@ -455,8 +450,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						.processImageFileName(travelnoteId, liveTravelnotePageView);
 				
 				//上传图片到云端
-			/*	performingBusiness.uploadImageFile(getContext(), ossImageFileName, path,
-						new BusinessCaller(this, BUSINESS_CODE_UPDATE_IMAGE_FILE));*/
+				this.performingBusiness.uploadImageFile(ossImageFileName, path,
+						new BusinessCaller(this, BUSINESS_CODE_UPDATE_IMAGE_FILE));
 				
 				//设置不可滑动到下一页
 				viewPagerTravelnotePages.setScrollble(false);
@@ -504,7 +499,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						.processVideoFileName(travelnoteId, liveTravelnotePageView);
 				
 				//上传视频到云端
-				performingBusiness.uploadVideoFile(ossVideoFileName, path,
+				this.performingBusiness.uploadVideoFile(ossVideoFileName, path,
 						new BusinessCaller(this, BUSINESS_CODE_UPDATE_VIDEO_FILE));
 			}
 		}

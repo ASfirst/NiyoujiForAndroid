@@ -1,6 +1,5 @@
 package com.jeramtough.niyouji.business;
 
-import android.content.Context;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
@@ -11,7 +10,6 @@ import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 
-import java.io.File;
 import java.util.concurrent.*;
 
 /**
@@ -82,55 +80,14 @@ public class PerformingService implements PerformingBusiness
 	}
 	
 	@Override
-	public void uploadImageFile(Context context, String filename, String imageFilePath,
+	public void uploadImageFile(String filename, String imageFilePath,
 			BusinessCaller businessCaller)
 	{
 		executor.execute(() ->
 		{
-			/*try
-			{
-				AssumeRoleResponse.Credentials credentials =
-						niyoujiStsManager.getCredentials();
-				
-				aliOssManager.connect(credentials.getAccessKeyId(),
-						credentials.getAccessKeySecret(), credentials.getSecurityToken());
-				
-				aliOssManager.setPuttingTaskCallback(new AliOssManager.PuttingTaskCallback()
-				{
-					@Override
-					public void onPutProgress(String filename, long currentSize,
-							long totalSize, float percent)
-					{
-					}
-					
-					@Override
-					public void onPutSuccess(String filename)
-					{
-						P.arrive();
-					}
-					
-					@Override
-					public void onPutFailure(String filename,
-							com.alibaba.sdk.android.oss.ClientException clientException,
-							ServiceException serviceException)
-					{
-					}
-				});
-				
-			}
-			catch (ClientException e)
-			{
-				e.printStackTrace();
-			}*/
-			//			setPutRequest(businessCaller);
+			setPutRequest(businessCaller);
 			P.debug(filename, imageFilePath);
-			/*aliOssManager.uploadImageFile("img_0_139800184.jpg",
-					"/storage/emulated/0/niyouji/images/JPEG_1515598406791.jpg");*/
-			/*aliOssManager.uploadImageFile("b.jpg",
-					"/storage/emulated/0/niyouji/images/JPEG_1515601175838.jpg");*/
 			aliOssManager.uploadImageFile(filename, imageFilePath);
-			/*aliOssManager.uploadImageFile("img_0_150645070.jpg",
-					"/storage/emulated/0/niyouji/images/JPEG_1515599910848.jpg");*/
 		});
 	}
 	

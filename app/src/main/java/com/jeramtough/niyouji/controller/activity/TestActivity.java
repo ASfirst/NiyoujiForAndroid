@@ -4,18 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-import com.alibaba.sdk.android.oss.ServiceException;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
-import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.PerformingBusiness;
 import com.jeramtough.niyouji.business.PerformingService;
-import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
-import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.io.File;
@@ -95,7 +88,7 @@ public class TestActivity extends AppBaseActivity
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
-		performingBusiness.uploadImageFile(this,"e.jpg",path,null);
+		performingBusiness.uploadImageFile("e.jpg",path,null);
 	}
 	
 	@Override

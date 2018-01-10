@@ -11,7 +11,7 @@ public class ProcessNameOfCloud
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
 		String cloudImageFileName =
-				"img_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".jpg ";
+				"img_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".jpg";
 		return cloudImageFileName;
 	}
 	
@@ -20,7 +20,7 @@ public class ProcessNameOfCloud
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
 		String ossVideoFileName =
-				"vdo_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".mp4 ";
+				"vdo_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".mp4";
 		return ossVideoFileName;
 	}
 	

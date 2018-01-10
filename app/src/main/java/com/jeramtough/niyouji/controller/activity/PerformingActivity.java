@@ -2,8 +2,6 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.jeramtough.jtandroid.controller.activity.JtBaseActivity;
-import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
@@ -25,8 +23,8 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	private LiveTravelnoteNavigationHandler liveTravelnoteNavigationHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
 	
-	@InjectService(service = PerformingService.class)
-	private PerformingBusiness performingBusiness;
+	/*@InjectService(service = PerformingService.class)
+	private PerformingBusiness performingBusiness;*/
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -51,7 +49,6 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		{
 			String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
 			
-			performingBusiness.uploadImageFile(this,"f.jpg",path,null);
 			liveTravelnoteNavigationHandler.setPageResourcePath(path);
 			
 		}
