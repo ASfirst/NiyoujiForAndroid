@@ -10,8 +10,8 @@ public class ProcessNameOfCloud
 	public static String processImageFileName(int travelnoteId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
-		String cloudImageFileName ="img_"+
-				travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".jpg ";
+		String cloudImageFileName =
+				"img_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".jpg ";
 		return cloudImageFileName;
 	}
 	
@@ -19,18 +19,22 @@ public class ProcessNameOfCloud
 	public static String processVideoFileName(int travelnoteId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
-		String ossVideoFileName ="vdo_"+
-				travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".mp4 ";
+		String ossVideoFileName =
+				"vdo_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".mp4 ";
 		return ossVideoFileName;
 	}
 	
 	public static String processImageFileUrl(String cloudImageFileName)
 	{
-		return "";
+		String url =
+				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/" + cloudImageFileName;
+		return url;
 	}
 	
 	public static String processVideoFileUrl(String cloudVideoFileName)
 	{
-		return "";
+		String url =
+				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/" + cloudVideoFileName;
+		return url;
 	}
 }
