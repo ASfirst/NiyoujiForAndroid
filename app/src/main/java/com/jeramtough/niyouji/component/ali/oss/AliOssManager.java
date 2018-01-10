@@ -1,11 +1,12 @@
 package com.jeramtough.niyouji.component.ali.oss;
 
 import android.content.Context;
-import android.util.Log;
 import com.alibaba.sdk.android.oss.*;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
@@ -21,6 +22,12 @@ public class AliOssManager
 {
 	private OSS oss;
 	private Context context;
+	
+	private final String bucketName = "niyouji";
+	private final String ossImagesDirectoryPath = "images/";
+	private final String ossvideosDirectoryPath = "videos/";
+	
+	private PuttingTaskCallback puttingTaskCallback;
 	
 	@IocAutowire
 	public AliOssManager(Context context)
@@ -53,26 +60,71 @@ public class AliOssManager
 	
 	public void updateImageFile(String filename, String imageFilePath)
 	{
-		PutObjectRequest put = new PutObjectRequest("niyouji", filename, imageFilePath);
-		try
+		PutObjectRequest put =
+				new PutObjectRequest(bucketName, ossImagesDirectoryPath + filename,
+						imageFilePath);
+		startPutObjectToOss(filename, put);
+	}
+	
+	public void updateVideoFile(String filename, String videoFilePath)
+	{
+		PutObjectRequest put =
+				new PutObjectRequest(bucketName, ossvideosDirectoryPath + filename,
+						videoFilePath);
+		startPutObjectToOss(filename, put);
+	}
+	
+	
+	public void setPuttingTaskCallback(PuttingTaskCallback puttingTaskCallback)
+	{
+		this.puttingTaskCallback = puttingTaskCallback;
+	}
+	
+	private void startPutObjectToOss(String filename, PutObjectRequest putObjectRequest)
+	{
+		// 异步上传时可以设置进度回调
+		putObjectRequest.setProgressCallback((request, currentSize, totalSize) ->
 		{
-			PutObjectResult putResult = oss.putObject(put);
-			P.info("PutObject", "UploadSuccess");
-			P.info("ETag", putResult.getETag());
-			P.info("RequestId", putResult.getRequestId());
-		}
-		catch (ClientException e)
-		{
-			// 本地异常如网络异常等
-			e.printStackTrace();
-		}
-		catch (ServiceException e)
-		{
-			// 服务异常
-			P.error("RequestId", e.getRequestId());
-			P.error("ErrorCode", e.getErrorCode());
-			P.error("HostId", e.getHostId());
-			P.error("RawMessage", e.getRawMessage());
-		}
+			if (puttingTaskCallback != null)
+			{
+				puttingTaskCallback.onPutProgress(filename, currentSize, totalSize,
+						((float) currentSize / (float) totalSize));
+			}
+		});
+		
+		OSSAsyncTask task = oss.asyncPutObject(putObjectRequest,
+				new OSSCompletedCallback<PutObjectRequest, PutObjectResult>()
+				{
+					@Override
+					public void onSuccess(PutObjectRequest request, PutObjectResult result)
+					{
+						if (puttingTaskCallback != null)
+						{
+							puttingTaskCallback.onPutSuccess(filename);
+						}
+					}
+					
+					@Override
+					public void onFailure(PutObjectRequest request,
+							ClientException clientException, ServiceException serviceException)
+					{
+						if (puttingTaskCallback != null)
+						{
+							puttingTaskCallback
+									.onPutFailure(filename, clientException, serviceException);
+						}
+					}
+				});
+	}
+	
+	//{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}
+	public interface PuttingTaskCallback
+	{
+		void onPutProgress(String filename, long currentSize, long totalSize, float percent);
+		
+		void onPutSuccess(String filename);
+		
+		void onPutFailure(String filename, ClientException clientException,
+				ServiceException serviceException);
 	}
 }

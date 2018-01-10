@@ -35,8 +35,6 @@ public class TestActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
 		
-		editText1 = findViewById(R.id.editText1);
-		editText2 = findViewById(R.id.editText2);
 		btn1 = findViewById(R.id.btn1);
 		
 		btn1.setOnClickListener(this);
@@ -52,9 +50,6 @@ public class TestActivity extends AppBaseActivity
 			case R.id.btn1:
 				String imageFilePath =
 						AppConfig.getAppDirecotry() + File.separator + "test.jpg";
-				performingBusiness
-						.uploadImageFile("test.jpg", imageFilePath,
-								getActivityUiHandler());
 				break;
 		}
 	}

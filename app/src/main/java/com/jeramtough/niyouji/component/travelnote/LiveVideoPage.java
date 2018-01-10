@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.VideoView;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
 
 
@@ -24,8 +25,9 @@ public class LiveVideoPage
 	private Handler handler;
 	private ImageButton btnDeletePage;
 	private FullScreenVideoView videoViewTravelnotePage;
+	private UploadTestView uploadTextView;
 	
-	private boolean isTouchable=false;
+	private boolean isTouchable = false;
 	
 	
 	public LiveVideoPage(ViewGroup viewGroup, Handler handler)
@@ -35,6 +37,7 @@ public class LiveVideoPage
 		
 		btnDeletePage = viewGroup.findViewById(R.id.btn_delete_page);
 		videoViewTravelnotePage = viewGroup.findViewById(R.id.videoView_travelnote_page);
+		uploadTextView = viewGroup.findViewById(R.id.uploadTextView);
 		
 		
 		btnDeletePage.setOnClickListener(this);
@@ -75,6 +78,11 @@ public class LiveVideoPage
 	public VideoView getVideoViewTravelnotePage()
 	{
 		return videoViewTravelnotePage;
+	}
+	
+	public UploadTestView getUploadTextView()
+	{
+		return uploadTextView;
 	}
 	
 	public void displayVideo(String path)

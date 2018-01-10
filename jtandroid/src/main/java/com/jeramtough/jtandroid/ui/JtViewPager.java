@@ -3,6 +3,7 @@ package com.jeramtough.jtandroid.ui;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 /**
  * @author 11718
@@ -14,6 +15,7 @@ public class JtViewPager extends ViewPager
 	private boolean isLastPage = false;
 	private boolean isDragPage = false;
 	private boolean canJumpPage = true;
+	private boolean scrollble = true;
 	
 	private JumpToLastCaller jumpToLastCaller;
 	
@@ -63,6 +65,16 @@ public class JtViewPager extends ViewPager
 		});
 	}
 	
+	@Override
+	public boolean onTouchEvent(MotionEvent ev)
+	{
+		if (!scrollble)
+		{
+			return true;
+		}
+		return super.onTouchEvent(ev);
+	}
+	
 	public void setCanJumpPage(boolean canJumpPage)
 	{
 		this.canJumpPage = canJumpPage;
@@ -71,6 +83,11 @@ public class JtViewPager extends ViewPager
 	public void setJumpToLastCaller(JumpToLastCaller jumpToLastCaller)
 	{
 		this.jumpToLastCaller = jumpToLastCaller;
+	}
+	
+	public void setScrollble(boolean scrollble)
+	{
+		this.scrollble = scrollble;
 	}
 	
 	//************************************

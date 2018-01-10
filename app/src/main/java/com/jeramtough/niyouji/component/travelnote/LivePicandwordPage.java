@@ -15,6 +15,7 @@ import com.jeramtough.jtemoji.*;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordTheme;
 import com.jeramtough.niyouji.component.ui.RecognizerPanelView;
+import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
@@ -45,6 +46,7 @@ public class LivePicandwordPage
 	private LinearLayout layoutWordFunction1;
 	private LinearLayout layoutWordFunction2;
 	private FrameLayout layoutFunctionsContainer;
+	private UploadTestView uploadTextView;
 	
 	private String musicPath;
 	
@@ -74,6 +76,7 @@ public class LivePicandwordPage
 		layoutWordFunction1 = viewGroup.findViewById(R.id.layout_word_function1);
 		layoutWordFunction2 = viewGroup.findViewById(R.id.layout_word_function2);
 		layoutFunctionsContainer = viewGroup.findViewById(R.id.layout_functions_container);
+		uploadTextView = viewGroup.findViewById(R.id.uploadTextView);
 		
 		editTravelnotePageContent.setVisibility(View.GONE);
 		textViewReminderWriting.setVisibility(View.GONE);
@@ -298,6 +301,11 @@ public class LivePicandwordPage
 	public ImageButton getBtnDeletePage()
 	{
 		return btnDeletePage;
+	}
+	
+	public UploadTestView getUploadTextView()
+	{
+		return uploadTextView;
 	}
 	
 	public LinearLayout getLayoutWordToolbar()

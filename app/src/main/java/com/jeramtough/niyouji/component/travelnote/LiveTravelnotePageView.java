@@ -31,7 +31,7 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 	private LiveVideoPage liveVideoPage;
 	private LivePicandwordPage livePicandwordPage;
 	
-	private LiveTravelnotePageType liveTravelnotePageType;
+	private TravelnotePageType travelnotePageType;
 	
 	private boolean isActivated = false;
 	
@@ -73,7 +73,7 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 			{
 				case R.id.imageView_picandword_page:
 					//设置游记页种类
-					liveTravelnotePageType = LiveTravelnotePageType.PICANDWORD;
+					travelnotePageType = TravelnotePageType.PICANDWORD;
 					//实例化图文页的对象
 					ViewGroup viewGroupPicandwordPage = (ViewGroup) inflater
 							.inflate(R.layout.view_live_travelnote_picandword_page, null);
@@ -88,7 +88,7 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 							LiveTravelnoteNavigationHandler.ACTIVATE_IMAGE_ACTION);
 					break;
 				case R.id.imageView_video_page:
-					liveTravelnotePageType = LiveTravelnotePageType.VIDEO;
+					travelnotePageType = TravelnotePageType.VIDEO;
 					
 					ViewGroup viewGroupVideoPage = (ViewGroup) inflater
 							.inflate(R.layout.view_live_travelnote_video_page, null);
@@ -105,9 +105,9 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 		}
 	}
 	
-	public LiveTravelnotePageType getLiveTravelnotePageType()
+	public TravelnotePageType getTravelnotePageType()
 	{
-		return liveTravelnotePageType;
+		return travelnotePageType;
 	}
 	
 	

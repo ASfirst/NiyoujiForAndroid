@@ -5,7 +5,7 @@ package com.jeramtough.niyouji.component.travelnote;
  *         on 2017  November 30 Thursday 16:16.
  */
 
-public enum LiveTravelnotePageType
+public enum TravelnotePageType
 {
 	/**
 	 * 图文页

@@ -86,16 +86,17 @@ public class PerformingActivity extends JtBaseActivity implements LiveTravelnote
 	}
 	
 	@Override
-	public void onPageSetPicture()
+	public void onPageSetPicture(String imageUrl)
 	{
 	
 	}
 	
 	@Override
-	public void onPageSetVideo()
+	public void onPageSetVideo(String videoUrl)
 	{
 	
 	}
+	
 	
 	@Override
 	public void onPageContentChanged(boolean isAdded, String words, int start)

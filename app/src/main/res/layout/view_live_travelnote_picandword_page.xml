@@ -54,6 +54,13 @@
                                 android:scaleType="fitCenter"
                                 android:layout_margin="10dp"/>
 
+                        <com.jeramtough.niyouji.component.ui.UploadTestView
+                                android:id="@+id/uploadTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="21sp"
+                                android:visibility="gone"/>
+
                         <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/imageView_frame"
                                 android:layout_width="match_parent"

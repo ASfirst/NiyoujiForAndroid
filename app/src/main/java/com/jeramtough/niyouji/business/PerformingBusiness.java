@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.business;
 
 import android.os.Handler;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 
 /**
  * @author 11718
@@ -9,5 +10,10 @@ import android.os.Handler;
 
 public interface PerformingBusiness
 {
-	void uploadImageFile(String filename, String imageFilePath, Handler handler);
+	int getTravelnoteId();
+	
+	void uploadImageFile(String filename, String imageFilePath, BusinessCaller businessCaller);
+	
+	void uploadVideoFile(String filename, String videoFilePath, BusinessCaller businessCaller);
+	
 }
