@@ -9,8 +9,8 @@ import com.jeramtough.jtandroid.ui.HorizontalListView;
 import com.jeramtough.jtandroid.controller.dialog.BottomPopupDialog;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.adapter.FiltersAdapter;
-import com.jeramtough.niyouji.component.ali.CameraFilter;
-import com.jeramtough.niyouji.component.ali.FiltersHandler;
+import com.jeramtough.niyouji.component.ali.camera.CameraFilter;
+import com.jeramtough.niyouji.component.ali.camera.FiltersHandler;
 
 /**
  * @author 11718

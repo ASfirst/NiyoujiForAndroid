@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.ali;
+package com.jeramtough.niyouji.component.ali.camera;
 
 import com.aliyun.struct.effect.EffectFilter;
 

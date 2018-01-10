@@ -2,7 +2,7 @@
  * Copyright (C) 2010-2017 Alibaba Group Holding Limited.
  */
 
-package com.jeramtough.niyouji.component.ali;
+package com.jeramtough.niyouji.component.ali.camera;
 
 import android.content.Context;
 import android.graphics.Canvas;

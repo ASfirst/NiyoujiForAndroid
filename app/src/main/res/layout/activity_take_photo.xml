@@ -14,7 +14,7 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-        <com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView
+        <com.jeramtough.niyouji.component.ali.camera.AliyunVideoGlSurfaceView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/glSurfaceView_camera"/>

@@ -12,7 +12,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               />-->
-    <com.jeramtough.niyouji.component.ali.AliyunVideoGlSurfaceView
+    <com.jeramtough.niyouji.component.ali.camera.AliyunVideoGlSurfaceView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/glSurfaceView_camera"/>
@@ -186,7 +186,7 @@
                 android:layout_height="wrap_content"
                 >
 
-            <com.jeramtough.niyouji.component.ali.RecordTimelineView
+            <com.jeramtough.niyouji.component.ali.camera.RecordTimelineView
                     android:id="@+id/recordTimeLineView"
                     android:layout_width="0dp"
                     android:layout_height="10dp"

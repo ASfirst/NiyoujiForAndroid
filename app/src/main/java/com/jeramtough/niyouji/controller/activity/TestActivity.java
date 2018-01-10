@@ -6,10 +6,16 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.*;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.listener.OnTextChangedListner;
 import com.jeramtough.jtemoji.JtEmojiCachesManager;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.PerformingBusiness;
+import com.jeramtough.niyouji.business.PerformingService;
+import com.jeramtough.niyouji.component.app.AppConfig;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
+
+import java.io.File;
 
 /**
  * @author 11718
@@ -20,6 +26,8 @@ public class TestActivity extends AppBaseActivity
 	private EditText editText2;
 	private Button btn1;
 	
+	@InjectService(service = PerformingService.class)
+	private PerformingBusiness performingBusiness;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -33,46 +41,6 @@ public class TestActivity extends AppBaseActivity
 		
 		btn1.setOnClickListener(this);
 		
-		editText1.addTextChangedListener(new OnTextChangedListner()
-		{
-			
-			@Override
-			public void onAddWords(String words, int start)
-			{
-				String text = editText2.getText().toString();
-				String headText = text.substring(0, start);
-				String extremeText = text.substring(start, text.length());
-				text = headText + words + extremeText;
-				editText2.setText(text);
-			}
-			
-			@Override
-			public void onAddWordsToLast(String words)
-			{
-				editText2.setText(editText2.getText() + words);
-			}
-			
-			@Override
-			public void onDeletedWords(String words, int start)
-			{
-				String text = editText2.getText().toString();
-				String headText = text.substring(0, start);
-				String extremeText = text.substring(start, text.length());
-				extremeText=extremeText.substring(words.length(),extremeText.length());
-				
-				text=headText+extremeText;
-				editText2.setText(text);
-			}
-			
-			@Override
-			public void onDeletedWordsFromLast(String words)
-			{
-				String text = editText2.getText().toString()
-						.substring(0, editText2.getText().length() - words.length());
-				editText2.setText(text);
-			}
-			
-		});
 	}
 	
 	
@@ -82,11 +50,11 @@ public class TestActivity extends AppBaseActivity
 		switch (viewId)
 		{
 			case R.id.btn1:
-				SpannableString spannableString = new SpannableString("[abc]def");
-				ImageSpan span = new ImageSpan(this,R.drawable.ic_arrow_back);
-				spannableString.setSpan(span, 0, 5,
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				editText1.setText(spannableString);
+				String imageFilePath =
+						AppConfig.getAppDirecotry() + File.separator + "test.jpg";
+				performingBusiness
+						.uploadImageFile("test.jpg", imageFilePath,
+								getActivityUiHandler());
 				break;
 		}
 	}

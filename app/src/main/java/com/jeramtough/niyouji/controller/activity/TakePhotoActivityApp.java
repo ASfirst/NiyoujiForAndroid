@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ali.MyRecorder;
+import com.jeramtough.niyouji.component.ali.camera.MyRecorder;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.io.File;

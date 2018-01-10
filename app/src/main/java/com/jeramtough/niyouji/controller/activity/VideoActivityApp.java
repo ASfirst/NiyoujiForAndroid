@@ -9,12 +9,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
-import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ali.CameraMusic;
-import com.jeramtough.niyouji.component.ali.MusicsHandler;
-import com.jeramtough.niyouji.component.ali.MyRecorder;
-import com.jeramtough.niyouji.component.ali.RecordTimelineView;
+import com.jeramtough.niyouji.component.ali.camera.CameraMusic;
+import com.jeramtough.niyouji.component.ali.camera.MusicsHandler;
+import com.jeramtough.niyouji.component.ali.camera.MyRecorder;
+import com.jeramtough.niyouji.component.ali.camera.RecordTimelineView;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 /**

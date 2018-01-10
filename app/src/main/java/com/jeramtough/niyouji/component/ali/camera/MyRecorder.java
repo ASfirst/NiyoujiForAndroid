@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.ali;
+package com.jeramtough.niyouji.component.ali.camera;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;

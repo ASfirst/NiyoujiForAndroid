@@ -2,9 +2,6 @@ package com.jeramtough.niyouji.controller.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +10,8 @@ import com.jeramtough.jtandroid.adapter.JtTextItemAdapter;
 import com.jeramtough.jtandroid.controller.dialog.BottomPopupDialog;
 import com.jeramtough.jtandroid.function.MusicPlayer;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ali.CameraMusic;
+import com.jeramtough.niyouji.component.ali.camera.CameraMusic;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**

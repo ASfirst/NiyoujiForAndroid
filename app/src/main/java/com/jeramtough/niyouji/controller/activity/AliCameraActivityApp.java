@@ -11,7 +11,7 @@ import com.aliyun.recorder.AliyunRecorderCreator;
 import com.aliyun.recorder.supply.AliyunIRecorder;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.component.ali.*;
+import com.jeramtough.niyouji.component.ali.camera.*;
 import com.jeramtough.niyouji.controller.dialog.SelectDecalDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectFilterDialog;
 
