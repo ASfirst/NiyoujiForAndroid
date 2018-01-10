@@ -480,6 +480,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			{
 				//设置视频可以点击
 				liveTravelnotePageView.getLiveVideoPage().setTouchable(true);
+				
+				//恢复视频页
+				resetCurrentImgOrVideoOfPage();
 			}
 			else
 			{
@@ -630,7 +633,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		{
 			if (resourcePath != null)
 			{
-				P.verbose("Reset resource of video of the travelnote page.");
 				liveTravelnotePageView.getLiveVideoPage().displayVideo(resourcePath);
 			}
 		}
