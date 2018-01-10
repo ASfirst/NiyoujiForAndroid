@@ -10,7 +10,7 @@ public class ProcessNameOfCloud
 	public static String processImageFileName(int travelnoteId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
-		String cloudImageFileName =
+		String cloudImageFileName ="img_"+
 				travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".jpg ";
 		return cloudImageFileName;
 	}
@@ -19,7 +19,7 @@ public class ProcessNameOfCloud
 	public static String processVideoFileName(int travelnoteId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
-		String ossVideoFileName =
+		String ossVideoFileName ="vdo_"+
 				travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".mp4 ";
 		return ossVideoFileName;
 	}

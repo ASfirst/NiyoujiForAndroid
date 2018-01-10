@@ -250,7 +250,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					boolean isSuccessful = msg.getData().getBoolean("isSuccessful");
 					if (isSuccessful)
 					{
-						Toast.makeText(getContext(), "上传视频完成", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getContext(), "上传图片完成", Toast.LENGTH_SHORT).show();
 						
 						//回调当上传完成page内容资源
 						String imageUrl = ProcessNameOfCloud.processImageFileUrl(
