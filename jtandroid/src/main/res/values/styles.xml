@@ -16,4 +16,9 @@
         <item name="android:windowEnterAnimation">@anim/bottom_anim_dialog_in</item>
         <item name="android:windowExitAnimation">@anim/bottom_anim_dialog_out</item>
     </style>
+
+    <style name="NoBackGroundDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

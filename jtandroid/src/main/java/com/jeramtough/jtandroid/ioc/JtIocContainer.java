@@ -10,8 +10,6 @@ import com.jeramtough.jtandroid.ioc.injector.Injector;
 import com.jeramtough.jtandroid.ioc.interpreter.ComponentInterpreter;
 import com.jeramtough.jtandroid.ioc.interpreter.ServiceInterpreter;
 import com.jeramtough.jtandroid.ioc.interpreter.ViewInterpreter;
-import com.jeramtough.jtandroid.jtlog2.JtLog2Config;
-import com.jeramtough.jtandroid.jtlog2.P;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,16 +29,16 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 	private Map<String, Object> injectedComponents;
 	private Map<String, Object> injectedServices;
 	
-	private final boolean hasLog=false;
+	private final boolean isPrintedLog =false;
 	
 	private JtIocContainer()
 	{
 		injectedComponents = new HashMap<>();
 		injectedServices = new HashMap<>();
 		
-		if (!hasLog)
+		if (!isPrintedLog)
 		{
-			JtLog2Config.getJtLog2Config().addTagFilter(JTLOG2_TAG_NAME);
+//			JtLogConfig.getJtLog2Config().addTagFilter(JTLOG2_TAG_NAME);
 		}
 		
 	}
@@ -243,7 +241,6 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 				+(jtFields.length - newInjectedViewsCount) + " the CSField and " +
 				newInjectedViewsCount + " ViewField .Now " + newInjectedObjectsCount +
 				" new Field objects inject to the IocContainer.";
-		P.info(JTLOG2_TAG_NAME, text);
 	}
 	
 }

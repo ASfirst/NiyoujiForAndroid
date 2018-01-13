@@ -6,7 +6,7 @@ import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
-import com.jeramtough.jtandroid.jtlog2.P;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 

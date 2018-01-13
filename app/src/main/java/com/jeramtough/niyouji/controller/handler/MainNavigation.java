@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.component.adapter.MainNavigationAdapter;
 
 /**

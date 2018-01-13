@@ -2,11 +2,8 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.jtlog2.P;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.business.PerformingBusiness;
-import com.jeramtough.niyouji.business.PerformingService;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;

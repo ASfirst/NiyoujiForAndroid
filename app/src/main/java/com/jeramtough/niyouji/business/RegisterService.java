@@ -3,7 +3,6 @@ package com.jeramtough.niyouji.business;
 import android.os.Handler;
 import android.os.Message;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.jtandroid.util.CommonValidatorUtil;
 import com.jeramtough.niyouji.bean.landr.InputtingLegality;
 import com.jeramtough.niyouji.bean.landr.RegisterInfo;

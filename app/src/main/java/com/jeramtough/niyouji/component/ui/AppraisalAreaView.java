@@ -14,11 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.jeramtough.jtandroid.jtlog2.P;
 import com.jeramtough.niyouji.R;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * @author JeramTough
