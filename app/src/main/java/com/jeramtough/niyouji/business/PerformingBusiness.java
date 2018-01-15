@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.business;
 
+import android.content.Context;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 
 /**
@@ -13,8 +14,9 @@ public interface PerformingBusiness
 	
 	String getNicknameOfPerformer();
 	
-	void uploadImageFile(String filename, String imageFilePath, BusinessCaller businessCaller);
+	void uploadImageFile(Context context, String filename, String imageFilePath,
+			BusinessCaller businessCaller);
 	
-	void uploadVideoFile(String filename, String videoFilePath, BusinessCaller businessCaller);
-	
+	void uploadVideoFile(Context context, String filename, String videoFilePath,
+			BusinessCaller businessCaller);
 }

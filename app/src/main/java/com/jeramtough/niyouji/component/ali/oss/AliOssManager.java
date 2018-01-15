@@ -53,7 +53,7 @@ public class AliOssManager
 		conf.setMaxConcurrentRequest(5);
 		// 失败后最大重试次数，默认2次
 		conf.setMaxErrorRetry(2);
-		OSSLog.enableLog();
+		
 		oss = new OSSClient(context, endpoint, credentialProvider);
 	}
 	

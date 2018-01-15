@@ -88,7 +88,7 @@ public class TestActivity extends AppBaseActivity
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
-		performingBusiness.uploadImageFile("e.jpg",path,null);
+		performingBusiness.uploadImageFile(this,"e.jpg",path,null);
 	}
 	
 	@Override

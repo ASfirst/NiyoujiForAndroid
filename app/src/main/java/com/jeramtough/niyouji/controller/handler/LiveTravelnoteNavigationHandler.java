@@ -22,6 +22,7 @@ import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.jtemoji.JtEmojiCachesManager;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.PerformingBusiness;
 import com.jeramtough.niyouji.business.PerformingService;
@@ -33,6 +34,7 @@ import com.jeramtough.niyouji.component.travelnote.ProcessNameOfCloud;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
+import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
 import com.jeramtough.niyouji.controller.activity.VideoActivity;
@@ -205,7 +207,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				textView.setPadding(10, 10, 10, 10);
 				textView.setText(barrageContent);
 				
-				String nicknameOfPerformer=performingBusiness.getNicknameOfPerformer();
+				String nicknameOfPerformer = performingBusiness.getNicknameOfPerformer();
 				
 				layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
 				appraisalAreaView.addAppraisal(nicknameOfPerformer, barrageContent, 2);
@@ -261,10 +263,11 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					}
 					else
 					{
-						String exceptionMessage= msg.getData().getString("exceptionMessage");
+						String exceptionMessage = msg.getData().getString("exceptionMessage");
 						
-						textViewNotification.setErrorMessage(exceptionMessage);
-						textViewNotification.closeDelayed(3000);
+						whenUploadingFail(exceptionMessage,
+								liveTravelnotePageView1.getLivePicandwordPage()
+										.getUploadTextView());
 					}
 				}
 				
@@ -292,6 +295,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					viewPagerTravelnotePages.setScrollble(true);
 					
 					boolean isSuccessful = msg.getData().getBoolean("isSuccessful");
+					
+					
 					if (isSuccessful)
 					{
 						Toast.makeText(getContext(), "上传视频完成", Toast.LENGTH_SHORT).show();
@@ -301,6 +306,14 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 								ProcessNameOfCloud.processVideoFileName(travelnoteId,
 										liveTravelnotePageView2));
 						liveTravelnoteEventsCaller.onPageSetPicture(position2, videoUrl);
+					}
+					else
+					{
+						String exceptionMessage = msg.getData().getString("exceptionMessage");
+						P.debug(exceptionMessage);
+						whenUploadingFail(exceptionMessage,
+								liveTravelnotePageView2.getLiveVideoPage()
+										.getUploadTextView());
 					}
 				}
 				
@@ -458,7 +471,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						.processImageFileName(travelnoteId, liveTravelnotePageView);
 				
 				//上传图片到云端
-				this.performingBusiness.uploadImageFile(ossImageFileName, path,
+				this.performingBusiness.uploadImageFile(getContext(), ossImageFileName, path,
 						new BusinessCaller(this, BUSINESS_CODE_UPDATE_IMAGE_FILE));
 				
 				//设置不可滑动到下一页
@@ -510,7 +523,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						.processVideoFileName(travelnoteId, liveTravelnotePageView);
 				
 				//上传视频到云端
-				this.performingBusiness.uploadVideoFile(ossVideoFileName, path,
+				this.performingBusiness.uploadVideoFile(getContext(), ossVideoFileName, path,
 						new BusinessCaller(this, BUSINESS_CODE_UPDATE_VIDEO_FILE));
 			}
 		}
@@ -758,4 +771,12 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		liveTravelnoteEventsCaller.onTravelnoteEnd();
 	}
 	
+	private void whenUploadingFail(String exceptionMessage, UploadTestView uploadTestView)
+	{
+		
+		textViewNotification.setErrorMessage(exceptionMessage);
+		textViewNotification.closeDelayed(3000);
+		
+		uploadTestView.setText("上传失败！");
+	}
 }
