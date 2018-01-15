@@ -9,6 +9,7 @@ import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
+import com.jeramtough.niyouji.component.app.AppUser;
 
 import java.util.concurrent.*;
 
@@ -24,11 +25,15 @@ public class PerformingService implements PerformingBusiness
 	private NiyoujiStsManager niyoujiStsManager;
 	private AliOssManager aliOssManager;
 	
+	private AppUser appUser;
+	
 	@IocAutowire
-	PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager)
+	PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
+			AppUser appUser)
 	{
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
+		this.appUser = appUser;
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
@@ -77,6 +82,12 @@ public class PerformingService implements PerformingBusiness
 	public int getTravelnoteId()
 	{
 		return 0;
+	}
+	
+	@Override
+	public String getNicknameOfPerformer()
+	{
+		return appUser.getNickname();
 	}
 	
 	@Override
@@ -150,10 +161,12 @@ public class PerformingService implements PerformingBusiness
 				businessCaller.getData().putBoolean("hasUploaded", true);
 				businessCaller.getData().putBoolean("isSuccessful", false);
 				String exceptionMessage = clientException.getMessage();
+				P.debug(exceptionMessage);
 				if (exceptionMessage == null)
 				{
 					exceptionMessage = serviceException.getRawMessage();
 				}
+				P.debug(exceptionMessage);
 				businessCaller.getData().putString("exceptionMessage", exceptionMessage);
 				businessCaller.callBusiness();
 			}

@@ -11,6 +11,8 @@ public interface PerformingBusiness
 {
 	int getTravelnoteId();
 	
+	String getNicknameOfPerformer();
+	
 	void uploadImageFile(String filename, String imageFilePath, BusinessCaller businessCaller);
 	
 	void uploadVideoFile(String filename, String videoFilePath, BusinessCaller businessCaller);

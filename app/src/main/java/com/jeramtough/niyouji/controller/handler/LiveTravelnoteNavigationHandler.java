@@ -205,8 +205,10 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				textView.setPadding(10, 10, 10, 10);
 				textView.setText(barrageContent);
 				
+				String nicknameOfPerformer=performingBusiness.getNicknameOfPerformer();
+				
 				layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
-				appraisalAreaView.addAppraisal("JeramTough", barrageContent, 2);
+				appraisalAreaView.addAppraisal(nicknameOfPerformer, barrageContent, 2);
 				
 				//回调发送主播弹幕事件
 				liveTravelnoteEventsCaller.onTravelnoteSentPerformerBarrage(barrageContent);
@@ -256,6 +258,13 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 								ProcessNameOfCloud.processImageFileName(travelnoteId,
 										liveTravelnotePageView1));
 						liveTravelnoteEventsCaller.onPageSetPicture(position1, imageUrl);
+					}
+					else
+					{
+						String exceptionMessage= msg.getData().getString("exceptionMessage");
+						
+						textViewNotification.setErrorMessage(exceptionMessage);
+						textViewNotification.closeDelayed(3000);
 					}
 				}
 				
