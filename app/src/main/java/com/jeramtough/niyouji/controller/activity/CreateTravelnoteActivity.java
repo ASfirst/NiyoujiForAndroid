@@ -4,13 +4,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
+import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.CreateTravelnoteBusiness;
+import com.jeramtough.niyouji.business.CreateTravelnoteService;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
 /**
@@ -22,6 +28,8 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private static final int COVER_TYPE_PHOTO = 1;
 	private static final int COVER_TYPE_VIDEO = 2;
 	
+	private static final int BUSINESS_CODE_CREATE_TRAVELNOTE = 0;
+	
 	private TextView textViewTjyjfm;
 	private ImageView imageViewAddTravelnoteCover;
 	private EditText editTravelnoteTitle;
@@ -29,10 +37,14 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private FullScreenVideoView videoViewTravelnoteCover;
 	private ImageView imageViewTravelnoteCover;
 	private AppCompatImageView viewBack;
+	private LinearLayout layoutWaitingCreateTravelnote;
 	
 	private String coverPath;
 	private String title;
 	private int coverType = COVER_TYPE_NONE;
+	
+	@InjectService(service = CreateTravelnoteService.class)
+	private CreateTravelnoteBusiness createTravelnoteBusiness;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -47,8 +59,10 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 		videoViewTravelnoteCover = findViewById(R.id.videoView_travelnote_cover);
 		imageViewTravelnoteCover = findViewById(R.id.imageView_travelnote_cover);
 		viewBack = findViewById(R.id.view_back);
+		layoutWaitingCreateTravelnote = findViewById(R.id.layout_waiting_create_travelnote);
 		
 		imageViewTravelnoteCover.setClickable(false);
+		layoutWaitingCreateTravelnote.setVisibility(View.INVISIBLE);
 		
 		imageViewAddTravelnoteCover.setOnClickListener(this);
 		imageViewTravelnoteCover.setOnClickListener(this);
@@ -89,8 +103,11 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 					break;
 				}
 				
-				Intent intent = new Intent(this, PerformingActivity.class);
-				startActivity(intent);
+				layoutWaitingCreateTravelnote.setVisibility(View.VISIBLE);
+				
+				createTravelnoteBusiness.createTravelnote(title, coverPath,
+						new BusinessCaller(getActivityUiHandler(),
+								BUSINESS_CODE_CREATE_TRAVELNOTE));
 				break;
 		}
 	}
@@ -150,6 +167,24 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				coverType = COVER_TYPE_VIDEO;
 			}
 		}
+	}
+	
+	
+	@Override
+	public void handleActivityMessage(Message message)
+	{
+		switch (message.what)
+		{
+			case BUSINESS_CODE_CREATE_TRAVELNOTE:
+				break;
+		}
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		recycleTheCoverResource();
 	}
 	
 	//************************************

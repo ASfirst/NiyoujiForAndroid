@@ -1,6 +1,7 @@
 package com.jeramtough.jtandroid.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 /**
@@ -10,6 +11,8 @@ import android.content.Intent;
 
 public class IntentUtil
 {
+	
+	
 	public static void toTheOtherActivity(Activity currentActivity,
 			Class theOtherActivityClass)
 	{
@@ -23,4 +26,5 @@ public class IntentUtil
 		Intent intent = new Intent(currentActivity, theOtherActivityClass);
 		currentActivity.startActivityForResult(intent, requestCode);
 	}
+	
 }

@@ -126,4 +126,27 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_arrow_back"/>
 
+    <LinearLayout
+            android:id="@+id/layout_waiting_create_travelnote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:alpha="0.7">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="21sp"
+                android:text="正在创建游记\n与服务器连接中..."
+                android:gravity="center"/>
+
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+    </LinearLayout>
 </FrameLayout>

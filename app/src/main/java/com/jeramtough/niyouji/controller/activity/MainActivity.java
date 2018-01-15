@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -9,8 +11,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.MainBusiness;
+import com.jeramtough.niyouji.business.MainService;
+import com.jeramtough.niyouji.controller.dialog.GoToLoginDialog;
 import com.jeramtough.niyouji.controller.handler.LeftPanelHandler;
 import com.jeramtough.niyouji.controller.handler.MainNavigation;
 
@@ -21,6 +28,9 @@ public class MainActivity extends AppBaseActivity
 {
 	private MainNavigation mainNavigation;
 	private ImageButton imageButtonPerform;
+	
+	@InjectService(service = MainService.class)
+	private MainBusiness mainBusiness;
 	
 	private LeftPanelHandler leftPanelHandler;
 	
@@ -65,7 +75,27 @@ public class MainActivity extends AppBaseActivity
 		switch (viewId)
 		{
 			case R.id.imageButton_perform:
-				IntentUtil.toTheOtherActivity(this, CreateTravelnoteActivity.class);
+				if (mainBusiness.userHasLogined())
+				{
+					if (mainBusiness.hasTheNetwork(this))
+					{
+						IntentUtil.toTheOtherActivity(this, CreateTravelnoteActivity.class);
+					}
+					else
+					{
+						new AlertDialog.Builder(this).setMessage("当前网络不可用")
+								.setNegativeButton("确定", (dialog, which) ->
+								{
+								
+								}).create().show();
+					}
+				}
+				else
+				{
+					GoToLoginDialog goToLoginDialog=new GoToLoginDialog(this);
+					goToLoginDialog.show();
+					
+				}
 				break;
 		}
 	}

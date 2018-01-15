@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background8">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您还没有登录，请先登录"
+            android:textSize="21sp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"/>
+
+    <Button
+            android:id="@+id/button_go_to_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_done"
+            android:text="去登录"
+            android:textSize="21sp"
+            android:textColor="@color/white"
+            android:layout_gravity=
+                    "bottom|center"
+            android:layout_marginBottom="30dp"/>
+
+</FrameLayout>
