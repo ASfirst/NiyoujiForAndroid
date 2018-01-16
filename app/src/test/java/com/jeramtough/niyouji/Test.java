@@ -1,6 +1,8 @@
 package com.jeramtough.niyouji;
 
 import com.jeramtough.jtandroid.util.CommonValidatorUtil;
+import com.jeramtough.jtlog3.JtLogConfig;
+import com.jeramtough.jtlog3.P;
 
 /**
  * @author 11718
@@ -28,6 +30,10 @@ public class Test
 	@org.junit.Test
 	public void test1()
 	{
+		JtLogConfig.getJtLogConfig().setUsedJavaPrinter(true);
+		String a="dfsdafsa.mp4";
+		String fileSuffix=a.substring(a.length()-3);
+		P.debug(fileSuffix);
 	}
 	
 	@org.junit.Test

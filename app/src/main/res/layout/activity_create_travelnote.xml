@@ -136,11 +136,12 @@
             android:alpha="0.7">
 
         <TextView
+                android:id="@+id/textView_create_travelnote_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="21sp"
-                android:text="正在创建游记\n与服务器连接中..."
+                android:text="正在创建游记直播\n与服务器连接中..."
                 android:gravity="center"/>
 
         <ProgressBar

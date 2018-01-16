@@ -10,5 +10,6 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 public interface CreateTravelnoteBusiness
 {
 	void createTravelnote(String travelnoteTitle, String coverResourcePath,
-			BusinessCaller businessCaller);
+			BusinessCaller createBusinessCaller, BusinessCaller connectBusinessCaller,
+			BusinessCaller uploadBusinessCaller);
 }

@@ -3,6 +3,7 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.AppCompatImageView;
@@ -29,6 +30,8 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private static final int COVER_TYPE_VIDEO = 2;
 	
 	private static final int BUSINESS_CODE_CREATE_TRAVELNOTE = 0;
+	private static final int BUSINESS_CODE_CONNECT_SERVER = 1;
+	private static final int BUSINESS_CODE_UPLOAD_COVER_RESOURCE = 2;
 	
 	private TextView textViewTjyjfm;
 	private ImageView imageViewAddTravelnoteCover;
@@ -38,6 +41,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private ImageView imageViewTravelnoteCover;
 	private AppCompatImageView viewBack;
 	private LinearLayout layoutWaitingCreateTravelnote;
+	private TextView textViewCreateTravelnoteInfo;
 	
 	private String coverPath;
 	private String title;
@@ -60,6 +64,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 		imageViewTravelnoteCover = findViewById(R.id.imageView_travelnote_cover);
 		viewBack = findViewById(R.id.view_back);
 		layoutWaitingCreateTravelnote = findViewById(R.id.layout_waiting_create_travelnote);
+		textViewCreateTravelnoteInfo = findViewById(R.id.textView_create_travelnote_info);
 		
 		imageViewTravelnoteCover.setClickable(false);
 		layoutWaitingCreateTravelnote.setVisibility(View.INVISIBLE);
@@ -105,9 +110,19 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				
 				layoutWaitingCreateTravelnote.setVisibility(View.VISIBLE);
 				
-				createTravelnoteBusiness.createTravelnote(title, coverPath,
+				BusinessCaller createBusinessCaller =
 						new BusinessCaller(getActivityUiHandler(),
-								BUSINESS_CODE_CREATE_TRAVELNOTE));
+								BUSINESS_CODE_CREATE_TRAVELNOTE);
+				BusinessCaller connectBusinessCaller =
+						new BusinessCaller(getActivityUiHandler(),
+								BUSINESS_CODE_CONNECT_SERVER);
+				BusinessCaller uploadBusinessCaller =
+						new BusinessCaller(getActivityUiHandler(),
+								BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
+				
+				createTravelnoteBusiness
+						.createTravelnote(title, coverPath, createBusinessCaller,
+								connectBusinessCaller, uploadBusinessCaller);
 				break;
 		}
 	}
@@ -175,7 +190,35 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	{
 		switch (message.what)
 		{
+			case BUSINESS_CODE_CONNECT_SERVER:
+				boolean connectSuccessfully =
+						message.getData().getBoolean("connectSuccessfully");
+				if (connectSuccessfully)
+				{
+					textViewCreateTravelnoteInfo.setText("连接服务器成功");
+				}
+				else
+				{
+					textViewCreateTravelnoteInfo.setText("连接超时！\n请检查网络后重试！");
+					layoutWaitingCreateTravelnote.postDelayed(() ->
+					{
+						layoutWaitingCreateTravelnote.setVisibility(View.INVISIBLE);
+					}, 4000);
+				}
+				break;
+			case BUSINESS_CODE_UPLOAD_COVER_RESOURCE:
+				boolean uploadSuccessfully=message.getData().getBoolean("uploadSuccessfully");
+				if (uploadSuccessfully)
+				{
+					textViewCreateTravelnoteInfo.setText("上传资源成功");
+				}
+				else
+				{
+					textViewCreateTravelnoteInfo.setText("上传资源失败！");
+				}
+				break;
 			case BUSINESS_CODE_CREATE_TRAVELNOTE:
+				boolean createFinally = message.getData().getBoolean("createFinally");
 				break;
 		}
 	}

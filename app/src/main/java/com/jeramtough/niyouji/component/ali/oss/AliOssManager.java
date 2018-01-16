@@ -9,15 +9,17 @@ import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
+import com.jeramtough.jtlog3.WithLogger;
 
 /**
  * @author 11718
  *         on 2018  January 09 Tuesday 21:50.
  */
 @JtComponent
-public class AliOssManager
+public class AliOssManager implements WithLogger
 {
 	private OSS oss;
 	private Context context;
@@ -32,6 +34,12 @@ public class AliOssManager
 	public AliOssManager(Context context)
 	{
 		this.context = context;
+	}
+	
+	public void connect(AssumeRoleResponse.Credentials credentials)
+	{
+		this.connect(credentials.getAccessKeyId(), credentials.getAccessKeySecret(),
+				credentials.getSecurityToken());
 	}
 	
 	public void connect(String stsTokenAccessKeyId, String stsTokenSecretKeyId,
@@ -79,6 +87,48 @@ public class AliOssManager
 		this.puttingTaskCallback = puttingTaskCallback;
 	}
 	
+	public boolean uploadImageFileBlocking(String filename, String imageFilePath)
+	{
+		PutObjectRequest put =
+				new PutObjectRequest(bucketName, ossImagesDirectoryPath + filename,
+						imageFilePath);
+		
+		try
+		{
+			PutObjectResult putResult = oss.putObject(put);
+			getP().info("upload the image file["+filename+"] successfully");
+			return true;
+		}
+		catch (ClientException | ServiceException e)
+		{
+			e.printStackTrace();
+			getP().error("upload the image file["+filename+"] failed");
+			return false;
+		}
+	}
+	
+	public boolean uploadVideoFileBlocking(String filename, String videoFilePath)
+	{
+		PutObjectRequest put =
+				new PutObjectRequest(bucketName, ossvideosDirectoryPath + filename,
+						videoFilePath);
+		
+		try
+		{
+			PutObjectResult putResult = oss.putObject(put);
+			getP().info("upload the video file["+filename+"] successfully");
+			return true;
+		}
+		catch (ClientException | ServiceException e)
+		{
+			e.printStackTrace();
+			getP().error("upload the video file["+filename+"] failed");
+			return false;
+		}
+	}
+	
+	
+	//**********************************************************
 	private void startPutObjectToOss(String filename, PutObjectRequest putObjectRequest)
 	{
 		// 异步上传时可以设置进度回调
@@ -115,6 +165,7 @@ public class AliOssManager
 					}
 				});
 	}
+	
 	
 	//{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}
 	public interface PuttingTaskCallback

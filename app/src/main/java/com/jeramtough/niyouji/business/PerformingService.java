@@ -65,7 +65,6 @@ public class PerformingService implements PerformingBusiness
 		{
 			executor.execute(() ->
 			{
-				P.debug(filename, imageFilePath);
 				setPutRequest(businessCaller);
 				aliOssManager.uploadImageFile(filename, imageFilePath);
 			});

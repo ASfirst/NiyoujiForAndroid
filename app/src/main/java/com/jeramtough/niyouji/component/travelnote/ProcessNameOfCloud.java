@@ -7,6 +7,16 @@ package com.jeramtough.niyouji.component.travelnote;
 
 public class ProcessNameOfCloud
 {
+	public static String processImageCoverName()
+	{
+		return "cover_"+System.currentTimeMillis()+".jpg";
+	}
+	
+	public static String processVideoCoverName()
+	{
+		return "cover_"+System.currentTimeMillis()+".mp4";
+	}
+	
 	public static String processImageFileName(int travelnoteId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{

@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface JtService
 {
-	JtObjectType pattern() default JtObjectType.Singleton;
+	JtObjectPattern pattern() default JtObjectPattern.Singleton;
 }

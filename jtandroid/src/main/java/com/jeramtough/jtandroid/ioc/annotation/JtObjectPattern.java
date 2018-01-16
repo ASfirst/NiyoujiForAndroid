@@ -5,7 +5,7 @@ package com.jeramtough.jtandroid.ioc.annotation;
  *         on 2017  December 08 Friday 22:10.
  */
 
-public enum JtObjectType
+public enum JtObjectPattern
 {
 	/**
 	 * singleton pattern

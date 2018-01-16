@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtandroid.ioc.annotation.JtObjectType;
+import com.jeramtough.jtandroid.ioc.annotation.JtObjectPattern;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author 11718
  *         on 2017  December 08 Friday 21:44.
  */
-@JtComponent(pattern = JtObjectType.Prototype)
+@JtComponent(pattern = JtObjectPattern.Prototype)
 public class MusicPlayer implements MediaPlayer.OnCompletionListener
 {
 	private MediaPlayer mediaPlayer;

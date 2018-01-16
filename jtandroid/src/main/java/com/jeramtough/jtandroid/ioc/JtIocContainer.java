@@ -170,11 +170,11 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 						JtComponent jtComponentAnnotation =
 								filedValueObject.getClass().getAnnotation(JtComponent.class);
 						
-						if (jtComponentAnnotation.pattern() == JtObjectType.Singleton)
+						if (jtComponentAnnotation.pattern() == JtObjectPattern.Singleton)
 						{
 							injectedComponents.put(fieldKeyName, filedValueObject);
 						}
-						else if (jtComponentAnnotation.pattern() == JtObjectType.Prototype)
+						else if (jtComponentAnnotation.pattern() == JtObjectPattern.Prototype)
 						{
 							newInjectedObjectsCount--;
 						}
@@ -209,11 +209,11 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 					{
 						JtService jtServiceAnnotation =
 								filedValueObject.getClass().getAnnotation(JtService.class);
-						if (jtServiceAnnotation.pattern() == JtObjectType.Singleton)
+						if (jtServiceAnnotation.pattern() == JtObjectPattern.Singleton)
 						{
 							injectedServices.put(fieldKeyName, filedValueObject);
 						}
-						else if (jtServiceAnnotation.pattern() == JtObjectType.Prototype)
+						else if (jtServiceAnnotation.pattern() == JtObjectPattern.Prototype)
 						{
 							newInjectedObjectsCount--;
 						}
