@@ -15,6 +15,7 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
+import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.CreateTravelnoteBusiness;
 import com.jeramtough.niyouji.business.CreateTravelnoteService;
@@ -218,7 +219,12 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				}
 				break;
 			case BUSINESS_CODE_CREATE_TRAVELNOTE:
-				boolean createFinally = message.getData().getBoolean("createFinally");
+				textViewCreateTravelnoteInfo.setText("开始您的游记直播！！！");
+				layoutWaitingCreateTravelnote.postDelayed(() ->
+				{
+					IntentUtil.toTheOtherActivity(CreateTravelnoteActivity.this,
+							PerformingActivity.class);
+				}, 500);
 				break;
 		}
 	}

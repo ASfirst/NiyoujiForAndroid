@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.bean.socketmessage.command;
+package com.jeramtough.niyouji.bean.socketmessage.command.client;
 
 /**
  * @author 11718
