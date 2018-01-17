@@ -76,13 +76,13 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	@Override
 	public void onTravelnoteSelectedPage(int position)
 	{
-		P.debug("select " + position);
+//		P.debug("select " + position);
 	}
 	
 	@Override
 	public void onTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView)
 	{
-		P.debug("add a page");
+//		P.debug("add a page");
 	}
 	
 	@Override
@@ -94,37 +94,37 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	@Override
 	public void onPageSetPicture(int position, String imageUrl)
 	{
-		P.debug(position, imageUrl);
+//		P.debug(position, imageUrl);
 	}
 	
 	@Override
 	public void onPageSetVideo(int position, String videoUrl)
 	{
-		P.debug(position, videoUrl);
+//		P.debug(position, videoUrl);
 	}
 	
 	@Override
 	public void onPageContentChanged(int position, boolean isAdded, String words, int start)
 	{
-		P.debug(position, isAdded, words, start);
+//		P.debug(position, isAdded, words, start);
 	}
 	
 	@Override
 	public void onPageSetTheme(int position, int themePosition)
 	{
-		P.debug(position, themePosition);
+//		P.debug(position, themePosition);
 	}
 	
 	@Override
 	public void onPageSetBackgroundMusic(int position, String musicPath)
 	{
-		P.debug(position, musicPath);
+//		P.debug(position, musicPath);
 	}
 	
 	@Override
 	public void onTravelnoteSentPerformerBarrage(int position, String barrageContent)
 	{
-		P.debug("sent a barrage" + barrageContent);
+//		P.debug("sent a barrage" + barrageContent);
 	}
 	
 	@Override

@@ -19,157 +19,171 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="@dimen/travelnote_page_right"
-                android:background="@mipmap/background2">
+                android:orientation="horizontal">
 
             <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="@drawable/roundrect"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginTop="5dp">
-
-                <com.jeramtough.jtandroid.ui.RoundImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@mipmap/surface_image"
-                        android:scaleType="center"/>
+                    android:background="@mipmap/background2">
 
                 <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="horizontal"
+                        android:background="@drawable/roundrect"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginTop="5dp">
 
-                    <TextView
+                    <com.jeramtough.jtandroid.ui.RoundImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="JeramTough"
-                            android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:shadowColor="@color/black"
-                            android:shadowRadius="1"
-                            android:shadowDy="1"
-                            android:shadowDx="1"/>
+                            app:srcCompat="@mipmap/surface_image"
+                            android:scaleType="center"/>
 
                     <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            >
 
                         <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="点亮:"
+                                android:text="JeramTough"
+                                android:layout_weight="1"
+                                android:gravity="bottom"
+                                android:textColor="@color/white"
                                 android:textStyle="bold"
-                                android:gravity="top"
-                                android:textColor="#f92828"
-                                android:shadowColor="@color/white"
+                                android:shadowColor="@color/black"
                                 android:shadowRadius="1"
                                 android:shadowDy="1"
                                 android:shadowDx="1"/>
 
-                        <TextView
-                                android:id="@+id/textView_attentions_count"
+                        <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:gravity="top"
-                                android:textColor="@color/white"
-                                android:shadowColor="@color/black"
-                                android:shadowRadius="1"
-                                android:shadowDy="1"
-                                android:shadowDx="1"
-                                android:layout_marginLeft="5dp"/>
+                                android:orientation="horizontal"
+                                android:layout_weight="1">
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="点亮:"
+                                    android:textStyle="bold"
+                                    android:gravity="top"
+                                    android:textColor="#f92828"
+                                    android:shadowColor="@color/white"
+                                    android:shadowRadius="1"
+                                    android:shadowDy="1"
+                                    android:shadowDx="1"/>
+
+                            <TextView
+                                    android:id="@+id/textView_attentions_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:gravity="top"
+                                    android:textColor="@color/white"
+                                    android:shadowColor="@color/black"
+                                    android:shadowRadius="1"
+                                    android:shadowDy="1"
+                                    android:shadowDx="1"
+                                    android:layout_marginLeft="5dp"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@drawable/roundrect"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P"
+                            android:textColor="@color/colorPrimary"
+                            android:shadowColor="@color/white"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="1"
+                            android:textStyle="bold"
+                            android:layout_marginRight="5dp"/>
+
+                    <TextView
+                            android:id="@+id/textView_pages_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-/-"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="1"
+                            android:shadowDy="1"
+                            android:shadowDx="1"
+                            android:textSize="12sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@drawable/roundrect"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="4dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom">
+
+                    <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="2dp"
+                            android:background="@mipmap/person"/>
+
+                    <TextView
+                            android:id="@+id/textView_audiences_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="1"
+                            android:shadowDy="1"
+                            android:shadowDx="1"
+                            android:textSize="12sp"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="wrap_content"
+            <Button
+                    android:id="@+id/button_bug_delete"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/roundrect"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="P"
-                        android:textColor="@color/colorPrimary"
-                        android:shadowColor="@color/white"
-                        android:shadowDx="1"
-                        android:shadowDy="1"
-                        android:shadowRadius="1"
-                        android:textStyle="bold"
-                        android:layout_marginRight="5dp"/>
-
-                <TextView
-                        android:id="@+id/textView_pages_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-/-"
-                        android:textColor="@color/white"
-                        android:shadowColor="@color/black"
-                        android:shadowRadius="1"
-                        android:shadowDy="1"
-                        android:shadowDx="1"
-                        android:textSize="12sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/roundrect"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="4dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom">
-
-                <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="2dp"
-                        android:background="@mipmap/person"/>
-
-                <TextView
-                        android:id="@+id/textView_audiences_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:shadowColor="@color/black"
-                        android:shadowRadius="1"
-                        android:shadowDy="1"
-                        android:shadowDx="1"
-                        android:textSize="12sp"/>
-
-            </LinearLayout>
+                    android:layout_weight="1"
+                    android:background="@color/transparent"/>
 
         </LinearLayout>
 

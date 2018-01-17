@@ -78,6 +78,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private DanmakuLayout layoutDanmaku;
 	private TextView textViewShutdownReminder;
 	private ImageButton buttonShutdownForLive;
+	private Button buttonBugDelete;
 	
 	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
 	private LiveTravelnotePageView lastLiveTravelnotePageView;
@@ -113,10 +114,12 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		layoutDanmaku = findViewById(R.id.layout_danmaku);
 		textViewShutdownReminder = findViewById(R.id.textView_shutdown_reminder);
 		buttonShutdownForLive = findViewById(R.id.button_shutdown_for_live);
+		buttonBugDelete = findViewById(R.id.button_bug_delete);
 		
 		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
 		textViewShutdownReminder.setVisibility(View.INVISIBLE);
+		buttonBugDelete.setVisibility(View.GONE);
 		
 		viewPagerTravelnotePages.addOnPageChangeListener(this);
 		buttonShutdownForLive.setOnTouchListener(this);
@@ -187,6 +190,10 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					this.resetCurrentImgOrVideoOfPage();
 					textViewNotification.setText(String.format("删除第%d页成功！", position + 1));
 					textViewNotification.closeDelayed(1000);
+					
+					//回调当删除了一个page时
+					P.debug(viewPagerTravelnotePages.getCurrentItem());
+					onPageSelected(viewPagerTravelnotePages.getCurrentItem());
 				}
 				break;
 			
@@ -213,8 +220,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				appraisalAreaView.addAppraisal(nicknameOfPerformer, barrageContent, 2);
 				
 				//回调发送主播弹幕事件
-				liveTravelnoteEventsCaller.onTravelnoteSentPerformerBarrage(position,
-						barrageContent);
+				liveTravelnoteEventsCaller
+						.onTravelnoteSentPerformerBarrage(position, barrageContent);
 				break;
 			case SELECT_PICANDWORD_THEME_ACTION:
 				//回调选择游记页主题事件
@@ -375,18 +382,25 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public void onPageSelected(int position)
 	{
 		pauseMusicIf();
+		P.arrive();
 		
 		//如果是最后一页
 		if (position == liveTravelnotePageViews.size() - 1)
 		{
 			layoutShutdownForLive.setVisibility(View.VISIBLE);
+			//这个按钮为了解决viewpager最后一页还可以删除问题
+			buttonBugDelete.setVisibility(View.VISIBLE);
 		}
 		else//不是最后一页
 		{
-			//让结束按钮消失
+			//让结束按钮消失和bug按钮消失
 			if (layoutShutdownForLive.getVisibility() == View.VISIBLE)
 			{
 				layoutShutdownForLive.setVisibility(View.INVISIBLE);
+			}
+			if (buttonBugDelete.getVisibility() == View.VISIBLE)
+			{
+				buttonBugDelete.setVisibility(View.GONE);
 			}
 			
 			liveTravelnoteEventsCaller.onTravelnoteSelectedPage(position);
@@ -705,6 +719,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	{
 		progressBarWaitTakephotoOrVideo.setVisibility(View.VISIBLE);
 		layoutShutdownForLive.setVisibility(View.INVISIBLE);
+		buttonBugDelete.setVisibility(View.GONE);
 		
 		int position = viewPagerTravelnotePages.getCurrentItem();
 		LiveTravelnotePageView pageView = liveTravelnotePageViews.get(position);
