@@ -160,6 +160,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	@Override
 	public void handleMessage(Message msg)
 	{
+		int position = viewPagerTravelnotePages.getCurrentItem();
 		switch (msg.what)
 		{
 			case ACTIVATE_IMAGE_ACTION:
@@ -181,7 +182,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				{
 					this.clearAndRemoveResource();
 					
-					int position = viewPagerTravelnotePages.getCurrentItem();
 					this.updateViewPagerUI(true);
 					this.updatePagesCount();
 					this.resetCurrentImgOrVideoOfPage();
@@ -218,7 +218,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 			case SELECT_PICANDWORD_THEME_ACTION:
 				//回调选择游记页主题事件
 				int themePosition = msg.getData().getInt("themePosition");
-				int position = viewPagerTravelnotePages.getCurrentItem();
 				liveTravelnoteEventsCaller.onPageSetTheme(position, themePosition);
 				break;
 			case CHANGED_PAGE_TEXT_CONTENT_ACTION:
@@ -226,13 +225,13 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				boolean isAdded = msg.getData().getBoolean("isAdded");
 				String words = msg.getData().getString("words");
 				int start = msg.getData().getInt("start");
-				liveTravelnoteEventsCaller.onPageContentChanged(isAdded, words, start);
+				liveTravelnoteEventsCaller
+						.onPageContentChanged(position, isAdded, words, start);
 				break;
 			
 			case BUSINESS_CODE_UPDATE_IMAGE_FILE:
-				int position1 = viewPagerTravelnotePages.getCurrentItem();
 				LiveTravelnotePageView liveTravelnotePageView1 =
-						liveTravelnotePageViews.get(position1);
+						liveTravelnotePageViews.get(position);
 				
 				boolean hasUploaded = msg.getData().getBoolean("hasUploaded");
 				if (!hasUploaded)
@@ -259,7 +258,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						String imageUrl = ProcessNameOfCloud.processImageFileUrl(
 								ProcessNameOfCloud.processImageFileName(travelnoteId,
 										liveTravelnotePageView1));
-						liveTravelnoteEventsCaller.onPageSetPicture(position1, imageUrl);
+						liveTravelnoteEventsCaller.onPageSetPicture(position, imageUrl);
 					}
 					else
 					{
@@ -275,9 +274,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				break;
 			
 			case BUSINESS_CODE_UPDATE_VIDEO_FILE:
-				int position2 = viewPagerTravelnotePages.getCurrentItem();
 				LiveTravelnotePageView liveTravelnotePageView2 =
-						liveTravelnotePageViews.get(position2);
+						liveTravelnotePageViews.get(position);
 				
 				boolean hasUploaded2 = msg.getData().getBoolean("hasUploaded");
 				if (!hasUploaded2)
@@ -305,7 +303,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						String videoUrl = ProcessNameOfCloud.processVideoFileUrl(
 								ProcessNameOfCloud.processVideoFileName(travelnoteId,
 										liveTravelnotePageView2));
-						liveTravelnoteEventsCaller.onPageSetPicture(position2, videoUrl);
+						liveTravelnoteEventsCaller.onPageSetPicture(position, videoUrl);
 					}
 					else
 					{
@@ -324,7 +322,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 	{
-	
+		
 	}
 	
 	@Override
@@ -779,4 +777,5 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		
 		uploadTestView.setText("上传失败！");
 	}
+	
 }

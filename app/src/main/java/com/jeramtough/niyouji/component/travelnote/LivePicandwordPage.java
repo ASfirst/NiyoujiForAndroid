@@ -55,6 +55,7 @@ public class LivePicandwordPage
 	
 	private int currentThemePosition = 0;
 	private boolean isInitTheme=true;
+	private boolean isResetTheme=false;
 	
 	private String currentText;
 	private String voiseText;
@@ -226,7 +227,7 @@ public class LivePicandwordPage
 		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
 		picAndWordTheme.setFrame(imageViewFrame);
 		
-		if (!isInitTheme)
+		if (!isInitTheme&&!isResetTheme)
 		{
 			Message message = new Message();
 			message.what = LiveTravelnoteNavigationHandler.SELECT_PICANDWORD_THEME_ACTION;
@@ -236,6 +237,7 @@ public class LivePicandwordPage
 		else
 		{
 			isInitTheme=false;
+			isResetTheme=false;
 		}
 	}
 	
@@ -363,6 +365,7 @@ public class LivePicandwordPage
 	
 	public void resetTheme()
 	{
+		isResetTheme=true;
 		selectPwThemeDialog.selectTheme(currentThemePosition);
 	}
 	
@@ -392,7 +395,7 @@ public class LivePicandwordPage
 	{
 		Message message = new Message();
 		message.what = LiveTravelnoteNavigationHandler.CHANGED_PAGE_TEXT_CONTENT_ACTION;
-		message.getData().putBoolean("isAdded", false);
+		message.getData().putBoolean("isAdded", isAdded);
 		message.getData().putString("words", words);
 		message.getData().putInt("start", start);
 		

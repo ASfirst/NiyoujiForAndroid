@@ -105,7 +105,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	
 	
 	@Override
-	public void onPageContentChanged(boolean isAdded, String words, int start)
+	public void onPageContentChanged(int position, boolean isAdded, String words, int start)
 	{
 		P.debug(isAdded,words,start);
 	}

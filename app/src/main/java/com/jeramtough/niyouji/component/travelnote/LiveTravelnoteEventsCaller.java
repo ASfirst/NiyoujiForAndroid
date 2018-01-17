@@ -19,7 +19,7 @@ public interface LiveTravelnoteEventsCaller
 	
 	void onPageSetVideo(int position, String videoUrl);
 	
-	void onPageContentChanged(boolean isAdded, String words, int start);
+	void onPageContentChanged(int position, boolean isAdded, String words, int start);
 	
 	void onPageSetTheme(int position, int themePosition);
 	
