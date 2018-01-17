@@ -135,7 +135,7 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 								.setCreateTime(DateTimeUtil.getCurrentDateTime());
 						createPerformingRoomCommand.setOwnerId(appUser.getUserId());
 						createPerformingRoomCommand
-								.setRoomId(appUser.getUserId() + IdUtil.getUUID());
+								.setTravelnoteId(appUser.getUserId() + IdUtil.getUUID());
 						createPerformingRoomCommand.setTravelnoteTitle(travelnoteTitle);
 						
 						SocketMessage socketMessage = SocketMessageFactory

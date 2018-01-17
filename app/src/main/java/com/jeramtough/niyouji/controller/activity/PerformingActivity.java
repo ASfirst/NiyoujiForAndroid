@@ -2,8 +2,11 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.PerformingBusiness;
+import com.jeramtough.niyouji.business.PerformingService;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
@@ -20,8 +23,8 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	private LiveTravelnoteNavigationHandler liveTravelnoteNavigationHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
 	
-	/*@InjectService(service = PerformingService.class)
-	private PerformingBusiness performingBusiness;*/
+	@InjectService(service = PerformingService.class)
+	private PerformingBusiness performingBusiness;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -91,38 +94,38 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	@Override
 	public void onPageSetPicture(int position, String imageUrl)
 	{
-	
+		P.debug(position, imageUrl);
 	}
 	
 	@Override
 	public void onPageSetVideo(int position, String videoUrl)
 	{
-	
+		P.debug(position, videoUrl);
 	}
 	
 	
 	@Override
 	public void onPageContentChanged(boolean isAdded, String words, int start)
 	{
-	
+		P.debug(isAdded,words,start);
 	}
 	
 	@Override
 	public void onPageSetTheme(int position, int themePosition)
 	{
-		P.debug(position,themePosition);
+		P.debug(position, themePosition);
 	}
 	
 	@Override
 	public void onPageSetBackgroundMusic(int position, String musicPath)
 	{
-		P.debug(position,musicPath);
+		P.debug(position, musicPath);
 	}
 	
 	@Override
 	public void onTravelnoteSentPerformerBarrage(String barrageContent)
 	{
-		P.debug("sent a barrage"+barrageContent);
+		P.debug("sent a barrage" + barrageContent);
 	}
 	
 	@Override

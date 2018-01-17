@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtandroid.listener.OnTextChangedListner;
 import com.jeramtough.jtemoji.*;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordTheme;
 import com.jeramtough.niyouji.component.ui.RecognizerPanelView;
@@ -53,6 +54,7 @@ public class LivePicandwordPage
 	private SelectPwThemeDialog selectPwThemeDialog;
 	
 	private int currentThemePosition = 0;
+	private boolean isInitTheme=true;
 	
 	private String currentText;
 	private String voiseText;
@@ -224,10 +226,17 @@ public class LivePicandwordPage
 		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
 		picAndWordTheme.setFrame(imageViewFrame);
 		
-		Message message = new Message();
-		message.what = LiveTravelnoteNavigationHandler.SELECT_PICANDWORD_THEME_ACTION;
-		message.getData().putInt("themePosition", position);
-		handler.sendMessage(message);
+		if (!isInitTheme)
+		{
+			Message message = new Message();
+			message.what = LiveTravelnoteNavigationHandler.SELECT_PICANDWORD_THEME_ACTION;
+			message.getData().putInt("themePosition", position);
+			handler.sendMessage(message);
+		}
+		else
+		{
+			isInitTheme=false;
+		}
 	}
 	
 	@Override
@@ -281,6 +290,7 @@ public class LivePicandwordPage
 		{
 			handler.sendMessage(processMessageOfChangingText(false, words, start));
 		}
+		
 	}
 	
 	public EditText getEditTravelnotePageContent()
@@ -381,7 +391,7 @@ public class LivePicandwordPage
 	private Message processMessageOfChangingText(boolean isAdded, String words, int start)
 	{
 		Message message = new Message();
-		message.what = LiveTravelnoteNavigationHandler.CHANGED_PICANDWORD_CONTENT_ACTION;
+		message.what = LiveTravelnoteNavigationHandler.CHANGED_PAGE_TEXT_CONTENT_ACTION;
 		message.getData().putBoolean("isAdded", false);
 		message.getData().putString("words", words);
 		message.getData().putInt("start", start);

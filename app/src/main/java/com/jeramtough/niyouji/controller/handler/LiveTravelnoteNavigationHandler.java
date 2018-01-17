@@ -61,10 +61,10 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public final static int SELECT_MUSIC_ACTION = 0X6;
 	public final static int SENT_BARRAGE_ACTION = 0X7;
 	public final static int SELECT_PICANDWORD_THEME_ACTION = 0X8;
-	public final static int CHANGED_PICANDWORD_CONTENT_ACTION = 0X9;
+	public final static int CHANGED_PAGE_TEXT_CONTENT_ACTION = 0X9;
 	
-	public final static int BUSINESS_CODE_UPDATE_IMAGE_FILE = 0X10;
-	public final static int BUSINESS_CODE_UPDATE_VIDEO_FILE = 0X11;
+	public final static int BUSINESS_CODE_UPDATE_IMAGE_FILE = 0X30;
+	public final static int BUSINESS_CODE_UPDATE_VIDEO_FILE = 0X31;
 	
 	private FragmentManager fragmentManager;
 	
@@ -221,7 +221,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				int position = viewPagerTravelnotePages.getCurrentItem();
 				liveTravelnoteEventsCaller.onPageSetTheme(position, themePosition);
 				break;
-			case CHANGED_PICANDWORD_CONTENT_ACTION:
+			case CHANGED_PAGE_TEXT_CONTENT_ACTION:
 				//回调当游记页文字内容发生改变
 				boolean isAdded = msg.getData().getBoolean("isAdded");
 				String words = msg.getData().getString("words");

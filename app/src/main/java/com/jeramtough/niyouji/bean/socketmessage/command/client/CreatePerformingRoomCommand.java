@@ -5,7 +5,7 @@ package com.jeramtough.niyouji.bean.socketmessage.command.client;
  */
 public class CreatePerformingRoomCommand
 {
-	private String roomId;
+	private String travelnoteId;
 	
 	private String createTime;
 	
@@ -18,14 +18,14 @@ public class CreatePerformingRoomCommand
 	private String travelnoteTitle;
 	
 	
-	public String getRoomId()
+	public String getTravelnoteId()
 	{
-		return roomId;
+		return travelnoteId;
 	}
 	
-	public void setRoomId(String roomId)
+	public void setTravelnoteId(String travelnoteId)
 	{
-		this.roomId = roomId;
+		this.travelnoteId = travelnoteId;
 	}
 	
 	public String getCreateTime()
@@ -81,7 +81,7 @@ public class CreatePerformingRoomCommand
 	@Override
 	public String toString()
 	{
-		return "CreatePerformingRoomCommand{" + "roomId='" + roomId + '\'' + ", createTime='" +
+		return "CreatePerformingRoomCommand{" + "travelnoteId='" + travelnoteId + '\'' + ", createTime='" +
 				createTime + '\'' + ", ownerId='" + ownerId + '\'' + ", coverType='" +
 				coverType + '\'' + ", coverResourceUrl='" + coverResourceUrl + '\'' +
 				", travelnoteTitle='" + travelnoteTitle + '\'' + '}';

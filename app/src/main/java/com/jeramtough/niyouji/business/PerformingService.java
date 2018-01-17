@@ -30,6 +30,8 @@ public class PerformingService implements PerformingBusiness
 	private AppUser appUser;
 	private NetworkIsAble networkIsAble;
 	
+	private final boolean debugUploadMode = true;
+	
 	@IocAutowire
 	PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
 			AppUser appUser, NetworkIsAble networkIsAble)
@@ -60,13 +62,20 @@ public class PerformingService implements PerformingBusiness
 	public void uploadImageFile(Context context, String filename, String imageFilePath,
 			BusinessCaller businessCaller)
 	{
-		boolean isHad = checkTheNetword(context, businessCaller);
+		boolean isHad = checkTheNetwork(context, businessCaller);
 		if (isHad)
 		{
 			executor.execute(() ->
 			{
-				setPutRequest(businessCaller);
-				aliOssManager.uploadImageFile(filename, imageFilePath);
+				if (debugUploadMode)
+				{
+					accessDebugMode(businessCaller);
+				}
+				else
+				{
+					setPutRequest(businessCaller);
+					aliOssManager.uploadImageFile(filename, imageFilePath);
+				}
 			});
 		}
 	}
@@ -75,22 +84,28 @@ public class PerformingService implements PerformingBusiness
 	public void uploadVideoFile(Context context, String filename, String videoFilePath,
 			BusinessCaller businessCaller)
 	{
-		boolean isHad = checkTheNetword(context, businessCaller);
+		boolean isHad = checkTheNetwork(context, businessCaller);
 		if (isHad)
 		{
 			executor.execute(() ->
 			{
-				setPutRequest(businessCaller);
-				aliOssManager.uploadVideoFile(filename, videoFilePath);
+				if (debugUploadMode)
+				{
+					accessDebugMode(businessCaller);
+				}
+				else
+				{
+					setPutRequest(businessCaller);
+					aliOssManager.uploadVideoFile(filename, videoFilePath);
+				}
 			});
 		}
 	}
 	
 	//*******************************
-	private boolean checkTheNetword(Context context, BusinessCaller businessCaller)
+	private boolean checkTheNetwork(Context context, BusinessCaller businessCaller)
 	{
 		boolean isHad = networkIsAble.isNetworkConnected(context);
-		P.debug(isHad);
 		if (!isHad)
 		{
 			businessCaller.getData().putString("exceptionMessage", "没有可用网络连接！");
@@ -104,6 +119,7 @@ public class PerformingService implements PerformingBusiness
 	
 	private void setPutRequest(BusinessCaller businessCaller)
 	{
+		
 		AssumeRoleResponse.Credentials credentials = null;
 		try
 		{
@@ -162,4 +178,14 @@ public class PerformingService implements PerformingBusiness
 		});
 	}
 	
+	private void accessDebugMode(BusinessCaller businessCaller)
+	{
+		businessCaller.getData().putFloat("percent", 1);
+		businessCaller.getData().putBoolean("hasUploaded", false);
+		businessCaller.callBusiness();
+		
+		businessCaller.getData().putBoolean("hasUploaded", true);
+		businessCaller.getData().putBoolean("isSuccessful", true);
+		businessCaller.callBusiness();
+	}
 }
