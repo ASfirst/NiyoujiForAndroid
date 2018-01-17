@@ -103,11 +103,10 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		P.debug(position, videoUrl);
 	}
 	
-	
 	@Override
 	public void onPageContentChanged(int position, boolean isAdded, String words, int start)
 	{
-		P.debug(isAdded,words,start);
+		P.debug(position, isAdded, words, start);
 	}
 	
 	@Override
@@ -123,7 +122,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	}
 	
 	@Override
-	public void onTravelnoteSentPerformerBarrage(String barrageContent)
+	public void onTravelnoteSentPerformerBarrage(int position, String barrageContent)
 	{
 		P.debug("sent a barrage" + barrageContent);
 	}

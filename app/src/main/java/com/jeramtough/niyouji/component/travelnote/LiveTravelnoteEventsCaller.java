@@ -25,7 +25,7 @@ public interface LiveTravelnoteEventsCaller
 	
 	void onPageSetBackgroundMusic(int position, String musicPath);
 	
-	void onTravelnoteSentPerformerBarrage(String barrageContent);
+	void onTravelnoteSentPerformerBarrage(int position, String barrageContent);
 	
 	void onTravelnoteEnd();
 }

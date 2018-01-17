@@ -213,7 +213,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				appraisalAreaView.addAppraisal(nicknameOfPerformer, barrageContent, 2);
 				
 				//回调发送主播弹幕事件
-				liveTravelnoteEventsCaller.onTravelnoteSentPerformerBarrage(barrageContent);
+				liveTravelnoteEventsCaller.onTravelnoteSentPerformerBarrage(position,
+						barrageContent);
 				break;
 			case SELECT_PICANDWORD_THEME_ACTION:
 				//回调选择游记页主题事件
@@ -322,7 +323,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 	{
-		
+	
 	}
 	
 	@Override
@@ -536,7 +537,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		}).setPositiveButton("确定", (dialog, which) ->
 		{
 			shutdownForLive();
-			getActivity().finish();
 		}).create().show();
 	}
 	
@@ -767,6 +767,8 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 		}
 		
 		liveTravelnoteEventsCaller.onTravelnoteEnd();
+		
+		getActivity().finish();
 	}
 	
 	private void whenUploadingFail(String exceptionMessage, UploadTestView uploadTestView)
