@@ -7,6 +7,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.nio.channels.NotYetConnectedException;
 
 /**
  * @author 11718
@@ -29,6 +30,13 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		{
 			webSocketClientListener.onOpen(handshakedata);
 		}
+	}
+	
+	@Override
+	public void send(String text) throws NotYetConnectedException
+	{
+		super.send(text);
+		getP().info("client sent a text message ["+text+"] to server");
 	}
 	
 	@Override

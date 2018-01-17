@@ -8,9 +8,9 @@ import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.jtutil.IdUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
-import com.jeramtough.niyouji.bean.socketmessage.SocketMessageFactory;
-import com.jeramtough.niyouji.bean.socketmessage.command.client.CreatePerformingRoomCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.server.ServerCommandActions;
+import com.jeramtough.niyouji.component.websocket.communicate.PerformerSocketMessageFactory;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppUser;
@@ -138,7 +138,7 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 								.setTravelnoteId(appUser.getUserId() + IdUtil.getUUID());
 						createPerformingRoomCommand.setTravelnoteTitle(travelnoteTitle);
 						
-						SocketMessage socketMessage = SocketMessageFactory
+						SocketMessage socketMessage = PerformerSocketMessageFactory
 								.processCreatePerformingRoomSocketMessage(
 										createPerformingRoomCommand);
 						

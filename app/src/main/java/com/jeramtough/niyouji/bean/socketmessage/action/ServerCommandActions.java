@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.bean.socketmessage.command.server;
+package com.jeramtough.niyouji.bean.socketmessage.action;
 
 public class ServerCommandActions
 {

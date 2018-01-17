@@ -10,10 +10,23 @@ public enum TravelnotePageType
 	/**
 	 * 图文页
 	 */
-	PICANDWORD,
+	PICANDWORD("picture_and_word"),
 	
 	/**
 	 * 视屏页
 	 */
-	VIDEO;
+	VIDEO("video");
+	
+	private String pageType;
+	
+	TravelnotePageType(String pageType)
+	{
+		this.pageType = pageType;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return pageType;
+	}
 }

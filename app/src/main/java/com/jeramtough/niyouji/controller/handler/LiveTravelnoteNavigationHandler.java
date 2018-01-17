@@ -382,7 +382,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	public void onPageSelected(int position)
 	{
 		pauseMusicIf();
-		P.arrive();
 		
 		//如果是最后一页
 		if (position == liveTravelnotePageViews.size() - 1)

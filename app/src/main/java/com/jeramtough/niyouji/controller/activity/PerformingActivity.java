@@ -3,10 +3,9 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.business.PerformingBusiness;
-import com.jeramtough.niyouji.business.PerformingService;
+import com.jeramtough.niyouji.business.PerformingBusiness1;
+import com.jeramtough.niyouji.business.PerformingService1;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
@@ -23,8 +22,9 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	private LiveTravelnoteNavigationHandler liveTravelnoteNavigationHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
 	
-	@InjectService(service = PerformingService.class)
-	private PerformingBusiness performingBusiness;
+	@InjectService(service = PerformingService1.class)
+	private PerformingBusiness1 performingBusiness1;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -76,60 +76,60 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	@Override
 	public void onTravelnoteSelectedPage(int position)
 	{
-//		P.debug("select " + position);
+		performingBusiness1.spreadTravelnoteSelectedPage(position);
 	}
 	
 	@Override
 	public void onTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView)
 	{
-//		P.debug("add a page");
+		performingBusiness1.spreadTravelnoteAddedPage(liveTravelnotePageView);
 	}
 	
 	@Override
 	public void onTravelnoteDeletedPage(int position)
 	{
-		P.debug("delete " + position);
+		performingBusiness1.spreadTravelnoteDeletedPage(position);
 	}
 	
 	@Override
 	public void onPageSetPicture(int position, String imageUrl)
 	{
-//		P.debug(position, imageUrl);
+		performingBusiness1.spreadPageSetPicture(position, imageUrl);
 	}
 	
 	@Override
 	public void onPageSetVideo(int position, String videoUrl)
 	{
-//		P.debug(position, videoUrl);
+		performingBusiness1.spreadPageSetVideo(position, videoUrl);
 	}
 	
 	@Override
 	public void onPageContentChanged(int position, boolean isAdded, String words, int start)
 	{
-//		P.debug(position, isAdded, words, start);
+		performingBusiness1.spreadPageContentChanged(position, isAdded, words, start);
 	}
 	
 	@Override
 	public void onPageSetTheme(int position, int themePosition)
 	{
-//		P.debug(position, themePosition);
+		performingBusiness1.spreadPageSetTheme(position, themePosition);
 	}
 	
 	@Override
 	public void onPageSetBackgroundMusic(int position, String musicPath)
 	{
-//		P.debug(position, musicPath);
+		performingBusiness1.spreadPageSetBackgroundMusic(position, musicPath);
 	}
 	
 	@Override
 	public void onTravelnoteSentPerformerBarrage(int position, String barrageContent)
 	{
-//		P.debug("sent a barrage" + barrageContent);
+		performingBusiness1.spreadTravelnoteSentPerformerBarrage(position, barrageContent);
 	}
 	
 	@Override
 	public void onTravelnoteEnd()
 	{
-		P.debug("shutdown");
+		performingBusiness1.spreadTravelnoteEnd();
 	}
 }
