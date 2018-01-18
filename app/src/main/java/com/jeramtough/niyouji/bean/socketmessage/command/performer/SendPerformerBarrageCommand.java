@@ -2,13 +2,16 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
 
 /**
  * @author 11718
- *         on 2018  January 18 Thursday 03:02.
+ * on 2018  January 18 Thursday 03:02.
  */
 
 public class SendPerformerBarrageCommand extends PerformerCommand
 {
 	private int position;
-	private String barrageContent;
+	private String nickname;
+	private boolean isPerformers;
+	private String content;
+	private String createTime;
 	
 	public int getPosition()
 	{
@@ -20,13 +23,43 @@ public class SendPerformerBarrageCommand extends PerformerCommand
 		this.position = position;
 	}
 	
-	public String getBarrageContent()
+	public String getNickname()
 	{
-		return barrageContent;
+		return nickname;
 	}
 	
-	public void setBarrageContent(String barrageContent)
+	public void setNickname(String nickname)
 	{
-		this.barrageContent = barrageContent;
+		this.nickname = nickname;
+	}
+	
+	public boolean getIsPerformers()
+	{
+		return isPerformers;
+	}
+	
+	public void setIsPerformers(boolean isPerformers)
+	{
+		this.isPerformers = isPerformers;
+	}
+	
+	public String getContent()
+	{
+		return content;
+	}
+	
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
+	
+	public String getCreateTime()
+	{
+		return createTime;
+	}
+	
+	public void setCreateTime(String createTime)
+	{
+		this.createTime = createTime;
 	}
 }

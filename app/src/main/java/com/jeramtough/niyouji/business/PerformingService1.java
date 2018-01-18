@@ -49,7 +49,8 @@ public class PerformingService1 implements PerformingBusiness1
 						new CreatePerformingRoomCommand();
 				createPerformingRoomCommand.setCoverResourceUrl(
 						"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/cover_1516105481681.jpg");
-				createPerformingRoomCommand.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
+				createPerformingRoomCommand
+						.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
 				createPerformingRoomCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
 				createPerformingRoomCommand.setPerformerId(this.appUser.getUserId());
 				createPerformingRoomCommand.setTravelnoteTitle("这是测试游记");
@@ -220,7 +221,10 @@ public class PerformingService1 implements PerformingBusiness1
 				new SendPerformerBarrageCommand();
 		sendPerformerBarrageCommand.setPerformerId(appUser.getUserId());
 		sendPerformerBarrageCommand.setPosition(position);
-		sendPerformerBarrageCommand.setBarrageContent(barrageContent);
+		sendPerformerBarrageCommand.setContent(barrageContent);
+		sendPerformerBarrageCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
+		sendPerformerBarrageCommand.setIsPerformers(true);
+		sendPerformerBarrageCommand.setNickname(appUser.getNickname());
 		
 		SocketMessage socketMessage = PerformerSocketMessageFactory
 				.processSendPerformerBarrageCommandSocketMessage(sendPerformerBarrageCommand);
