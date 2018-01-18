@@ -5,9 +5,8 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
  *         on 2018  January 17 Wednesday 20:33.
  */
 
-public class AddPageCommand
+public class AddPageCommand extends PerformerCommand
 {
-	private String performerId;
 	private String createTime;
 	private String pageType;
 	private int themePosition;
@@ -42,13 +41,4 @@ public class AddPageCommand
 		this.themePosition = themePosition;
 	}
 	
-	public String getPerformerId()
-	{
-		return performerId;
-	}
-	
-	public void setPerformerId(String performerId)
-	{
-		this.performerId = performerId;
-	}
 }

@@ -47,9 +47,9 @@ public class PerformingService implements PerformingBusiness
 	}
 	
 	@Override
-	public int getTravelnoteId()
+	public String getUserId()
 	{
-		return 0;
+		return appUser.getUserId();
 	}
 	
 	@Override

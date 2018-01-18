@@ -10,7 +10,7 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 
 public interface PerformingBusiness
 {
-	int getTravelnoteId();
+	String getUserId();
 	
 	String getNicknameOfPerformer();
 	

@@ -3,30 +3,15 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
 /**
  * @author 11718
  */
-public class CreatePerformingRoomCommand
+public class CreatePerformingRoomCommand extends PerformerCommand
 {
-	private String travelnoteId;
-	
 	private String createTime;
-	
-	private String ownerId;
 	
 	private String coverType;
 	
 	private String coverResourceUrl;
 	
 	private String travelnoteTitle;
-	
-	
-	public String getTravelnoteId()
-	{
-		return travelnoteId;
-	}
-	
-	public void setTravelnoteId(String travelnoteId)
-	{
-		this.travelnoteId = travelnoteId;
-	}
 	
 	public String getCreateTime()
 	{
@@ -36,16 +21,6 @@ public class CreatePerformingRoomCommand
 	public void setCreateTime(String createTime)
 	{
 		this.createTime = createTime;
-	}
-	
-	public String getOwnerId()
-	{
-		return ownerId;
-	}
-	
-	public void setOwnerId(String ownerId)
-	{
-		this.ownerId = ownerId;
 	}
 	
 	public String getCoverType()
@@ -78,12 +53,4 @@ public class CreatePerformingRoomCommand
 		this.travelnoteTitle = travelnoteTitle;
 	}
 	
-	@Override
-	public String toString()
-	{
-		return "CreatePerformingRoomCommand{" + "travelnoteId='" + travelnoteId + '\'' + ", createTime='" +
-				createTime + '\'' + ", ownerId='" + ownerId + '\'' + ", coverType='" +
-				coverType + '\'' + ", coverResourceUrl='" + coverResourceUrl + '\'' +
-				", travelnoteTitle='" + travelnoteTitle + '\'' + '}';
-	}
 }

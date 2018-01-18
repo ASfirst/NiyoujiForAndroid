@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 public class PerformerWebSocketClient extends BaseWebSocketClient
 {
 	private static final String socketHandlerUrl =
-			"ws://192.168.0.100:8080/niyouji/performerHandler" + ".do";
+			"ws://192.168.0.117:8080/niyouji/performerHandler" + ".do";
 	
 	public PerformerWebSocketClient() throws URISyntaxException
 	{

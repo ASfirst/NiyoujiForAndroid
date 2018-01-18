@@ -96,8 +96,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	private LiveTravelnoteEventsCaller liveTravelnoteEventsCaller;
 	
-	private int travelnoteId;
-	
 	public LiveTravelnoteNavigationHandler(Activity activity, FragmentManager fragmentManager)
 	{
 		super(activity);
@@ -129,8 +127,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	protected void initResources()
 	{
-		travelnoteId = performingBusiness.getTravelnoteId();
-		
 		liveTravelnotePageViews = new ArrayList<>();
 		
 		this.addPageViewToList();
@@ -192,7 +188,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 					textViewNotification.closeDelayed(1000);
 					
 					//回调当删除了一个page时
-					P.debug(viewPagerTravelnotePages.getCurrentItem());
 					onPageSelected(viewPagerTravelnotePages.getCurrentItem());
 				}
 				break;
@@ -264,7 +259,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						
 						//回调当上传完成page内容资源
 						String imageUrl = ProcessNameOfCloud.processImageFileUrl(
-								ProcessNameOfCloud.processImageFileName(travelnoteId,
+								ProcessNameOfCloud.processImageFileName(performingBusiness.getUserId(),
 										liveTravelnotePageView1));
 						liveTravelnoteEventsCaller.onPageSetPicture(position, imageUrl);
 					}
@@ -309,7 +304,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 						
 						//回调当上传完成page内容资源
 						String videoUrl = ProcessNameOfCloud.processVideoFileUrl(
-								ProcessNameOfCloud.processVideoFileName(travelnoteId,
+								ProcessNameOfCloud.processVideoFileName(performingBusiness.getUserId(),
 										liveTravelnotePageView2));
 						liveTravelnoteEventsCaller.onPageSetPicture(position, videoUrl);
 					}
@@ -480,7 +475,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				
 				//生成云图片文件名
 				String ossImageFileName = ProcessNameOfCloud
-						.processImageFileName(travelnoteId, liveTravelnotePageView);
+						.processImageFileName(performingBusiness.getUserId(), liveTravelnotePageView);
 				
 				//上传图片到云端
 				this.performingBusiness.uploadImageFile(getContext(), ossImageFileName, path,
@@ -532,7 +527,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 				
 				//生成云视频文件名
 				String ossVideoFileName = ProcessNameOfCloud
-						.processVideoFileName(travelnoteId, liveTravelnotePageView);
+						.processVideoFileName(performingBusiness.getUserId(), liveTravelnotePageView);
 				
 				//上传视频到云端
 				this.performingBusiness.uploadVideoFile(getContext(), ossVideoFileName, path,

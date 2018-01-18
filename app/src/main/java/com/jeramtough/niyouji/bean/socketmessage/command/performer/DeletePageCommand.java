@@ -5,10 +5,9 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
  *         on 2018  January 17 Wednesday 20:39.
  */
 
-public class DeletePageCommand
+public class DeletePageCommand extends PerformerCommand
 {
 	private int position;
-	private String performerId;
 	
 	public int getPosition()
 	{
@@ -20,13 +19,4 @@ public class DeletePageCommand
 		this.position = position;
 	}
 	
-	public String getPerformerId()
-	{
-		return performerId;
-	}
-	
-	public void setPerformerId(String performerId)
-	{
-		this.performerId = performerId;
-	}
 }

@@ -17,20 +17,20 @@ public class ProcessNameOfCloud
 		return "cover_"+System.currentTimeMillis()+".mp4";
 	}
 	
-	public static String processImageFileName(int travelnoteId,
+	public static String processImageFileName(String userId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
 		String cloudImageFileName =
-				"img_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".jpg";
+				"img_" + userId + "_" + liveTravelnotePageView.hashCode() + ".jpg";
 		return cloudImageFileName;
 	}
 	
 	
-	public static String processVideoFileName(int travelnoteId,
+	public static String processVideoFileName(String userId,
 			LiveTravelnotePageView liveTravelnotePageView)
 	{
 		String ossVideoFileName =
-				"vdo_" + travelnoteId + "_" + liveTravelnotePageView.hashCode() + ".mp4";
+				"vdo_" + userId + "_" + liveTravelnotePageView.hashCode() + ".mp4";
 		return ossVideoFileName;
 	}
 	

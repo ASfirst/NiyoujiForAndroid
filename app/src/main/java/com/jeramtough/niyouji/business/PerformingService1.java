@@ -3,10 +3,11 @@ package com.jeramtough.niyouji.business;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtutil.DateTimeUtil;
-import com.jeramtough.jtutil.IdUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.AddPageCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.DeletePageCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.SelectPageCommand;
 import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
@@ -14,7 +15,10 @@ import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.communicate.PerformerSocketMessageFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 11718
@@ -54,9 +58,7 @@ public class PerformingService1 implements PerformingBusiness1
 					"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/cover_1516105481681.jpg");
 			createPerformingRoomCommand.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
 			createPerformingRoomCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
-			createPerformingRoomCommand.setOwnerId(this.appUser.getUserId());
-			createPerformingRoomCommand
-					.setTravelnoteId(this.appUser.getUserId() + IdUtil.getUUID());
+			createPerformingRoomCommand.setPerformerId(this.appUser.getUserId());
 			createPerformingRoomCommand.setTravelnoteTitle("这是测试游记");
 			SocketMessage socketMessage = PerformerSocketMessageFactory
 					.processCreatePerformingRoomSocketMessage(createPerformingRoomCommand);
@@ -68,8 +70,12 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void spreadTravelnoteSelectedPage(int position)
 	{
+		SelectPageCommand selectPageCommand=new SelectPageCommand();
+		selectPageCommand.setPerformerId(appUser.getUserId());
+		selectPageCommand.setPosition(position);
+		
 		SocketMessage socketMessage = PerformerSocketMessageFactory
-				.processSelectPageSocketMessage(appUser.getUserId(), position);
+				.processSelectPageSocketMessage(selectPageCommand);
 		
 		executorService.submit(() ->
 		{
@@ -105,8 +111,12 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void spreadTravelnoteDeletedPage(int position)
 	{
+		DeletePageCommand deletePageCommand=new DeletePageCommand();
+		deletePageCommand.setPerformerId(appUser.getUserId());
+		deletePageCommand.setPosition(position);
+		
 		SocketMessage socketMessage = PerformerSocketMessageFactory
-				.processDeletedPageSocketMessage(appUser.getUserId(), position);
+				.processDeletedPageSocketMessage(deletePageCommand);
 		
 		executorService.submit(() ->
 		{
