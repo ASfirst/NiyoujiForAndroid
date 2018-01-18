@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.business;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
@@ -54,14 +55,14 @@ public class LeftPanelService implements LeftPanelBusiness
 	}
 	
 	@Override
-	public void clearTravelnoteCaches(Handler handler)
+	public void clearTravelnoteCaches(Context context,Handler handler)
 	{
 		final ThreadPoolExecutor threadPool =
 				new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
 						new SynchronousQueue<>());
 		
-		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
-		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory());
+		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory(context));
+		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory(context));
 		
 		final int totalTaskCount =
 				videosDirectory.listFiles().length + imagesDirectory.listFiles().length;

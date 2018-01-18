@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.component.app;
 
 import android.content.Context;
 import android.os.Environment;
+import com.jeramtough.jtlog3.P;
 
 import java.io.File;
 
@@ -14,19 +15,28 @@ public class AppConfig
 {
 	public static final String APP_DIRECTORY_NAME = "niyouji";
 	
-	public static String getAppDirecotry()
+	public static String getAppDirecotry(Context context)
 	{
-		return Environment.getExternalStorageDirectory() + File.separator + APP_DIRECTORY_NAME;
+		boolean sdCardExist = Environment.getExternalStorageState()
+				.equals(android.os.Environment.MEDIA_MOUNTED);
+		if (sdCardExist)
+		{
+			return Environment.getExternalStorageDirectory() + File.separator + APP_DIRECTORY_NAME;
+		}
+		else
+		{
+			return context.getFilesDir() + File.separator + APP_DIRECTORY_NAME;
+		}
 	}
 	
-	public static String getImagesDirectory()
+	public static String getImagesDirectory(Context context)
 	{
-		return getAppDirecotry() + File.separator + "images";
+		return getAppDirecotry(context) + File.separator + "images";
 	}
 	
-	public static String getVideosDirectory()
+	public static String getVideosDirectory(Context context)
 	{
-		return getAppDirecotry() + File.separator + "videos";
+		return getAppDirecotry(context) + File.separator + "videos";
 	}
 	
 	public static String getFiltersDirectory(Context context)

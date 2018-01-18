@@ -23,5 +23,5 @@ public interface LeftPanelBusiness
 	/**
 	 * 清除游记图片和视频缓存
 	 */
-	void clearTravelnoteCaches(Handler handler);
+	void clearTravelnoteCaches(Context context,Handler handler);
 }

@@ -112,7 +112,7 @@ public class VideoActivity extends AliCameraActivity
 			{
 				case MotionEvent.ACTION_DOWN:
 					this.uiOfPressRecorderButton();
-					myRecorder.startRecoding();
+					myRecorder.startRecoding(this);
 					break;
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_CANCEL:

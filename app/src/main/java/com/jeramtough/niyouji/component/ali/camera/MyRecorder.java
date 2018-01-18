@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.component.ali.camera;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import com.aliyun.recorder.AliyunRecorderCreator;
@@ -162,10 +163,10 @@ public class MyRecorder implements RecordCallback
 		aliRecorder.setMusic(cameraMusic.getPath(), 0, MAX_RECORD_TIME);
 	}
 	
-	public void startRecoding()
+	public void startRecoding(Context context)
 	{
 		String videoPath =
-				AppConfig.getVideosDirectory() + File.separator + System.currentTimeMillis() +
+				AppConfig.getVideosDirectory(context) + File.separator + System.currentTimeMillis() +
 						"" + ".mp4";
 		aliRecorder.setOutputPath(videoPath);
 		aliRecorder.startRecording();

@@ -98,7 +98,7 @@ public class LeftPanelHandler extends JtIocHandler
 		}
 		else if (id == R.id.nav_clear_caches)
 		{
-			leftPanelBusiness.clearTravelnoteCaches(this);
+			leftPanelBusiness.clearTravelnoteCaches(getContext(),this);
 		}
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);

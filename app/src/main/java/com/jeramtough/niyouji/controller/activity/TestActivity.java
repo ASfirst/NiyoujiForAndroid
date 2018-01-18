@@ -99,11 +99,11 @@ public class TestActivity extends AppBaseActivity
 			case R.id.btn1:
 				
 				String imageFilePath =
-						AppConfig.getAppDirecotry() + File.separator + "test.jpg";
+						AppConfig.getAppDirecotry(this) + File.separator + "test.jpg";
 				String imageFilePath1
 						="/storage/emulated/0/niyouji/images/JPEG_1515598406791.jpg";
 				String videoFilePath =
-						AppConfig.getAppDirecotry() + File.separator + "test.mp4";
+						AppConfig.getAppDirecotry(this) + File.separator + "test.mp4";
 				
 //				aliOssManager.uploadVideoFile("a.mp4",videoFilePath);
 				break;

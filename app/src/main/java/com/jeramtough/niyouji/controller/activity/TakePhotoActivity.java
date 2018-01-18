@@ -90,7 +90,7 @@ public class TakePhotoActivity extends AliCameraActivity
 				{
 					String photoName = "JPEG_" + System.currentTimeMillis() + ".jpg";
 					File file = new File(
-							AppConfig.getImagesDirectory() + File.separator + photoName);
+							AppConfig.getImagesDirectory(this) + File.separator + photoName);
 					BitmapUtil.saveBitmapToLocal(bitmapOfPhoto, file, 40);
 					
 					Intent intent = this.getIntent();

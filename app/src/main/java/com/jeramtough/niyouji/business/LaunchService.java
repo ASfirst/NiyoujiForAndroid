@@ -7,6 +7,7 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.jtandroid.java.ExtractedZip;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.app.AppConfig;
 import org.apache.commons.io.IOUtils;
 
@@ -53,13 +54,13 @@ public class LaunchService implements LaunchBusiness
 	@Override
 	public void createAppDirectory(Activity activity)
 	{
-		Directory appDirectory = new Directory(AppConfig.getAppDirecotry());
+		Directory appDirectory = new Directory(AppConfig.getAppDirecotry(activity));
 		
 		Directory filtersDirectory = new Directory(AppConfig.getFiltersDirectory(activity));
 		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory(activity));
 		Directory pwThemesDirectory = new Directory(AppConfig.getPwThemesDirectory(activity));
-		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory());
-		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory());
+		Directory videosDirectory = new Directory(AppConfig.getVideosDirectory(activity));
+		Directory imagesDirectory = new Directory(AppConfig.getImagesDirectory(activity));
 		
 		if (!videosDirectory.exists())
 		{
@@ -82,7 +83,7 @@ public class LaunchService implements LaunchBusiness
 			unZipFile(activity, musicsDirectory, musicsFileName);
 		}
 		//!pwThemesDirectory.exists()
-		if (true)
+		if (!pwThemesDirectory.exists())
 		{
 			String pwthemesFileName = "pwthemes.zip";
 			unZipFile(activity, pwThemesDirectory, pwthemesFileName);
@@ -95,7 +96,8 @@ public class LaunchService implements LaunchBusiness
 	{
 		resourceDirectory.mkdirs();
 		
-		File zipFile = new File(AppConfig.getAppDirecotry() + File.separator + zipFileName);
+		File zipFile =
+				new File(AppConfig.getAppDirecotry(activity) + File.separator + zipFileName);
 		try
 		{
 			zipFile.createNewFile();
