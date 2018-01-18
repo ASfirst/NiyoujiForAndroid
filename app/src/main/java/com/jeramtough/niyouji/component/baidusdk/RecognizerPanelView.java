@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.ui;
+package com.jeramtough.niyouji.component.baidusdk;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -91,7 +91,7 @@ public class RecognizerPanelView extends FrameLayout
 	@Override
 	public void onRecognizePartial(String text)
 	{
-		textViewRecognisingInfo.setText("识别中");
+		textViewRecognisingInfo.setText("识别中:"+text);
 		if (recognizerPanelListener != null)
 		{
 			recognizerPanelListener.onRecognizePartial(text);
@@ -101,7 +101,7 @@ public class RecognizerPanelView extends FrameLayout
 	@Override
 	public void onRecognizeFinish(String text)
 	{
-		textViewRecognisingInfo.setText("识别完成一句话");
+		textViewRecognisingInfo.setText("识别完成一句话\n请继续说话...");
 		if (recognizerPanelListener != null)
 		{
 			recognizerPanelListener.onRecognizeFinish(text);

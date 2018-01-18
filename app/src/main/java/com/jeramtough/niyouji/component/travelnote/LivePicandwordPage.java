@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.jeramtough.jtandroid.listener.OnTextChangedListner;
 import com.jeramtough.jtemoji.*;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.PicAndWordTheme;
-import com.jeramtough.niyouji.component.ui.RecognizerPanelView;
+import com.jeramtough.niyouji.component.baidusdk.RecognizerPanelView;
 import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
@@ -56,9 +55,6 @@ public class LivePicandwordPage
 	private int currentThemePosition = 0;
 	private boolean isInitTheme=true;
 	private boolean isResetTheme=false;
-	
-	private String currentText;
-	private String voiseText;
 	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler,
@@ -244,8 +240,12 @@ public class LivePicandwordPage
 	@Override
 	public void onClickEmoji(int position, JtEmoji jtEmoji)
 	{
-		this.setTravelnoteContentWithEmojiStr(
-				editTravelnotePageContent.getText().toString() + jtEmoji.getPlaceholder());
+		SpannableString spannableString = JtEmojiUtils
+				.getEmotionContent(viewGroup.getContext(), editTravelnotePageContent,
+						JtEmojisHandler.getJtEmojisHandler(), jtEmoji.getPlaceholder());
+		editTravelnotePageContent.append(spannableString);
+		//输入选择光标移动到最后
+		editTravelnotePageContent.setSelection(editTravelnotePageContent.getText().length());
 	}
 	
 	@Override
@@ -257,19 +257,12 @@ public class LivePicandwordPage
 	@Override
 	public void onRecognizePartial(String text)
 	{
-		voiseText = text;
-		if (currentText == null)
-		{
-			currentText = editTravelnotePageContent.getText().toString();
-		}
-		this.setTravelnoteContentWithEmojiStr(currentText + voiseText);
 	}
 	
 	@Override
 	public void onRecognizeFinish(String text)
 	{
-		currentText = currentText + text + "，";
-		this.setTravelnoteContentWithEmojiStr(currentText);
+		editTravelnotePageContent.append(text+"，");
 	}
 	
 	@Override
@@ -379,17 +372,24 @@ public class LivePicandwordPage
 	}
 	
 	
-	private void setTravelnoteContentWithEmojiStr(String contentWithEmojiStr)
+	/*private void setTravelnoteContentWithEmojiStr(String contentWithAllEmojiStr)
 	{
+		editTravelnotePageContent.selectAll();
+		int action = KeyEvent.ACTION_DOWN;
+		int code = KeyEvent.KEYCODE_DEL;
+		KeyEvent event = new KeyEvent(action, code);
+		//抛给系统处理了
+		editTravelnotePageContent.onKeyDown(KeyEvent.KEYCODE_DEL, event);
+		
 		SpannableString spannableString = JtEmojiUtils
 				.getEmotionContent(viewGroup.getContext(), editTravelnotePageContent,
-						JtEmojisHandler.getJtEmojisHandler(), contentWithEmojiStr);
+						JtEmojisHandler.getJtEmojisHandler(), contentWithAllEmojiStr);
 		
 		editTravelnotePageContent.setText(spannableString);
 		
 		//输入选择光标移动到最后
 		editTravelnotePageContent.setSelection(editTravelnotePageContent.getText().length());
-	}
+	}*/
 	
 	private Message processMessageOfChangingText(boolean isAdded, String words, int start)
 	{
