@@ -2,13 +2,13 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
 
 /**
  * @author 11718
- *         on 2018  January 18 Thursday 03:01.
+ *         on 2018  January 18 Thursday 02:58.
  */
 
-public class PageSetBackgroundMusicCommand extends PerformerCommand
+public class PageSetImageCommand extends PerformerCommand
 {
 	private int position;
-	private String musicPath;
+	private String imageUrl;
 	
 	public int getPosition()
 	{
@@ -20,13 +20,13 @@ public class PageSetBackgroundMusicCommand extends PerformerCommand
 		this.position = position;
 	}
 	
-	public String getMusicPath()
+	public String getImageUrl()
 	{
-		return musicPath;
+		return imageUrl;
 	}
 	
-	public void setMusicPath(String musicPath)
+	public void setImageUrl(String imageUrl)
 	{
-		this.musicPath = musicPath;
+		this.imageUrl = imageUrl;
 	}
 }

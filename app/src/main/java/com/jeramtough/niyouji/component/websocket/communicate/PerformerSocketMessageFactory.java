@@ -2,11 +2,8 @@ package com.jeramtough.niyouji.component.websocket.communicate;
 
 import com.alibaba.fastjson.JSON;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.AddPageCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.DeletePageCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.SelectPageCommand;
 
 /**
  * @author 11718
@@ -22,7 +19,8 @@ public class PerformerSocketMessageFactory
 		return socketMessage;
 	}
 	
-	public static SocketMessage processSelectPageSocketMessage(SelectPageCommand selectPageCommand)
+	public static SocketMessage processSelectPageSocketMessage(
+			SelectPageCommand selectPageCommand)
 	{
 		SocketMessage socketMessage = new SocketMessage();
 		socketMessage.setCommandAction(PerformerCommandActions.SELECTED_PAGE);
@@ -42,13 +40,87 @@ public class PerformerSocketMessageFactory
 		return socketMessage;
 	}
 	
-	public static SocketMessage processDeletedPageSocketMessage(DeletePageCommand deletePageCommand)
+	public static SocketMessage processDeletedPageSocketMessage(
+			DeletePageCommand deletePageCommand)
 	{
 		SocketMessage socketMessage = new SocketMessage();
-		socketMessage.setCommandAction(PerformerCommandActions.ADDED_PAGE);
+		socketMessage.setCommandAction(PerformerCommandActions.DELETED_PAGE);
 		
 		socketMessage.setCommand(JSON.toJSONString(deletePageCommand));
 		
 		return socketMessage;
 	}
+	
+	public static SocketMessage processPageSetImageSocketMessage(
+			PageSetImageCommand pageSetImageCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PAGE_SET_IMAGE);
+		
+		socketMessage.setCommand(JSON.toJSONString(pageSetImageCommand));
+		
+		return socketMessage;
+	}
+	
+	public static SocketMessage processPageSetVideoSocketMessage(
+			PageSetVideoCommand pageSetVideoCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PAGE_SET_VIDEO);
+		
+		socketMessage.setCommand(JSON.toJSONString(pageSetVideoCommand));
+		return socketMessage;
+	}
+	
+	public static SocketMessage processPageSetThemeCommandSSocketMessage(
+			PageSetThemeCommand pageSetThemeCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PAGE_SET_THEME);
+		
+		socketMessage.setCommand(JSON.toJSONString(pageSetThemeCommand));
+		return socketMessage;
+	}
+	
+	public static SocketMessage processPageSetBackgroundMusicCommandSocketMessage(
+			PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PAGE_SET_BACKGROUND_MUSIC);
+		
+		socketMessage.setCommand(JSON.toJSONString(pageSetBackgroundMusicCommand));
+		return socketMessage;
+	}
+	
+	public static SocketMessage processSendPerformerBarrageCommandSocketMessage(
+			SendPerformerBarrageCommand sendPerformerBarrageCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.SENT_PERFORMER_BARRAGE);
+		
+		socketMessage.setCommand(JSON.toJSONString(sendPerformerBarrageCommand));
+		return socketMessage;
+	}
+	
+	public static SocketMessage processPageTextChangeCommandSocketMessage(
+			PageTextChangeCommand pageSetVideoCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PAGE_TEXT_CHANGED);
+		
+		socketMessage.setCommand(JSON.toJSONString(pageSetVideoCommand));
+		return socketMessage;
+	}
+	
+	public static SocketMessage processTravelnoteEndCommandSocketMessage(
+			TravelnoteEndCommand travelnoteEndCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.TRAVELNOTE_END);
+		
+		socketMessage.setCommand(JSON.toJSONString(travelnoteEndCommand));
+		return socketMessage;
+	}
+	
+	
 }

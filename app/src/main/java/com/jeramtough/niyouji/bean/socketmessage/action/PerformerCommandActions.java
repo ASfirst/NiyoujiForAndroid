@@ -13,7 +13,7 @@ public class PerformerCommandActions
 	
 	public static final int ADDED_PAGE = BASE + 2;
 	
-	public static final int DELETEED_PAGE = BASE + 3;
+	public static final int DELETED_PAGE = BASE + 3;
 	
 	public static final int PAGE_SET_IMAGE = BASE + 4;
 	
