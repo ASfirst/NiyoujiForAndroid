@@ -7,6 +7,7 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
 
 public class AddPageCommand
 {
+	private String performerId;
 	private String createTime;
 	private String pageType;
 	private int themePosition;
@@ -41,4 +42,13 @@ public class AddPageCommand
 		this.themePosition = themePosition;
 	}
 	
+	public String getPerformerId()
+	{
+		return performerId;
+	}
+	
+	public void setPerformerId(String performerId)
+	{
+		this.performerId = performerId;
+	}
 }

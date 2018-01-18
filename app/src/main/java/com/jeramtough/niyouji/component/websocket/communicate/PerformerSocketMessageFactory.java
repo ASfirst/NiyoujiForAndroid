@@ -22,13 +22,15 @@ public class PerformerSocketMessageFactory
 		return socketMessage;
 	}
 	
-	public static SocketMessage processSelectPageSocketMessage(int position)
+	public static SocketMessage processSelectPageSocketMessage(String performerId,
+			int position)
 	{
 		SocketMessage socketMessage = new SocketMessage();
 		socketMessage.setCommandAction(PerformerCommandActions.SELECTED_PAGE);
 		
 		SelectPageCommand selectPageCommand = new SelectPageCommand();
 		selectPageCommand.setPosition(position);
+		selectPageCommand.setPerformerId(performerId);
 		
 		socketMessage.setCommand(JSON.toJSONString(selectPageCommand));
 		
@@ -45,13 +47,16 @@ public class PerformerSocketMessageFactory
 		return socketMessage;
 	}
 	
-	public static SocketMessage processDeletedPageSocketMessage(int position)
+	public static SocketMessage processDeletedPageSocketMessage(String performerId,
+			int position)
 	{
 		DeletePageCommand deletePageCommand = new DeletePageCommand();
 		deletePageCommand.setPosition(position);
+		deletePageCommand.setPerformerId(performerId);
 		
 		SocketMessage socketMessage = new SocketMessage();
 		socketMessage.setCommandAction(PerformerCommandActions.ADDED_PAGE);
+		
 		
 		socketMessage.setCommand(JSON.toJSONString(deletePageCommand));
 		

@@ -68,8 +68,8 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void spreadTravelnoteSelectedPage(int position)
 	{
-		SocketMessage socketMessage =
-				PerformerSocketMessageFactory.processSelectPageSocketMessage(position);
+		SocketMessage socketMessage = PerformerSocketMessageFactory
+				.processSelectPageSocketMessage(appUser.getUserId(), position);
 		
 		executorService.submit(() ->
 		{
@@ -83,6 +83,7 @@ public class PerformingService1 implements PerformingBusiness1
 		AddPageCommand addPageCommand = new AddPageCommand();
 		addPageCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
 		addPageCommand.setPageType(liveTravelnotePageView.getTravelnotePageType().toString());
+		addPageCommand.setPerformerId(appUser.getUserId());
 		
 		if (liveTravelnotePageView.getTravelnotePageType() == TravelnotePageType.PICANDWORD)
 		{
@@ -104,8 +105,8 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void spreadTravelnoteDeletedPage(int position)
 	{
-		SocketMessage socketMessage =
-				PerformerSocketMessageFactory.processDeletedPageSocketMessage(position);
+		SocketMessage socketMessage = PerformerSocketMessageFactory
+				.processDeletedPageSocketMessage(appUser.getUserId(), position);
 		
 		executorService.submit(() ->
 		{

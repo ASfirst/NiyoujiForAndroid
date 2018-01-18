@@ -8,6 +8,7 @@ package com.jeramtough.niyouji.bean.socketmessage.command.performer;
 public class SelectPageCommand
 {
 	private int position;
+	private String performerId;
 	
 	public int getPosition()
 	{
@@ -17,5 +18,15 @@ public class SelectPageCommand
 	public void setPosition(int position)
 	{
 		this.position = position;
+	}
+	
+	public String getPerformerId()
+	{
+		return performerId;
+	}
+	
+	public void setPerformerId(String performerId)
+	{
+		this.performerId = performerId;
 	}
 }
