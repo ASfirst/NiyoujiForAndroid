@@ -1,6 +1,8 @@
 package com.jeramtough.jtandroid.controller.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,12 +18,15 @@ import android.view.ViewGroup;
 public abstract class JtBaseFragment extends Fragment implements View.OnClickListener
 {
 	private View view;
+	private Handler fragmentHandler;
 	
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 			@Nullable Bundle savedInstanceState)
 	{
+		fragmentHandler=new FragmentHandler();
+		
 		view = inflater.inflate(loadFragmentLayoutId(), null);
 		return view;
 	}
@@ -42,5 +47,25 @@ public abstract class JtBaseFragment extends Fragment implements View.OnClickLis
 	public void onClick(View v, int viewId)
 	{
 	
+	}
+	
+	public void handleFragmentMessage(Message message)
+	{
+	}
+	
+	public Handler getFragmentHandler()
+	{
+		return fragmentHandler;
+	}
+	
+	//{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}
+	private class FragmentHandler extends Handler
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			super.handleMessage(msg);
+			handleFragmentMessage(msg);
+		}
 	}
 }

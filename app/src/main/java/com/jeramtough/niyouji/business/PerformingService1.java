@@ -10,7 +10,7 @@ import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
-import com.jeramtough.niyouji.component.websocket.communicate.PerformerSocketMessageFactory;
+import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;

@@ -3,7 +3,6 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.AppCompatImageView;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
@@ -112,13 +110,13 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				layoutWaitingCreateTravelnote.setVisibility(View.VISIBLE);
 				
 				BusinessCaller createBusinessCaller =
-						new BusinessCaller(getActivityUiHandler(),
+						new BusinessCaller(getActivityHandler(),
 								BUSINESS_CODE_CREATE_TRAVELNOTE);
 				BusinessCaller connectBusinessCaller =
-						new BusinessCaller(getActivityUiHandler(),
+						new BusinessCaller(getActivityHandler(),
 								BUSINESS_CODE_CONNECT_SERVER);
 				BusinessCaller uploadBusinessCaller =
-						new BusinessCaller(getActivityUiHandler(),
+						new BusinessCaller(getActivityHandler(),
 								BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
 				
 				createTravelnoteBusiness

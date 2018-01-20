@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.websocket;
 
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
+import com.jeramtough.niyouji.component.app.AppConfig;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,7 +10,7 @@ import java.net.URISyntaxException;
 public class PerformerWebSocketClient extends BaseWebSocketClient
 {
 	private static final String socketHandlerUrl =
-			"ws://192.168.0.117:8080/niyouji/performerHandler" + ".do";
+			"ws://" + AppConfig.SERVER_HOST + "/niyouji/performerHandler" + ".do";
 	
 	public PerformerWebSocketClient() throws URISyntaxException
 	{

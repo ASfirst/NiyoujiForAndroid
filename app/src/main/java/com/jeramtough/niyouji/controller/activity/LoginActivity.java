@@ -87,7 +87,7 @@ public class LoginActivity extends AppBaseActivity
 						loginBusiness.checkInputtingIsLegal(loginInfo);
 				if (inputtingLegality.isPassed())
 				{
-					loginBusiness.login(loginInfo, getActivityUiHandler());
+					loginBusiness.login(loginInfo, getActivityHandler());
 					loginBusiness.rememberLoginInfo(loginInfo);
 				}
 				else

@@ -5,10 +5,15 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import com.jeramtough.jtandroid.adapter.ViewsAdapter;
+import com.jeramtough.jtandroid.ioc.annotation.InjectView;
+import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.controller.activity.PerformingActivity;
+import com.jeramtough.niyouji.controller.activity.TestActivity;
 import com.jeramtough.pullrefreshing.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -19,10 +24,15 @@ import java.util.ArrayList;
  */
 
 public class DiscoverFragment extends AppBaseFragment
-		implements PullToRefreshView.OnRefreshListener
 {
-	private PullToRefreshView pullToRefresh;
-	private GridView gridView;
+	@InjectView(R.id.btn_test1)
+	private Button btnTest1;
+	
+	@InjectView(R.id.btn_test2)
+	private Button btnTest2;
+	
+	@InjectView(R.id.btn_test3)
+	private Button btnTest3;
 	
 	
 	@Override
@@ -34,57 +44,27 @@ public class DiscoverFragment extends AppBaseFragment
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
 	{
-		super.onViewCreated(view, savedInstanceState);
-		pullToRefresh = findViewById(R.id.pull_to_refresh);
-		gridView = findViewById(R.id.gridView);
+		getIocContainer().injectView(getContext(), this);
+		btnTest1.setOnClickListener(this);
+		btnTest2.setOnClickListener(this);
+		btnTest3.setOnClickListener(this);
 		
-		pullToRefresh.setOnRefreshListener(this);
-		
-		initResources();
-	}
-	
-	protected void initResources()
-	{
-		ArrayList<View> views = new ArrayList<>();
-		for (int i = 0; i < 8; i++)
-		{
-			ViewGroup viewGroup = (ViewGroup) getActivity().getLayoutInflater()
-					.inflate(R.layout.adapter_travelnote_covers, null);
-			ImageView imageViewTravelnoteCover =
-					viewGroup.findViewById(R.id.imageView_travelnote_cover);
-			int random=(int)(Math.random()*3);
-			switch (random)
-			{
-				case 0:
-					imageViewTravelnoteCover.setBackgroundResource(R.mipmap.temp);
-					break;
-				case 1:
-					imageViewTravelnoteCover.setBackgroundResource(R.mipmap.temp1);
-					break;
-				case 2:
-					imageViewTravelnoteCover.setBackgroundResource(R.mipmap.temp2);
-					break;
-			}
-			
-			views.add(viewGroup);
-		}
-		ViewsAdapter adapter = new ViewsAdapter(views);
-		ArrayAdapter<String> adapter1 =
-				new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,
-						new String[]{"a", "b", "c", "d", "e", "f"});
-		gridView.setAdapter(adapter);
 	}
 	
 	@Override
-	public void onRefresh()
+	public void onClick(View v, int viewId)
 	{
-		pullToRefresh.postDelayed(() ->
+		switch (viewId)
 		{
-			initResources();
-			pullToRefresh.setRefreshing(false);
-			
-		}, 2000);
+			case R.id.btn_test1:
+				IntentUtil.toTheOtherActivity(this.getActivity(), PerformingActivity.class);
+				break;
+			case R.id.btn_test2:
+				IntentUtil.toTheOtherActivity(this.getActivity(), TestActivity.class);
+				break;
+			case R.id.btn_test3:
+				break;
+		}
 	}
-	
 	//***********************************************
 }

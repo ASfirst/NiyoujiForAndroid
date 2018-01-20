@@ -54,7 +54,7 @@ dependencies {
     //java开源jar
     implementation 'com.google.code.findbugs:jsr305:3.0.0'
     implementation 'pub.devrel:easypermissions:0.2.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
     implementation 'com.squareup.okio:okio:1.12.0'
     implementation 'com.google.code.gson:gson:2.8.0'

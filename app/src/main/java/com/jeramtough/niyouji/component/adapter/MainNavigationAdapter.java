@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import com.jeramtough.niyouji.controller.fragment.DiscoverFragment;
-import com.jeramtough.niyouji.controller.fragment.PerformanceFragment;
+import com.jeramtough.niyouji.controller.fragment.PerformingFragment;
 
 /**
  * @author 11718
@@ -14,13 +14,13 @@ import com.jeramtough.niyouji.controller.fragment.PerformanceFragment;
 public class MainNavigationAdapter extends FragmentPagerAdapter
 {
 	private DiscoverFragment discoverFragment;
-	private PerformanceFragment performanceFragment;
+	private PerformingFragment performingFragment;
 	
 	public MainNavigationAdapter(FragmentManager fm)
 	{
 		super(fm);
 		discoverFragment = new DiscoverFragment();
-		performanceFragment = new PerformanceFragment();
+		performingFragment = new PerformingFragment();
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class MainNavigationAdapter extends FragmentPagerAdapter
 		}
 		else
 		{
-			return performanceFragment;
+			return performingFragment;
 		}
 	}
 	

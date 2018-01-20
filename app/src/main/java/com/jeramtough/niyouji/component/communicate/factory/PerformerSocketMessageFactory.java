@@ -1,4 +1,4 @@
-package com.jeramtough.niyouji.component.websocket.communicate;
+package com.jeramtough.niyouji.component.communicate.factory;
 
 import com.alibaba.fastjson.JSON;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;

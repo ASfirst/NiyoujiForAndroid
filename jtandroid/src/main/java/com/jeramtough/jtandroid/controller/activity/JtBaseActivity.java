@@ -14,13 +14,13 @@ import android.view.View;
 
 public abstract class JtBaseActivity extends AppCompatActivity implements View.OnClickListener
 {
-	private ActivityUiHandler activityUiHandler;
+	private ActivityHandler activityHandler;
 	
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		activityUiHandler = new ActivityUiHandler();
+		activityHandler = new ActivityHandler();
 	}
 	
 	@Override
@@ -39,13 +39,13 @@ public abstract class JtBaseActivity extends AppCompatActivity implements View.O
 	{
 	}
 	
-	public Handler getActivityUiHandler()
+	public Handler getActivityHandler()
 	{
-		return activityUiHandler;
+		return activityHandler;
 	}
 	
 	//{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}
-	private class ActivityUiHandler extends Handler
+	private class ActivityHandler extends Handler
 	{
 		@Override
 		public void handleMessage(Message msg)

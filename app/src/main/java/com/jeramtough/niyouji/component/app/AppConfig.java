@@ -15,6 +15,8 @@ public class AppConfig
 {
 	public static final String APP_DIRECTORY_NAME = "niyouji";
 	
+	public static final String SERVER_HOST="192.168.0.117:8080";
+	
 	public static String getAppDirecotry(Context context)
 	{
 		boolean sdCardExist = Environment.getExternalStorageState()

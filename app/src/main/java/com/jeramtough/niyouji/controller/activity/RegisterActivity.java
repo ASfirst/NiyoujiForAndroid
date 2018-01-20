@@ -77,7 +77,7 @@ public class RegisterActivity extends AppBaseActivity
 				break;
 			case R.id.button_request_verification_code:
 				registerBusiness.requestVerificationCode(editPhoneNumber.getText().toString(),
-						getActivityUiHandler());
+						getActivityHandler());
 				afterSentVerificationCode();
 				break;
 			case R.id.button_register_user:
@@ -91,7 +91,7 @@ public class RegisterActivity extends AppBaseActivity
 				{
 					registerInfo
 							.setVerificationCode(editVerificationCode.getText().toString());
-					registerBusiness.registerNewUser(registerInfo, getActivityUiHandler());
+					registerBusiness.registerNewUser(registerInfo, getActivityHandler());
 				}
 				else
 				{

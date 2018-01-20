@@ -3,24 +3,25 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#00ffff"
+        >
 
-    <com.jeramtough.pullrefreshing.PullToRefreshView
-            android:id="@+id/pull_to_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
+    <Button
+            android:id="@+id/btn_test1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test1"/>
 
-        <GridView
-                android:id="@+id/gridView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:numColumns="2"
-                android:horizontalSpacing="7dp"
-                android:verticalSpacing="7dp"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                />
+    <Button
+            android:id="@+id/btn_test2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test2"/>
 
-    </com.jeramtough.pullrefreshing.PullToRefreshView>
-
+    <Button
+            android:id="@+id/btn_test3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test3"/>
 </LinearLayout>
