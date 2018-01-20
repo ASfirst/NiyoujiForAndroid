@@ -1,15 +1,15 @@
 package com.jeramtough.niyouji.component.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
+import com.jeramtough.niyouji.component.app.GlideApp;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 	@Override
 	public int getCount()
 	{
-		return liveTravelnoteCovers.length;
+		return liveTravelnoteCovers.length == 0 ? 1 : liveTravelnoteCovers.length;
 	}
 	
 	@Override
@@ -68,6 +68,8 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 					convertView.findViewById(R.id.textView_performer_name);
 			viewsHolder.textViewAttentionsCount =
 					convertView.findViewById(R.id.textView_attentions_count);
+			viewsHolder.textViewNoLiveTravelnote =
+					convertView.findViewById(R.id.textView_no_live_travelnote);
 			
 			convertView.setTag(viewsHolder);
 		}
@@ -76,23 +78,28 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 			viewsHolder = (ViewsHolder) convertView.getTag();
 		}
 		
-		LiveTravelnoteCover liveTravelnoteCover = liveTravelnoteCovers[position];
-		viewsHolder.textViewPerformerName.setText(liveTravelnoteCover.getPerformerId());
-		viewsHolder.textViewTravelnoteTitle.setText(liveTravelnoteCover.getTravelnoteTitle());
-		viewsHolder.textViewAttentionsCount
-				.setText(liveTravelnoteCover.getAttentionsCount() + "");
-		
-		if (Objects.equals(liveTravelnoteCover.getCoverType(),
-				TravelnoteResourceTypes.IMAGE.toString()))
+		if (liveTravelnoteCovers.length!=0)
 		{
-			//load image
-			Glide.with(convertView).load(liveTravelnoteCover.getCoverResourceUrl())
-					.into(viewsHolder.imageViewTravelnoteCover);
+			LiveTravelnoteCover liveTravelnoteCover = liveTravelnoteCovers[position];
+			viewsHolder.textViewPerformerName.setText(liveTravelnoteCover.getPerformerNickname());
+			viewsHolder.textViewTravelnoteTitle.setText(liveTravelnoteCover.getTravelnoteTitle());
+			viewsHolder.textViewAttentionsCount
+					.setText(liveTravelnoteCover.getAttentionsCount() + "");
+			
+			if (Objects.equals(liveTravelnoteCover.getCoverType(), TravelnoteResourceTypes.IMAGE.toString()))
+			{
+				//load image
+				GlideApp.with(context).load(liveTravelnoteCover.getCoverResourceUrl()).placeholder(R.drawable.ic_image).error(R.drawable.ic_broken_image)
+						.centerCrop().into(viewsHolder.imageViewTravelnoteCover);
+			}
+			else if (Objects.equals(liveTravelnoteCover.getCoverType(), TravelnoteResourceTypes.VIDEO.toString()))
+			{
+				//load video
+			}
 		}
-		else if (Objects.equals(liveTravelnoteCover.getCoverType(),
-				TravelnoteResourceTypes.VIDEO.toString()))
+		else
 		{
-			//load video
+			viewsHolder.textViewNoLiveTravelnote.setVisibility(View.VISIBLE);
 		}
 		return convertView;
 	}
@@ -100,9 +107,10 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 	//{{{{{{{{}}}}}}}}}}
 	private class ViewsHolder
 	{
-		ImageView imageViewTravelnoteCover;
+		AppCompatImageView imageViewTravelnoteCover;
 		TextView textViewTravelnoteTitle;
 		TextView textViewPerformerName;
 		TextView textViewAttentionsCount;
+		TextView textViewNoLiveTravelnote;
 	}
 }

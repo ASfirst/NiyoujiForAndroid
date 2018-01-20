@@ -5,6 +5,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.TextView;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtlog3.P;
@@ -68,11 +69,22 @@ public class PerformingFragment extends AppBaseFragment
 		{
 			case BUSINESS_CODE_OBTAIN_TRAVELNOTE_COVERS:
 				LiveTravelnoteCover[] liveTravelnoteCovers =
-						(LiveTravelnoteCover[]) message.getData().getSerializable("liveTravelnoteCovers");
+						(LiveTravelnoteCover[]) message.getData()
+								.getSerializable("liveTravelnoteCovers");
 				if (liveTravelnoteCovers != null)
 				{
-					LiveTravelnoteCoverAdapter liveTravelnoteCoverAdapter=new
-							LiveTravelnoteCoverAdapter(getContext(),liveTravelnoteCovers);
+					LiveTravelnoteCoverAdapter liveTravelnoteCoverAdapter =
+							new LiveTravelnoteCoverAdapter(getContext(), liveTravelnoteCovers);
+					
+					if (liveTravelnoteCovers.length==0)
+					{
+						gridView.setNumColumns(1);
+					}
+					else
+					{
+						gridView.setNumColumns(2);
+					}
+					
 					gridView.setAdapter(liveTravelnoteCoverAdapter);
 					pullToRefresh.setRefreshing(false);
 				}
