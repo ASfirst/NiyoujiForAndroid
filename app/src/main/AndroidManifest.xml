@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
         xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.jeramtough.niyouji">
+        package="com.jeramtough.niyouji"
+        >
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -22,7 +23,8 @@
     <uses-feature android:name="android.hardware.location.gps"/>
     <uses-feature
             android:name="android.hardware.camera"
-            android:required="false"/>
+            android:required="false"
+            />
 
     <!-- To auto-complete the email text field in setPrimaryInfoOfUserogin form with primaryInfoOfUseruser's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -35,29 +37,36 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            >
         <meta-data
                 android:name="com.baidu.speech.APP_ID"
-                android:value="10570926"/>
+                android:value="10570926"
+                />
         <meta-data
                 android:name="com.baidu.speech.API_KEY"
-                android:value="fN5CsYOw6OUrj6jR93S8fMdc"/>
+                android:value="fN5CsYOw6OUrj6jR93S8fMdc"
+                />
         <meta-data
                 android:name="com.baidu.speech.SECRET_KEY"
-                android:value="b5NWSGk5pUTwje4IGXMPBxF403TkawhQ"/>
+                android:value="b5NWSGk5pUTwje4IGXMPBxF403TkawhQ"
+                />
 
         <service
                 android:name="com.baidu.speech.VoiceRecognitionService"
-                android:exported="false"/>
+                android:exported="false"
+                />
 
         <activity
                 android:name=".controller.activity.MainActivity"
                 android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.LaunchActivity"
-                android:label="@string/app_name">
+                android:label="@string/app_name"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -68,32 +77,41 @@
                 android:name=".controller.activity.VideoActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_camera"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.CreateTravelnoteActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.TakePhotoActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.PerformingActivity"
                 android:theme="@style/AppTheme.NoActionBar"
-                android:windowSoftInputMode="adjustPan">
+                android:windowSoftInputMode="adjustPan"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.TestActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.LoginActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
         <activity
                 android:name=".controller.activity.RegisterActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                >
+        </activity>
+        <activity android:name=".controller.activity.AudienceActivity">
         </activity>
     </application>
 

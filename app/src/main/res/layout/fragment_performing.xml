@@ -22,4 +22,11 @@
 
     </com.jeramtough.pullrefreshing.PullToRefreshView>
 
+    <com.jeramtough.jtandroid.ui.TimedCloseTextView
+            android:id="@+id/timedCloseTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="21sp"/>
+
 </FrameLayout>

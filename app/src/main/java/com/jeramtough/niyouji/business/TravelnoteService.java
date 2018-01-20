@@ -1,7 +1,9 @@
 package com.jeramtough.niyouji.business;
 
+import android.content.Context;
 import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.function.NetworkIsAble;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
@@ -15,19 +17,28 @@ import java.util.concurrent.*;
  *         on 2018  January 20 Saturday 17:22.
  */
 @JtService
-public class PerformingService2 implements PerformingBusiness2
+public class TravelnoteService implements TravelnoteBusiness
 {
 	private NiyoujiHttpClient niyoujiHttpClient;
 	private ExecutorService executorService;
+	private NetworkIsAble networkIsAble;
 	
 	@IocAutowire
-	public PerformingService2(NiyoujiHttpClient niyoujiHttpClient)
+	public TravelnoteService(NiyoujiHttpClient niyoujiHttpClient, NetworkIsAble networkIsAble)
 	{
 		this.niyoujiHttpClient = niyoujiHttpClient;
+		this.networkIsAble = networkIsAble;
+		
 		executorService = new ThreadPoolExecutor(0, 1, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
 	}
 	
+	
+	@Override
+	public boolean checkTheNetwork(Context context)
+	{
+		return networkIsAble.isNetworkConnected(context);
+	}
 	
 	@Override
 	public void getTravelnoteCovers(BusinessCaller businessCaller)

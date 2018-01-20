@@ -39,6 +39,7 @@ public class TimedCloseTextView extends android.support.v7.widget.AppCompatTextV
 			public void run()
 			{
 				TimedCloseTextView.this.setVisibility(View.GONE);
+				setPrimaryMessage("");
 			}
 		}, time);
 	}

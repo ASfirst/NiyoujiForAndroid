@@ -4,16 +4,18 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtlog3.P;
+import com.jeramtough.jtandroid.ui.TimedCloseTextView;
+import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
-import com.jeramtough.niyouji.business.PerformingBusiness2;
-import com.jeramtough.niyouji.business.PerformingService2;
+import com.jeramtough.niyouji.business.TravelnoteBusiness;
+import com.jeramtough.niyouji.business.TravelnoteService;
 import com.jeramtough.niyouji.component.adapter.LiveTravelnoteCoverAdapter;
+import com.jeramtough.niyouji.controller.activity.AudienceActivity;
 import com.jeramtough.pullrefreshing.PullToRefreshView;
 
 /**
@@ -22,15 +24,18 @@ import com.jeramtough.pullrefreshing.PullToRefreshView;
  */
 
 public class PerformingFragment extends AppBaseFragment
-		implements PullToRefreshView.OnRefreshListener
+		implements PullToRefreshView.OnRefreshListener, AdapterView.OnItemClickListener
 {
 	private static final int BUSINESS_CODE_OBTAIN_TRAVELNOTE_COVERS = 0;
 	
 	private PullToRefreshView pullToRefresh;
 	private GridView gridView;
+	private TimedCloseTextView timedCloseTextView;
 	
-	@InjectService(service = PerformingService2.class)
-	private PerformingBusiness2 performingBusiness2;
+	private boolean hasLiveTravelnote = false;
+	
+	@InjectService(service = TravelnoteService.class)
+	private TravelnoteBusiness travelnoteBusiness;
 	
 	@Override
 	public int loadFragmentLayoutId()
@@ -44,8 +49,10 @@ public class PerformingFragment extends AppBaseFragment
 		super.onViewCreated(view, savedInstanceState);
 		pullToRefresh = findViewById(R.id.pull_to_refresh);
 		gridView = findViewById(R.id.gridView);
+		timedCloseTextView = findViewById(R.id.timedCloseTextView);
 		
 		pullToRefresh.setOnRefreshListener(this);
+		gridView.setOnItemClickListener(this);
 		
 		initResources();
 	}
@@ -53,13 +60,28 @@ public class PerformingFragment extends AppBaseFragment
 	protected void initResources()
 	{
 		obtainTravelnoteCovers();
-		pullToRefresh.setRefreshing(true);
 	}
 	
 	@Override
 	public void onRefresh()
 	{
 		obtainTravelnoteCovers();
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		if (hasLiveTravelnote)
+		{
+			LiveTravelnoteCoverAdapter adapter =
+					(LiveTravelnoteCoverAdapter) parent.getAdapter();
+			LiveTravelnoteCover liveTravelnoteCover =
+					(LiveTravelnoteCover) adapter.getItem(position);
+			
+			getActivity().getIntent()
+					.putExtra("performerId", liveTravelnoteCover.getPerformerId());
+			IntentUtil.toTheOtherActivity(getActivity(), AudienceActivity.class);
+		}
 	}
 	
 	@Override
@@ -76,13 +98,15 @@ public class PerformingFragment extends AppBaseFragment
 					LiveTravelnoteCoverAdapter liveTravelnoteCoverAdapter =
 							new LiveTravelnoteCoverAdapter(getContext(), liveTravelnoteCovers);
 					
-					if (liveTravelnoteCovers.length==0)
+					if (liveTravelnoteCovers.length == 0)
 					{
 						gridView.setNumColumns(1);
+						hasLiveTravelnote = false;
 					}
 					else
 					{
 						gridView.setNumColumns(2);
+						hasLiveTravelnote = true;
 					}
 					
 					gridView.setAdapter(liveTravelnoteCoverAdapter);
@@ -96,8 +120,19 @@ public class PerformingFragment extends AppBaseFragment
 	//********************************
 	private void obtainTravelnoteCovers()
 	{
-		performingBusiness2.getTravelnoteCovers(new BusinessCaller(getFragmentHandler(),
-				BUSINESS_CODE_OBTAIN_TRAVELNOTE_COVERS));
+		if (travelnoteBusiness.checkTheNetwork(this.getContext()))
+		{
+			travelnoteBusiness.getTravelnoteCovers(new BusinessCaller(getFragmentHandler(),
+					BUSINESS_CODE_OBTAIN_TRAVELNOTE_COVERS));
+			pullToRefresh.setRefreshing(true);
+		}
+		else
+		{
+			timedCloseTextView.setErrorMessage("目前没有可用网络！");
+			timedCloseTextView.closeDelayed(3000);
+			pullToRefresh.setRefreshing(false);
+		}
 	}
+	
 	
 }
