@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
@@ -68,8 +70,8 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 					convertView.findViewById(R.id.textView_performer_name);
 			viewsHolder.textViewAttentionsCount =
 					convertView.findViewById(R.id.textView_attentions_count);
-			viewsHolder.textViewNoLiveTravelnote =
-					convertView.findViewById(R.id.textView_no_live_travelnote);
+			viewsHolder.viewNoLiveTravelnote = convertView.findViewById(R.id
+					.view_no_live_travelnote);
 			
 			convertView.setTag(viewsHolder);
 		}
@@ -80,6 +82,9 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 		
 		if (liveTravelnoteCovers.length!=0)
 		{
+			//移除提示
+			((FrameLayout)convertView).removeView(viewsHolder.viewNoLiveTravelnote);
+			
 			LiveTravelnoteCover liveTravelnoteCover = liveTravelnoteCovers[position];
 			viewsHolder.textViewPerformerName.setText(liveTravelnoteCover.getPerformerNickname());
 			viewsHolder.textViewTravelnoteTitle.setText(liveTravelnoteCover.getTravelnoteTitle());
@@ -99,7 +104,7 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 		}
 		else
 		{
-			viewsHolder.textViewNoLiveTravelnote.setVisibility(View.VISIBLE);
+			viewsHolder.viewNoLiveTravelnote.setVisibility(View.VISIBLE);
 		}
 		return convertView;
 	}
@@ -111,6 +116,6 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 		TextView textViewTravelnoteTitle;
 		TextView textViewPerformerName;
 		TextView textViewAttentionsCount;
-		TextView textViewNoLiveTravelnote;
+		View viewNoLiveTravelnote;
 	}
 }
