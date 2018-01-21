@@ -49,7 +49,7 @@ import java.util.TimerTask;
  *         on 2017  November 30 Thursday 14:45.
  */
 
-public class PerformerLiveTravelnoteHandler extends JtIocHandler
+public class PerformerLiveTravelnoteHandler extends LiveTravelnoteHandler
 		implements ViewPager.OnPageChangeListener, SelectMusicDialog.SelectMusicListener,
 		View.OnTouchListener
 {

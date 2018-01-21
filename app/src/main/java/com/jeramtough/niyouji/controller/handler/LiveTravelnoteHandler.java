@@ -22,27 +22,17 @@ import java.util.ArrayList;
 
 public class LiveTravelnoteHandler extends JtIocHandler
 {
-	protected JtViewPager viewPagerTravelnotePages;
-	
-	
-	protected ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
-	protected LiveTravelnotePageView lastLiveTravelnotePageView;
 	
 	public LiveTravelnoteHandler(Activity activity)
 	{
 		super(activity);
 		
-		viewPagerTravelnotePages = findViewById(R.id.viewPager_travelnote_pages);
 		
 		initResources();
 	}
 	
 	protected void initResources()
 	{
-		liveTravelnotePageViews = new ArrayList<>();
-		
-		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
-		viewPagerTravelnotePages.setAdapter(adapter);
 	}
 	
 	//*************************
