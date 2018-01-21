@@ -8,7 +8,7 @@ import com.jeramtough.niyouji.business.PerformingBusiness1;
 import com.jeramtough.niyouji.business.PerformingService1;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
-import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
+import com.jeramtough.niyouji.controller.handler.PerformerLiveTravelnoteHandler;
 import com.jeramtough.niyouji.controller.handler.TravelnoteWithAudiencesHandler;
 
 /**
@@ -19,7 +19,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	public static final int TAKE_PHOTO_REQUEST_CODE = 0X1;
 	public static final int VIDEO_REQUEST_CODE = 0X2;
 	
-	private LiveTravelnoteNavigationHandler liveTravelnoteNavigationHandler;
+	private PerformerLiveTravelnoteHandler performerLiveTravelnoteHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
 	
 	@InjectService(service = PerformingService1.class)
@@ -32,11 +32,11 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_performing);
 		
-		liveTravelnoteNavigationHandler =
-				new LiveTravelnoteNavigationHandler(this, getSupportFragmentManager());
+		performerLiveTravelnoteHandler =
+				new PerformerLiveTravelnoteHandler(this);
 		travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
 		
-		liveTravelnoteNavigationHandler.setLiveTravelnoteEventsCaller(this);
+		performerLiveTravelnoteHandler.setLiveTravelnoteEventsCaller(this);
 	}
 	
 	@Override
@@ -49,14 +49,14 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		{
 			String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
 			
-			liveTravelnoteNavigationHandler.setPageResourcePath(path);
+			performerLiveTravelnoteHandler.setPageResourcePath(path);
 			
 		}
 		else if (requestCode == VIDEO_REQUEST_CODE &&
 				resultCode == VideoActivity.VIDEO_RESULT_CODE)
 		{
 			String path = data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
-			liveTravelnoteNavigationHandler.setPageResourcePath(path);
+			performerLiveTravelnoteHandler.setPageResourcePath(path);
 		}
 	}
 	
@@ -64,13 +64,13 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		liveTravelnoteNavigationHandler.onDestroy();
+		performerLiveTravelnoteHandler.onDestroy();
 	}
 	
 	@Override
 	public void onBackPressed()
 	{
-		liveTravelnoteNavigationHandler.shutdownForLiveByUseingDialog();
+		performerLiveTravelnoteHandler.shutdownForLiveByUseingDialog();
 	}
 	
 	@Override

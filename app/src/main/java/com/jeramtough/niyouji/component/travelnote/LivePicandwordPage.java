@@ -18,7 +18,7 @@ import com.jeramtough.niyouji.component.baidusdk.RecognizerPanelView;
 import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
-import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
+import com.jeramtough.niyouji.controller.handler.PerformerLiveTravelnoteHandler;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -57,8 +57,7 @@ public class LivePicandwordPage
 	private boolean isResetTheme=false;
 	
 	
-	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler,
-			FragmentManager fragmentManager)
+	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
 	{
 		this.viewGroup = viewGroupPicandwordPage;
 		this.handler = handler;
@@ -120,7 +119,7 @@ public class LivePicandwordPage
 					builder.listener(index ->
 					{
 						handler.sendEmptyMessage(
-								LiveTravelnoteNavigationHandler.SELECT_MUSIC_ACTION);
+								PerformerLiveTravelnoteHandler.SELECT_MUSIC_ACTION);
 					});
 					break;
 				case 2:
@@ -134,7 +133,7 @@ public class LivePicandwordPage
 						editBarrageDialog.setEditBarrageListener((String content) ->
 						{
 							Message message = new Message();
-							message.what = LiveTravelnoteNavigationHandler.SENT_BARRAGE_ACTION;
+							message.what = PerformerLiveTravelnoteHandler.SENT_BARRAGE_ACTION;
 							message.getData().putString("barrageContent", content);
 							handler.sendMessage(message);
 						});
@@ -166,10 +165,10 @@ public class LivePicandwordPage
 		switch (v.getId())
 		{
 			case R.id.view_picture_of_page:
-				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.TAKE_PHOTO_ACTION);
+				handler.sendEmptyMessage(PerformerLiveTravelnoteHandler.TAKE_PHOTO_ACTION);
 				break;
 			case R.id.btn_delete_page:
-				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
+				handler.sendEmptyMessage(PerformerLiveTravelnoteHandler.DELETE_ACTION);
 				break;
 			case R.id.layout_word_function1:
 				if (layoutFunctionsContainer.getChildCount() == 0)
@@ -226,7 +225,7 @@ public class LivePicandwordPage
 		if (!isInitTheme&&!isResetTheme)
 		{
 			Message message = new Message();
-			message.what = LiveTravelnoteNavigationHandler.SELECT_PICANDWORD_THEME_ACTION;
+			message.what = PerformerLiveTravelnoteHandler.SELECT_PICANDWORD_THEME_ACTION;
 			message.getData().putInt("themePosition", position);
 			handler.sendMessage(message);
 		}
@@ -394,7 +393,7 @@ public class LivePicandwordPage
 	private Message processMessageOfChangingText(boolean isAdded, String words, int start)
 	{
 		Message message = new Message();
-		message.what = LiveTravelnoteNavigationHandler.CHANGED_PAGE_TEXT_CONTENT_ACTION;
+		message.what = PerformerLiveTravelnoteHandler.CHANGED_PAGE_TEXT_CONTENT_ACTION;
 		message.getData().putBoolean("isAdded", isAdded);
 		message.getData().putString("words", words);
 		message.getData().putInt("start", start);

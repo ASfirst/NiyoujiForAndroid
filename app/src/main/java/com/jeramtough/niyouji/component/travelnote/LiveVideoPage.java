@@ -10,7 +10,7 @@ import android.widget.VideoView;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ui.UploadTestView;
-import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
+import com.jeramtough.niyouji.controller.handler.PerformerLiveTravelnoteHandler;
 
 
 /**
@@ -51,7 +51,7 @@ public class LiveVideoPage
 		switch (v.getId())
 		{
 			case R.id.btn_delete_page:
-				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.DELETE_ACTION);
+				handler.sendEmptyMessage(PerformerLiveTravelnoteHandler.DELETE_ACTION);
 				break;
 		}
 	}
@@ -69,7 +69,7 @@ public class LiveVideoPage
 		{
 			if (isTouchable)
 			{
-				handler.sendEmptyMessage(LiveTravelnoteNavigationHandler.VIDEO_ACTION);
+				handler.sendEmptyMessage(PerformerLiveTravelnoteHandler.VIDEO_ACTION);
 			}
 		}
 		return true;

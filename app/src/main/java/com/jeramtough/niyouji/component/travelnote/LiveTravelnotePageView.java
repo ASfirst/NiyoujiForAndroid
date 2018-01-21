@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler;
+import com.jeramtough.niyouji.controller.handler.PerformerLiveTravelnoteHandler;
 
 /**
  * @author 11718
@@ -20,7 +20,6 @@ import com.jeramtough.niyouji.controller.handler.LiveTravelnoteNavigationHandler
 public class LiveTravelnotePageView extends FrameLayout implements View.OnClickListener
 {
 	private Handler handler;
-	private FragmentManager fragmentManager;
 	
 	private LayoutInflater inflater;
 	private FrameLayout layoutSelectWhichPage;
@@ -35,11 +34,9 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 	
 	private boolean isActivated = false;
 	
-	public LiveTravelnotePageView(@NonNull Context context, Handler handler,
-			FragmentManager fragmentManager)
+	public LiveTravelnotePageView(@NonNull Context context, Handler handler)
 	{
 		super(context);
-		this.fragmentManager = fragmentManager;
 		this.handler = handler;
 		inflater = (LayoutInflater) getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,12 +77,11 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 					this.addView(viewGroupPicandwordPage);
 					
 					livePicandwordPage =
-							new LivePicandwordPage(viewGroupPicandwordPage, handler,
-									fragmentManager);
+							new LivePicandwordPage(viewGroupPicandwordPage, handler);
 					
 					//回调更新Activity动作
 					handler.sendEmptyMessage(
-							LiveTravelnoteNavigationHandler.ACTIVATE_IMAGE_ACTION);
+							PerformerLiveTravelnoteHandler.ACTIVATE_IMAGE_ACTION);
 					break;
 				case R.id.imageView_video_page:
 					travelnotePageType = TravelnotePageType.VIDEO;
@@ -97,7 +93,7 @@ public class LiveTravelnotePageView extends FrameLayout implements View.OnClickL
 					liveVideoPage = new LiveVideoPage(viewGroupVideoPage, handler);
 					
 					handler.sendEmptyMessage(
-							LiveTravelnoteNavigationHandler.ACTIVATE_VIDEO_ACTION);
+							PerformerLiveTravelnoteHandler.ACTIVATE_VIDEO_ACTION);
 					break;
 			}
 			isActivated = true;

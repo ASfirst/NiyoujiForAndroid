@@ -49,7 +49,7 @@ import java.util.TimerTask;
  *         on 2017  November 30 Thursday 14:45.
  */
 
-public class LiveTravelnoteNavigationHandler extends JtIocHandler
+public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		implements ViewPager.OnPageChangeListener, SelectMusicDialog.SelectMusicListener,
 		View.OnTouchListener
 {
@@ -65,8 +65,6 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	public final static int BUSINESS_CODE_UPDATE_IMAGE_FILE = 0X30;
 	public final static int BUSINESS_CODE_UPDATE_VIDEO_FILE = 0X31;
-	
-	private FragmentManager fragmentManager;
 	
 	private JtViewPager viewPagerTravelnotePages;
 	
@@ -96,11 +94,9 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	
 	private LiveTravelnoteEventsCaller liveTravelnoteEventsCaller;
 	
-	public LiveTravelnoteNavigationHandler(Activity activity, FragmentManager fragmentManager)
+	public PerformerLiveTravelnoteHandler(Activity activity)
 	{
 		super(activity);
-		
-		this.fragmentManager = fragmentManager;
 		
 		viewPagerTravelnotePages = findViewById(R.id.viewPager_travelnote_pages);
 		textViewPagesCount = findViewById(R.id.textView_pages_count);
@@ -734,7 +730,7 @@ public class LiveTravelnoteNavigationHandler extends JtIocHandler
 	private void addPageViewToList()
 	{
 		LiveTravelnotePageView page =
-				new LiveTravelnotePageView(getContext(), this, fragmentManager);
+				new LiveTravelnotePageView(getContext(), this);
 		liveTravelnotePageViews.add(page);
 	}
 	
