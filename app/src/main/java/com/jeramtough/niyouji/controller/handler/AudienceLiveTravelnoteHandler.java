@@ -1,6 +1,8 @@
 package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -11,14 +13,19 @@ import com.jeramtough.jtandroid.function.MusicPlayer;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
+import com.jeramtough.niyouji.bean.travelnote.TravelnotePage;
 import com.jeramtough.niyouji.component.ali.camera.MusicsHandler;
-import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
+import com.jeramtough.niyouji.component.app.GlideApp;
+import com.jeramtough.niyouji.component.travelnote.AudienceLiveTravelnotePageView;
+import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 11718
@@ -40,8 +47,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private HeartLayout heartLayout;
 	
 	
-	private ArrayList<LiveTravelnotePageView> liveTravelnotePageViews;
-	private LiveTravelnotePageView lastLiveTravelnotePageView;
+	private ArrayList<AudienceLiveTravelnotePageView> liveTravelnotePageViews;
 	
 	@InjectComponent
 	private MusicsHandler musicsHandler;
@@ -70,13 +76,50 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	protected void initResources()
 	{
 		liveTravelnotePageViews = new ArrayList<>();
-		
-		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
-		viewPagerTravelnotePages.setAdapter(adapter);
 	}
 	
 	public void loadTravelnote(Travelnote travelnote)
 	{
+		List<TravelnotePage> travelnotePages = travelnote.getTravelnotePages();
+		P.debug(travelnote.getTravelnotePages().size());
+		
+		
+		for (TravelnotePage travelnotePage : travelnotePages)
+		{
+			AudienceLiveTravelnotePageView liveTravelnotePageView =
+					new AudienceLiveTravelnotePageView(getContext());
+			liveTravelnotePageView.setTravelnotePage(travelnotePage);
+			liveTravelnotePageViews.add(liveTravelnotePageView);
+		}
+		
+		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
+		viewPagerTravelnotePages.setAdapter(adapter);
+		
+		textViewAttentionsCount.setText(travelnote.getAttentionsCount() + "");
+		
+		progressBar.setVisibility(View.INVISIBLE);
+		timedCloseTextViewShowMessage.setNiceMessage("初始化资源完成");
+		timedCloseTextViewShowMessage.closeDelayed(1000);
+	}
 	
+	public void addPage(int position, String pageResourceType)
+	{
+		AudienceLiveTravelnotePageView liveTravelnotePageView =
+				new AudienceLiveTravelnotePageView(getContext());
+		liveTravelnotePageViews.add(liveTravelnotePageView);
+	
+		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
+	}
+	
+	public void deletePage(int position)
+	{
+		liveTravelnotePageViews.remove(position);
+		
+		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
+	}
+	
+	public void selectPage(int position)
+	{
+		viewPagerTravelnotePages.setCurrentItem(position);
 	}
 }

@@ -13,6 +13,7 @@ public class LiveTravelnoteCover implements Serializable
 	private String coverResourceUrl;
 	private String travelnoteTitle;
 	private int attentionsCount = 0;
+	private int audiencesCount;
 	private String performerNickname;
 	
 	public String getPerformerId()
@@ -83,5 +84,15 @@ public class LiveTravelnoteCover implements Serializable
 	public void setPerformerNickname(String performerNickname)
 	{
 		this.performerNickname = performerNickname;
+	}
+	
+	public int getAudiencesCount()
+	{
+		return audiencesCount;
+	}
+	
+	public void setAudiencesCount(int audiencesCount)
+	{
+		this.audiencesCount = audiencesCount;
 	}
 }

@@ -24,6 +24,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+            <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/imageButton_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_arrow_back_black"
+                    android:background="@color/white"
+                    android:layout_marginRight="10dp"/>
+
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

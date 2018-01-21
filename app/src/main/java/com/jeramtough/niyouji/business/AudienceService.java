@@ -5,11 +5,17 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
+import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.AddPageCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.DeletePageCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.PerformerCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.SelectPageCommand;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.component.communicate.factory.AudienceSocketMessageFactory;
+import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
 import com.jeramtough.niyouji.component.websocket.AudienceWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 
@@ -40,7 +46,8 @@ public class AudienceService implements AudienceBusiness
 	
 	@Override
 	public void enterPerformingRoom(String performerId, BusinessCaller enterRoomBusinessCaller,
-			BusinessCaller obtainingLiveTravelnoteBusinessCaller)
+			BusinessCaller obtainingLiveTravelnoteBusinessCaller,
+			BusinessCaller performerActionsBusinessCaller)
 	{
 		if (audienceWebSocketClient.isConectionFailed())
 		{
@@ -80,7 +87,58 @@ public class AudienceService implements AudienceBusiness
 													Travelnote.class);
 											obtainingLiveTravelnoteBusinessCaller.getData()
 													.putSerializable("travelnote", travelnote);
-											obtainingLiveTravelnoteBusinessCaller.callBusiness();
+											obtainingLiveTravelnoteBusinessCaller
+													.callBusiness();
+											break;
+										
+										case PerformerCommandActions.ADDED_PAGE:
+											performerActionsBusinessCaller.getData()
+													.putInt("performerAction",
+															socketMessage.getCommandAction());
+											
+											AddPageCommand addPageCommand =
+													PerformerCommandParser.parseAddPageCommand(
+															socketMessage);
+											
+											performerActionsBusinessCaller.getData()
+													.putSerializable("command",
+															addPageCommand);
+											
+											performerActionsBusinessCaller.callBusiness();
+											break;
+										
+										case PerformerCommandActions.SELECTED_PAGE:
+											performerActionsBusinessCaller.getData()
+													.putInt("performerAction",
+															socketMessage.getCommandAction());
+											
+											SelectPageCommand selectPageCommand =
+													PerformerCommandParser
+															.parseSelectPageCommand(
+																	socketMessage);
+											
+											performerActionsBusinessCaller.getData()
+													.putSerializable("command",
+															selectPageCommand);
+											
+											performerActionsBusinessCaller.callBusiness();
+											break;
+										
+										case PerformerCommandActions.DELETED_PAGE:
+											performerActionsBusinessCaller.getData()
+													.putInt("performerAction",
+															socketMessage.getCommandAction());
+											
+											DeletePageCommand deletePageCommand =
+													PerformerCommandParser
+															.parseDeletePageCommand(
+																	socketMessage);
+											
+											performerActionsBusinessCaller.getData()
+													.putSerializable("command",
+															deletePageCommand);
+											
+											performerActionsBusinessCaller.callBusiness();
 											break;
 									}
 								}

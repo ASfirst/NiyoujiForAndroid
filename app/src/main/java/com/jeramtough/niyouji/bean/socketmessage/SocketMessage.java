@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.bean.socketmessage;
 
+import java.io.Serializable;
+
 /**
  * @author 11718
  */

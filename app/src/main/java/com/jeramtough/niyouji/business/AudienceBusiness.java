@@ -11,6 +11,7 @@ import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 public interface AudienceBusiness
 {
 	void enterPerformingRoom(String performerId, BusinessCaller enterRoomBusinessCaller,
-			BusinessCaller obtainingLiveTravelnoteBusinessCaller);
+			BusinessCaller obtainingLiveTravelnoteBusinessCaller,
+			BusinessCaller performerActionsBusinessCaller);
 	
 }

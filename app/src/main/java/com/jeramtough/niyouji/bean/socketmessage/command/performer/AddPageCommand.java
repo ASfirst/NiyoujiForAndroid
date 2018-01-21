@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.bean.socketmessage.command.performer;
 
+import java.io.Serializable;
+
 /**
  * @author 11718
  *         on 2018  January 17 Wednesday 20:33.
