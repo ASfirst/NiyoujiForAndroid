@@ -114,7 +114,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	public void deletePage(int position)
 	{
 		liveTravelnotePageViews.remove(position);
-		
+		P.debug(liveTravelnotePageViews.size());
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
 	}
 	
