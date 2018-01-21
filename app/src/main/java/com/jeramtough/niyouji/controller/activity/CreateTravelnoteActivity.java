@@ -1,10 +1,14 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +21,7 @@ import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.CreateTravelnoteBusiness;
 import com.jeramtough.niyouji.business.CreateTravelnoteService;
+import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrAlbumDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
 /**
@@ -91,7 +96,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 			
 			case R.id.imageView_travelnote_cover:
 			case R.id.imageView_add_travelnote_cover:
-				SelectTakephotoOrVideoDialog dialog = new SelectTakephotoOrVideoDialog(this);
+				SelectTakephotoOrAlbumDialog dialog = new SelectTakephotoOrAlbumDialog(this);
 				dialog.show();
 				break;
 			case R.id.btn_start_performing:
@@ -109,15 +114,12 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				
 				layoutWaitingCreateTravelnote.setVisibility(View.VISIBLE);
 				
-				BusinessCaller createBusinessCaller =
-						new BusinessCaller(getActivityHandler(),
-								BUSINESS_CODE_CREATE_TRAVELNOTE);
+				BusinessCaller createBusinessCaller = new BusinessCaller(getActivityHandler(),
+						BUSINESS_CODE_CREATE_TRAVELNOTE);
 				BusinessCaller connectBusinessCaller =
-						new BusinessCaller(getActivityHandler(),
-								BUSINESS_CODE_CONNECT_SERVER);
-				BusinessCaller uploadBusinessCaller =
-						new BusinessCaller(getActivityHandler(),
-								BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
+						new BusinessCaller(getActivityHandler(), BUSINESS_CODE_CONNECT_SERVER);
+				BusinessCaller uploadBusinessCaller = new BusinessCaller(getActivityHandler(),
+						BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
 				
 				createTravelnoteBusiness
 						.createTravelnote(title, coverPath, createBusinessCaller,
@@ -141,17 +143,32 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == resultCode &&
-				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
+		if (data != null)
 		{
-			String photoPath = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
+			if (requestCode == resultCode &&
+					resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
+			{
+				this.coverPath = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
+			}
+			else if (requestCode ==
+					SelectTakephotoOrAlbumDialog.REQUEST_CODE_SELECT_IMAGE_FROM_ALIBUM &&
+					resultCode == Activity.RESULT_OK)
+			{
+				Uri selectedImage = data.getData();
+				String[] filePathColumns = {MediaStore.Images.Media.DATA};
+				Cursor c = getContentResolver()
+						.query(selectedImage, filePathColumns, null, null, null);
+				c.moveToFirst();
+				int columnIndex = c.getColumnIndex(filePathColumns[0]);
+				this.coverPath = c.getString(columnIndex);
+				c.close();
+			}
 			
-			this.coverPath = photoPath;
 			if (coverPath != null)
 			{
 				recycleTheCoverResource();
 				
-				Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+				Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
 				imageViewTravelnoteCover.setImageBitmap(bitmap);
 				imageViewTravelnoteCover.setVisibility(View.VISIBLE);
 				
@@ -160,25 +177,6 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				imageViewTravelnoteCover.setClickable(true);
 				
 				coverType = COVER_TYPE_PHOTO;
-			}
-		}
-		else if (requestCode == resultCode && resultCode == VideoActivity.VIDEO_RESULT_CODE)
-		{
-			String videoPath = data.getStringExtra(VideoActivity.VIDEO_PATH_NAME);
-			if (videoPath != null)
-			{
-				recycleTheCoverResource();
-				
-				this.coverPath = videoPath;
-				videoViewTravelnoteCover.setVisibility(View.VISIBLE);
-				videoViewTravelnoteCover.setVideoPath(videoPath);
-				videoViewTravelnoteCover.start();
-				
-				textViewTjyjfm.setVisibility(View.INVISIBLE);
-				imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
-				
-				
-				coverType = COVER_TYPE_VIDEO;
 			}
 		}
 	}
@@ -206,7 +204,8 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				}
 				break;
 			case BUSINESS_CODE_UPLOAD_COVER_RESOURCE:
-				boolean uploadSuccessfully=message.getData().getBoolean("uploadSuccessfully");
+				boolean uploadSuccessfully =
+						message.getData().getBoolean("uploadSuccessfully");
 				if (uploadSuccessfully)
 				{
 					textViewCreateTravelnoteInfo.setText("上传资源成功");

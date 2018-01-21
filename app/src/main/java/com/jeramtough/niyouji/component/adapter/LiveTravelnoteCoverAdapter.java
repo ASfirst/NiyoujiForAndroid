@@ -100,6 +100,7 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 			else if (Objects.equals(liveTravelnoteCover.getCoverType(), TravelnoteResourceTypes.VIDEO.toString()))
 			{
 				//load video
+				//估计是用不上了，不想做视频封面了
 			}
 		}
 		else

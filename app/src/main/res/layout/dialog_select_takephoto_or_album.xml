@@ -48,15 +48,15 @@
                 android:layout_weight="1">
 
             <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/imageView_video"
+                    android:id="@+id/imageView_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_video_call"/>
+                    app:srcCompat="@drawable/ic_image_green"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="摄像"
+                    android:text="相册"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="20sp"/>
