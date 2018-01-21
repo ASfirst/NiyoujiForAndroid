@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.controller.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -78,9 +79,10 @@ public class PerformingFragment extends AppBaseFragment
 					(LiveTravelnoteCoverAdapter) parent.getAdapter();
 			LiveTravelnoteCover liveTravelnoteCover =
 					(LiveTravelnoteCover) adapter.getItem(position);
-			getActivity().getIntent()
-					.putExtra("liveTravelnoteCover", liveTravelnoteCover);
-			IntentUtil.toTheOtherActivity(getActivity(), AudienceActivity.class);
+			
+			Intent intent = new Intent(getActivity(), AudienceActivity.class);
+			intent.putExtra("liveTravelnoteCover", liveTravelnoteCover);
+			getActivity().startActivity(intent);
 		}
 	}
 	

@@ -122,8 +122,8 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	}
 	
 	protected void initResources()
-{
-	liveTravelnotePageViews = new ArrayList<>();
+	{
+		liveTravelnotePageViews = new ArrayList<>();
 		
 		this.addPageViewToList();
 		

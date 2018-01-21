@@ -21,7 +21,7 @@ import java.io.File;
 public class TakePhotoActivity extends AliCameraActivity
 		implements MyRecorder.TakephotoListener
 {
-	public final static int TAKE_PHOTO_RESULT_CODE = 0x8879;
+	public final static int TAKE_PHOTO_RESULT_CODE = 8879;
 	public final static String PHOTO_PATH_NAME = "photoPath";
 	
 	private AppCompatImageView viewDone;

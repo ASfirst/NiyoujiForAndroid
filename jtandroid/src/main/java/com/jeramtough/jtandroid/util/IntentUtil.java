@@ -16,7 +16,7 @@ public class IntentUtil
 	public static void toTheOtherActivity(Activity currentActivity,
 			Class theOtherActivityClass)
 	{
-		Intent intent=currentActivity.getIntent();
+		Intent intent=new Intent();
 		intent.setClass(currentActivity,theOtherActivityClass);
 		currentActivity.startActivity(intent);
 	}
@@ -24,7 +24,7 @@ public class IntentUtil
 	public static void toTheOtherActivity(Activity currentActivity,
 			Class theOtherActivityClass, int requestCode)
 	{
-		Intent intent=currentActivity.getIntent();
+		Intent intent=new Intent();
 		intent.setClass(currentActivity,theOtherActivityClass);
 		currentActivity.startActivityForResult(intent, requestCode);
 	}

@@ -3,6 +3,7 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.PerformingBusiness1;
 import com.jeramtough.niyouji.business.PerformingService1;
@@ -43,12 +44,10 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		
 		if (requestCode == TAKE_PHOTO_REQUEST_CODE &&
 				resultCode == TakePhotoActivity.TAKE_PHOTO_RESULT_CODE)
 		{
 			String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
-			
 			performerLiveTravelnoteHandler.setPageResourcePath(path);
 			
 		}
