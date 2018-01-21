@@ -24,21 +24,14 @@ public class NiyoujiHttpClient
 		client = new OkHttpClient();
 	}
 	
-	public String getLiveTravelnotesBlocking()
+	public String getLiveTravelnotesBlocking() throws IOException
 	{
 		String jsonStr = null;
 		String url = baseUrl + "getLiveTravelnotes.do";
 		Request request = new Request.Builder().url(url).build();
 		
-		try
-		{
 			Response response = client.newCall(request).execute();
 			jsonStr = response.body().string();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 		
 		return jsonStr;
 	}

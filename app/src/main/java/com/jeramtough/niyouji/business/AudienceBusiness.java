@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.business;
 
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 
 /**
@@ -9,5 +10,7 @@ import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 
 public interface AudienceBusiness
 {
-	void enterPerformingRoom(LiveTravelnoteCover liveTravelnoteCover);
+	void enterPerformingRoom(String performerId, BusinessCaller enterRoomBusinessCaller,
+			BusinessCaller obtainingLiveTravelnoteBusinessCaller);
+	
 }

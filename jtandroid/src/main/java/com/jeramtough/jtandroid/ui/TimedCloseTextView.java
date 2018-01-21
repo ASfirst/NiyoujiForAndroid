@@ -64,4 +64,14 @@ public class TimedCloseTextView extends android.support.v7.widget.AppCompatTextV
 		this.setTextColor(Color.WHITE);
 		this.setText(message);
 	}
+	
+	public void visible()
+	{
+		this.setVisibility(View.VISIBLE);
+	}
+	
+	public void invisible()
+	{
+		this.setVisibility(View.INVISIBLE);
+	}
 }

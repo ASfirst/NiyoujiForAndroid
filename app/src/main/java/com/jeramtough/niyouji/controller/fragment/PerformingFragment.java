@@ -10,6 +10,7 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.business.TravelnoteBusiness;
@@ -77,9 +78,8 @@ public class PerformingFragment extends AppBaseFragment
 					(LiveTravelnoteCoverAdapter) parent.getAdapter();
 			LiveTravelnoteCover liveTravelnoteCover =
 					(LiveTravelnoteCover) adapter.getItem(position);
-			
 			getActivity().getIntent()
-					.putExtra("performerId", liveTravelnoteCover.getPerformerId());
+					.putExtra("liveTravelnoteCover", liveTravelnoteCover);
 			IntentUtil.toTheOtherActivity(getActivity(), AudienceActivity.class);
 		}
 	}
@@ -90,27 +90,38 @@ public class PerformingFragment extends AppBaseFragment
 		switch (message.what)
 		{
 			case BUSINESS_CODE_OBTAIN_TRAVELNOTE_COVERS:
-				LiveTravelnoteCover[] liveTravelnoteCovers =
-						(LiveTravelnoteCover[]) message.getData()
-								.getSerializable("liveTravelnoteCovers");
-				if (liveTravelnoteCovers != null)
+				boolean isSuccessful = message.getData().getBoolean("isSuccessful");
+				if (isSuccessful)
 				{
-					LiveTravelnoteCoverAdapter liveTravelnoteCoverAdapter =
-							new LiveTravelnoteCoverAdapter(getContext(), liveTravelnoteCovers);
-					
-					if (liveTravelnoteCovers.length == 0)
+					LiveTravelnoteCover[] liveTravelnoteCovers =
+							(LiveTravelnoteCover[]) message.getData()
+									.getSerializable("liveTravelnoteCovers");
+					if (liveTravelnoteCovers != null)
 					{
-						gridView.setNumColumns(1);
-						hasLiveTravelnote = false;
+						LiveTravelnoteCoverAdapter liveTravelnoteCoverAdapter =
+								new LiveTravelnoteCoverAdapter(getContext(),
+										liveTravelnoteCovers);
+						
+						if (liveTravelnoteCovers.length == 0)
+						{
+							gridView.setNumColumns(1);
+							hasLiveTravelnote = false;
+						}
+						else
+						{
+							gridView.setNumColumns(2);
+							hasLiveTravelnote = true;
+						}
+						
+						gridView.setAdapter(liveTravelnoteCoverAdapter);
+						pullToRefresh.setRefreshing(false);
 					}
-					else
-					{
-						gridView.setNumColumns(2);
-						hasLiveTravelnote = true;
-					}
-					
-					gridView.setAdapter(liveTravelnoteCoverAdapter);
+				}
+				else
+				{
 					pullToRefresh.setRefreshing(false);
+					timedCloseTextView.setErrorMessage("拉取资源失败！请稍后重试");
+					timedCloseTextView.closeDelayed(3000);
 				}
 				
 				break;

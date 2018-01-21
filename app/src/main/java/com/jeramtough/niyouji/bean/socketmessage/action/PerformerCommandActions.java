@@ -5,7 +5,7 @@ package com.jeramtough.niyouji.bean.socketmessage.action;
  */
 public class PerformerCommandActions
 {
-	private static final int BASE = 10;
+	private static final int BASE = 100;
 	
 	public static final int CREATE_PERFORMING_ROOM = BASE + 0;
 	

@@ -9,6 +9,7 @@ import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.component.httpclient.NiyoujiHttpClient;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -45,14 +46,25 @@ public class TravelnoteService implements TravelnoteBusiness
 	{
 		executorService.submit(() ->
 		{
-			String responseStr = niyoujiHttpClient.getLiveTravelnotesBlocking();
-			List<LiveTravelnoteCover> liveTravelnoteCoverList =
-					JSON.parseArray(responseStr, LiveTravelnoteCover.class);
-			LiveTravelnoteCover[] liveTravelnoteCovers = liveTravelnoteCoverList
-					.toArray(new LiveTravelnoteCover[liveTravelnoteCoverList.size()]);
-			
-			businessCaller.getData().putSerializable("liveTravelnoteCovers", liveTravelnoteCovers);
-			businessCaller.callBusiness();
+			try
+			{
+				String responseStr = niyoujiHttpClient.getLiveTravelnotesBlocking();
+				List<LiveTravelnoteCover> liveTravelnoteCoverList =
+						JSON.parseArray(responseStr, LiveTravelnoteCover.class);
+				LiveTravelnoteCover[] liveTravelnoteCovers = liveTravelnoteCoverList
+						.toArray(new LiveTravelnoteCover[liveTravelnoteCoverList.size()]);
+				
+				businessCaller.getData().putBoolean("isSuccessful", true);
+				businessCaller.getData()
+						.putSerializable("liveTravelnoteCovers", liveTravelnoteCovers);
+				businessCaller.callBusiness();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+				businessCaller.getData().putBoolean("isSuccessful", false);
+				businessCaller.callBusiness();
+			}
 		});
 	}
 }

@@ -1,16 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.jeramtough.niyouji.controller.activity.AudienceActivity"
-        android:orientation="vertical">
+        tools:context="com.jeramtough.niyouji.controller.activity.PerformingActivity">
 
-    <ProgressBar
+    <com.jeramtough.jtandroid.ui.JtViewPager
+            android:id="@+id/viewPager_travelnote_pages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <!--弹幕,作者头像，观众，页数-->
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@mipmap/background2">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@drawable/roundrect"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginTop="5dp">
+
+                    <com.jeramtough.jtandroid.ui.RoundImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@mipmap/surface_image"
+                            android:scaleType="center"/>
+
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            >
+
+                        <TextView
+                                android:id="@+id/textView_performer_nickname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="JeramTough"
+                                android:layout_weight="1"
+                                android:gravity="bottom"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:shadowColor="@color/black"
+                                android:shadowRadius="1"
+                                android:shadowDy="1"
+                                android:shadowDx="1"/>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_weight="1">
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="点亮:"
+                                    android:textStyle="bold"
+                                    android:gravity="top"
+                                    android:textColor="#f92828"
+                                    android:shadowColor="@color/white"
+                                    android:shadowRadius="1"
+                                    android:shadowDy="1"
+                                    android:shadowDx="1"/>
+
+                            <TextView
+                                    android:id="@+id/textView_attentions_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:gravity="top"
+                                    android:textColor="@color/white"
+                                    android:shadowColor="@color/black"
+                                    android:shadowRadius="1"
+                                    android:shadowDy="1"
+                                    android:shadowDx="1"
+                                    android:layout_marginLeft="5dp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@drawable/roundrect"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P"
+                            android:textColor="@color/colorPrimary"
+                            android:shadowColor="@color/white"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="1"
+                            android:textStyle="bold"
+                            android:layout_marginRight="5dp"/>
+
+                    <TextView
+                            android:id="@+id/textView_pages_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-/-"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="1"
+                            android:shadowDy="1"
+                            android:shadowDx="1"
+                            android:textSize="12sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@drawable/roundrect"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="4dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom">
+
+                    <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="2dp"
+                            android:background="@mipmap/person"/>
+
+                    <TextView
+                            android:id="@+id/textView_audiences_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowRadius="1"
+                            android:shadowDy="1"
+                            android:shadowDx="1"
+                            android:textSize="12sp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/button_bug_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"/>
+
+        </LinearLayout>
+
+        <com.jeramtough.jtandroid.ui.TimedCloseTextView
+                android:id="@+id/timedCloseTextView_show_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/white"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:focusable="false">
+
+
+            <com.jeramtough.niyouji.component.ui.AppraisalAreaView
+                    android:id="@+id/appraisalAreaView"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:orientation="vertical"
+                    android:layout_weight="7"
+                    android:paddingLeft="10dp"/>
+
+
+            <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:focusable="false"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <com.jeramtough.niyouji.component.ui.DanmakuLayout
+            android:id="@+id/layout_danmaku"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="50dp"/>
+
+    <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
             />
 
-</LinearLayout>
+    <com.jeramtough.heartlayout.HeartLayout
+            android:id="@+id/heart_layout"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginBottom="60dp"/>
+
+</FrameLayout>
