@@ -29,4 +29,18 @@ public enum TravelnotePageType
 	{
 		return pageType;
 	}
+	
+	public static TravelnotePageType toTravelnotePageType(String travelnotePageTypeStr)
+	{
+		if (travelnotePageTypeStr.equals(TravelnotePageType.PICANDWORD.toString()))
+		{
+			return TravelnotePageType.PICANDWORD;
+		}
+		else
+		{
+			return TravelnotePageType.VIDEO;
+		}
+		
+	}
+	
 }

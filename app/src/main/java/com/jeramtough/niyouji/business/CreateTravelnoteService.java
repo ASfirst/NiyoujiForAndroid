@@ -113,7 +113,7 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 					if (uploadSuccessfully)
 					{
 						performerWebSocketClient
-								.setWebSocketClientListener(new WebSocketClientListener()
+								.addWebSocketClientListener(new WebSocketClientListener()
 								{
 									@Override
 									public void onMessage(SocketMessage socketMessage)

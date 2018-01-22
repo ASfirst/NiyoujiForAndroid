@@ -7,14 +7,17 @@
         android:background="@color/white"
         android:layout_gravity="center"
         >
-
+    <FrameLayout
+            android:id="@+id/layout_audience_live_travelnote_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -22,8 +25,8 @@
                 android:orientation="vertical">
 
             <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center">
 
 
@@ -31,7 +34,7 @@
                         android:id="@+id/view_picture_of_page"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ic_image_green"
+                        android:background="@drawable/ic_image_green_large"
                         android:scaleType="fitCenter"
                         android:layout_margin="10dp"/>
 
@@ -55,6 +58,7 @@
 
         </LinearLayout>
     </ScrollView>
+
 
 
     <com.jeramtough.jtandroid.ui.FullScreenVideoView

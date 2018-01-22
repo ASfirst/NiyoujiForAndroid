@@ -11,12 +11,9 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.AddPageCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.DeletePageCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.SelectPageCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.business.AudienceBusiness;
@@ -32,7 +29,6 @@ public class AudienceActivity extends AppBaseActivity
 {
 	private static final int BUSINESS_CODE_ENTER_PERFORMING_ROOM = 0;
 	private static final int BUSINESS_CODE_OBTAINING_LIVE_TRAVELNOTE = 1;
-	private static final int BUSINESS_CODE_PERFORMER_ACTIONS = 2;
 	
 	private JtViewPager viewPagerTravelnotePages;
 	private TextView textViewAttentionsCount;
@@ -71,7 +67,6 @@ public class AudienceActivity extends AppBaseActivity
 		progressBar = findViewById(R.id.progressBar);
 		heartLayout = findViewById(R.id.heart_layout);
 		
-		audienceLiveTravelnoteHandler = new AudienceLiveTravelnoteHandler(this);
 		initResources();
 	}
 	
@@ -83,14 +78,16 @@ public class AudienceActivity extends AppBaseActivity
 		liveTravelnoteCover =
 				(LiveTravelnoteCover) getIntent().getSerializableExtra("liveTravelnoteCover");
 		
+		audienceLiveTravelnoteHandler =
+				new AudienceLiveTravelnoteHandler(this, liveTravelnoteCover.getPerformerId());
+		
 		textViewPerformerNickname.setText(liveTravelnoteCover.getPerformerNickname());
 		textViewAudiencesCount.setText(liveTravelnoteCover.getAudiencesCount() + "");
 		
 		audienceBusiness.enterPerformingRoom(liveTravelnoteCover.getPerformerId(),
 				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_ENTER_PERFORMING_ROOM),
 				new BusinessCaller(getActivityHandler(),
-						BUSINESS_CODE_OBTAINING_LIVE_TRAVELNOTE),
-				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_PERFORMER_ACTIONS));
+						BUSINESS_CODE_OBTAINING_LIVE_TRAVELNOTE));
 	}
 	
 	@Override
@@ -130,32 +127,7 @@ public class AudienceActivity extends AppBaseActivity
 				}, 1000);
 				break;
 			
-			case BUSINESS_CODE_PERFORMER_ACTIONS:
-				int performerAction = message.getData().getInt("performerAction");
-				switch (performerAction)
-				{
-					case PerformerCommandActions.ADDED_PAGE:
-						AddPageCommand addPageCommand =
-								(AddPageCommand) message.getData().getSerializable("command");
-						
-						audienceLiveTravelnoteHandler.addPage(addPageCommand
-								.getThemePosition(),addPageCommand.getPageType());
-						break;
-					case PerformerCommandActions.SELECTED_PAGE:
-						SelectPageCommand selectPageCommand =
-								(SelectPageCommand) message.getData()
-										.getSerializable("command");
-						
-						audienceLiveTravelnoteHandler.selectPage(selectPageCommand.getPosition());
-						break;
-					case PerformerCommandActions.DELETED_PAGE:
-						DeletePageCommand deletePageCommand =
-								(DeletePageCommand) message.getData()
-										.getSerializable("command");
-						
-						audienceLiveTravelnoteHandler.deletePage(deletePageCommand.getPosition());
-						break;
-				}
+			default:
 				break;
 		}
 	}

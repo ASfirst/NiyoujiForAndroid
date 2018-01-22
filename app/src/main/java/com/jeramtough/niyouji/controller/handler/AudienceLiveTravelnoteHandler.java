@@ -1,28 +1,37 @@
 package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
-import android.view.LayoutInflater;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.jeramtough.heartlayout.HeartLayout;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
 import com.jeramtough.jtandroid.function.MusicPlayer;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtlog3.P;
+import com.jeramtough.jtutil.StringUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.bean.travelnote.TravelnotePage;
+import com.jeramtough.niyouji.business.AudienceBusiness;
+import com.jeramtough.niyouji.business.AudienceService;
 import com.jeramtough.niyouji.component.ali.camera.MusicsHandler;
 import com.jeramtough.niyouji.component.app.GlideApp;
 import com.jeramtough.niyouji.component.travelnote.AudienceLiveTravelnotePageView;
-import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
+import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.*;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
+import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +42,10 @@ import java.util.List;
  */
 
 public class AudienceLiveTravelnoteHandler extends JtIocHandler
+		implements SelectPwThemeDialog.SelectPwthemeListener
 {
+	private static final int BUSINESS_CODE_PERFORMER_ACTIONS = 2;
+	
 	private JtViewPager viewPagerTravelnotePages;
 	private TextView textViewPerformerNickname;
 	private TextView textViewAttentionsCount;
@@ -47,16 +59,28 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private HeartLayout heartLayout;
 	
 	
+	private String performerId;
+	
 	private ArrayList<AudienceLiveTravelnotePageView> liveTravelnotePageViews;
+	
+	@InjectService(service = AudienceService.class)
+	private AudienceBusiness audienceBusiness;
 	
 	@InjectComponent
 	private MusicsHandler musicsHandler;
 	@InjectComponent
 	private MusicPlayer musicPlayer;
 	
-	public AudienceLiveTravelnoteHandler(Activity activity)
+	@InjectComponent
+	private PicAndWordResourcesHandler picAndWordResourcesHandler;
+	@InjectComponent
+	private PwResourcesCacheManager pwResourcesCacheManager;
+	
+	
+	public AudienceLiveTravelnoteHandler(Activity activity, String performerId)
 	{
 		super(activity);
+		this.performerId = performerId;
 		
 		viewPagerTravelnotePages = findViewById(R.id.viewPager_travelnote_pages);
 		textViewPerformerNickname = findViewById(R.id.textView_performer_nickname);
@@ -75,7 +99,113 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	protected void initResources()
 	{
+		musicPlayer.setRepeated(true);
+		
 		liveTravelnotePageViews = new ArrayList<>();
+		
+		audienceBusiness.callPerformerActions(performerId,
+				new BusinessCaller(this, BUSINESS_CODE_PERFORMER_ACTIONS));
+	}
+	
+	@Override
+	public void handleMessage(Message message)
+	{
+		switch (message.what)
+		{
+			case BUSINESS_CODE_PERFORMER_ACTIONS:
+				int performerAction = message.getData().getInt("performerAction");
+				switch (performerAction)
+				{
+					case PerformerCommandActions.ADDED_PAGE:
+						AddPageCommand addPageCommand =
+								(AddPageCommand) message.getData().getSerializable("command");
+						
+						this.addPage(addPageCommand);
+						break;
+					case PerformerCommandActions.SELECTED_PAGE:
+						SelectPageCommand selectPageCommand =
+								(SelectPageCommand) message.getData()
+										.getSerializable("command");
+						
+						this.selectPage(selectPageCommand);
+						break;
+					case PerformerCommandActions.DELETED_PAGE:
+						DeletePageCommand deletePageCommand =
+								(DeletePageCommand) message.getData()
+										.getSerializable("command");
+						
+						this.deletePage(deletePageCommand);
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_IMAGE:
+						PageSetImageCommand pageSetImageCommand =
+								(PageSetImageCommand) message.getData()
+										.getSerializable("command");
+						
+						this.pageSetImage(pageSetImageCommand);
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_VIDEO:
+						PageSetVideoCommand pageSetVideoCommand =
+								(PageSetVideoCommand) message.getData()
+										.getSerializable("command");
+						
+						this.pageSetVideo(pageSetVideoCommand);
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_THEME:
+						PageSetThemeCommand pageSetThemeCommand =
+								(PageSetThemeCommand) message.getData()
+										.getSerializable("command");
+						
+						this.pageSetTheme(pageSetThemeCommand);
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_BACKGROUND_MUSIC:
+						PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
+								(PageSetBackgroundMusicCommand) message.getData()
+										.getSerializable("command");
+						
+						this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
+						break;
+					
+					case PerformerCommandActions.PAGE_TEXT_CHANGED:
+						PageTextChangeCommand pageTextChangeCommand =
+								(PageTextChangeCommand) message.getData()
+										.getSerializable("command");
+						
+						this.pageTextChanged(pageTextChangeCommand);
+						break;
+					
+					case PerformerCommandActions.SENT_PERFORMER_BARRAGE:
+						SendPerformerBarrageCommand sendPerformerBarrageCommand =
+								(SendPerformerBarrageCommand) message.getData()
+										.getSerializable("command");
+						
+						this.sentPerformerBarrage(sendPerformerBarrageCommand);
+						break;
+					
+					case PerformerCommandActions.TRAVELNOTE_END:
+						TravelnoteEndCommand travelnoteEndCommand =
+								(TravelnoteEndCommand) message.getData()
+										.getSerializable("command");
+						
+						this.travelnoteEnd(travelnoteEndCommand);
+						break;
+				}
+				break;
+		}
+	}
+	
+	
+	@Override
+	public void onSelectedPicAndWordTheme(int position, PicAndWordTheme picAndWordTheme)
+	{
+		picAndWordTheme.setMainBackground(
+				getCurrentAudienceLiveTravelnoteView().getLayoutAudienceLiveTravelnotePage());
+		picAndWordTheme.setTextViewOrEditText(
+				getCurrentAudienceLiveTravelnoteView().getTextViewTravelnotePageContent());
+		picAndWordTheme.setFrame(getCurrentAudienceLiveTravelnoteView().getImageViewFrame());
 	}
 	
 	public void loadTravelnote(Travelnote travelnote)
@@ -88,38 +218,202 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		{
 			AudienceLiveTravelnotePageView liveTravelnotePageView =
 					new AudienceLiveTravelnotePageView(getContext());
-			liveTravelnotePageView.setTravelnotePage(travelnotePage);
 			liveTravelnotePageViews.add(liveTravelnotePageView);
+			
+			liveTravelnotePageView.setCurrentThemePosition(travelnotePage.getThemePosition());
+			liveTravelnotePageView.setMusicPath(travelnotePage.getBackgroundMusicPath());
+			liveTravelnotePageView.setResourcePath(travelnotePage.getResourceUrl());
+			liveTravelnotePageView.setTravelnotePageType(
+					TravelnotePageType.toTravelnotePageType(travelnotePage.getPageType()));
 		}
 		
 		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
+		//强制更新UI
+		adapter.setForceUpdateMode(true);
 		viewPagerTravelnotePages.setAdapter(adapter);
 		
 		textViewAttentionsCount.setText(travelnote.getAttentionsCount() + "");
+		
+		if (travelnotePages.size() > 0)
+		{
+			SelectPageCommand selectPageCommand = new SelectPageCommand();
+			selectPageCommand.setPosition(travelnotePages.size() - 1);
+			selectPage(selectPageCommand);
+		}
 		
 		progressBar.setVisibility(View.INVISIBLE);
 		timedCloseTextViewShowMessage.setNiceMessage("初始化资源完成");
 		timedCloseTextViewShowMessage.closeDelayed(1000);
 	}
 	
-	public void addPage(int position, String pageResourceType)
+	public int getCurrentPosition()
+	{
+		return viewPagerTravelnotePages.getCurrentItem();
+	}
+	
+	public AudienceLiveTravelnotePageView getCurrentAudienceLiveTravelnoteView()
+	{
+		return liveTravelnotePageViews.get(getCurrentPosition());
+	}
+	
+	//***********************************************************
+	private void addPage(AddPageCommand addPageCommand)
 	{
 		AudienceLiveTravelnotePageView liveTravelnotePageView =
 				new AudienceLiveTravelnotePageView(getContext());
 		liveTravelnotePageViews.add(liveTravelnotePageView);
-	
+		
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
 	}
 	
-	public void deletePage(int position)
+	private void deletePage(DeletePageCommand deletePageCommand)
 	{
-		liveTravelnotePageViews.remove(position);
-		P.debug(liveTravelnotePageViews.size());
+		liveTravelnotePageViews.remove(deletePageCommand.getPosition());
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
+		
+		pauseMusicIf();
 	}
 	
-	public void selectPage(int position)
+	private void selectPage(SelectPageCommand selectPageCommand)
 	{
-		viewPagerTravelnotePages.setCurrentItem(position);
+		pauseMusicIf();
+		
+		viewPagerTravelnotePages.setCurrentItem(selectPageCommand.getPosition());
+		
+		updatePagesCount();
+		
+		//恢复音乐
+		if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
+		{
+			PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
+					new PageSetBackgroundMusicCommand();
+			pageSetBackgroundMusicCommand
+					.setMusicPath(getCurrentAudienceLiveTravelnoteView().getMusicPath());
+			
+			this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
+		}
+		
+		//恢复主题
+		PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
+		pageSetThemeCommand.setThemePosition(
+				getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
+		this.pageSetTheme(pageSetThemeCommand);
+		
+		//恢复显示的资源内容
+		if (getCurrentAudienceLiveTravelnoteView().getResourcePath() != null)
+		{
+			if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+					TravelnotePageType.PICANDWORD)
+			{
+				PageSetImageCommand pageSetImageCommand = new PageSetImageCommand();
+				pageSetImageCommand
+						.setImageUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
+				
+				this.pageSetImage(pageSetImageCommand);
+			}
+			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+					TravelnotePageType.VIDEO)
+			{
+				PageSetVideoCommand pageSetVideoCommand = new PageSetVideoCommand();
+				pageSetVideoCommand
+						.setVideoUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
+				
+				this.pageSetVideo(pageSetVideoCommand);
+			}
+		}
+	}
+	
+	private void pageSetImage(PageSetImageCommand pageSetImageCommand)
+	{
+		//暂时先设置一张静态的图片
+		pageSetImageCommand.setImageUrl(
+				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/img_0_172641769.jpg");
+		
+		liveTravelnotePageViews.get(pageSetImageCommand.getPosition())
+				.setResourcePath(pageSetImageCommand.getImageUrl());
+		
+		//加载图片
+		GlideApp.with(getContext()).load(pageSetImageCommand.getImageUrl()).fitCenter()
+				.skipMemoryCache(true)
+				.into(getCurrentAudienceLiveTravelnoteView().getViewPictureOfPage());
+	}
+	
+	private void pageSetVideo(PageSetVideoCommand pageSetVideoCommand)
+	{
+	
+	}
+	
+	private void pageSetTheme(PageSetThemeCommand pageSetThemeCommand)
+	{
+		liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
+				.setCurrentThemePosition(pageSetThemeCommand.getThemePosition());
+		
+		PwResourcePosition pwResourcePosition =
+				picAndWordResourcesHandler.getPwResourcePositions()
+						.get(pageSetThemeCommand.getThemePosition());
+		PwResourceCache pwResourceCache =
+				pwResourcesCacheManager.getPwResourceCache(pwResourcePosition);
+		PicAndWordTheme picAndWordTheme =
+				new PicAndWordThemeImpl(getContext(), pwResourceCache);
+		
+		picAndWordTheme.setMainBackground(
+				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition()).getLayoutAudienceLiveTravelnotePage());
+		picAndWordTheme.setTextViewOrEditText(
+				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition()).getTextViewTravelnotePageContent());
+		picAndWordTheme.setFrame(liveTravelnotePageViews.get(pageSetThemeCommand.getPosition()).getImageViewFrame());
+	}
+	
+	private void pageSetBackgroundMusic(
+			PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand)
+	{
+		musicPlayer.playMusic(pageSetBackgroundMusicCommand.getMusicPath());
+		
+		liveTravelnotePageViews.get(pageSetBackgroundMusicCommand.getPosition())
+				.setMusicPath(pageSetBackgroundMusicCommand.getMusicPath());
+	}
+	
+	private void pageTextChanged(PageTextChangeCommand pageTextChangeCommand)
+	{
+		AudienceLiveTravelnotePageView audienceLiveTravelnotePageView =
+				liveTravelnotePageViews.get(pageTextChangeCommand.getPosition());
+		String text =
+				audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().getText()
+						.toString();
+		text = StringUtil.addOrDeleteWords(text, pageTextChangeCommand.isAdded(),
+				pageTextChangeCommand.getStart(), pageTextChangeCommand.getWords());
+		audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().setText(text);
+		
+	}
+	
+	private void sentPerformerBarrage(SendPerformerBarrageCommand sendPerformerBarrageCommand)
+	{
+		TextView textView = new TextView(getContext());
+		textView.setBackgroundResource(R.color.colorPrimary);
+		textView.setPadding(10, 10, 10, 10);
+		textView.setText(sendPerformerBarrageCommand.getContent());
+		layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
+		
+		appraisalAreaView.addAppraisal(sendPerformerBarrageCommand.getNickname(),
+				sendPerformerBarrageCommand.getContent(), 2);
+	}
+	
+	private void travelnoteEnd(TravelnoteEndCommand travelnoteEndCommand)
+	{
+		P.arrive();
+	}
+	
+	private void pauseMusicIf()
+	{
+		if (musicPlayer.getMediaPlayer().isPlaying())
+		{
+			musicPlayer.getMediaPlayer().pause();
+		}
+	}
+	
+	private void updatePagesCount()
+	{
+		
+		textViewPagesCount.setText((getCurrentPosition()+1)+"/" + (liveTravelnotePageViews.size
+				() ));
 	}
 }

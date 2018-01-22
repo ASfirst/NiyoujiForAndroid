@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.jeramtough.jtandroid.ui.FullScreenVideoView;
@@ -23,9 +24,13 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 	private AppCompatImageView imageViewFrame;
 	private TextView textViewTravelnotePageContent;
 	private FullScreenVideoView videoViewTravelnotePage;
+	private ViewGroup layoutAudienceLiveTravelnotePage;
 	
-	private TravelnotePage travelnotePage;
 	
+	private int currentThemePosition = 0;
+	private String musicPath;
+	private String resourcePath;
+	private TravelnotePageType travelnotePageType;
 	
 	public AudienceLiveTravelnotePageView(@NonNull Context context)
 	{
@@ -43,13 +48,21 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 	protected void initViews()
 	{
 		FrameLayout frameLayout = (FrameLayout) LayoutInflater.from(getContext())
-				.inflate(R.layout.audience_live_travelnote_view, null);
+				.inflate(R.layout.view_audience_live_travelnote_page, null);
 		this.addView(frameLayout);
 		
 		viewPictureOfPage = findViewById(R.id.view_picture_of_page);
 		imageViewFrame = findViewById(R.id.imageView_frame);
 		textViewTravelnotePageContent = findViewById(R.id.textView_travelnote_page_content);
 		videoViewTravelnotePage = findViewById(R.id.videoView_travelnote_page);
+		layoutAudienceLiveTravelnotePage =
+				findViewById(R.id.layout_audience_live_travelnote_page);
+	}
+	
+	public void clearTheme()
+	{
+		layoutAudienceLiveTravelnotePage.setBackgroundResource(R.color.transparent);
+		imageViewFrame.setImageResource(R.color.transparent);
 	}
 	
 	public AppCompatImageView getViewPictureOfPage()
@@ -67,18 +80,56 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		return videoViewTravelnotePage;
 	}
 	
-	public TravelnotePage getTravelnotePage()
-	{
-		return travelnotePage;
-	}
-	
-	public void setTravelnotePage(TravelnotePage travelnotePage)
-	{
-		this.travelnotePage = travelnotePage;
-	}
 	
 	public TextView getTextViewTravelnotePageContent()
 	{
 		return textViewTravelnotePageContent;
 	}
+	
+	public ViewGroup getLayoutAudienceLiveTravelnotePage()
+	{
+		return layoutAudienceLiveTravelnotePage;
+	}
+	
+	public int getCurrentThemePosition()
+	{
+		return currentThemePosition;
+	}
+	
+	public void setCurrentThemePosition(int currentThemePosition)
+	{
+		this.currentThemePosition = currentThemePosition;
+	}
+	
+	public String getMusicPath()
+	{
+		return musicPath;
+	}
+	
+	public void setMusicPath(String musicPath)
+	{
+		this.musicPath = musicPath;
+	}
+	
+	public String getResourcePath()
+	{
+		return resourcePath;
+	}
+	
+	public void setResourcePath(String resourcePath)
+	{
+		this.resourcePath = resourcePath;
+	}
+	
+	public TravelnotePageType getTravelnotePageType()
+	{
+		return travelnotePageType;
+	}
+	
+	public void setTravelnotePageType(TravelnotePageType travelnotePageType)
+	{
+		this.travelnotePageType = travelnotePageType;
+	}
+	
+	
 }

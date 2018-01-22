@@ -28,7 +28,6 @@ public class SelectPwThemeDialog extends BottomPopupDialog implements OnItemClic
 	
 	@InjectComponent
 	private PicAndWordResourcesHandler picAndWordResourcesHandler;
-	
 	@InjectComponent
 	private PwResourcesCacheManager pwResourcesCacheManager;
 	

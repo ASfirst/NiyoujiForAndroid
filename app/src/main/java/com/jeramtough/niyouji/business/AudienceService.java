@@ -4,15 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.AddPageCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.DeletePageCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.PerformerCommand;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.SelectPageCommand;
-import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.component.communicate.factory.AudienceSocketMessageFactory;
 import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
@@ -46,20 +43,10 @@ public class AudienceService implements AudienceBusiness
 	
 	@Override
 	public void enterPerformingRoom(String performerId, BusinessCaller enterRoomBusinessCaller,
-			BusinessCaller obtainingLiveTravelnoteBusinessCaller,
-			BusinessCaller performerActionsBusinessCaller)
+			BusinessCaller obtainingLiveTravelnoteBusinessCaller)
 	{
-		if (audienceWebSocketClient.isConectionFailed())
-		{
-			try
-			{
-				audienceWebSocketClient = new AudienceWebSocketClient();
-			}
-			catch (URISyntaxException e)
-			{
-				e.printStackTrace();
-			}
-		}
+		audienceWebSocketClient =
+				(AudienceWebSocketClient) audienceWebSocketClient.clone();
 		
 		executorService.submit(() ->
 		{
@@ -73,7 +60,7 @@ public class AudienceService implements AudienceBusiness
 				if (connectSuccessfully)
 				{
 					audienceWebSocketClient
-							.setWebSocketClientListener(new WebSocketClientListener()
+							.addWebSocketClientListener(new WebSocketClientListener()
 							{
 								@Override
 								public void onMessage(SocketMessage socketMessage)
@@ -89,56 +76,6 @@ public class AudienceService implements AudienceBusiness
 													.putSerializable("travelnote", travelnote);
 											obtainingLiveTravelnoteBusinessCaller
 													.callBusiness();
-											break;
-										
-										case PerformerCommandActions.ADDED_PAGE:
-											performerActionsBusinessCaller.getData()
-													.putInt("performerAction",
-															socketMessage.getCommandAction());
-											
-											AddPageCommand addPageCommand =
-													PerformerCommandParser.parseAddPageCommand(
-															socketMessage);
-											
-											performerActionsBusinessCaller.getData()
-													.putSerializable("command",
-															addPageCommand);
-											
-											performerActionsBusinessCaller.callBusiness();
-											break;
-										
-										case PerformerCommandActions.SELECTED_PAGE:
-											performerActionsBusinessCaller.getData()
-													.putInt("performerAction",
-															socketMessage.getCommandAction());
-											
-											SelectPageCommand selectPageCommand =
-													PerformerCommandParser
-															.parseSelectPageCommand(
-																	socketMessage);
-											
-											performerActionsBusinessCaller.getData()
-													.putSerializable("command",
-															selectPageCommand);
-											
-											performerActionsBusinessCaller.callBusiness();
-											break;
-										
-										case PerformerCommandActions.DELETED_PAGE:
-											performerActionsBusinessCaller.getData()
-													.putInt("performerAction",
-															socketMessage.getCommandAction());
-											
-											DeletePageCommand deletePageCommand =
-													PerformerCommandParser
-															.parseDeletePageCommand(
-																	socketMessage);
-											
-											performerActionsBusinessCaller.getData()
-													.putSerializable("command",
-															deletePageCommand);
-											
-											performerActionsBusinessCaller.callBusiness();
 											break;
 									}
 								}
@@ -160,6 +97,154 @@ public class AudienceService implements AudienceBusiness
 			}
 			
 			
+		});
+	}
+	
+	@Override
+	public void callPerformerActions(String performerId,
+			BusinessCaller performerActionsBusinessCaller)
+	{
+		audienceWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
+		{
+			@Override
+			public void onMessage(SocketMessage socketMessage)
+			{
+				int action = socketMessage.getCommandAction();
+				switch (action)
+				{
+					case PerformerCommandActions.ADDED_PAGE:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						AddPageCommand addPageCommand =
+								PerformerCommandParser.parseAddPageCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", addPageCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.SELECTED_PAGE:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						SelectPageCommand selectPageCommand =
+								PerformerCommandParser.parseSelectPageCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", selectPageCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.DELETED_PAGE:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						DeletePageCommand deletePageCommand =
+								PerformerCommandParser.parseDeletePageCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", deletePageCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_IMAGE:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PageSetImageCommand pageSetImageCommand =
+								PerformerCommandParser.parsePageSetImageCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", pageSetImageCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_VIDEO:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PageSetVideoCommand pageSetVideoCommand =
+								PerformerCommandParser.parsePageSetVideoCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", pageSetVideoCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_THEME:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PageSetThemeCommand pageSetThemeCommand =
+								PerformerCommandParser.parsePageSetThemeCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", pageSetThemeCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.PAGE_SET_BACKGROUND_MUSIC:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
+								PerformerCommandParser
+										.parsePageSetBackgroundMusicCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", pageSetBackgroundMusicCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.PAGE_TEXT_CHANGED:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PageTextChangeCommand pageTextChangeCommand = PerformerCommandParser
+								.parsePageTextChangeCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", pageTextChangeCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.SENT_PERFORMER_BARRAGE:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						SendPerformerBarrageCommand sendPerformerBarrageCommand =
+								PerformerCommandParser
+										.parseSendPerformerBarrageCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", sendPerformerBarrageCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.TRAVELNOTE_END:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						TravelnoteEndCommand travelnoteEndCommand = PerformerCommandParser
+								.parseTravelnoteEndCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", travelnoteEndCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+				}
+			}
 		});
 	}
 	

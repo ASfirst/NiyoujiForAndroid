@@ -8,6 +8,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.nio.channels.NotYetConnectedException;
+import java.util.ArrayList;
 
 /**
  * @author 11718
@@ -15,20 +16,24 @@ import java.nio.channels.NotYetConnectedException;
 public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 {
 	private boolean isConectionFailed = false;
-	private WebSocketClientListener webSocketClientListener;
+	private ArrayList<WebSocketClientListener> webSocketClientListeners;
 	
 	public BaseWebSocketClient(URI serverUri)
 	{
 		super(serverUri);
+		webSocketClientListeners = new ArrayList<>();
 	}
 	
 	@Override
 	public void onOpen(ServerHandshake handshakedata)
 	{
 		getP().info("open a new connection with server");
-		if (webSocketClientListener != null)
+		if (webSocketClientListeners.size() != 0)
 		{
-			webSocketClientListener.onOpen(handshakedata);
+			for (WebSocketClientListener webSocketClientListener : webSocketClientListeners)
+			{
+				webSocketClientListener.onOpen(handshakedata);
+			}
 		}
 	}
 	
@@ -36,7 +41,7 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 	public void send(String text) throws NotYetConnectedException
 	{
 		super.send(text);
-		getP().info("client sent a text message ["+text+"] to server");
+		getP().info("client sent a text message [" + text + "] to server");
 	}
 	
 	@Override
@@ -45,9 +50,12 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		getP().info("accept a message from server [" + message + "]");
 		
 		SocketMessage socketMessage = JSON.parseObject(message, SocketMessage.class);
-		if (webSocketClientListener != null)
+		if (webSocketClientListeners.size() != 0)
 		{
-			webSocketClientListener.onMessage(socketMessage);
+			for (WebSocketClientListener webSocketClientListener : webSocketClientListeners)
+			{
+				webSocketClientListener.onMessage(socketMessage);
+			}
 		}
 	}
 	
@@ -57,9 +65,12 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		getP().warn("close the connection with server, because " + code + ": " + reason);
 		isConectionFailed = true;
 		
-		if (webSocketClientListener != null)
+		if (webSocketClientListeners.size() != 0)
 		{
-			webSocketClientListener.onClose(code, reason, remote);
+			for (WebSocketClientListener webSocketClientListener : webSocketClientListeners)
+			{
+				webSocketClientListener.onClose(code, reason, remote);
+			}
 		}
 		
 	}
@@ -70,9 +81,12 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		getP().error("have a exception for [" + ex.getMessage() + "]");
 		this.close();
 		
-		if (webSocketClientListener != null)
+		if (webSocketClientListeners.size() != 0)
 		{
-			webSocketClientListener.onError(ex);
+			for (WebSocketClientListener webSocketClientListener : webSocketClientListeners)
+			{
+				webSocketClientListener.onError(ex);
+			}
 		}
 	}
 	
@@ -87,9 +101,19 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 	}
 	
 	
-	public void setWebSocketClientListener(WebSocketClientListener webSocketClientListener)
+	public void addWebSocketClientListener(WebSocketClientListener webSocketClientListener)
 	{
-		this.webSocketClientListener = webSocketClientListener;
+		this.webSocketClientListeners.add(webSocketClientListener);
 	}
 	
+	protected ArrayList<WebSocketClientListener> getWebSocketClientListeners()
+	{
+		return webSocketClientListeners;
+	}
+	
+	protected void setWebSocketClientListeners(
+			ArrayList<WebSocketClientListener> webSocketClientListeners)
+	{
+		this.webSocketClientListeners = webSocketClientListeners;
+	}
 }

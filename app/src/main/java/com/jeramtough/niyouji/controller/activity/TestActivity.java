@@ -2,83 +2,56 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.*;
-import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
+import com.jeramtough.jtandroid.ui.FullScreenVideoView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.business.PerformingBusiness;
-import com.jeramtough.niyouji.business.PerformingService;
-import com.jeramtough.niyouji.component.app.AppConfig;
-
-import java.io.File;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.PageSetThemeCommand;
+import com.jeramtough.niyouji.component.app.GlideApp;
+import com.jeramtough.niyouji.component.travelnote.picandwordtheme.*;
 
 /**
  * @author 11718
  */
 public class TestActivity extends AppBaseActivity
 {
-	private Button btn1;
+	private FrameLayout layoutAudienceLiveTravelnotePage;
+	private AppCompatImageView viewPictureOfPage;
+	private AppCompatImageView imageViewFrame;
+	private TextView textViewTravelnotePageContent;
+	private FullScreenVideoView videoViewTravelnotePage;
 	
-	@InjectService(service = PerformingService.class)
-	private PerformingBusiness performingBusiness;
+	@InjectComponent
+	private PicAndWordResourcesHandler picAndWordResourcesHandler;
+	@InjectComponent
+	private PwResourcesCacheManager pwResourcesCacheManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_test);
+		setContentView(R.layout.view_audience_live_travelnote_page);
 		
-		btn1 = findViewById(R.id.btn1);
-		/*new Thread()
-		{
-			@Override
-			public void run()
-			{
-				try
-				
-				{
-					AssumeRoleResponse.Credentials credentials =
-							niyoujiStsManager.getCredentials();
-					aliOssManager.connect(credentials.getAccessKeyId(),
-							credentials.getAccessKeySecret(), credentials.getSecurityToken());
-					aliOssManager
-							.setPuttingTaskCallback(new AliOssManager.PuttingTaskCallback()
-							{
-								@Override
-								public void onPutProgress(String filename, long currentSize,
-										long totalSize, float percent)
-								{
-								
-								}
-								
-								@Override
-								public void onPutSuccess(String filename)
-								{
-									P.arrive();
-								}
-								
-								@Override
-								public void onPutFailure(String filename,
-										com.alibaba.sdk.android.oss.ClientException clientException,
-										ServiceException serviceException)
-								{
-								
-								}
-							});
-				}
-				catch (ClientException e)
-				
-				{
-					e.printStackTrace();
-				}
-			}
-		}.start();*/
+		layoutAudienceLiveTravelnotePage = findViewById(R.id.layout_audience_live_travelnote_page);
+		viewPictureOfPage = findViewById(R.id.view_picture_of_page);
+		imageViewFrame = findViewById(R.id.imageView_frame);
+		textViewTravelnotePageContent = findViewById(R.id.textView_travelnote_page_content);
+		videoViewTravelnotePage = findViewById(R.id.videoView_travelnote_page);
 		
-		IntentUtil.toTheOtherActivity(this,TakePhotoActivity.class,0);
+		GlideApp.with(this).load("http://niyouji.oss-cn-shenzhen.aliyuncs" +
+				".com/images/img_0_172641769.jpg").fitCenter().skipMemoryCache(true)
+				.into(viewPictureOfPage);
 		
-		btn1.setOnClickListener(this);
+		PwResourcePosition pwResourcePosition =
+				picAndWordResourcesHandler.getPwResourcePositions().get(2);
+		PwResourceCache pwResourceCache =
+				pwResourcesCacheManager.getPwResourceCache(pwResourcePosition);
+		PicAndWordTheme picAndWordTheme = new PicAndWordThemeImpl(this, pwResourceCache);
 		
+		picAndWordTheme.setMainBackground(layoutAudienceLiveTravelnotePage);
+		picAndWordTheme.setFrame(imageViewFrame);
 	}
 	
 	
@@ -87,8 +60,6 @@ public class TestActivity extends AppBaseActivity
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		
-		String path = data.getStringExtra(TakePhotoActivity.PHOTO_PATH_NAME);
-		performingBusiness.uploadImageFile(this,"e.jpg",path,null);
 	}
 	
 	@Override
@@ -97,15 +68,6 @@ public class TestActivity extends AppBaseActivity
 		switch (viewId)
 		{
 			case R.id.btn1:
-				
-				String imageFilePath =
-						AppConfig.getAppDirecotry(this) + File.separator + "test.jpg";
-				String imageFilePath1
-						="/storage/emulated/0/niyouji/images/JPEG_1515598406791.jpg";
-				String videoFilePath =
-						AppConfig.getAppDirecotry(this) + File.separator + "test.mp4";
-				
-//				aliOssManager.uploadVideoFile("a.mp4",videoFilePath);
 				break;
 		}
 	}
