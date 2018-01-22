@@ -225,6 +225,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 			liveTravelnotePageView.setResourcePath(travelnotePage.getResourceUrl());
 			liveTravelnotePageView.setTravelnotePageType(
 					TravelnotePageType.toTravelnotePageType(travelnotePage.getPageType()));
+			liveTravelnotePageView.getTextViewTravelnotePageContent().setText(travelnotePage
+					.getTextContent());
 		}
 		
 		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
@@ -379,6 +381,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		String text =
 				audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().getText()
 						.toString();
+		
+		P.debug(text);
+		
 		text = StringUtil.addOrDeleteWords(text, pageTextChangeCommand.isAdded(),
 				pageTextChangeCommand.getStart(), pageTextChangeCommand.getWords());
 		audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().setText(text);
