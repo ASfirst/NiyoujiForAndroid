@@ -42,7 +42,7 @@ public abstract class OnTextChangedListner implements TextWatcher
 		else if (wordsLengthAfterInputting < wordsCountBefterInputting)
 		{
 			String words = textBeforeChanged.substring(start, start + before);
-			onDeletedWords(words, start);
+			onDeletedWords(words, start+words.length());
 			/*if (start + before == textBeforeChanged.length())
 			{
 				onDeletedWordsFromLast(words);

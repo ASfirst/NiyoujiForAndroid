@@ -111,8 +111,12 @@
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
-        <activity android:name=".controller.activity.AudienceActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+                android:name=".controller.activity.AudienceActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                >
+        </activity>
+        <activity android:name=".controller.activity.Test1Activity">
         </activity>
     </application>
 

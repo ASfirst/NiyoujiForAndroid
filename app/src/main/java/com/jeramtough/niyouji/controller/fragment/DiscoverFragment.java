@@ -13,6 +13,7 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectView;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
+import com.jeramtough.niyouji.controller.activity.Test1Activity;
 import com.jeramtough.niyouji.controller.activity.TestActivity;
 import com.jeramtough.pullrefreshing.PullToRefreshView;
 
@@ -63,6 +64,7 @@ public class DiscoverFragment extends AppBaseFragment
 				IntentUtil.toTheOtherActivity(this.getActivity(), TestActivity.class);
 				break;
 			case R.id.btn_test3:
+				IntentUtil.toTheOtherActivity(this.getActivity(), Test1Activity.class);
 				break;
 		}
 	}
