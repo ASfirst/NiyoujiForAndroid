@@ -221,6 +221,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				{
 					IntentUtil.toTheOtherActivity(CreateTravelnoteActivity.this,
 							PerformingActivity.class);
+					CreateTravelnoteActivity.this.finish();
 				}, 500);
 				break;
 		}

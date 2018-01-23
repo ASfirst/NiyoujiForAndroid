@@ -1,11 +1,13 @@
 package com.jeramtough.niyouji.component.travelnote;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -24,7 +26,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 	private TextView textViewTravelnotePageContent;
 	private JtVideoView videoViewTravelnotePage;
 	private ViewGroup layoutAudienceLiveTravelnotePage;
-	
+	private FrameLayout layoutVideoCachingReminder;
 	
 	private int currentThemePosition = 0;
 	private String musicPath;
@@ -56,8 +58,17 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		videoViewTravelnotePage = findViewById(R.id.videoView_travelnote_page);
 		layoutAudienceLiveTravelnotePage =
 				findViewById(R.id.layout_audience_live_travelnote_page);
+		layoutVideoCachingReminder = findViewById(R.id.layout_video_caching_reminder);
 		
+		videoViewTravelnotePage.setVisibility(View.GONE);
+		videoViewTravelnotePage.setFullScreen(true);
 		videoViewTravelnotePage.setRepeated(true);
+		layoutVideoCachingReminder.setVisibility(View.GONE);
+		
+		videoViewTravelnotePage.setOnPreparedListener((MediaPlayer mp) ->
+		{
+			layoutVideoCachingReminder.setVisibility(View.GONE);
+		});
 	}
 	
 	public void clearTheme()
@@ -133,6 +144,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		if (travelnotePageType == TravelnotePageType.VIDEO)
 		{
 			videoViewTravelnotePage.setVisibility(VISIBLE);
+			layoutVideoCachingReminder.setVisibility(View.VISIBLE);
 		}
 	}
 	

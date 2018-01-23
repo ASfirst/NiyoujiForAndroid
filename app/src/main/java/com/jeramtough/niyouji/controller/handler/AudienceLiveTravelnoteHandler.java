@@ -267,6 +267,10 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	{
 		AudienceLiveTravelnotePageView liveTravelnotePageView =
 				new AudienceLiveTravelnotePageView(getContext());
+		
+		liveTravelnotePageView.setTravelnotePageType(
+				TravelnotePageType.toTravelnotePageType((addPageCommand.getPageType())));
+		
 		liveTravelnotePageViews.add(liveTravelnotePageView);
 		
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
@@ -312,8 +316,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
 							new PageSetBackgroundMusicCommand();
 					pageSetBackgroundMusicCommand.setPosition(selectPageCommand.getPosition());
-					pageSetBackgroundMusicCommand
-							.setMusicPath(getCurrentAudienceLiveTravelnoteView().getMusicPath());
+					pageSetBackgroundMusicCommand.setMusicPath(
+							getCurrentAudienceLiveTravelnoteView().getMusicPath());
 					
 					this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
 				}
@@ -356,7 +360,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private void pageSetVideo(PageSetVideoCommand pageSetVideoCommand)
 	{
 		//暂时先设置静态视频
-		pageSetVideoCommand.setVideoUrl("http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_216644795.mp4");
+		pageSetVideoCommand.setVideoUrl(
+				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4");
 		
 		AudienceLiveTravelnotePageView audienceLiveTravelnotePageView =
 				liveTravelnotePageViews.get(pageSetVideoCommand.getPosition());
