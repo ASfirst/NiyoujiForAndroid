@@ -12,8 +12,6 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.business.AudienceBusiness;
@@ -130,5 +128,12 @@ public class AudienceActivity extends AppBaseActivity
 			default:
 				break;
 		}
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		audienceLiveTravelnoteHandler.onDestroy();
 	}
 }

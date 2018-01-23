@@ -61,6 +61,13 @@ public class PerformingFragment extends AppBaseFragment
 	
 	protected void initResources()
 	{
+	
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 		obtainTravelnoteCovers();
 	}
 	

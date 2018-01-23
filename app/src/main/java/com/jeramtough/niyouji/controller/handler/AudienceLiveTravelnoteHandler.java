@@ -2,10 +2,12 @@ package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
 import android.os.Message;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.jeramtough.heartlayout.HeartLayout;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.business.BusinessCaller;
@@ -15,6 +17,9 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
+import com.jeramtough.jtemoji.JtEmojiCachesManager;
+import com.jeramtough.jtemoji.JtEmojiUtils;
+import com.jeramtough.jtemoji.JtEmojisHandler;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.StringUtil;
 import com.jeramtough.niyouji.R;
@@ -32,6 +37,7 @@ import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.*;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
+import com.jeramtough.niyouji.controller.dialog.AudienceTravelnoteEndDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
 
 import java.util.ArrayList;
@@ -76,6 +82,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private PicAndWordResourcesHandler picAndWordResourcesHandler;
 	@InjectComponent
 	private PwResourcesCacheManager pwResourcesCacheManager;
+	
 	
 	@InjectComponent
 	private VideoCacheServer videoCacheServer;
@@ -209,6 +216,15 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		picAndWordTheme.setTextViewOrEditText(
 				getCurrentAudienceLiveTravelnoteView().getTextViewTravelnotePageContent());
 		picAndWordTheme.setFrame(getCurrentAudienceLiveTravelnoteView().getImageViewFrame());
+	}
+	
+	@Override
+	public void onDestroy()
+	{
+		musicPlayer.end();
+		recycleCurrentPageResource();
+		Glide.get(this.getContext()).clearMemory();
+		JtEmojiCachesManager.getJtEmojiCachesManager().clearAllCaches();
 	}
 	
 	public void loadTravelnote(Travelnote travelnote)
@@ -376,8 +392,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
 				.setCurrentThemePosition(pageSetThemeCommand.getThemePosition());
 		
-		P.debug(pageSetThemeCommand.getThemePosition());
-		
 		PwResourcePosition pwResourcePosition =
 				picAndWordResourcesHandler.getPwResourcePositions()
 						.get(pageSetThemeCommand.getThemePosition());
@@ -409,13 +423,20 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	{
 		AudienceLiveTravelnotePageView audienceLiveTravelnotePageView =
 				liveTravelnotePageViews.get(pageTextChangeCommand.getPosition());
+		
 		String text =
 				audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().getText()
 						.toString();
 		
 		text = StringUtil.addOrDeleteWords(text, pageTextChangeCommand.isAdded(),
 				pageTextChangeCommand.getStart(), pageTextChangeCommand.getWords());
-		audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().setText(text);
+		
+		SpannableString spannableString = JtEmojiUtils.getEmotionContent(getContext(),
+				audienceLiveTravelnotePageView.getTextViewTravelnotePageContent(),
+				JtEmojisHandler.getJtEmojisHandler(), text);
+		
+		audienceLiveTravelnotePageView.getTextViewTravelnotePageContent()
+				.setText(spannableString);
 		
 	}
 	
@@ -434,6 +455,10 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private void travelnoteEnd(TravelnoteEndCommand travelnoteEndCommand)
 	{
 		P.arrive();
+		
+		AudienceTravelnoteEndDialog dialog =
+				new AudienceTravelnoteEndDialog(this.getActivity());
+		dialog.show();
 	}
 	
 	private void pauseMusicIf()
@@ -446,10 +471,14 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void recycleCurrentPageResource()
 	{
-		if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
-				TravelnotePageType.VIDEO)
+		if (liveTravelnotePageViews.size() > 0)
 		{
-			getCurrentAudienceLiveTravelnoteView().getVideoViewTravelnotePage().stopAndClear();
+			if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+					TravelnotePageType.VIDEO)
+			{
+				getCurrentAudienceLiveTravelnoteView().getVideoViewTravelnotePage()
+						.stopAndClear();
+			}
 		}
 	}
 	

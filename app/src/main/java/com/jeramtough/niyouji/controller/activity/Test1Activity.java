@@ -9,6 +9,7 @@ import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.cache.VideoCacheServer;
+import com.jeramtough.niyouji.controller.dialog.AudienceTravelnoteEndDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +31,14 @@ public class Test1Activity extends AppBaseActivity
 		setContentView(R.layout.activity_test1);
 		
 		videoView = findViewById(R.id.videoView);
-		
+		videoView.setFullScreen(false);
 		videoView.setVideoPath(videoCacheServer.toCacheUrl("http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4"));
 		videoView.setRepeated(true);
 		
 		videoView.start();
+		
+		AudienceTravelnoteEndDialog dialog=new AudienceTravelnoteEndDialog(this);
+		dialog.show();
 		
 	}
 	
