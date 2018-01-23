@@ -1,18 +1,22 @@
 package com.jeramtough.niyouji.controller.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
-import com.jeramtough.jtandroid.listener.OnTextChangedListner;
+import android.support.v7.app.AppCompatActivity;
+import com.danikula.videocache.HttpProxyCacheServer;
+import com.danikula.videocache.file.DiskUsage;
+import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.jtlog3.P;
-import com.jeramtough.jtutil.StringUtil;
 import com.jeramtough.niyouji.R;
 
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * @author 11718
+ */
 public class Test1Activity extends AppCompatActivity
 {
-	private EditText textView1;
-	private EditText textView2;
-	
+	private JtVideoView videoView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -20,30 +24,30 @@ public class Test1Activity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test1);
 		
-		textView1 = findViewById(R.id.textView_1);
-		textView2 = findViewById(R.id.textView_2);
+		videoView = findViewById(R.id.videoView);
 		
-		textView1.addTextChangedListener(new OnTextChangedListner()
+		String url = "http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_0_204654938.mp4";
+		
+		HttpProxyCacheServer proxy = new HttpProxyCacheServer.Builder(this)
+				.maxCacheSize(100 * 1024 * 1024)       // 1 Gb for cache
+				.diskUsage(new DiskUsage()
+				{
+					@Override
+					public void touch(File file) throws IOException
+					{
+						P.debug(file.getAbsolutePath());
+					}
+				}).build();
+		String proxyUrl = proxy.getProxyUrl(url);
+		videoView.setVideoPath(proxyUrl);
+		videoView.setRepeated(true);
+		
+		videoView.start();
+		
+		videoView.postDelayed(() ->
 		{
-			@Override
-			public void onAddWords(String words, int start)
-			{
-				a(true, start, words);
-			}
-			
-			@Override
-			public void onDeletedWords(String words, int start)
-			{
-				P.debug(start);
-				a(false, start, words);
-				
-			}
-		});
+			videoView.stopAndClear();
+		}, 2000);
 	}
 	
-	private void a(boolean isAdd, int start, String words)
-	{
-		textView2.setText(StringUtil
-				.addOrDeleteWords(textView2.getText().toString(), isAdd, start, words));
-	}
 }

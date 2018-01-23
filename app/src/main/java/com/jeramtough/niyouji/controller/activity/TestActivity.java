@@ -6,9 +6,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
-import com.jeramtough.jtandroid.ui.FullScreenVideoView;
+import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.PageSetThemeCommand;
 import com.jeramtough.niyouji.component.app.GlideApp;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.*;
 
@@ -21,7 +20,7 @@ public class TestActivity extends AppBaseActivity
 	private AppCompatImageView viewPictureOfPage;
 	private AppCompatImageView imageViewFrame;
 	private TextView textViewTravelnotePageContent;
-	private FullScreenVideoView videoViewTravelnotePage;
+	private JtVideoView videoViewTravelnotePage;
 	
 	@InjectComponent
 	private PicAndWordResourcesHandler picAndWordResourcesHandler;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.VideoView;
-import com.jeramtough.jtandroid.ui.FullScreenVideoView;
+import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.handler.PerformerLiveTravelnoteHandler;
@@ -24,7 +24,7 @@ public class LiveVideoPage
 	private ViewGroup viewGroup;
 	private Handler handler;
 	private ImageButton btnDeletePage;
-	private FullScreenVideoView videoViewTravelnotePage;
+	private JtVideoView videoViewTravelnotePage;
 	private UploadTestView uploadTextView;
 	
 	private boolean isTouchable = false;

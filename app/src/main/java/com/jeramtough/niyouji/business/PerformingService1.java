@@ -91,15 +91,6 @@ public class PerformingService1 implements PerformingBusiness1
 		addPageCommand.setPageType(liveTravelnotePageView.getTravelnotePageType().toString());
 		addPageCommand.setPerformerId(appUser.getUserId());
 		
-		if (liveTravelnotePageView.getTravelnotePageType() == TravelnotePageType.PICANDWORD)
-		{
-			addPageCommand.setThemePosition(0);
-		}
-		else
-		{
-			addPageCommand.setThemePosition(-1);
-		}
-		
 		SocketMessage socketMessage =
 				PerformerSocketMessageFactory.processAddedPageSocketMessage(addPageCommand);
 		executorService.submit(() ->

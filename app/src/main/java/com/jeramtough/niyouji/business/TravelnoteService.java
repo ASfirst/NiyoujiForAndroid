@@ -6,6 +6,8 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.NetworkIsAble;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtlog3.P;
+import com.jeramtough.jtlog3.WithLogger;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.component.httpclient.NiyoujiHttpClient;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.*;
  *         on 2018  January 20 Saturday 17:22.
  */
 @JtService
-public class TravelnoteService implements TravelnoteBusiness
+public class TravelnoteService implements TravelnoteBusiness,WithLogger
 {
 	private NiyoujiHttpClient niyoujiHttpClient;
 	private ExecutorService executorService;
@@ -61,7 +63,8 @@ public class TravelnoteService implements TravelnoteBusiness
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				getP().error("get travelnote covers "+ e.getMessage());
+				
 				businessCaller.getData().putBoolean("isSuccessful", false);
 				businessCaller.callBusiness();
 			}

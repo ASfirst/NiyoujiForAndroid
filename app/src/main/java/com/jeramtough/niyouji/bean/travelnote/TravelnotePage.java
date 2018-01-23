@@ -8,7 +8,7 @@ public class TravelnotePage
 	private String travelnoteId;
 	private String createTime;
 	private String pageType;
-	private int themePosition;
+	private int themePosition=0;
 	private String resourceUrl;
 	private String textContent;
 	private String backgroundMusicPath;

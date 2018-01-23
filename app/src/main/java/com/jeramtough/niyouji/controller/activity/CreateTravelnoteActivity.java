@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.ui.FullScreenVideoView;
+import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
@@ -41,7 +41,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private ImageView imageViewAddTravelnoteCover;
 	private EditText editTravelnoteTitle;
 	private Button btnStartPerforming;
-	private FullScreenVideoView videoViewTravelnoteCover;
+	private JtVideoView videoViewTravelnoteCover;
 	private ImageView imageViewTravelnoteCover;
 	private AppCompatImageView viewBack;
 	private LinearLayout layoutWaitingCreateTravelnote;

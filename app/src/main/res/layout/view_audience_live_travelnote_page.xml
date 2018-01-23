@@ -7,6 +7,7 @@
         android:background="@color/white"
         android:layout_gravity="center"
         >
+
     <FrameLayout
             android:id="@+id/layout_audience_live_travelnote_page"
             android:layout_width="match_parent"
@@ -59,11 +60,9 @@
         </LinearLayout>
     </ScrollView>
 
-
-
-    <com.jeramtough.jtandroid.ui.FullScreenVideoView
+    <com.jeramtough.jtandroid.ui.JtVideoView
             android:id="@+id/videoView_travelnote_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 </FrameLayout>

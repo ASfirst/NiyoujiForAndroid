@@ -26,6 +26,7 @@ import com.jeramtough.niyouji.business.AudienceBusiness;
 import com.jeramtough.niyouji.business.AudienceService;
 import com.jeramtough.niyouji.component.ali.camera.MusicsHandler;
 import com.jeramtough.niyouji.component.app.GlideApp;
+import com.jeramtough.niyouji.component.cache.VideoCacheServer;
 import com.jeramtough.niyouji.component.travelnote.AudienceLiveTravelnotePageView;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.picandwordtheme.*;
@@ -76,6 +77,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	@InjectComponent
 	private PwResourcesCacheManager pwResourcesCacheManager;
 	
+	@InjectComponent
+	private VideoCacheServer videoCacheServer;
 	
 	public AudienceLiveTravelnoteHandler(Activity activity, String performerId)
 	{
@@ -225,8 +228,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 			liveTravelnotePageView.setResourcePath(travelnotePage.getResourceUrl());
 			liveTravelnotePageView.setTravelnotePageType(
 					TravelnotePageType.toTravelnotePageType(travelnotePage.getPageType()));
-			liveTravelnotePageView.getTextViewTravelnotePageContent().setText(travelnotePage
-					.getTextContent());
+			liveTravelnotePageView.getTextViewTravelnotePageContent()
+					.setText(travelnotePage.getTextContent());
 		}
 		
 		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
@@ -236,6 +239,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		
 		textViewAttentionsCount.setText(travelnote.getAttentionsCount() + "");
 		
+		//模拟选中最后一页
 		if (travelnotePages.size() > 0)
 		{
 			SelectPageCommand selectPageCommand = new SelectPageCommand();
@@ -270,6 +274,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void deletePage(DeletePageCommand deletePageCommand)
 	{
+		//先回收资源
+		recycleCurrentPageResource();
+		//再移除page
 		liveTravelnotePageViews.remove(deletePageCommand.getPosition());
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
 		
@@ -278,28 +285,13 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void selectPage(SelectPageCommand selectPageCommand)
 	{
+		//先暂停背景音乐和回收视频资源
 		pauseMusicIf();
+		recycleCurrentPageResource();
 		
 		viewPagerTravelnotePages.setCurrentItem(selectPageCommand.getPosition());
 		
 		updatePagesCount();
-		
-		//恢复音乐
-		if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
-		{
-			PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
-					new PageSetBackgroundMusicCommand();
-			pageSetBackgroundMusicCommand
-					.setMusicPath(getCurrentAudienceLiveTravelnoteView().getMusicPath());
-			
-			this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
-		}
-		
-		//恢复主题
-		PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
-		pageSetThemeCommand.setThemePosition(
-				getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
-		this.pageSetTheme(pageSetThemeCommand);
 		
 		//恢复显示的资源内容
 		if (getCurrentAudienceLiveTravelnoteView().getResourcePath() != null)
@@ -308,15 +300,36 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					TravelnotePageType.PICANDWORD)
 			{
 				PageSetImageCommand pageSetImageCommand = new PageSetImageCommand();
+				pageSetImageCommand.setPosition(selectPageCommand.getPosition());
 				pageSetImageCommand
 						.setImageUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
 				
 				this.pageSetImage(pageSetImageCommand);
+				
+				//图文页才恢复音乐
+				if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
+				{
+					PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
+							new PageSetBackgroundMusicCommand();
+					pageSetBackgroundMusicCommand.setPosition(selectPageCommand.getPosition());
+					pageSetBackgroundMusicCommand
+							.setMusicPath(getCurrentAudienceLiveTravelnoteView().getMusicPath());
+					
+					this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
+				}
+				
+				//图文页才恢复主题
+				PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
+				pageSetThemeCommand.setPosition(selectPageCommand.getPosition());
+				pageSetThemeCommand.setThemePosition(
+						getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
+				this.pageSetTheme(pageSetThemeCommand);
 			}
 			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
 					TravelnotePageType.VIDEO)
 			{
 				PageSetVideoCommand pageSetVideoCommand = new PageSetVideoCommand();
+				pageSetVideoCommand.setPosition(selectPageCommand.getPosition());
 				pageSetVideoCommand
 						.setVideoUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
 				
@@ -342,13 +355,23 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void pageSetVideo(PageSetVideoCommand pageSetVideoCommand)
 	{
-	
+		//暂时先设置静态视频
+		pageSetVideoCommand.setVideoUrl("http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_216644795.mp4");
+		
+		AudienceLiveTravelnotePageView audienceLiveTravelnotePageView =
+				liveTravelnotePageViews.get(pageSetVideoCommand.getPosition());
+		String videoCacheUrl = videoCacheServer.toCacheUrl(pageSetVideoCommand.getVideoUrl());
+		audienceLiveTravelnotePageView.getVideoViewTravelnotePage()
+				.setVideoPath(videoCacheUrl);
+		audienceLiveTravelnotePageView.getVideoViewTravelnotePage().start();
 	}
 	
 	private void pageSetTheme(PageSetThemeCommand pageSetThemeCommand)
 	{
 		liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
 				.setCurrentThemePosition(pageSetThemeCommand.getThemePosition());
+		
+		P.debug(pageSetThemeCommand.getThemePosition());
 		
 		PwResourcePosition pwResourcePosition =
 				picAndWordResourcesHandler.getPwResourcePositions()
@@ -359,10 +382,13 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 				new PicAndWordThemeImpl(getContext(), pwResourceCache);
 		
 		picAndWordTheme.setMainBackground(
-				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition()).getLayoutAudienceLiveTravelnotePage());
+				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
+						.getLayoutAudienceLiveTravelnotePage());
 		picAndWordTheme.setTextViewOrEditText(
-				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition()).getTextViewTravelnotePageContent());
-		picAndWordTheme.setFrame(liveTravelnotePageViews.get(pageSetThemeCommand.getPosition()).getImageViewFrame());
+				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
+						.getTextViewTravelnotePageContent());
+		picAndWordTheme.setFrame(liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
+				.getImageViewFrame());
 	}
 	
 	private void pageSetBackgroundMusic(
@@ -381,8 +407,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		String text =
 				audienceLiveTravelnotePageView.getTextViewTravelnotePageContent().getText()
 						.toString();
-		
-		P.debug(text);
 		
 		text = StringUtil.addOrDeleteWords(text, pageTextChangeCommand.isAdded(),
 				pageTextChangeCommand.getStart(), pageTextChangeCommand.getWords());
@@ -415,10 +439,19 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		}
 	}
 	
+	private void recycleCurrentPageResource()
+	{
+		if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+				TravelnotePageType.VIDEO)
+		{
+			getCurrentAudienceLiveTravelnoteView().getVideoViewTravelnotePage().stopAndClear();
+		}
+	}
+	
 	private void updatePagesCount()
 	{
 		
-		textViewPagesCount.setText((getCurrentPosition()+1)+"/" + (liveTravelnotePageViews.size
-				() ));
+		textViewPagesCount
+				.setText((getCurrentPosition() + 1) + "/" + (liveTravelnotePageViews.size()));
 	}
 }

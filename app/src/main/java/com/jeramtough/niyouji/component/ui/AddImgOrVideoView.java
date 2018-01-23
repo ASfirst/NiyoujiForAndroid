@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import com.jeramtough.jtandroid.ui.FullScreenVideoView;
+import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.niyouji.R;
 
 /**
@@ -33,14 +33,14 @@ public class AddImgOrVideoView extends FrameLayout
 		FrameLayout.LayoutParams params =
 				new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.MATCH_PARENT);
-		FullScreenVideoView fullScreenVideoView = new FullScreenVideoView(getContext());
-		fullScreenVideoView.setLayoutParams(params);
+		JtVideoView jtVideoView = new JtVideoView(getContext());
+		jtVideoView.setLayoutParams(params);
 		
 		ImageView imageView = new ImageView(getContext());
 		imageView.setImageResource(R.drawable.plussign);
 		imageView.setLayoutParams(params);
 		
-		this.addView(fullScreenVideoView);
+		this.addView(jtVideoView);
 		this.addView(imageView);
 	}
 }

@@ -8,13 +8,9 @@
         tools:context="com.jeramtough.niyouji.controller.activity.Test1Activity"
         android:orientation="vertical">
 
-    <EditText
-            android:id="@+id/textView_1"
+    <com.jeramtough.jtandroid.ui.JtVideoView
+            android:id="@+id/videoView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    <EditText
-            android:id="@+id/textView_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
 </LinearLayout>

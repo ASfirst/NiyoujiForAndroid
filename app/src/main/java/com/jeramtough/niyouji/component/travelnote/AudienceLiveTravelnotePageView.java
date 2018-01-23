@@ -9,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.jeramtough.jtandroid.ui.FullScreenVideoView;
+import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.bean.travelnote.TravelnotePage;
 
 /**
  * @author 11718
@@ -23,7 +22,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 	private AppCompatImageView viewPictureOfPage;
 	private AppCompatImageView imageViewFrame;
 	private TextView textViewTravelnotePageContent;
-	private FullScreenVideoView videoViewTravelnotePage;
+	private JtVideoView videoViewTravelnotePage;
 	private ViewGroup layoutAudienceLiveTravelnotePage;
 	
 	
@@ -57,6 +56,8 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		videoViewTravelnotePage = findViewById(R.id.videoView_travelnote_page);
 		layoutAudienceLiveTravelnotePage =
 				findViewById(R.id.layout_audience_live_travelnote_page);
+		
+		videoViewTravelnotePage.setRepeated(true);
 	}
 	
 	public void clearTheme()
@@ -75,7 +76,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		return imageViewFrame;
 	}
 	
-	public FullScreenVideoView getVideoViewTravelnotePage()
+	public JtVideoView getVideoViewTravelnotePage()
 	{
 		return videoViewTravelnotePage;
 	}
@@ -129,6 +130,10 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 	public void setTravelnotePageType(TravelnotePageType travelnotePageType)
 	{
 		this.travelnotePageType = travelnotePageType;
+		if (travelnotePageType == TravelnotePageType.VIDEO)
+		{
+			videoViewTravelnotePage.setVisibility(VISIBLE);
+		}
 	}
 	
 	

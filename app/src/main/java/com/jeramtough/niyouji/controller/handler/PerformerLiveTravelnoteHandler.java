@@ -302,7 +302,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 						String videoUrl = ProcessNameOfCloud.processVideoFileUrl(
 								ProcessNameOfCloud.processVideoFileName(performingBusiness.getUserId(),
 										liveTravelnotePageView2));
-						liveTravelnoteEventsCaller.onPageSetPicture(position, videoUrl);
+						liveTravelnoteEventsCaller.onPageSetVideo(position, videoUrl);
 					}
 					else
 					{

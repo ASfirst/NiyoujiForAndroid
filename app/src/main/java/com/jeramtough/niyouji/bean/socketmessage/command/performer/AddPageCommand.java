@@ -11,7 +11,6 @@ public class AddPageCommand extends PerformerCommand
 {
 	private String createTime;
 	private String pageType;
-	private int themePosition;
 	
 	public String getCreateTime()
 	{
@@ -32,15 +31,4 @@ public class AddPageCommand extends PerformerCommand
 	{
 		this.pageType = pageType;
 	}
-	
-	public int getThemePosition()
-	{
-		return themePosition;
-	}
-	
-	public void setThemePosition(int themePosition)
-	{
-		this.themePosition = themePosition;
-	}
-	
 }
