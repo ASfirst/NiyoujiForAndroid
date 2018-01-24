@@ -145,6 +145,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		{
 			videoViewTravelnotePage.setVisibility(VISIBLE);
 			layoutVideoCachingReminder.setVisibility(View.VISIBLE);
+			viewPictureOfPage.setVisibility(View.INVISIBLE);
 		}
 	}
 	

@@ -3,6 +3,7 @@ package com.jeramtough.niyouji.controller.handler;
 import android.app.Activity;
 import android.os.Message;
 import android.text.SpannableString;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -23,7 +24,9 @@ import com.jeramtough.jtemoji.JtEmojisHandler;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.StringUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.bean.travelnote.TravelnotePage;
@@ -38,7 +41,11 @@ import com.jeramtough.niyouji.component.travelnote.picandwordtheme.*;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
 import com.jeramtough.niyouji.controller.dialog.AudienceTravelnoteEndDialog;
+import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectPwThemeDialog;
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +59,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		implements SelectPwThemeDialog.SelectPwthemeListener
 {
 	private static final int BUSINESS_CODE_PERFORMER_ACTIONS = 2;
+	private static final int BUSINESS_CODE_AUDIENCE_ACTIONS = 3;
 	
 	private JtViewPager viewPagerTravelnotePages;
 	private TextView textViewPerformerNickname;
@@ -64,6 +72,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private DanmakuLayout layoutDanmaku;
 	private ProgressBar progressBar;
 	private HeartLayout heartLayout;
+	private BoomMenuButton boomMenuButton;
 	
 	
 	private String performerId;
@@ -87,6 +96,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	@InjectComponent
 	private VideoCacheServer videoCacheServer;
 	
+	private boolean isFollowMode = true;
+	
 	public AudienceLiveTravelnoteHandler(Activity activity, String performerId)
 	{
 		super(activity);
@@ -103,6 +114,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		layoutDanmaku = findViewById(R.id.layout_danmaku);
 		progressBar = findViewById(R.id.progressBar);
 		heartLayout = findViewById(R.id.heart_layout);
+		boomMenuButton = findViewById(R.id.boomMenuButton);
+		
+		boomMenuButton.setVisibility(View.INVISIBLE);
 		
 		initResources();
 	}
@@ -113,8 +127,58 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		
 		liveTravelnotePageViews = new ArrayList<>();
 		
+		//初始化底部点击按钮
+		for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++)
+		{
+			HamButton.Builder builder = new HamButton.Builder();
+			switch (i)
+			{
+				case 0:
+					builder.normalImageRes(R.drawable.ic_beautiful);
+					builder.normalColorRes(R.color.menu_color3);
+					builder.normalText("关闭跟寻主播模式");
+					builder.listener(index ->
+					{
+						if (isFollowMode)
+						{
+							boomMenuButton.getBoomButton(index).getTextView()
+									.setText("开启跟寻主播模式");
+							isFollowMode = false;
+						}
+						else
+						{
+							boomMenuButton.getBoomButton(index).getTextView()
+									.setText("关闭跟寻主播模式");
+							isFollowMode = true;
+						}
+					});
+					break;
+				case 1:
+					builder.normalImageRes(R.drawable.ic_send_voice);
+					builder.normalColorRes(R.color.menu_color4);
+					builder.normalText("发送弹幕");
+					builder.listener(index ->
+					{
+						EditBarrageDialog editBarrageDialog =
+								new EditBarrageDialog(this.getContext());
+						editBarrageDialog.setEditBarrageListener((String content) ->
+						{
+							audienceBusiness.broadcastAudienceSendBarrage(performerId,
+									getCurrentPosition(), content);
+						});
+						editBarrageDialog.show();
+					});
+					break;
+			}
+			builder.textSize(21);
+			builder.textGravity(Gravity.CENTER);
+			boomMenuButton.addBuilder(builder);
+		}
+		
 		audienceBusiness.callPerformerActions(performerId,
 				new BusinessCaller(this, BUSINESS_CODE_PERFORMER_ACTIONS));
+		audienceBusiness.callAudienceActions(performerId,
+				new BusinessCaller(this, BUSINESS_CODE_AUDIENCE_ACTIONS));
 	}
 	
 	@Override
@@ -204,6 +268,19 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 						break;
 				}
 				break;
+			
+			case BUSINESS_CODE_AUDIENCE_ACTIONS:
+				int audienceAction = message.getData().getInt("audienceAction");
+				switch (audienceAction)
+				{
+					case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
+						SendAudienceBarrageCommand sendAudienceBarrageCommand =
+								(SendAudienceBarrageCommand) message.getData()
+										.getSerializable("command");
+						sentAudienceBarrage(sendAudienceBarrageCommand);
+						break;
+				}
+				break;
 		}
 	}
 	
@@ -231,7 +308,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	{
 		List<TravelnotePage> travelnotePages = travelnote.getTravelnotePages();
 		P.debug(travelnote.getTravelnotePages().size());
-		
 		
 		for (TravelnotePage travelnotePage : travelnotePages)
 		{
@@ -264,6 +340,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		}
 		
 		progressBar.setVisibility(View.INVISIBLE);
+		boomMenuButton.setVisibility(View.VISIBLE);
 		timedCloseTextViewShowMessage.setNiceMessage("初始化资源完成");
 		timedCloseTextViewShowMessage.closeDelayed(1000);
 	}
@@ -287,9 +364,23 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		liveTravelnotePageView.setTravelnotePageType(
 				TravelnotePageType.toTravelnotePageType((addPageCommand.getPageType())));
 		
+		//提示当前主播行为
+		if (liveTravelnotePageView.getTravelnotePageType() == TravelnotePageType.PICANDWORD)
+		{
+			timedCloseTextViewShowMessage.setPrimaryMessage("主播正在拍照中。。。");
+			
+		}
+		else if (liveTravelnotePageView.getTravelnotePageType() == TravelnotePageType.VIDEO)
+		{
+			timedCloseTextViewShowMessage.setPrimaryMessage("主播正在录像中。。。");
+		}
+		timedCloseTextViewShowMessage.visible();
+		
 		liveTravelnotePageViews.add(liveTravelnotePageView);
 		
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
+		
+		
 	}
 	
 	private void deletePage(DeletePageCommand deletePageCommand)
@@ -305,61 +396,67 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void selectPage(SelectPageCommand selectPageCommand)
 	{
-		//先暂停背景音乐和回收视频资源
-		pauseMusicIf();
-		recycleCurrentPageResource();
-		
-		viewPagerTravelnotePages.setCurrentItem(selectPageCommand.getPosition());
-		
-		updatePagesCount();
-		
-		//恢复显示的资源内容
-		if (getCurrentAudienceLiveTravelnoteView().getResourcePath() != null)
+		if (isFollowMode)
 		{
-			if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
-					TravelnotePageType.PICANDWORD)
+			//先暂停背景音乐和回收视频资源
+			pauseMusicIf();
+			recycleCurrentPageResource();
+			
+			viewPagerTravelnotePages.setCurrentItem(selectPageCommand.getPosition());
+			
+			updatePagesCount();
+			
+			//恢复显示的资源内容
+			if (getCurrentAudienceLiveTravelnoteView().getResourcePath() != null)
 			{
-				PageSetImageCommand pageSetImageCommand = new PageSetImageCommand();
-				pageSetImageCommand.setPosition(selectPageCommand.getPosition());
-				pageSetImageCommand
-						.setImageUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
-				
-				this.pageSetImage(pageSetImageCommand);
-				
-				//图文页才恢复音乐
-				if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
+				if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+						TravelnotePageType.PICANDWORD)
 				{
-					PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
-							new PageSetBackgroundMusicCommand();
-					pageSetBackgroundMusicCommand.setPosition(selectPageCommand.getPosition());
-					pageSetBackgroundMusicCommand.setMusicPath(
-							getCurrentAudienceLiveTravelnoteView().getMusicPath());
+					PageSetImageCommand pageSetImageCommand = new PageSetImageCommand();
+					pageSetImageCommand.setPosition(selectPageCommand.getPosition());
+					pageSetImageCommand.setImageUrl(
+							getCurrentAudienceLiveTravelnoteView().getResourcePath());
 					
-					this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
+					this.pageSetImage(pageSetImageCommand);
+					
+					//图文页才恢复音乐
+					if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
+					{
+						PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
+								new PageSetBackgroundMusicCommand();
+						pageSetBackgroundMusicCommand
+								.setPosition(selectPageCommand.getPosition());
+						pageSetBackgroundMusicCommand.setMusicPath(
+								getCurrentAudienceLiveTravelnoteView().getMusicPath());
+						
+						this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
+					}
+					
+					//图文页才恢复主题
+					PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
+					pageSetThemeCommand.setPosition(selectPageCommand.getPosition());
+					pageSetThemeCommand.setThemePosition(
+							getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
+					this.pageSetTheme(pageSetThemeCommand);
 				}
-				
-				//图文页才恢复主题
-				PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
-				pageSetThemeCommand.setPosition(selectPageCommand.getPosition());
-				pageSetThemeCommand.setThemePosition(
-						getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
-				this.pageSetTheme(pageSetThemeCommand);
-			}
-			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
-					TravelnotePageType.VIDEO)
-			{
-				PageSetVideoCommand pageSetVideoCommand = new PageSetVideoCommand();
-				pageSetVideoCommand.setPosition(selectPageCommand.getPosition());
-				pageSetVideoCommand
-						.setVideoUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
-				
-				this.pageSetVideo(pageSetVideoCommand);
+				else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+						TravelnotePageType.VIDEO)
+				{
+					PageSetVideoCommand pageSetVideoCommand = new PageSetVideoCommand();
+					pageSetVideoCommand.setPosition(selectPageCommand.getPosition());
+					pageSetVideoCommand.setVideoUrl(
+							getCurrentAudienceLiveTravelnoteView().getResourcePath());
+					
+					this.pageSetVideo(pageSetVideoCommand);
+				}
 			}
 		}
 	}
 	
 	private void pageSetImage(PageSetImageCommand pageSetImageCommand)
 	{
+		timedCloseTextViewShowMessage.invisible();
+		
 		//暂时先设置一张静态的图片
 		pageSetImageCommand.setImageUrl(
 				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/img_0_172641769.jpg");
@@ -375,6 +472,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void pageSetVideo(PageSetVideoCommand pageSetVideoCommand)
 	{
+		timedCloseTextViewShowMessage.invisible();
+		
 		//暂时先设置静态视频
 		pageSetVideoCommand.setVideoUrl(
 				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4");
@@ -446,10 +545,22 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		textView.setBackgroundResource(R.color.colorPrimary);
 		textView.setPadding(10, 10, 10, 10);
 		textView.setText(sendPerformerBarrageCommand.getContent());
-		layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
+		layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE2);
 		
 		appraisalAreaView.addAppraisal(sendPerformerBarrageCommand.getNickname(),
 				sendPerformerBarrageCommand.getContent(), 2);
+	}
+	
+	private void sentAudienceBarrage(SendAudienceBarrageCommand sendAudienceBarrageCommand)
+	{
+		TextView textView = new TextView(getContext());
+		textView.setBackgroundResource(R.color.colorPrimary);
+		textView.setPadding(10, 10, 10, 10);
+		textView.setText(sendAudienceBarrageCommand.getContent());
+		layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
+		
+		appraisalAreaView.addAppraisal(sendAudienceBarrageCommand.getNickname(),
+				sendAudienceBarrageCommand.getContent(), 1);
 	}
 	
 	private void travelnoteEnd(TravelnoteEndCommand travelnoteEndCommand)

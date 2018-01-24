@@ -4,19 +4,22 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
-import com.jeramtough.jtlog3.P;
+import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
+import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
+import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.communicate.factory.AudienceSocketMessageFactory;
+import com.jeramtough.niyouji.component.communicate.parser.AudienceCommandParser;
 import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
 import com.jeramtough.niyouji.component.websocket.AudienceWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 
-import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -31,11 +34,13 @@ public class AudienceService implements AudienceBusiness
 {
 	private AudienceWebSocketClient audienceWebSocketClient;
 	private ExecutorService executorService;
+	private AppUser appUser;
 	
 	@IocAutowire
-	public AudienceService(AudienceWebSocketClient audienceWebSocketClient)
+	public AudienceService(AudienceWebSocketClient audienceWebSocketClient, AppUser appUser)
 	{
 		this.audienceWebSocketClient = audienceWebSocketClient;
+		this.appUser = appUser;
 		
 		executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 				new LinkedBlockingQueue<Runnable>());
@@ -45,8 +50,7 @@ public class AudienceService implements AudienceBusiness
 	public void enterPerformingRoom(String performerId, BusinessCaller enterRoomBusinessCaller,
 			BusinessCaller obtainingLiveTravelnoteBusinessCaller)
 	{
-		audienceWebSocketClient =
-				(AudienceWebSocketClient) audienceWebSocketClient.clone();
+		audienceWebSocketClient = (AudienceWebSocketClient) audienceWebSocketClient.clone();
 		
 		executorService.submit(() ->
 		{
@@ -246,6 +250,62 @@ public class AudienceService implements AudienceBusiness
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void callAudienceActions(String performerId,
+			BusinessCaller audienceActionsBusinessCaller)
+	{
+		audienceWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
+		{
+			@Override
+			public void onMessage(SocketMessage socketMessage)
+			{
+				int action = socketMessage.getCommandAction();
+				switch (action)
+				{
+					case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						SendAudienceBarrageCommand sendAudienceBarrageCommand =
+								AudienceCommandParser
+										.parseSendAudienceBarrageCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", sendAudienceBarrageCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+				}
+			}
+		});
+	}
+	
+	@Override
+	public void broadcastAudienceSendBarrage(String performerId, int position,
+			String broadcastContent)
+	{
+		SendAudienceBarrageCommand sendAudienceBarrageCommand =
+				new SendAudienceBarrageCommand();
+		sendAudienceBarrageCommand.setPosition(position);
+		sendAudienceBarrageCommand.setContent(broadcastContent);
+		if (appUser.getHasLogined())
+		{
+			sendAudienceBarrageCommand.setNickname(appUser.getNickname());
+		}
+		else
+		{
+			sendAudienceBarrageCommand.setNickname("观众");
+		}
+		sendAudienceBarrageCommand.setPerformers(false);
+		sendAudienceBarrageCommand.setPerformerId(performerId);
+		sendAudienceBarrageCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
+		
+		SocketMessage socketMessage = AudienceSocketMessageFactory
+				.processSendAudienceBarrageCommandSocketMessage(sendAudienceBarrageCommand);
+		
+		audienceWebSocketClient.sendSocketMessage(socketMessage);
 	}
 	
 	

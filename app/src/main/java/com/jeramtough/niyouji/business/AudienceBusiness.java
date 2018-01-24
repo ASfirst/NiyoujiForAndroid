@@ -16,4 +16,8 @@ public interface AudienceBusiness
 	void callPerformerActions(String performerId,
 			BusinessCaller performerActionsBusinessCaller);
 	
+	void callAudienceActions(String performerId, BusinessCaller audienceActionsBusinessCaller);
+	
+	void broadcastAudienceSendBarrage(String performerId, int position,
+			String broadcastContent);
 }

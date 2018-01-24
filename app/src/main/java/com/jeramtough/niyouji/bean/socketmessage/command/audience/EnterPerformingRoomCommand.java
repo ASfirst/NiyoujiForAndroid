@@ -1,17 +1,9 @@
 package com.jeramtough.niyouji.bean.socketmessage.command.audience;
 
-public class EnterPerformingRoomCommand
+/**
+ * @author 11718
+ */
+public class EnterPerformingRoomCommand extends AudienceCommand
 {
-	private String performerId;
-	
-	
-	public String getPerformerId()
-	{
-		return performerId;
-	}
-	
-	public void setPerformerId(String performerId)
-	{
-		this.performerId = performerId;
-	}
+
 }

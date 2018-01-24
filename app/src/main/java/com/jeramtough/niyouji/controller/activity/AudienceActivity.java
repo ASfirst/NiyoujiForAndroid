@@ -18,7 +18,12 @@ import com.jeramtough.niyouji.business.AudienceBusiness;
 import com.jeramtough.niyouji.business.AudienceService;
 import com.jeramtough.niyouji.component.ui.AppraisalAreaView;
 import com.jeramtough.niyouji.component.ui.DanmakuLayout;
+import com.jeramtough.niyouji.controller.dialog.EditBarrageDialog;
 import com.jeramtough.niyouji.controller.handler.AudienceLiveTravelnoteHandler;
+import com.jeramtough.niyouji.controller.handler.PerformerLiveTravelnoteHandler;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 
 /**
  * @author 11718
@@ -64,6 +69,7 @@ public class AudienceActivity extends AppBaseActivity
 		layoutDanmaku = findViewById(R.id.layout_danmaku);
 		progressBar = findViewById(R.id.progressBar);
 		heartLayout = findViewById(R.id.heart_layout);
+		
 		
 		initResources();
 	}

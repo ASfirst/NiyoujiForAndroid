@@ -50,7 +50,7 @@ public class EditBarrageDialog extends Dialog implements View.OnClickListener
 		switch (v.getId())
 		{
 			case R.id.button_send_barrage:
-				if (editBarrageListener != null)
+				if (editBarrageListener != null && editBarrage.getText().length() > 0)
 				{
 					editBarrageListener.onSentBarrage(editBarrage.getText().toString());
 				}
