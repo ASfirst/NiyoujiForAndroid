@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
 
 /**
@@ -29,6 +30,17 @@ public class AudienceSocketMessageFactory
 		SocketMessage socketMessage =
 				new SocketMessage(AudienceCommandActions.SEND_AUDIENCE_BARRAGE);
 		socketMessage.setCommand(JSON.toJSONString(sendAudienceBarrageCommand));
+		
+		return socketMessage;
+	}
+	
+	
+	public static SocketMessage processLightAttentionCountCommandSocketMessage(
+			LightAttentionCountCommand lightAttentionCountCommand)
+	{
+		SocketMessage socketMessage =
+				new SocketMessage(AudienceCommandActions.LIGHT_ATTENTION_COUNT);
+		socketMessage.setCommand(JSON.toJSONString(lightAttentionCountCommand));
 		
 		return socketMessage;
 	}

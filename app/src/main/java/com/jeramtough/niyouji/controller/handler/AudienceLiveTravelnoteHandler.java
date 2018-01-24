@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.os.Message;
 import android.text.SpannableString;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.bumptech.glide.Glide;
 import com.jeramtough.heartlayout.HeartLayout;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
@@ -26,6 +25,8 @@ import com.jeramtough.jtutil.StringUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
@@ -48,6 +49,7 @@ import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -55,8 +57,8 @@ import java.util.List;
  *         on 2018  January 21 Sunday 19:59.
  */
 
-public class AudienceLiveTravelnoteHandler extends JtIocHandler
-		implements SelectPwThemeDialog.SelectPwthemeListener
+public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.OnTouchListener
+
 {
 	private static final int BUSINESS_CODE_PERFORMER_ACTIONS = 2;
 	private static final int BUSINESS_CODE_AUDIENCE_ACTIONS = 3;
@@ -73,9 +75,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private ProgressBar progressBar;
 	private HeartLayout heartLayout;
 	private BoomMenuButton boomMenuButton;
-	
-	
-	private String performerId;
+	private FrameLayout layoutDoubleClick;
 	
 	private ArrayList<AudienceLiveTravelnotePageView> liveTravelnotePageViews;
 	
@@ -97,6 +97,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private VideoCacheServer videoCacheServer;
 	
 	private boolean isFollowMode = true;
+	private String performerId;
+	private int clickCount = 0;
+	private int lightAttentionCount = 0;
 	
 	public AudienceLiveTravelnoteHandler(Activity activity, String performerId)
 	{
@@ -115,8 +118,11 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		progressBar = findViewById(R.id.progressBar);
 		heartLayout = findViewById(R.id.heart_layout);
 		boomMenuButton = findViewById(R.id.boomMenuButton);
+		layoutDoubleClick = findViewById(R.id.layout_double_click);
 		
 		boomMenuButton.setVisibility(View.INVISIBLE);
+		
+		layoutDoubleClick.setOnTouchListener(this);
 		
 		initResources();
 	}
@@ -273,11 +279,26 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 				int audienceAction = message.getData().getInt("audienceAction");
 				switch (audienceAction)
 				{
+					case AudienceCommandActions.ENTER_PERFORMING_ROOM:
+						//其他观众进入直播间时回调到这里
+						EnterPerformingRoomCommand enterPerformingRoomCommand =
+								(EnterPerformingRoomCommand) message.getData()
+										.getSerializable("command");
+						otherAudienceEnterPerformingRoom(enterPerformingRoomCommand);
+						break;
+					
 					case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
 						SendAudienceBarrageCommand sendAudienceBarrageCommand =
 								(SendAudienceBarrageCommand) message.getData()
 										.getSerializable("command");
 						sentAudienceBarrage(sendAudienceBarrageCommand);
+						break;
+					
+					case AudienceCommandActions.LIGHT_ATTENTION_COUNT:
+						LightAttentionCountCommand lightAttentionCountCommand =
+								(LightAttentionCountCommand) message.getData()
+										.getSerializable("command");
+						lightAttentionCount(lightAttentionCountCommand);
 						break;
 				}
 				break;
@@ -286,13 +307,36 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	
 	@Override
-	public void onSelectedPicAndWordTheme(int position, PicAndWordTheme picAndWordTheme)
+	public boolean onTouch(View v, MotionEvent event)
 	{
-		picAndWordTheme.setMainBackground(
-				getCurrentAudienceLiveTravelnoteView().getLayoutAudienceLiveTravelnotePage());
-		picAndWordTheme.setTextViewOrEditText(
-				getCurrentAudienceLiveTravelnoteView().getTextViewTravelnotePageContent());
-		picAndWordTheme.setFrame(getCurrentAudienceLiveTravelnoteView().getImageViewFrame());
+		if (v.getId() == R.id.layout_double_click)
+		{
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+			{
+				clickCount++;
+				if (clickCount == 1)
+				{
+					v.postDelayed(() ->
+					{
+						if (clickCount == 2)
+						{
+							lightAttentionCount++;
+							if (lightAttentionCount <= 10)
+							{
+								audienceBusiness.broadcastLightAttentionCount(performerId);
+							}
+							else
+							{
+								Toast.makeText(this.getContext(), "点亮以到最大限额",
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+						clickCount = 0;
+					}, 300);
+				}
+			}
+		}
+		return false;
 	}
 	
 	@Override
@@ -329,7 +373,10 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		adapter.setForceUpdateMode(true);
 		viewPagerTravelnotePages.setAdapter(adapter);
 		
-		textViewAttentionsCount.setText(travelnote.getAttentionsCount() + "");
+		//加上这个用户本生的观众数
+		int audiencesCount = travelnote.getAttentionsCount() + 1;
+		P.debug(audiencesCount);
+		textViewAttentionsCount.setText(audiencesCount + "");
 		
 		//模拟选中最后一页
 		if (travelnotePages.size() > 0)
@@ -563,6 +610,21 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 				sendAudienceBarrageCommand.getContent(), 1);
 	}
 	
+	private void lightAttentionCount(LightAttentionCountCommand lightAttentionCountCommand)
+	{
+		heartLayout.addHeartWithRandomColor();
+		int count = Integer.parseInt(textViewAttentionsCount.getText().toString()) + 1;
+		textViewAttentionsCount.setText(count + "");
+	}
+	
+	
+	private void otherAudienceEnterPerformingRoom(
+			EnterPerformingRoomCommand enterPerformingRoomCommand)
+	{
+		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString()) + 1;
+		textViewAudiencesCount.setText(audiencesCount + "");
+	}
+	
 	private void travelnoteEnd(TravelnoteEndCommand travelnoteEndCommand)
 	{
 		P.arrive();
@@ -599,4 +661,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		textViewPagesCount
 				.setText((getCurrentPosition() + 1) + "/" + (liveTravelnotePageViews.size()));
 	}
+	
+	
 }

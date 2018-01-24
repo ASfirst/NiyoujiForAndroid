@@ -10,6 +10,7 @@ import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
@@ -20,10 +21,7 @@ import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParse
 import com.jeramtough.niyouji.component.websocket.AudienceWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author 11718
@@ -42,8 +40,8 @@ public class AudienceService implements AudienceBusiness
 		this.audienceWebSocketClient = audienceWebSocketClient;
 		this.appUser = appUser;
 		
-		executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
-				new LinkedBlockingQueue<Runnable>());
+		executorService = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
+				new SynchronousQueue<Runnable>());
 	}
 	
 	@Override
@@ -264,6 +262,20 @@ public class AudienceService implements AudienceBusiness
 				int action = socketMessage.getCommandAction();
 				switch (action)
 				{
+					case AudienceCommandActions.ENTER_PERFORMING_ROOM:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						EnterPerformingRoomCommand enterPerformingRoomCommand =
+								AudienceCommandParser
+										.parseEnterPerformingRoomCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", enterPerformingRoomCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+					
 					case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
 						audienceActionsBusinessCaller.getData()
 								.putInt("audienceAction", socketMessage.getCommandAction());
@@ -277,6 +289,19 @@ public class AudienceService implements AudienceBusiness
 						
 						audienceActionsBusinessCaller.callBusiness();
 						break;
+					case AudienceCommandActions.LIGHT_ATTENTION_COUNT:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						LightAttentionCountCommand lightAttentionCountCommand =
+								AudienceCommandParser
+										.parseLightAttentionCountCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", lightAttentionCountCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
 				}
 			}
 		});
@@ -286,26 +311,49 @@ public class AudienceService implements AudienceBusiness
 	public void broadcastAudienceSendBarrage(String performerId, int position,
 			String broadcastContent)
 	{
-		SendAudienceBarrageCommand sendAudienceBarrageCommand =
-				new SendAudienceBarrageCommand();
-		sendAudienceBarrageCommand.setPosition(position);
-		sendAudienceBarrageCommand.setContent(broadcastContent);
-		if (appUser.getHasLogined())
-		{
-			sendAudienceBarrageCommand.setNickname(appUser.getNickname());
-		}
-		else
-		{
-			sendAudienceBarrageCommand.setNickname("观众");
-		}
-		sendAudienceBarrageCommand.setPerformers(false);
-		sendAudienceBarrageCommand.setPerformerId(performerId);
-		sendAudienceBarrageCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
 		
-		SocketMessage socketMessage = AudienceSocketMessageFactory
-				.processSendAudienceBarrageCommandSocketMessage(sendAudienceBarrageCommand);
+		executorService.submit(() ->
+		{
+			SendAudienceBarrageCommand sendAudienceBarrageCommand =
+					new SendAudienceBarrageCommand();
+			sendAudienceBarrageCommand.setPosition(position);
+			sendAudienceBarrageCommand.setContent(broadcastContent);
+			if (appUser.getHasLogined())
+			{
+				sendAudienceBarrageCommand.setNickname(appUser.getNickname());
+			}
+			else
+			{
+				sendAudienceBarrageCommand.setNickname("观众");
+			}
+			sendAudienceBarrageCommand.setPerformers(false);
+			sendAudienceBarrageCommand.setPerformerId(performerId);
+			sendAudienceBarrageCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
+			
+			SocketMessage socketMessage = AudienceSocketMessageFactory
+					.processSendAudienceBarrageCommandSocketMessage(
+							sendAudienceBarrageCommand);
+			
+			audienceWebSocketClient.sendSocketMessage(socketMessage);
+		});
 		
-		audienceWebSocketClient.sendSocketMessage(socketMessage);
+	}
+	
+	@Override
+	public void broadcastLightAttentionCount(String performerId)
+	{
+		executorService.submit(() ->
+		{
+			LightAttentionCountCommand lightAttentionCountCommand =
+					new LightAttentionCountCommand();
+			lightAttentionCountCommand.setPerformerId(performerId);
+			
+			SocketMessage socketMessage = AudienceSocketMessageFactory
+					.processLightAttentionCountCommandSocketMessage(
+							lightAttentionCountCommand);
+			
+			audienceWebSocketClient.sendSocketMessage(socketMessage);
+		});
 	}
 	
 	

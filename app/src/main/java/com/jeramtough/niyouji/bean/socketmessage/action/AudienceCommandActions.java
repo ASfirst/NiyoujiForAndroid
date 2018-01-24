@@ -7,4 +7,6 @@ public class AudienceCommandActions
 	public static final int ENTER_PERFORMING_ROOM = BASE + 1;
 	
 	public static final int SEND_AUDIENCE_BARRAGE = BASE + 2;
+	
+	public static final int LIGHT_ATTENTION_COUNT = BASE + 3;
 }

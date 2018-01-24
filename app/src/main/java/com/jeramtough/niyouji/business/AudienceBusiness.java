@@ -20,4 +20,6 @@ public interface AudienceBusiness
 	
 	void broadcastAudienceSendBarrage(String performerId, int position,
 			String broadcastContent);
+	
+	void broadcastLightAttentionCount(String performerId);
 }
