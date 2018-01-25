@@ -1,16 +1,23 @@
 package com.jeramtough.niyouji.business;
 
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
+import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.component.app.AppUser;
+import com.jeramtough.niyouji.component.communicate.parser.AudienceCommandParser;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
+import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -240,4 +247,61 @@ public class PerformingService1 implements PerformingBusiness1
 			performerWebSocketClient.sendSocketMessage(socketMessage);
 		});
 	}
+	
+	@Override
+	public void callAudienceActions(BusinessCaller audienceActionsBusinessCaller)
+	{
+		performerWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
+		{
+			@Override
+			public void onMessage(SocketMessage socketMessage)
+			{
+				int action = socketMessage.getCommandAction();
+				switch (action)
+				{
+					case AudienceCommandActions.ENTER_PERFORMING_ROOM:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						EnterPerformingRoomCommand enterPerformingRoomCommand =
+								AudienceCommandParser
+										.parseEnterPerformingRoomCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", enterPerformingRoomCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+					
+					case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						SendAudienceBarrageCommand sendAudienceBarrageCommand =
+								AudienceCommandParser
+										.parseSendAudienceBarrageCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", sendAudienceBarrageCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+					case AudienceCommandActions.LIGHT_ATTENTION_COUNT:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						LightAttentionCountCommand lightAttentionCountCommand =
+								AudienceCommandParser
+										.parseLightAttentionCountCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", lightAttentionCountCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+				}
+			}
+		});
+	}
+	
 }

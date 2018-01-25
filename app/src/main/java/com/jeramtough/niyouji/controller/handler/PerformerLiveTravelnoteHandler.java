@@ -207,7 +207,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 				
 				String nicknameOfPerformer = performingBusiness.getNicknameOfPerformer();
 				
-				layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE1);
+				layoutDanmaku.addViewWithAnimation(textView, DanmakuLayout.ANIMATION_STYLE2);
 				appraisalAreaView.addAppraisal(nicknameOfPerformer, barrageContent, 2);
 				
 				//回调发送主播弹幕事件

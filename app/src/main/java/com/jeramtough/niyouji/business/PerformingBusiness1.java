@@ -1,5 +1,6 @@
 package com.jeramtough.niyouji.business;
 
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 
 /**
@@ -28,4 +29,6 @@ public interface PerformingBusiness1
 	void spreadTravelnoteSentPerformerBarrage(int position, String barrageContent);
 	
 	void spreadTravelnoteEnd();
+	
+	void callAudienceActions(BusinessCaller audienceActionsBusinessCaller);
 }

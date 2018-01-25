@@ -89,7 +89,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
-                            android:hint="要写点什么~"/>
+                            android:hint="要写点什么~"
+                            android:textColor="@color/black"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="5dp"/>
 
                     <FrameLayout
                             android:id="@+id/layout_functions_container"

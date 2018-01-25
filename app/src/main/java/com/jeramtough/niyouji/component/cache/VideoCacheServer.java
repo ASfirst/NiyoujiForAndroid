@@ -24,6 +24,10 @@ public class VideoCacheServer implements WithLogger
 	public VideoCacheServer(Context context)
 	{
 		this.context = context;
+		
+		//cancel logging
+		unableLog();
+		
 		proxy = new HttpProxyCacheServer.Builder(context)
 				.maxCacheSize(MAX_CACHE_MB * 1024 * 1024).diskUsage((File file) ->
 				{

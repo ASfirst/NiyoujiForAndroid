@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -57,7 +58,8 @@ import java.util.List;
  *         on 2018  January 21 Sunday 19:59.
  */
 
-public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.OnTouchListener
+public class AudienceLiveTravelnoteHandler extends JtIocHandler
+		implements View.OnTouchListener, ViewPager.OnPageChangeListener
 
 {
 	private static final int BUSINESS_CODE_PERFORMER_ACTIONS = 2;
@@ -100,6 +102,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 	private String performerId;
 	private int clickCount = 0;
 	private int lightAttentionCount = 0;
+	private AudienceLiveTravelnotePageView lastAudienceLiveTravelnotePageView;
 	
 	public AudienceLiveTravelnoteHandler(Activity activity, String performerId)
 	{
@@ -122,7 +125,10 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 		
 		boomMenuButton.setVisibility(View.INVISIBLE);
 		
+		viewPagerTravelnotePages.setScrollble(false);
+		
 		layoutDoubleClick.setOnTouchListener(this);
+		viewPagerTravelnotePages.addOnPageChangeListener(this);
 		
 		initResources();
 	}
@@ -150,12 +156,14 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 							boomMenuButton.getBoomButton(index).getTextView()
 									.setText("开启跟寻主播模式");
 							isFollowMode = false;
+							viewPagerTravelnotePages.setScrollble(true);
 						}
 						else
 						{
 							boomMenuButton.getBoomButton(index).getTextView()
 									.setText("关闭跟寻主播模式");
 							isFollowMode = true;
+							viewPagerTravelnotePages.setScrollble(false);
 						}
 					});
 					break;
@@ -183,8 +191,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 		
 		audienceBusiness.callPerformerActions(performerId,
 				new BusinessCaller(this, BUSINESS_CODE_PERFORMER_ACTIONS));
-		audienceBusiness.callAudienceActions(performerId,
-				new BusinessCaller(this, BUSINESS_CODE_AUDIENCE_ACTIONS));
+		audienceBusiness
+				.callAudienceActions(new BusinessCaller(this, BUSINESS_CODE_AUDIENCE_ACTIONS));
 	}
 	
 	@Override
@@ -207,7 +215,10 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 								(SelectPageCommand) message.getData()
 										.getSerializable("command");
 						
-						this.selectPage(selectPageCommand);
+						if (isFollowMode)
+						{
+							this.selectPage(selectPageCommand);
+						}
 						break;
 					case PerformerCommandActions.DELETED_PAGE:
 						DeletePageCommand deletePageCommand =
@@ -340,6 +351,25 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 	}
 	
 	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+	
+	@Override
+	public void onPageSelected(int position)
+	{
+		if (!isFollowMode)
+		{
+			SelectPageCommand selectPageCommand = new SelectPageCommand();
+			selectPageCommand.setPosition(position);
+			this.selectPage(selectPageCommand);
+		}
+		
+		lastAudienceLiveTravelnotePageView = getCurrentAudienceLiveTravelnoteView();
+	}
+	
+	@Override
+	public void onPageScrollStateChanged(int state) {}
+	
+	@Override
 	public void onDestroy()
 	{
 		musicPlayer.end();
@@ -374,9 +404,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 		viewPagerTravelnotePages.setAdapter(adapter);
 		
 		//加上这个用户本生的观众数
-		int audiencesCount = travelnote.getAttentionsCount() + 1;
-		P.debug(audiencesCount);
-		textViewAttentionsCount.setText(audiencesCount + "");
+		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString()) + 1;
+		textViewAudiencesCount.setText(audiencesCount + "");
 		
 		//模拟选中最后一页
 		if (travelnotePages.size() > 0)
@@ -443,59 +472,55 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 	
 	private void selectPage(SelectPageCommand selectPageCommand)
 	{
-		if (isFollowMode)
+		//先暂停背景音乐和回收视频资源
+		pauseMusicIf();
+		recycleCurrentPageResource();
+		
+		viewPagerTravelnotePages.setCurrentItem(selectPageCommand.getPosition());
+		
+		updatePagesCount();
+		
+		//恢复显示的资源内容
+		if (getCurrentAudienceLiveTravelnoteView().getResourcePath() != null)
 		{
-			//先暂停背景音乐和回收视频资源
-			pauseMusicIf();
-			recycleCurrentPageResource();
-			
-			viewPagerTravelnotePages.setCurrentItem(selectPageCommand.getPosition());
-			
-			updatePagesCount();
-			
-			//恢复显示的资源内容
-			if (getCurrentAudienceLiveTravelnoteView().getResourcePath() != null)
+			if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+					TravelnotePageType.PICANDWORD)
 			{
-				if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
-						TravelnotePageType.PICANDWORD)
+				PageSetImageCommand pageSetImageCommand = new PageSetImageCommand();
+				pageSetImageCommand.setPosition(selectPageCommand.getPosition());
+				pageSetImageCommand
+						.setImageUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
+				
+				this.pageSetImage(pageSetImageCommand);
+				
+				//图文页才恢复音乐
+				if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
 				{
-					PageSetImageCommand pageSetImageCommand = new PageSetImageCommand();
-					pageSetImageCommand.setPosition(selectPageCommand.getPosition());
-					pageSetImageCommand.setImageUrl(
-							getCurrentAudienceLiveTravelnoteView().getResourcePath());
+					PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
+							new PageSetBackgroundMusicCommand();
+					pageSetBackgroundMusicCommand.setPosition(selectPageCommand.getPosition());
+					pageSetBackgroundMusicCommand.setMusicPath(
+							getCurrentAudienceLiveTravelnoteView().getMusicPath());
 					
-					this.pageSetImage(pageSetImageCommand);
-					
-					//图文页才恢复音乐
-					if (getCurrentAudienceLiveTravelnoteView().getMusicPath() != null)
-					{
-						PageSetBackgroundMusicCommand pageSetBackgroundMusicCommand =
-								new PageSetBackgroundMusicCommand();
-						pageSetBackgroundMusicCommand
-								.setPosition(selectPageCommand.getPosition());
-						pageSetBackgroundMusicCommand.setMusicPath(
-								getCurrentAudienceLiveTravelnoteView().getMusicPath());
-						
-						this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
-					}
-					
-					//图文页才恢复主题
-					PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
-					pageSetThemeCommand.setPosition(selectPageCommand.getPosition());
-					pageSetThemeCommand.setThemePosition(
-							getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
-					this.pageSetTheme(pageSetThemeCommand);
+					this.pageSetBackgroundMusic(pageSetBackgroundMusicCommand);
 				}
-				else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
-						TravelnotePageType.VIDEO)
-				{
-					PageSetVideoCommand pageSetVideoCommand = new PageSetVideoCommand();
-					pageSetVideoCommand.setPosition(selectPageCommand.getPosition());
-					pageSetVideoCommand.setVideoUrl(
-							getCurrentAudienceLiveTravelnoteView().getResourcePath());
-					
-					this.pageSetVideo(pageSetVideoCommand);
-				}
+				
+				//图文页才恢复主题
+				PageSetThemeCommand pageSetThemeCommand = new PageSetThemeCommand();
+				pageSetThemeCommand.setPosition(selectPageCommand.getPosition());
+				pageSetThemeCommand.setThemePosition(
+						getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
+				this.pageSetTheme(pageSetThemeCommand);
+			}
+			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+					TravelnotePageType.VIDEO)
+			{
+				PageSetVideoCommand pageSetVideoCommand = new PageSetVideoCommand();
+				pageSetVideoCommand.setPosition(selectPageCommand.getPosition());
+				pageSetVideoCommand
+						.setVideoUrl(getCurrentAudienceLiveTravelnoteView().getResourcePath());
+				
+				this.pageSetVideo(pageSetVideoCommand);
 			}
 		}
 	}
@@ -627,8 +652,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 	
 	private void travelnoteEnd(TravelnoteEndCommand travelnoteEndCommand)
 	{
-		P.arrive();
-		
 		AudienceTravelnoteEndDialog dialog =
 				new AudienceTravelnoteEndDialog(this.getActivity());
 		dialog.show();
@@ -646,12 +669,26 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 	{
 		if (liveTravelnotePageViews.size() > 0)
 		{
-			if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
-					TravelnotePageType.VIDEO)
+			if (isFollowMode)
 			{
-				getCurrentAudienceLiveTravelnoteView().getVideoViewTravelnotePage()
-						.stopAndClear();
+				if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
+						TravelnotePageType.VIDEO)
+				{
+					getCurrentAudienceLiveTravelnoteView().getVideoViewTravelnotePage()
+							.stopAndClear();
+				}
 			}
+			else
+			{
+				if (lastAudienceLiveTravelnotePageView != null &&
+						lastAudienceLiveTravelnotePageView.getTravelnotePageType() ==
+								TravelnotePageType.VIDEO)
+				{
+					lastAudienceLiveTravelnotePageView.getVideoViewTravelnotePage()
+							.stopAndClear();
+				}
+			}
+			
 		}
 	}
 	
@@ -661,6 +698,5 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler implements View.
 		textViewPagesCount
 				.setText((getCurrentPosition() + 1) + "/" + (liveTravelnotePageViews.size()));
 	}
-	
 	
 }

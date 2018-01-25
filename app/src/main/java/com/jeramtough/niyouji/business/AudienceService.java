@@ -251,8 +251,7 @@ public class AudienceService implements AudienceBusiness
 	}
 	
 	@Override
-	public void callAudienceActions(String performerId,
-			BusinessCaller audienceActionsBusinessCaller)
+	public void callAudienceActions(BusinessCaller audienceActionsBusinessCaller)
 	{
 		audienceWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
 		{
