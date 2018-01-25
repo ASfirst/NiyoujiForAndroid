@@ -122,5 +122,25 @@ public class PerformerSocketMessageFactory
 		return socketMessage;
 	}
 	
+	public static SocketMessage processPerformerLeaveCommandSocketMessage(
+			PerformerLeaveCommand performerLeaveCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PERFORMER_LEAVE);
+		
+		socketMessage.setCommand(JSON.toJSONString(performerLeaveCommand));
+		return socketMessage;
+	}
+	
+	public static SocketMessage processPerformerRebackCommandSocketMessage(
+			PerformerRebackCommand performerRebackCommand)
+	{
+		SocketMessage socketMessage = new SocketMessage();
+		socketMessage.setCommandAction(PerformerCommandActions.PERFORMER_REBACK);
+		
+		socketMessage.setCommand(JSON.toJSONString(performerRebackCommand));
+		return socketMessage;
+	}
+	
 	
 }

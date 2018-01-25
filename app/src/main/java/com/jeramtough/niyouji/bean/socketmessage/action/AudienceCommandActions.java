@@ -9,4 +9,6 @@ public class AudienceCommandActions
 	public static final int SEND_AUDIENCE_BARRAGE = BASE + 2;
 	
 	public static final int LIGHT_ATTENTION_COUNT = BASE + 3;
+	
+	public static final int AUDIENCE_LEAVE = BASE + 4;
 }

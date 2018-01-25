@@ -133,7 +133,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		this.recycleLastPage();
 		
 		//一些模拟操作，到时候会删掉的
-		for (int i = 0; i < 7; i++)
+		/*for (int i = 0; i < 7; i++)
 		{
 			int finalI = i;
 			appraisalAreaView.postDelayed(() ->
@@ -147,8 +147,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 2);
 				}
 			}, 1500 * i);
-			
-		}
+		}*/
 		
 	}
 	

@@ -69,4 +69,15 @@ public class PerformerCommandParser
 	{
 		return JSON.parseObject(socketMessage.getCommand(), TravelnoteEndCommand.class);
 	}
+	
+	public static PerformerLeaveCommand parsePerformerLeaveCommand(SocketMessage socketMessage)
+	{
+		return JSON.parseObject(socketMessage.getCommand(), PerformerLeaveCommand.class);
+	}
+	
+	public static PerformerRebackCommand parsePerformerRebackCommand(
+			SocketMessage socketMessage)
+	{
+		return JSON.parseObject(socketMessage.getCommand(), PerformerRebackCommand.class);
+	}
 }

@@ -83,7 +83,7 @@ public class LeftPanelHandler extends JtIocHandler
 		if (hasLogined)
 		{
 			//将这句注释掉就是自动登录了
-			//			loginFinally();
+			loginFinally();
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class LeftPanelHandler extends JtIocHandler
 		}
 		else if (id == R.id.nav_clear_caches)
 		{
-			leftPanelBusiness.clearTravelnoteCaches(getContext(),this);
+			leftPanelBusiness.clearTravelnoteCaches(getContext(), this);
 		}
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
