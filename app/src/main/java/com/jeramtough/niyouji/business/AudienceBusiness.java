@@ -22,4 +22,6 @@ public interface AudienceBusiness
 			String broadcastContent);
 	
 	void broadcastLightAttentionCount(String performerId);
+	
+	void broadcastAudienceLeave(String performerId);
 }

@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.AudienceLeaveCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
@@ -34,6 +36,9 @@ public class AudienceService implements AudienceBusiness
 	private ExecutorService executorService;
 	private AppUser appUser;
 	
+	private WebSocketClientListener webSocketClientListener;
+	private WebSocketClientListener webSocketClientListener1;
+	
 	@IocAutowire
 	public AudienceService(AudienceWebSocketClient audienceWebSocketClient, AppUser appUser)
 	{
@@ -52,34 +57,42 @@ public class AudienceService implements AudienceBusiness
 		{
 			try
 			{
+				P.arrive();
 				boolean connectSuccessfully = audienceWebSocketClient.reconnectBlocking();
 				enterRoomBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				enterRoomBusinessCaller.callBusiness();
-				
+				P.debug(connectSuccessfully);
 				if (connectSuccessfully)
 				{
-					audienceWebSocketClient
-							.addWebSocketClientListener(new WebSocketClientListener()
+					if (webSocketClientListener!=null)
+					{
+						audienceWebSocketClient
+								.removeWebSocketClientListener(webSocketClientListener);
+					}
+					
+					webSocketClientListener = new WebSocketClientListener()
+					{
+						@Override
+						public void onMessage(SocketMessage socketMessage)
+						{
+							int action = socketMessage.getCommandAction();
+							switch (action)
 							{
-								@Override
-								public void onMessage(SocketMessage socketMessage)
-								{
-									int action = socketMessage.getCommandAction();
-									switch (action)
-									{
-										case ServerCommandActions.RETURN_LIVE_TRAVELNOTE:
-											Travelnote travelnote = JSON.parseObject(
-													socketMessage.getCommand(),
+								case ServerCommandActions.RETURN_LIVE_TRAVELNOTE:
+									Travelnote travelnote =
+											JSON.parseObject(socketMessage.getCommand(),
 													Travelnote.class);
-											obtainingLiveTravelnoteBusinessCaller.getData()
-													.putSerializable("travelnote", travelnote);
-											obtainingLiveTravelnoteBusinessCaller
-													.callBusiness();
-											break;
-									}
-								}
-							});
+									obtainingLiveTravelnoteBusinessCaller.getData()
+											.putSerializable("travelnote", travelnote);
+									obtainingLiveTravelnoteBusinessCaller.callBusiness();
+									break;
+							}
+						}
+					};
+					
+					audienceWebSocketClient
+							.addWebSocketClientListener(webSocketClientListener);
 					
 					//发送进入房间命令，并且等待游记资源返回
 					EnterPerformingRoomCommand enterPerformingRoomCommand =
@@ -104,7 +117,12 @@ public class AudienceService implements AudienceBusiness
 	public void callPerformerActions(String performerId,
 			BusinessCaller performerActionsBusinessCaller)
 	{
-		audienceWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
+		if (webSocketClientListener1!=null)
+		{
+			audienceWebSocketClient.removeWebSocketClientListener(webSocketClientListener1);
+		}
+		
+		webSocketClientListener1=new WebSocketClientListener()
 		{
 			@Override
 			public void onMessage(SocketMessage socketMessage)
@@ -245,7 +263,8 @@ public class AudienceService implements AudienceBusiness
 						break;
 				}
 			}
-		});
+		};
+		audienceWebSocketClient.addWebSocketClientListener(webSocketClientListener1);
 	}
 	
 	@Override
@@ -296,6 +315,18 @@ public class AudienceService implements AudienceBusiness
 						
 						audienceActionsBusinessCaller.getData()
 								.putSerializable("command", lightAttentionCountCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+					case AudienceCommandActions.AUDIENCE_LEAVE:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						AudienceLeaveCommand audienceLeaveCommand =
+								AudienceCommandParser.parseAudienceLeaveCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", audienceLeaveCommand);
 						
 						audienceActionsBusinessCaller.callBusiness();
 						break;
@@ -350,6 +381,31 @@ public class AudienceService implements AudienceBusiness
 							lightAttentionCountCommand);
 			
 			audienceWebSocketClient.sendSocketMessage(socketMessage);
+		});
+	}
+	
+	@Override
+	public void broadcastAudienceLeave(String performerId)
+	{
+		executorService.submit(() ->
+		{
+			AudienceLeaveCommand audienceLeaveCommand = new AudienceLeaveCommand();
+			audienceLeaveCommand.setPerformerId(performerId);
+			
+			SocketMessage socketMessage = AudienceSocketMessageFactory
+					.processAudienceLeaveCommandSocketMessage(audienceLeaveCommand);
+			
+			audienceWebSocketClient.sendSocketMessage(socketMessage);
+			
+			//发送完退出房间信息再关闭session
+			try
+			{
+				audienceWebSocketClient.closeBlocking();
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		});
 	}
 	

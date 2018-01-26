@@ -36,6 +36,8 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 	private AliOssManager aliOssManager;
 	private PerformerWebSocketClient performerWebSocketClient;
 	
+	private WebSocketClientListener webSocketClientListener;
+	
 	private Executor executor;
 	
 	@IocAutowire
@@ -100,19 +102,26 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 					
 					if (uploadSuccessfully)
 					{
-						performerWebSocketClient
-								.addWebSocketClientListener(new WebSocketClientListener()
+						if (webSocketClientListener != null)
+						{
+							performerWebSocketClient
+									.removeWebSocketClientListener(webSocketClientListener);
+						}
+						
+						webSocketClientListener = new WebSocketClientListener()
+						{
+							@Override
+							public void onMessage(SocketMessage socketMessage)
+							{
+								if (socketMessage.getCommandAction() ==
+										ServerCommandActions.CREATING_PERFORMING_ROOM_FINISH)
 								{
-									@Override
-									public void onMessage(SocketMessage socketMessage)
-									{
-										if (socketMessage.getCommandAction()==
-												ServerCommandActions.CREATING_PERFORMING_ROOM_FINISH)
-										{
-											createBusinessCaller.callBusiness();
-										}
-									}
-								});
+									createBusinessCaller.callBusiness();
+								}
+							}
+						};
+						
+						performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
 						
 						CreatePerformingRoomCommand createPerformingRoomCommand =
 								new CreatePerformingRoomCommand();

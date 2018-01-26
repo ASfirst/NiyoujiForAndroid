@@ -6,6 +6,7 @@ import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.AudienceLeaveCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
@@ -217,6 +218,17 @@ public class PerformingService1 implements PerformingBusiness1
 		executorService.submit(() ->
 		{
 			performerWebSocketClient.sendSocketMessage(socketMessage);
+			
+			//结束socket连接
+			try
+			{
+				performerWebSocketClient.closeBlocking();
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			
 		});
 	}
 	
@@ -268,6 +280,18 @@ public class PerformingService1 implements PerformingBusiness1
 						
 						audienceActionsBusinessCaller.getData()
 								.putSerializable("command", lightAttentionCountCommand);
+						
+						audienceActionsBusinessCaller.callBusiness();
+						break;
+					case AudienceCommandActions.AUDIENCE_LEAVE:
+						audienceActionsBusinessCaller.getData()
+								.putInt("audienceAction", socketMessage.getCommandAction());
+						
+						AudienceLeaveCommand audienceLeaveCommand =
+								AudienceCommandParser.parseAudienceLeaveCommand(socketMessage);
+						
+						audienceActionsBusinessCaller.getData()
+								.putSerializable("command", audienceLeaveCommand);
 						
 						audienceActionsBusinessCaller.callBusiness();
 						break;

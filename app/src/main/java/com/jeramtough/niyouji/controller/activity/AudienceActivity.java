@@ -11,6 +11,7 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
@@ -141,5 +142,11 @@ public class AudienceActivity extends AppBaseActivity
 	{
 		super.onDestroy();
 		audienceLiveTravelnoteHandler.onDestroy();
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		audienceLiveTravelnoteHandler.leaveByUseingDialog();
 	}
 }

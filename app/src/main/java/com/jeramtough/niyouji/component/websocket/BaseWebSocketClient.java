@@ -106,6 +106,11 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		this.webSocketClientListeners.add(webSocketClientListener);
 	}
 	
+	public void removeWebSocketClientListener(WebSocketClientListener webSocketClientListener)
+	{
+		this.webSocketClientListeners.remove(webSocketClientListener);
+	}
+	
 	protected ArrayList<WebSocketClientListener> getWebSocketClientListeners()
 	{
 		return webSocketClientListeners;

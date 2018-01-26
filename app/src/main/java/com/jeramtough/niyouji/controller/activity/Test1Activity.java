@@ -5,9 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.DiskUsage;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.business.PerformingBusiness;
+import com.jeramtough.niyouji.business.PerformingService;
+import com.jeramtough.niyouji.business.PerformingService10;
 import com.jeramtough.niyouji.component.cache.VideoCacheServer;
 import com.jeramtough.niyouji.controller.dialog.AudienceTravelnoteEndDialog;
 
@@ -23,6 +27,11 @@ public class Test1Activity extends AppBaseActivity
 	
 	@InjectComponent
 	private VideoCacheServer videoCacheServer;
+	
+	@InjectService(service = PerformingService10.class)
+	private PerformingBusiness performingBusiness;
+	
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

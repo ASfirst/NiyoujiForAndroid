@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.controller.handler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
@@ -26,6 +27,7 @@ import com.jeramtough.jtutil.StringUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.AudienceLeaveCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
@@ -78,6 +80,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private HeartLayout heartLayout;
 	private BoomMenuButton boomMenuButton;
 	private FrameLayout layoutDoubleClick;
+	private TextView textViewNoPage;
 	
 	private ArrayList<AudienceLiveTravelnotePageView> liveTravelnotePageViews;
 	
@@ -122,8 +125,10 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		heartLayout = findViewById(R.id.heart_layout);
 		boomMenuButton = findViewById(R.id.boomMenuButton);
 		layoutDoubleClick = findViewById(R.id.layout_double_click);
+		textViewNoPage = findViewById(R.id.textView_no_page);
 		
 		boomMenuButton.setVisibility(View.INVISIBLE);
+		textViewNoPage.setVisibility(View.GONE);
 		
 		viewPagerTravelnotePages.setScrollble(false);
 		
@@ -168,6 +173,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					});
 					break;
 				case 1:
+					
 					builder.normalImageRes(R.drawable.ic_send_voice);
 					builder.normalColorRes(R.color.menu_color4);
 					builder.normalText("发送弹幕");
@@ -177,10 +183,15 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 								new EditBarrageDialog(this.getContext());
 						editBarrageDialog.setEditBarrageListener((String content) ->
 						{
+							
 							audienceBusiness.broadcastAudienceSendBarrage(performerId,
 									getCurrentPosition(), content);
 						});
-						editBarrageDialog.show();
+						
+						if (liveTravelnotePageViews.size() > 0)
+						{
+							editBarrageDialog.show();
+						}
 					});
 					break;
 			}
@@ -311,6 +322,13 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 										.getSerializable("command");
 						lightAttentionCount(lightAttentionCountCommand);
 						break;
+					
+					case AudienceCommandActions.AUDIENCE_LEAVE:
+						AudienceLeaveCommand audienceLeaveCommand =
+								(AudienceLeaveCommand) message.getData()
+										.getSerializable("command");
+						otherAudienceLeavePerformingRoom(audienceLeaveCommand);
+						break;
 				}
 				break;
 		}
@@ -407,12 +425,16 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString()) + 1;
 		textViewAudiencesCount.setText(audiencesCount + "");
 		
-		//模拟选中最后一页
+		//模拟选中最后一页或者提示没有page
 		if (travelnotePages.size() > 0)
 		{
 			SelectPageCommand selectPageCommand = new SelectPageCommand();
 			selectPageCommand.setPosition(travelnotePages.size() - 1);
 			selectPage(selectPageCommand);
+		}
+		else
+		{
+			textViewNoPage.setVisibility(View.VISIBLE);
 		}
 		
 		progressBar.setVisibility(View.INVISIBLE);
@@ -429,6 +451,18 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	public AudienceLiveTravelnotePageView getCurrentAudienceLiveTravelnoteView()
 	{
 		return liveTravelnotePageViews.get(getCurrentPosition());
+	}
+	
+	public void leaveByUseingDialog()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setMessage("是否立即退出游记直播？").setNegativeButton("取消", (dialog, which) ->
+		{
+		}).setPositiveButton("确定", (dialog, which) ->
+		{
+			audienceBusiness.broadcastAudienceLeave(performerId);
+			getActivity().finish();
+		}).create().show();
 	}
 	
 	//***********************************************************
@@ -472,6 +506,12 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	
 	private void selectPage(SelectPageCommand selectPageCommand)
 	{
+		//取消没有page提示
+		if (textViewNoPage.getVisibility() == View.VISIBLE)
+		{
+			textViewNoPage.setVisibility(View.GONE);
+		}
+		
 		//先暂停背景音乐和回收视频资源
 		pauseMusicIf();
 		recycleCurrentPageResource();
@@ -647,6 +687,16 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 			EnterPerformingRoomCommand enterPerformingRoomCommand)
 	{
 		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString()) + 1;
+		textViewAudiencesCount.setText(audiencesCount + "");
+	}
+	
+	private void otherAudienceLeavePerformingRoom(AudienceLeaveCommand audienceLeaveCommand)
+	{
+		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString());
+		if (audiencesCount > 0)
+		{
+			audiencesCount--;
+		}
 		textViewAudiencesCount.setText(audiencesCount + "");
 	}
 	

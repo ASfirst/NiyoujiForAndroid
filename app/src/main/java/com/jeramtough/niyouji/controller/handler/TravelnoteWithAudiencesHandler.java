@@ -11,6 +11,7 @@ import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.audience.AudienceLeaveCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBarrageCommand;
@@ -96,6 +97,12 @@ public class TravelnoteWithAudiencesHandler extends JtIocHandler
 										.getSerializable("command");
 						lightAttentionCount(lightAttentionCountCommand);
 						break;
+					case AudienceCommandActions.AUDIENCE_LEAVE:
+						AudienceLeaveCommand audienceLeaveCommand =
+								(AudienceLeaveCommand) message.getData()
+										.getSerializable("command");
+						audienceLeavePerformingRoom(audienceLeaveCommand);
+						break;
 				}
 				break;
 		}
@@ -108,6 +115,16 @@ public class TravelnoteWithAudiencesHandler extends JtIocHandler
 	{
 		int count = Integer.valueOf(textViewAudiencesCount.getText().toString());
 		textViewAudiencesCount.setText((count + 1) + "");
+	}
+	
+	private void audienceLeavePerformingRoom(AudienceLeaveCommand audienceLeaveCommand)
+	{
+		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString());
+		if (audiencesCount > 0)
+		{
+			audiencesCount--;
+		}
+		textViewAudiencesCount.setText(audiencesCount + "");
 	}
 	
 	private void sentAudienceBarrage(SendAudienceBarrageCommand sendAudienceBarrageCommand)
