@@ -28,4 +28,8 @@ public class PerformerCommandActions
 	public static final int SENT_PERFORMER_BARRAGE = BASE + 9;
 	
 	public static final int TRAVELNOTE_END = BASE + 10;
+	
+	public static final int PERFORMER_LEAVE = BASE + 11;
+	
+	public static final int PERFORMER_REBACK = BASE + 12;
 }
