@@ -44,34 +44,6 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 				new LinkedBlockingQueue<Runnable>());
-		
-		executorService.submit(() ->
-		{
-			//模拟创建房间操作
-			try
-			{
-				performerWebSocketClient.connectBlocking();
-				
-				CreatePerformingRoomCommand createPerformingRoomCommand =
-						new CreatePerformingRoomCommand();
-				createPerformingRoomCommand.setCoverResourceUrl(
-						"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/cover_1516105481681.jpg");
-				createPerformingRoomCommand
-						.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
-				createPerformingRoomCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
-				createPerformingRoomCommand.setPerformerId(this.appUser.getUserId());
-				createPerformingRoomCommand.setTravelnoteTitle("这是测试游记");
-				SocketMessage socketMessage = PerformerSocketMessageFactory
-						.processCreatePerformingRoomSocketMessage(createPerformingRoomCommand);
-				
-				performerWebSocketClient.sendSocketMessage(socketMessage);
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-			
-		});
 	}
 	
 	@Override

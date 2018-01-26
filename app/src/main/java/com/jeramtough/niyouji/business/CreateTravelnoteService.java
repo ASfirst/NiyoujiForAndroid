@@ -57,25 +57,13 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 			BusinessCaller uploadBusinessCaller)
 	{
 		
-		if (performerWebSocketClient.isConectionFailed())
-		{
-			try
-			{
-				performerWebSocketClient = new PerformerWebSocketClient();
-			}
-			catch (URISyntaxException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
 		//先与服务器连接，然后上传封面，然后发送创建游记的命令
 		executor.execute(() ->
 		{
 			try
 			{
 				//连接服务器
-				boolean connectSuccessfully = performerWebSocketClient.connectBlocking();
+				boolean connectSuccessfully = performerWebSocketClient.reconnectBlocking();
 				connectBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				connectBusinessCaller.callBusiness();

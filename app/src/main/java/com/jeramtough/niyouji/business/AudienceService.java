@@ -48,13 +48,11 @@ public class AudienceService implements AudienceBusiness
 	public void enterPerformingRoom(String performerId, BusinessCaller enterRoomBusinessCaller,
 			BusinessCaller obtainingLiveTravelnoteBusinessCaller)
 	{
-		audienceWebSocketClient = (AudienceWebSocketClient) audienceWebSocketClient.clone();
-		
 		executorService.submit(() ->
 		{
 			try
 			{
-				boolean connectSuccessfully = audienceWebSocketClient.connectBlocking();
+				boolean connectSuccessfully = audienceWebSocketClient.reconnectBlocking();
 				enterRoomBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				enterRoomBusinessCaller.callBusiness();

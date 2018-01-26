@@ -9,9 +9,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import com.jeramtough.jtandroid.adapter.ViewsAdapter;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectView;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
+import com.jeramtough.niyouji.component.app.AppUser;
+import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
+import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
+import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.Test1Activity;
 import com.jeramtough.niyouji.controller.activity.TestActivity;
@@ -35,6 +43,10 @@ public class DiscoverFragment extends AppBaseFragment
 	@InjectView(R.id.btn_test3)
 	private Button btnTest3;
 	
+	@InjectComponent
+	private AppUser appUser;
+	@InjectComponent
+	private PerformerWebSocketClient performerWebSocketClient;
 	
 	@Override
 	public int loadFragmentLayoutId()
@@ -58,7 +70,38 @@ public class DiscoverFragment extends AppBaseFragment
 		switch (viewId)
 		{
 			case R.id.btn_test1:
-				IntentUtil.toTheOtherActivity(this.getActivity(), PerformingActivity.class);
+				new Thread()
+				{
+					@Override
+					public void run()
+					{
+						//模拟创建房间操作
+						try
+						{
+							performerWebSocketClient.reconnectBlocking();
+							
+							CreatePerformingRoomCommand createPerformingRoomCommand =
+									new CreatePerformingRoomCommand();
+							createPerformingRoomCommand.setCoverResourceUrl(
+									"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/cover_1516105481681.jpg");
+							createPerformingRoomCommand
+									.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
+							createPerformingRoomCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
+							createPerformingRoomCommand.setPerformerId(appUser.getUserId());
+							createPerformingRoomCommand.setTravelnoteTitle("这是测试游记");
+							SocketMessage socketMessage = PerformerSocketMessageFactory
+									.processCreatePerformingRoomSocketMessage(createPerformingRoomCommand);
+							performerWebSocketClient.sendSocketMessage(socketMessage);
+							Thread.sleep(500);
+							IntentUtil.toTheOtherActivity(getActivity(), PerformingActivity.class);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+					}
+				}.start();
+				
 				break;
 			case R.id.btn_test2:
 				IntentUtil.toTheOtherActivity(this.getActivity(), TestActivity.class);
