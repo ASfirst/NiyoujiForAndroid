@@ -75,6 +75,7 @@ public class ServiceInterpreter implements Interpreter
 							
 							fieldObject = constructor.newInstance(constructorParameters
 									.toArray(new Object[constructorParameters.size()]));
+							
 							if (fieldObject != null)
 							{
 								break;

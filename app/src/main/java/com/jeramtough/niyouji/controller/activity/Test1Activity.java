@@ -1,22 +1,13 @@
 package com.jeramtough.niyouji.controller.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.danikula.videocache.file.DiskUsage;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtVideoView;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.business.PerformingBusiness;
-import com.jeramtough.niyouji.business.PerformingService;
-import com.jeramtough.niyouji.business.PerformingService10;
+import com.jeramtough.niyouji.business.*;
 import com.jeramtough.niyouji.component.cache.VideoCacheServer;
 import com.jeramtough.niyouji.controller.dialog.AudienceTravelnoteEndDialog;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author 11718
@@ -28,8 +19,11 @@ public class Test1Activity extends AppBaseActivity
 	@InjectComponent
 	private VideoCacheServer videoCacheServer;
 	
-	@InjectService(service = PerformingService10.class)
+	@InjectService(service = PerformingService.class)
 	private PerformingBusiness performingBusiness;
+	
+	//@InjectService(service = PerformingService1.class)
+	//private PerformingBusiness1 performingBusiness1;
 	
 	
 	

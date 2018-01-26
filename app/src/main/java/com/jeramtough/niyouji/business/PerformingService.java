@@ -13,15 +13,19 @@ import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppUser;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 11718
- *         on 2018  January 09 Tuesday 21:36.
+ *         on 2018  January 27 Saturday 05:46.
  */
 @JtService
 public class PerformingService implements PerformingBusiness
 {
+	
 	private Executor executor;
 	
 	private NiyoujiStsManager niyoujiStsManager;
@@ -33,8 +37,8 @@ public class PerformingService implements PerformingBusiness
 	private final boolean debugUploadMode = true;
 	
 	@IocAutowire
-	PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
-			AppUser appUser, NetworkIsAble networkIsAble)
+	public PerformingService(NiyoujiStsManager niyoujiStsManager,
+			AliOssManager aliOssManager, AppUser appUser, NetworkIsAble networkIsAble)
 	{
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
@@ -43,7 +47,6 @@ public class PerformingService implements PerformingBusiness
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
-		
 	}
 	
 	@Override
@@ -119,7 +122,6 @@ public class PerformingService implements PerformingBusiness
 	
 	private void setPutRequest(BusinessCaller businessCaller)
 	{
-		
 		AssumeRoleResponse.Credentials credentials = null;
 		try
 		{

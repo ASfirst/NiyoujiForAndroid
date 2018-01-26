@@ -197,6 +197,7 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 			}
 			else if (jtField.getAnnotation() instanceof InjectService)
 			{
+				
 				filedValueObject = injectedServices.get(fieldKeyName);
 				if (filedValueObject == null)
 				{
@@ -205,6 +206,7 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 					serviceInterpreter.setNeededComponentCaller(this);
 					filedValueObject =
 							serviceInterpreter.getFieldValueObject(jtField.getField());
+					
 					if (filedValueObject != null)
 					{
 						JtService jtServiceAnnotation =
