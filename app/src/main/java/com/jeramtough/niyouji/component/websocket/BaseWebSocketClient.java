@@ -7,6 +7,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		super(serverUri);
 		webSocketClientListeners = new ArrayList<>();
 	}
+	
 	
 	@Override
 	public void onOpen(ServerHandshake handshakedata)
@@ -111,6 +113,7 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		this.webSocketClientListeners.remove(webSocketClientListener);
 	}
 	
+	
 	protected ArrayList<WebSocketClientListener> getWebSocketClientListeners()
 	{
 		return webSocketClientListeners;
@@ -121,4 +124,6 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 	{
 		this.webSocketClientListeners = webSocketClientListeners;
 	}
+	
+	
 }

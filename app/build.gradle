@@ -62,6 +62,7 @@ dependencies {
     implementation 'com.aliyun.dpa:oss-android-sdk:2.4.5'
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.44'
 //    implementation "org.java-websocket:Java-WebSocket:1.3.7"
+    implementation 'com.koushikdutta.async:androidasync:2.2.1'
 
     //阿里云短视频SDK
     implementation(name: 'AliyunSdk-RC', ext: 'aar')

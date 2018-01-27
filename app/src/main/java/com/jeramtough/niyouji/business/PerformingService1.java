@@ -36,6 +36,8 @@ public class PerformingService1 implements PerformingBusiness1
 	private ExecutorService executorService;
 	private AppUser appUser;
 	
+	private WebSocketClientListener webSocketClientListener;
+	
 	@IocAutowire
 	public PerformingService1(PerformerWebSocketClient performerWebSocketClient,
 			AppUser appUser)
@@ -235,7 +237,12 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void callAudienceActions(BusinessCaller audienceActionsBusinessCaller)
 	{
-		performerWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
+		if (webSocketClientListener != null)
+		{
+			performerWebSocketClient.removeWebSocketClientListener(webSocketClientListener);
+		}
+		
+		webSocketClientListener = new WebSocketClientListener()
 		{
 			@Override
 			public void onMessage(SocketMessage socketMessage)
@@ -297,7 +304,8 @@ public class PerformingService1 implements PerformingBusiness1
 						break;
 				}
 			}
-		});
+		};
+		performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
 	}
 	
 }

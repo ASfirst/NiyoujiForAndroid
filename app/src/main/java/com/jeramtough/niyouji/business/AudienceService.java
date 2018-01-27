@@ -57,15 +57,18 @@ public class AudienceService implements AudienceBusiness
 		{
 			try
 			{
-				P.arrive();
-				boolean connectSuccessfully = audienceWebSocketClient.reconnectBlocking();
+				//初始化WebSocket客户端对象
+				audienceWebSocketClient =
+						(AudienceWebSocketClient) audienceWebSocketClient.clone();
+				
+				boolean connectSuccessfully = audienceWebSocketClient.connectBlocking();
 				enterRoomBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				enterRoomBusinessCaller.callBusiness();
 				P.debug(connectSuccessfully);
 				if (connectSuccessfully)
 				{
-					if (webSocketClientListener!=null)
+					if (webSocketClientListener != null)
 					{
 						audienceWebSocketClient
 								.removeWebSocketClientListener(webSocketClientListener);
@@ -117,12 +120,12 @@ public class AudienceService implements AudienceBusiness
 	public void callPerformerActions(String performerId,
 			BusinessCaller performerActionsBusinessCaller)
 	{
-		if (webSocketClientListener1!=null)
+		if (webSocketClientListener1 != null)
 		{
 			audienceWebSocketClient.removeWebSocketClientListener(webSocketClientListener1);
 		}
 		
-		webSocketClientListener1=new WebSocketClientListener()
+		webSocketClientListener1 = new WebSocketClientListener()
 		{
 			@Override
 			public void onMessage(SocketMessage socketMessage)

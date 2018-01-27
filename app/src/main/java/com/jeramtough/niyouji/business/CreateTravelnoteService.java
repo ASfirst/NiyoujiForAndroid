@@ -58,14 +58,17 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 			BusinessCaller createBusinessCaller, BusinessCaller connectBusinessCaller,
 			BusinessCaller uploadBusinessCaller)
 	{
-		
 		//先与服务器连接，然后上传封面，然后发送创建游记的命令
 		executor.execute(() ->
 		{
 			try
 			{
+				//初始化socket客户端对象
+				performerWebSocketClient =
+						(PerformerWebSocketClient) performerWebSocketClient.clone();
+				
 				//连接服务器
-				boolean connectSuccessfully = performerWebSocketClient.reconnectBlocking();
+				boolean connectSuccessfully = performerWebSocketClient.connectBlocking();
 				connectBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				connectBusinessCaller.callBusiness();
@@ -121,7 +124,8 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 							}
 						};
 						
-						performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
+						performerWebSocketClient
+								.addWebSocketClientListener(webSocketClientListener);
 						
 						CreatePerformingRoomCommand createPerformingRoomCommand =
 								new CreatePerformingRoomCommand();
