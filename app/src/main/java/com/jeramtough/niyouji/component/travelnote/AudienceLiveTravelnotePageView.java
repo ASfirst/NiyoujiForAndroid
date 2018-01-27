@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.niyouji.R;
@@ -27,6 +28,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 	private JtVideoView videoViewTravelnotePage;
 	private ViewGroup layoutAudienceLiveTravelnotePage;
 	private FrameLayout layoutVideoCachingReminder;
+	private ScrollView scrollViewPicandword;
 	
 	private int currentThemePosition = 0;
 	private String musicPath;
@@ -59,6 +61,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		layoutAudienceLiveTravelnotePage =
 				findViewById(R.id.layout_audience_live_travelnote_page);
 		layoutVideoCachingReminder = findViewById(R.id.layout_video_caching_reminder);
+		scrollViewPicandword = findViewById(R.id.scrollView_picandword);
 		
 		videoViewTravelnotePage.setVisibility(View.GONE);
 		videoViewTravelnotePage.setFullScreen(true);
@@ -147,6 +150,14 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 			layoutVideoCachingReminder.setVisibility(View.VISIBLE);
 			viewPictureOfPage.setVisibility(View.INVISIBLE);
 		}
+	}
+	
+	public void scrollToBottom()
+	{
+		scrollViewPicandword.post(() ->
+		{
+			scrollViewPicandword.fullScroll(View.FOCUS_DOWN);
+		});
 	}
 	
 	

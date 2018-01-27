@@ -78,7 +78,10 @@ public class DiscoverFragment extends AppBaseFragment
 						//模拟创建房间操作
 						try
 						{
-							performerWebSocketClient.reconnectBlocking();
+							performerWebSocketClient =
+									(PerformerWebSocketClient) performerWebSocketClient
+											.clone();
+							performerWebSocketClient.connectBlocking();
 							
 							CreatePerformingRoomCommand createPerformingRoomCommand =
 									new CreatePerformingRoomCommand();
@@ -86,14 +89,17 @@ public class DiscoverFragment extends AppBaseFragment
 									"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/cover_1516105481681.jpg");
 							createPerformingRoomCommand
 									.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
-							createPerformingRoomCommand.setCreateTime(DateTimeUtil.getCurrentDateTime());
+							createPerformingRoomCommand
+									.setCreateTime(DateTimeUtil.getCurrentDateTime());
 							createPerformingRoomCommand.setPerformerId(appUser.getUserId());
 							createPerformingRoomCommand.setTravelnoteTitle("这是测试游记");
 							SocketMessage socketMessage = PerformerSocketMessageFactory
-									.processCreatePerformingRoomSocketMessage(createPerformingRoomCommand);
+									.processCreatePerformingRoomSocketMessage(
+											createPerformingRoomCommand);
 							performerWebSocketClient.sendSocketMessage(socketMessage);
 							Thread.sleep(500);
-							IntentUtil.toTheOtherActivity(getActivity(), PerformingActivity.class);
+							IntentUtil.toTheOtherActivity(getActivity(),
+									PerformingActivity.class);
 						}
 						catch (InterruptedException e)
 						{

@@ -550,6 +550,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 				pageSetThemeCommand.setPosition(selectPageCommand.getPosition());
 				pageSetThemeCommand.setThemePosition(
 						getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
+				
 				this.pageSetTheme(pageSetThemeCommand);
 			}
 			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
@@ -648,6 +649,12 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		
 		audienceLiveTravelnotePageView.getTextViewTravelnotePageContent()
 				.setText(spannableString);
+		
+		if (isFollowMode)
+		{
+			//混动文本到底部
+			audienceLiveTravelnotePageView.scrollToBottom();
+		}
 		
 	}
 	
