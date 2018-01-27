@@ -501,6 +501,11 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		liveTravelnotePageViews.remove(deletePageCommand.getPosition());
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
 		
+		P.debug(liveTravelnotePageViews.size());
+		if (liveTravelnotePageViews.size()<=0)
+		{
+			textViewNoPage.setVisibility(View.VISIBLE);
+		}
 		pauseMusicIf();
 	}
 	
