@@ -39,6 +39,12 @@ public class AppUser
 		return sharedPreferences.getBoolean("hasLogined", false);
 	}
 	
+	public void setHasLogined(boolean hasLogined)
+	{
+		editor.putBoolean("hasLogined", hasLogined);
+		editor.commit();
+	}
+	
 	public String getUserId()
 	{
 		return sharedPreferences.getString("userId", null);

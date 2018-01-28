@@ -68,6 +68,12 @@ public class MainActivity extends AppBaseActivity
 		}
 	}
 	
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		leftPanelHandler.onResume();
+	}
 	
 	@Override
 	public void onClick(View v, int viewId)

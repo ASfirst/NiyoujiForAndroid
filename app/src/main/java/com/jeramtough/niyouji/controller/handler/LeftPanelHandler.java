@@ -16,11 +16,13 @@ import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.RoundImageView;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LeftPanelBusiness;
 import com.jeramtough.niyouji.business.LeftPanelService;
 import com.jeramtough.niyouji.controller.activity.AppBaseActivity;
 import com.jeramtough.niyouji.controller.activity.LoginActivity;
+import com.jeramtough.niyouji.controller.activity.UserActivity;
 
 /**
  * @author 11718
@@ -41,6 +43,8 @@ public class LeftPanelHandler extends JtIocHandler
 	
 	@InjectService(service = LeftPanelService.class)
 	private LeftPanelBusiness leftPanelBusiness;
+	
+	private boolean hasLogined = false;
 	
 	public LeftPanelHandler(Activity activity)
 	{
@@ -73,20 +77,36 @@ public class LeftPanelHandler extends JtIocHandler
 		
 		navigationView.setNavigationItemSelectedListener(this);
 		textViewLoginOrRegister.setOnClickListener(this);
+		imageViewSurface.setOnClickListener(this);
 		
 		initResources();
 	}
 	
-	protected void initResources()
+	@Override
+	public void onResume()
 	{
-		boolean hasLogined = leftPanelBusiness.hasLogined();
+		hasLogined = leftPanelBusiness.hasLogined();
 		if (hasLogined)
 		{
+			imageViewSurface.setVisibility(View.VISIBLE);
+			
 			//将这句注释掉就是自动登录了
 			//loginFinally();
 		}
+		else
+		{
+			imageViewSurface.setVisibility(View.INVISIBLE);
+			textViewUsername.setVisibility(View.INVISIBLE);
+			textViewLoginOrRegister.setVisibility(View.VISIBLE);
+			textViewLoginOrRegister.setClickable(true);
+			textViewGoldCount.setText("0");
+		}
 	}
 	
+	protected void initResources()
+	{
+	
+	}
 	
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item)
@@ -114,6 +134,12 @@ public class LeftPanelHandler extends JtIocHandler
 				IntentUtil.toTheOtherActivity(getActivity(), LoginActivity.class,
 						ACTIVITY_REQUEST_CODE_LOGIN);
 				break;
+			case R.id.imageView_surface:
+				if (hasLogined)
+				{
+					IntentUtil.toTheOtherActivity(getActivity(), UserActivity.class);
+				}
+				break;
 		}
 	}
 	
@@ -136,7 +162,9 @@ public class LeftPanelHandler extends JtIocHandler
 		textViewUsername.setVisibility(View.VISIBLE);
 		textViewUsername.setText(leftPanelBusiness.getUserNickname());
 		imageViewSurface.setImageResource(R.mipmap.surface_image);
+		textViewLoginOrRegister.setClickable(false);
 		
 		textViewGoldCount.setText(leftPanelBusiness.getGoldCount());
 	}
+	
 }

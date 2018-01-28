@@ -41,6 +41,10 @@ public class JtBaseHandler extends Handler implements View.OnClickListener
 	
 	}
 	
+	public void onResume()
+	{
+	}
+	
 	@Override
 	@Deprecated
 	public void onClick(View v)

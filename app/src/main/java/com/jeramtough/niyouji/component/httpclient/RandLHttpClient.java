@@ -131,12 +131,9 @@ public class RandLHttpClient implements WithLogger
 			Response response = client.newCall(request).execute();
 			String result = response.body().string();
 			
-			P.debug(result);
-			
 			com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(result);
 			
 			int statusCode = jsonObject.getIntValue("statusCode");
-			P.debug(statusCode);
 			if (statusCode == 666)
 			{
 				
