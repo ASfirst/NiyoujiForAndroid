@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.component.websocket;
 
 import com.alibaba.fastjson.JSON;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtlog3.WithLogger;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import org.java_websocket.client.WebSocketClient;
@@ -64,6 +65,7 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 	@Override
 	public void onClose(int code, String reason, boolean remote)
 	{
+		P.arrive();
 		getP().warn("close the connection with server, because " + code + ": " + reason);
 		isConectionFailed = true;
 		

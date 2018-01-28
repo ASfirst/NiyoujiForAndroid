@@ -1,7 +1,9 @@
 package com.jeramtough.niyouji.business;
 
 
+import android.content.Context;
 import android.os.Handler;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.niyouji.bean.landr.InputtingLegality;
 import com.jeramtough.niyouji.bean.landr.LoginInfo;
 
@@ -18,6 +20,8 @@ public interface LoginBusiness
 	 * @return 如果合法返回真
 	 */
 	InputtingLegality checkInputtingIsLegal(LoginInfo loginInfo);
+	
+	boolean checkNetwork(Context context);
 	
 	/**
 	 * 得到已经记录的登录信息
@@ -36,7 +40,7 @@ public interface LoginBusiness
 	/**
 	 * 登录
 	 */
-	void login(LoginInfo loginInfo, Handler handler);
+	void login(LoginInfo loginInfo, BusinessCaller businessCaller);
 	
 	
 }

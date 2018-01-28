@@ -20,7 +20,7 @@ import java.util.concurrent.*;
  *         on 2018  January 20 Saturday 17:22.
  */
 @JtService
-public class TravelnoteService implements TravelnoteBusiness,WithLogger
+public class TravelnoteService implements TravelnoteBusiness, WithLogger
 {
 	private NiyoujiHttpClient niyoujiHttpClient;
 	private ExecutorService executorService;
@@ -33,7 +33,7 @@ public class TravelnoteService implements TravelnoteBusiness,WithLogger
 		this.networkIsAble = networkIsAble;
 		
 		executorService = new ThreadPoolExecutor(0, 1, 60L, TimeUnit.SECONDS,
-				new SynchronousQueue<Runnable>());
+				new SynchronousQueue<Runnable>(), new ThreadPoolExecutor.DiscardPolicy());
 	}
 	
 	
@@ -63,7 +63,7 @@ public class TravelnoteService implements TravelnoteBusiness,WithLogger
 			}
 			catch (IOException e)
 			{
-				getP().error("get travelnote covers "+ e.getMessage());
+				getP().error("get travelnote covers " + e.getMessage());
 				
 				businessCaller.getData().putBoolean("isSuccessful", false);
 				businessCaller.callBusiness();

@@ -5,6 +5,7 @@ import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
@@ -48,6 +49,8 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
 		this.performerWebSocketClient = performerWebSocketClient;
+		
+		P.debug(performerWebSocketClient.hashCode());
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());

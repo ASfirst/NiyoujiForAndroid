@@ -11,6 +11,9 @@ import android.os.Message;
 
 public class BusinessCaller
 {
+	public static final String IS_SUCCESSFUL = "isSuccessful";
+	public static final String MESSAGE = "BusinessCaller_message";
+	
 	private Handler handler;
 	private int businessCode;
 	private Message message;
@@ -39,5 +42,16 @@ public class BusinessCaller
 			message = new Message();
 		}
 		return message.getData();
+	}
+	
+	public void setSuccessful(boolean successful)
+	{
+		getData().putBoolean(IS_SUCCESSFUL, successful);
+	}
+	
+	
+	public void setMessage(String message)
+	{
+		getData().putString(MESSAGE, message);
 	}
 }

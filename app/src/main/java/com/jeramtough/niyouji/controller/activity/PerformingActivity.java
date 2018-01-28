@@ -60,10 +60,18 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	}
 	
 	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		P.arrive();
+	}
+	
+	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
 		performerLiveTravelnoteHandler.onDestroy();
+		P.arrive();
 	}
 	
 	@Override

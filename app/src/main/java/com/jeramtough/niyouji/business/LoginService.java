@@ -1,26 +1,35 @@
 package com.jeramtough.niyouji.business;
 
+import android.content.Context;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.LoginPreferences;
+import com.jeramtough.jtandroid.function.NetworkIsAble;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.util.CommonValidatorUtil;
 import com.jeramtough.niyouji.bean.landr.InputtingLegality;
 import com.jeramtough.niyouji.bean.landr.LoginInfo;
+import com.jeramtough.niyouji.bean.landr.LoginResponse;
 import com.jeramtough.niyouji.bean.user.PrimaryInfoOfUser;
 import com.jeramtough.niyouji.component.app.AppUser;
-import com.jeramtough.niyouji.controller.activity.LoginActivity;
+import com.jeramtough.niyouji.component.httpclient.RandLHttpClient;
 
 @JtService
 public class LoginService implements LoginBusiness
 {
 	private LoginPreferences loginPreferences;
 	private AppUser appUser;
+	private RandLHttpClient randLHttpClient;
+	private NetworkIsAble networkIsAble;
 	
 	@IocAutowire
-	public LoginService(LoginPreferences loginPreferences, AppUser appUser)
+	public LoginService(LoginPreferences loginPreferences, AppUser appUser,
+			RandLHttpClient randLHttpClient, NetworkIsAble networkIsAble)
 	{
 		this.loginPreferences = loginPreferences;
 		this.appUser = appUser;
+		this.randLHttpClient = randLHttpClient;
+		this.networkIsAble = networkIsAble;
 	}
 	
 	@Override
@@ -42,7 +51,7 @@ public class LoginService implements LoginBusiness
 			return inputtingLegality;
 		}
 		
-		if (loginInfo.getPassword().length()<6)
+		if (loginInfo.getPassword().length() < 6)
 		{
 			inputtingLegality.setPassed(false);
 			inputtingLegality.setIllegalMessage("密码长度6位及以上！");
@@ -62,6 +71,12 @@ public class LoginService implements LoginBusiness
 	}
 	
 	@Override
+	public boolean checkNetwork(Context context)
+	{
+		return networkIsAble.isNetworkConnected(context);
+	}
+	
+	@Override
 	public LoginInfo getHasRememberLoginInfo()
 	{
 		LoginInfo loginInfo = new LoginInfo();
@@ -78,16 +93,34 @@ public class LoginService implements LoginBusiness
 	}
 	
 	@Override
-	public void login(LoginInfo loginInfo, android.os.Handler handler)
+	public void login(LoginInfo loginInfo, BusinessCaller businessCaller)
 	{
-		PrimaryInfoOfUser primaryInfoOfUser = new PrimaryInfoOfUser();
-		primaryInfoOfUser.setUserId("1");
-		primaryInfoOfUser.setNickname("JeramTough");
-		primaryInfoOfUser.setPhoneNumber("15289678163");
-		primaryInfoOfUser.setSurfaceImageUrl(
-				"http://112.74.51.247:8666/randl/surfaceImage?name=default.jpg");
-		appUser.setPrimaryInfoOfUser(primaryInfoOfUser);
-		handler.sendEmptyMessage(LoginActivity.BUSINESS_CODE_LOGIN_SUCCESSFULLY);
+		new Thread()
+		{
+			@Override
+			public void run()
+			{
+				LoginResponse loginResponse = randLHttpClient
+						.userLogin(loginInfo.getPhoneNumber(), loginInfo.getPassword());
+				if (loginResponse.isSuccessful())
+				{
+					PrimaryInfoOfUser primaryInfoOfUser = loginResponse.getPrimaryInfoOfUser();
+					appUser.setPrimaryInfoOfUser(primaryInfoOfUser);
+					
+					businessCaller.getData().putBoolean("isSuccessful", true);
+				}
+				else
+				{
+					businessCaller.getData().putBoolean("isSuccessful", false);
+					businessCaller.getData()
+							.putString("failedMessage", loginResponse.getFailedMessage());
+				}
+				
+				businessCaller.callBusiness();
+			}
+		}.start();
+		
 	}
+	
 	
 }

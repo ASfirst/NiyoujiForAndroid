@@ -78,10 +78,10 @@ public class DiscoverFragment extends AppBaseFragment
 						//模拟创建房间操作
 						try
 						{
-							performerWebSocketClient =
+							/*performerWebSocketClient =
 									(PerformerWebSocketClient) performerWebSocketClient
-											.clone();
-							performerWebSocketClient.connectBlocking();
+											.clone();*/
+							performerWebSocketClient.reconnectBlocking();
 							
 							CreatePerformingRoomCommand createPerformingRoomCommand =
 									new CreatePerformingRoomCommand();

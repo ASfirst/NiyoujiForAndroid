@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.business;
 
+import android.content.Context;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.niyouji.bean.landr.InputtingLegality;
 import com.jeramtough.niyouji.bean.landr.RegisterInfo;
 
@@ -15,12 +17,17 @@ public interface RegisterBusiness
 	InputtingLegality checkInputtingIsLegal(RegisterInfo registerInfo);
 	
 	/**
+	 * 检查网络
+	 */
+	boolean checkNetwork(Context context);
+	
+	/**
 	 * 请求发送手机验证码
 	 */
-	void requestVerificationCode(String phoneNumber, android.os.Handler handler);
+	void requestVerificationCode(String phoneNumber, BusinessCaller businessCaller);
 	
 	/**
 	 * 注册一名新用户到系统
 	 */
-	void registerNewUser(RegisterInfo registerInfo, android.os.Handler handler);
+	void registerNewUser(RegisterInfo registerInfo, BusinessCaller businessCaller);
 }

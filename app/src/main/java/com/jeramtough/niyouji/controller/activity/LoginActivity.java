@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;
@@ -27,8 +30,7 @@ public class LoginActivity extends AppBaseActivity
 {
 	public static final int ACTIVITY_RESULT_CODE_LOGIN = 0;
 	
-	public static final int BUSINESS_CODE_LOGIN_SUCCESSFULLY = 0;
-	public static final int BUSINESS_CODE_LOGIN_FAILED = 1;
+	private static final int BUSINESS_CODE_LOGIN = 0;
 	
 	public static final int ACTIVITY_REQUEST_CODE_REGISTER = 0;
 	
@@ -81,19 +83,29 @@ public class LoginActivity extends AppBaseActivity
 				this.finish();
 				break;
 			case R.id.button_login:
-				LoginInfo loginInfo = new LoginInfo(editPhoneNumber.getText().toString(),
-						editPassword.getText().toString());
-				InputtingLegality inputtingLegality =
-						loginBusiness.checkInputtingIsLegal(loginInfo);
-				if (inputtingLegality.isPassed())
+				if (loginBusiness.checkNetwork(this))
 				{
-					loginBusiness.login(loginInfo, getActivityHandler());
-					loginBusiness.rememberLoginInfo(loginInfo);
+					LoginInfo loginInfo = new LoginInfo(editPhoneNumber.getText().toString(),
+							editPassword.getText().toString());
+					InputtingLegality inputtingLegality =
+							loginBusiness.checkInputtingIsLegal(loginInfo);
+					if (inputtingLegality.isPassed())
+					{
+						loginBusiness.login(loginInfo,
+								new BusinessCaller(getActivityHandler(), BUSINESS_CODE_LOGIN));
+						loginBusiness.rememberLoginInfo(loginInfo);
+					}
+					else
+					{
+						timedCloseTextViewShowMessage
+								.setErrorMessage(inputtingLegality.getIllegalMessage());
+						timedCloseTextViewShowMessage.closeDelayed(3000);
+					}
 				}
 				else
 				{
 					timedCloseTextViewShowMessage
-							.setErrorMessage(inputtingLegality.getIllegalMessage());
+							.setErrorMessage("没有可用网络！");
 					timedCloseTextViewShowMessage.closeDelayed(3000);
 				}
 				break;
@@ -111,12 +123,24 @@ public class LoginActivity extends AppBaseActivity
 	{
 		switch (message.what)
 		{
-			case BUSINESS_CODE_LOGIN_SUCCESSFULLY:
-				Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
-				setResult(ACTIVITY_RESULT_CODE_LOGIN, getIntent());
-				this.finish();
-				break;
-			case BUSINESS_CODE_LOGIN_FAILED:
+			case BUSINESS_CODE_LOGIN:
+				boolean isSuccessful = message.getData().getBoolean("isSuccessful");
+				if (isSuccessful)
+				{
+					Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
+					setResult(ACTIVITY_RESULT_CODE_LOGIN, getIntent());
+					this.finish();
+				}
+				else
+				{
+					String failedMessage = message.getData().getString("failedMessage");
+					AlertDialog dialog = new AlertDialog.Builder(this).setTitle("登录失败")
+							.setMessage(failedMessage)
+							.setPositiveButton("确定", (dialog1, which) ->
+							{
+							}).create();
+					dialog.show();
+				}
 				break;
 		}
 	}
@@ -125,10 +149,10 @@ public class LoginActivity extends AppBaseActivity
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if (requestCode == ACTIVITY_REQUEST_CODE_REGISTER &&
-				resultCode == RegisterActivity.ACTIVITY_SESULT_CODE_REGISTER)
+				resultCode == RegisterActivity.ACTIVITY_SESULT_CODE_REGISTER && data != null)
 		{
-			String phoneNumber=data.getStringExtra("phoneNumber");
-			String password=data.getStringExtra("password");
+			String phoneNumber = data.getStringExtra("phoneNumber");
+			String password = data.getStringExtra("password");
 			
 			editPhoneNumber.setText(phoneNumber);
 			editPassword.setText(password);

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.niyouji.R;
@@ -24,10 +25,8 @@ import java.util.TimerTask;
  */
 public class RegisterActivity extends AppBaseActivity
 {
-	public static final int BUSINESS_CODE_SENT_VERIFICATION_CODE_SUCCESSFULLY = 0;
-	public static final int BUSINESS_CODE_SENT_VERIFICATION_CODE_FAILED = 1;
-	public static final int BUSINESS_CODE_REGISTERED_SUCCESSFULLY = 2;
-	public static final int BUSINESS_CODE_REGISTERED_FAILED = 3;
+	public static final int BUSINESS_CODE_SENT_VERIFICATION_CODE = 0;
+	public static final int BUSINESS_CODE_REGISTERED = 1;
 	
 	public static final int ACTIVITY_SESULT_CODE_REGISTER = 0;
 	
@@ -76,27 +75,47 @@ public class RegisterActivity extends AppBaseActivity
 				this.finish();
 				break;
 			case R.id.button_request_verification_code:
-				registerBusiness.requestVerificationCode(editPhoneNumber.getText().toString(),
-						getActivityHandler());
-				afterSentVerificationCode();
-				break;
-			case R.id.button_register_user:
-				RegisterInfo registerInfo = new RegisterInfo();
-				registerInfo.setPhoneNumber(editPhoneNumber.getText().toString());
-				registerInfo.setPassword(editPassword.getText().toString());
-				registerInfo.setRepeatPassword(editRepeatPassword.getText().toString());
-				InputtingLegality inputtingLegality =
-						registerBusiness.checkInputtingIsLegal(registerInfo);
-				if (inputtingLegality.isPassed())
+				if (registerBusiness.checkNetwork(this))
 				{
-					registerInfo
-							.setVerificationCode(editVerificationCode.getText().toString());
-					registerBusiness.registerNewUser(registerInfo, getActivityHandler());
+					registerBusiness
+							.requestVerificationCode(editPhoneNumber.getText().toString(),
+									new BusinessCaller(getActivityHandler(),
+											BUSINESS_CODE_SENT_VERIFICATION_CODE));
 				}
 				else
 				{
-					timedCloseTextViewShowMessage
-							.setErrorMessage(inputtingLegality.getIllegalMessage());
+					timedCloseTextViewShowMessage.setErrorMessage("没有可用网络");
+					timedCloseTextViewShowMessage.closeDelayed(3000);
+				}
+				break;
+			case R.id.button_register_user:
+				if (registerBusiness.checkNetwork(this))
+				{
+					RegisterInfo registerInfo = new RegisterInfo();
+					registerInfo.setPhoneNumber(editPhoneNumber.getText().toString());
+					registerInfo.setPassword(editPassword.getText().toString());
+					registerInfo.setRepeatPassword(editRepeatPassword.getText().toString());
+					registerInfo.setVerificationCode(editVerificationCode.getText().toString());
+					InputtingLegality inputtingLegality =
+							registerBusiness.checkInputtingIsLegal(registerInfo);
+					if (inputtingLegality.isPassed())
+					{
+						registerInfo.setVerificationCode(
+								editVerificationCode.getText().toString());
+						registerBusiness.registerNewUser(registerInfo,
+								new BusinessCaller(getActivityHandler(),
+										BUSINESS_CODE_REGISTERED));
+					}
+					else
+					{
+						timedCloseTextViewShowMessage
+								.setErrorMessage(inputtingLegality.getIllegalMessage());
+						timedCloseTextViewShowMessage.closeDelayed(3000);
+					}
+				}
+				else
+				{
+					timedCloseTextViewShowMessage.setErrorMessage("没有可用网络");
 					timedCloseTextViewShowMessage.closeDelayed(3000);
 				}
 				break;
@@ -108,23 +127,35 @@ public class RegisterActivity extends AppBaseActivity
 	{
 		switch (message.what)
 		{
-			case BUSINESS_CODE_SENT_VERIFICATION_CODE_FAILED:
-				String errorMessage = message.getData().getString("errorMessage");
-				timedCloseTextViewShowMessage.setErrorMessage("发送失败!" + errorMessage);
-				timedCloseTextViewShowMessage.closeDelayed(3000);
+			case BUSINESS_CODE_SENT_VERIFICATION_CODE:
+				if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL))
+				{
+					timedCloseTextViewShowMessage.setNiceMessage("发送成功");
+					timedCloseTextViewShowMessage.closeDelayed(3000);
+					afterSentVerificationCode();
+				}
+				else
+				{
+					String errorMessage = message.getData().getString("errorMessage");
+					timedCloseTextViewShowMessage.setErrorMessage("发送失败!" + errorMessage);
+					timedCloseTextViewShowMessage.closeDelayed(3000);
+				}
 				break;
-			case BUSINESS_CODE_SENT_VERIFICATION_CODE_SUCCESSFULLY:
-				timedCloseTextViewShowMessage.setNiceMessage("发送成功");
-				timedCloseTextViewShowMessage.closeDelayed(3000);
-				break;
-			case BUSINESS_CODE_REGISTERED_FAILED:
-				break;
-			case BUSINESS_CODE_REGISTERED_SUCCESSFULLY:
-				Toast.makeText(this, "注册成功~", Toast.LENGTH_SHORT).show();
-				setResult(ACTIVITY_SESULT_CODE_REGISTER, getIntent());
-				getIntent().putExtra("phoneNumber",editPhoneNumber.getText().toString());
-				getIntent().putExtra("password",editPassword.getText().toString());
-				this.finish();
+			case BUSINESS_CODE_REGISTERED:
+				if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL))
+				{
+					Toast.makeText(this, "注册成功~", Toast.LENGTH_SHORT).show();
+					setResult(ACTIVITY_SESULT_CODE_REGISTER, getIntent());
+					getIntent().putExtra("phoneNumber", editPhoneNumber.getText().toString());
+					getIntent().putExtra("password", editPassword.getText().toString());
+					this.finish();
+				}
+				else
+				{
+					String failedMessage=message.getData().getString(BusinessCaller.MESSAGE);
+					timedCloseTextViewShowMessage.setErrorMessage(failedMessage);
+					timedCloseTextViewShowMessage.closeDelayed(3000);
+				}
 				break;
 		}
 	}
@@ -132,7 +163,7 @@ public class RegisterActivity extends AppBaseActivity
 	//***************************************
 	private void afterSentVerificationCode()
 	{
-		final int[] count = {30};
+		final int[] count = {60};
 		textViewSendingCountdown.setVisibility(View.VISIBLE);
 		buttonRequestVerificationCode.setVisibility(View.INVISIBLE);
 		TimerTask timerTask = new TimerTask()
@@ -149,7 +180,7 @@ public class RegisterActivity extends AppBaseActivity
 						this.cancel();
 						textViewSendingCountdown.setVisibility(View.INVISIBLE);
 						buttonRequestVerificationCode.setVisibility(View.VISIBLE);
-						textViewSendingCountdown.setText("(30)s");
+						textViewSendingCountdown.setText("(60)s");
 					}
 				});
 				
