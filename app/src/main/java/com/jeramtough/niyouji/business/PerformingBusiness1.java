@@ -31,4 +31,8 @@ public interface PerformingBusiness1
 	void spreadTravelnoteEnd();
 	
 	void callAudienceActions(BusinessCaller audienceActionsBusinessCaller);
+	
+	void whenPerformerLeave(BusinessCaller businessCaller);
+	
+	void performerReback(BusinessCaller businessCaller);
 }

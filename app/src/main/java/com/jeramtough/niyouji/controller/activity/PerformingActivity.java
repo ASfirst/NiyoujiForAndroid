@@ -1,10 +1,17 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
+import android.widget.TextView;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.command.performer.PerformerRebackCommand;
 import com.jeramtough.niyouji.business.PerformingBusiness1;
 import com.jeramtough.niyouji.business.PerformingService1;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnoteEventsCaller;
@@ -20,6 +27,13 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	public static final int TAKE_PHOTO_REQUEST_CODE = 0X1;
 	public static final int VIDEO_REQUEST_CODE = 0X2;
 	
+	private static final int BUSINESS_CODE_WHEN_PERFORMER_LEAVE = 0X3;
+	private static final int BUSINESS_CODE_WHEN_PERFORMER_REBACK = 0X4;
+	
+	private TimedCloseTextView timedCloseTextView;
+	private TextView textViewAttentionsCount;
+	private TextView textViewAudiencesCount;
+	
 	private PerformerLiveTravelnoteHandler performerLiveTravelnoteHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
 	
@@ -33,11 +47,17 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_performing);
 		
-		performerLiveTravelnoteHandler =
-				new PerformerLiveTravelnoteHandler(this);
+		timedCloseTextView = findViewById(R.id.textView_notification);
+		textViewAttentionsCount = findViewById(R.id.textView_attentions_count);
+		textViewAudiencesCount = findViewById(R.id.textView_audiences_count);
+		
+		performerLiveTravelnoteHandler = new PerformerLiveTravelnoteHandler(this);
 		travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
 		
 		performerLiveTravelnoteHandler.setLiveTravelnoteEventsCaller(this);
+		
+		performingBusiness1.whenPerformerLeave(
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_WHEN_PERFORMER_LEAVE));
 	}
 	
 	@Override
@@ -78,6 +98,62 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	public void onBackPressed()
 	{
 		performerLiveTravelnoteHandler.shutdownForLiveByUseingDialog();
+	}
+	
+	@Override
+	public void handleActivityMessage(Message message)
+	{
+		switch (message.what)
+		{
+			case BUSINESS_CODE_WHEN_PERFORMER_LEAVE:
+				AlertDialog dialog =
+						new AlertDialog.Builder(this).setMessage("与服务器失去连接," + "点击确定进行重连")
+								.setPositiveButton("确定", (dialog1, which) ->
+								{
+									performingBusiness1.performerReback(
+											new BusinessCaller(getActivityHandler(),
+													BUSINESS_CODE_WHEN_PERFORMER_REBACK));
+									
+									timedCloseTextView.setPrimaryMessage("等待重连中...");
+									timedCloseTextView.visible();
+									
+								}).setNegativeButton("取消", (dialog12, which) ->
+						{
+							PerformingActivity.this.finish();
+						}).create();
+				dialog.show();
+				break;
+			
+			case BUSINESS_CODE_WHEN_PERFORMER_REBACK:
+				boolean isSuccessful =
+						message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL);
+				if (isSuccessful)
+				{
+					int performerActions = message.getData().getInt("performerActions");
+					switch (performerActions)
+					{
+						case PerformerCommandActions.PERFORMER_REBACK:
+							PerformerRebackCommand performerRebackCommand =
+									(PerformerRebackCommand) message.getData()
+											.getSerializable("command");
+							
+							textViewAudiencesCount.setText(performerRebackCommand
+									.getAudiencesCount()+"");
+							textViewAttentionsCount.setText(performerRebackCommand
+									.getAttentionsCount()+"");
+							
+							timedCloseTextView.setNiceMessage("重连成功！");
+							timedCloseTextView.closeDelayed(3000);
+							break;
+					}
+				}
+				else
+				{
+					timedCloseTextView.setErrorMessage("重连失败！");
+					timedCloseTextView.closeDelayed(3000);
+				}
+				break;
+		}
 	}
 	
 	@Override

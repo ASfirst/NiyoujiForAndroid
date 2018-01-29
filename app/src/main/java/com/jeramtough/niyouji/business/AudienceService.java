@@ -264,6 +264,31 @@ public class AudienceService implements AudienceBusiness
 						
 						performerActionsBusinessCaller.callBusiness();
 						break;
+					case PerformerCommandActions.PERFORMER_LEAVE:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PerformerLeaveCommand performerLeaveCommand = PerformerCommandParser
+								.parsePerformerLeaveCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", performerLeaveCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
+					
+					case PerformerCommandActions.PERFORMER_REBACK:
+						performerActionsBusinessCaller.getData()
+								.putInt("performerAction", socketMessage.getCommandAction());
+						
+						PerformerRebackCommand performerRebackCommand = PerformerCommandParser
+								.parsePerformerRebackCommand(socketMessage);
+						
+						performerActionsBusinessCaller.getData()
+								.putSerializable("command", performerRebackCommand);
+						
+						performerActionsBusinessCaller.callBusiness();
+						break;
 				}
 			}
 		};

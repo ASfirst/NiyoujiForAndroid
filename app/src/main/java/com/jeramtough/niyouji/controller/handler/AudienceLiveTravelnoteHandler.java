@@ -294,6 +294,19 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 						
 						this.travelnoteEnd(travelnoteEndCommand);
 						break;
+					case PerformerCommandActions.PERFORMER_LEAVE:
+						PerformerLeaveCommand performerLeaveCommand =
+								(PerformerLeaveCommand) message.getData()
+										.getSerializable("command");
+						this.whenPerformerLeave(performerLeaveCommand);
+						break;
+					
+					case PerformerCommandActions.PERFORMER_REBACK:
+						PerformerRebackCommand performerRebackCommand =
+								(PerformerRebackCommand) message.getData()
+										.getSerializable("command");
+						this.whenPerformerReback(performerRebackCommand);
+						break;
 				}
 				break;
 			
@@ -369,7 +382,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	}
 	
 	@Override
-	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+	{
+	}
 	
 	@Override
 	public void onPageSelected(int position)
@@ -385,7 +400,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	}
 	
 	@Override
-	public void onPageScrollStateChanged(int state) {}
+	public void onPageScrollStateChanged(int state)
+	{
+	}
 	
 	@Override
 	public void onDestroy()
@@ -502,7 +519,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
 		
 		P.debug(liveTravelnotePageViews.size());
-		if (liveTravelnotePageViews.size()<=0)
+		if (liveTravelnotePageViews.size() <= 0)
 		{
 			textViewNoPage.setVisibility(View.VISIBLE);
 		}
@@ -717,6 +734,18 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		AudienceTravelnoteEndDialog dialog =
 				new AudienceTravelnoteEndDialog(this.getActivity());
 		dialog.show();
+	}
+	
+	private void whenPerformerLeave(PerformerLeaveCommand performerLeaveCommand)
+	{
+		timedCloseTextViewShowMessage.setErrorMessage("主播断线中?.?.?..");
+		timedCloseTextViewShowMessage.visible();
+	}
+	
+	private void whenPerformerReback(PerformerRebackCommand performerRebackCommand)
+	{
+		timedCloseTextViewShowMessage.setNiceMessage("主播已重连~");
+		timedCloseTextViewShowMessage.closeDelayed(3000);
 	}
 	
 	private void pauseMusicIf()

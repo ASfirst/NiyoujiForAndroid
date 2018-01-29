@@ -43,6 +43,9 @@ public class DiscoverFragment extends AppBaseFragment
 	@InjectView(R.id.btn_test3)
 	private Button btnTest3;
 	
+	@InjectView(R.id.btn_test4)
+	private Button btnTest4;
+	
 	@InjectComponent
 	private AppUser appUser;
 	@InjectComponent
@@ -61,6 +64,7 @@ public class DiscoverFragment extends AppBaseFragment
 		btnTest1.setOnClickListener(this);
 		btnTest2.setOnClickListener(this);
 		btnTest3.setOnClickListener(this);
+		btnTest4.setOnClickListener(this);
 		
 	}
 	
@@ -100,6 +104,9 @@ public class DiscoverFragment extends AppBaseFragment
 							Thread.sleep(500);
 							IntentUtil.toTheOtherActivity(getActivity(),
 									PerformingActivity.class);
+							
+							Thread.sleep(5000);
+							performerWebSocketClient.closeBlocking();
 						}
 						catch (InterruptedException e)
 						{
@@ -114,6 +121,16 @@ public class DiscoverFragment extends AppBaseFragment
 				break;
 			case R.id.btn_test3:
 				IntentUtil.toTheOtherActivity(this.getActivity(), Test1Activity.class);
+				break;
+			case R.id.btn_test4:
+				new Thread()
+				{
+					@Override
+					public void run()
+					{
+					}
+				}.start();
+				
 				break;
 		}
 	}

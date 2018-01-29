@@ -8,7 +8,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
 import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
 
@@ -17,8 +17,14 @@ import java.util.ArrayList;
  */
 public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 {
-	private boolean isConectionFailed = false;
+	private boolean isConnectionFailed = false;
 	private ArrayList<WebSocketClientListener> webSocketClientListeners;
+	private boolean isHeartBeating = false;
+	private byte[] pingBytes = "0".getBytes();
+	private int pingInterval = 1500;
+	private int pingPongCount = 0;
+	private int maxLostCount = 25;
+	
 	
 	public BaseWebSocketClient(URI serverUri)
 	{
@@ -65,9 +71,10 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 	@Override
 	public void onClose(int code, String reason, boolean remote)
 	{
-		P.arrive();
 		getP().warn("close the connection with server, because " + code + ": " + reason);
-		isConectionFailed = true;
+		isConnectionFailed = true;
+		
+		stopHeartbeat();
 		
 		if (webSocketClientListeners.size() != 0)
 		{
@@ -85,6 +92,8 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		getP().error("have a exception for [" + ex.getMessage() + "]");
 		this.close();
 		
+		stopHeartbeat();
+		
 		if (webSocketClientListeners.size() != 0)
 		{
 			for (WebSocketClientListener webSocketClientListener : webSocketClientListeners)
@@ -94,14 +103,58 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 		}
 	}
 	
+	@Override
+	public void onMessage(ByteBuffer bytes)
+	{
+		pingPongCount--;
+	}
+	
 	public void sendSocketMessage(SocketMessage socketMessage)
 	{
 		this.send(JSON.toJSONString(socketMessage));
 	}
 	
-	public boolean isConectionFailed()
+	public void startHeartbeat()
 	{
-		return isConectionFailed;
+		isHeartBeating = true;
+		
+		new Thread()
+		{
+			@Override
+			public void run()
+			{
+				while (isHeartBeating)
+				{
+					if (pingPongCount < maxLostCount)
+					{
+						P.debug(pingPongCount);
+						pingPongCount++;
+						send(pingBytes);
+						try
+						{
+							Thread.sleep(pingInterval);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			}
+		}.start();
+		
+	}
+	
+	
+	public void stopHeartbeat()
+	{
+		isHeartBeating = false;
+	}
+	
+	public boolean isConnectionFailed()
+	{
+		return isConnectionFailed;
 	}
 	
 	

@@ -7,6 +7,7 @@ import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
+import com.jeramtough.niyouji.bean.socketmessage.action.PerformerCommandActions;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.AudienceLeaveCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.EnterPerformingRoomCommand;
 import com.jeramtough.niyouji.bean.socketmessage.command.audience.LightAttentionCountCommand;
@@ -14,6 +15,7 @@ import com.jeramtough.niyouji.bean.socketmessage.command.audience.SendAudienceBa
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.*;
 import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.communicate.parser.AudienceCommandParser;
+import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
@@ -38,6 +40,7 @@ public class PerformingService1 implements PerformingBusiness1
 	private AppUser appUser;
 	
 	private WebSocketClientListener webSocketClientListener;
+	private WebSocketClientListener webSocketClientListener1;
 	
 	@IocAutowire
 	public PerformingService1(PerformerWebSocketClient performerWebSocketClient,
@@ -307,6 +310,90 @@ public class PerformingService1 implements PerformingBusiness1
 			}
 		};
 		performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
+	}
+	
+	@Override
+	public void whenPerformerLeave(BusinessCaller businessCaller)
+	{
+		if (webSocketClientListener1 != null)
+		{
+			performerWebSocketClient.removeWebSocketClientListener(webSocketClientListener1);
+		}
+		
+		webSocketClientListener1 = new WebSocketClientListener()
+		{
+			@Override
+			public void onClose(int code, String reason, boolean remote)
+			{
+				super.onClose(code, reason, remote);
+				businessCaller.callBusiness();
+			}
+		};
+		
+		performerWebSocketClient.addWebSocketClientListener(webSocketClientListener1);
+	}
+	
+	
+	@Override
+	public void performerReback(BusinessCaller businessCaller)
+	{
+		executorService.submit(() ->
+		{
+			performerWebSocketClient =
+					(PerformerWebSocketClient) performerWebSocketClient.clone();
+			WebSocketClientListener webSocketClientListener = new WebSocketClientListener()
+			{
+				@Override
+				public void onMessage(SocketMessage socketMessage)
+				{
+					super.onMessage(socketMessage);
+					switch (socketMessage.getCommandAction())
+					{
+						case PerformerCommandActions.PERFORMER_REBACK:
+							businessCaller.getData().putInt("performerActions",
+									socketMessage.getCommandAction());
+							
+							PerformerRebackCommand performerRebackCommand =
+									PerformerCommandParser
+											.parsePerformerRebackCommand(socketMessage);
+							
+							businessCaller.getData()
+									.putSerializable("command", performerRebackCommand);
+							
+							businessCaller.setSuccessful(true);
+							businessCaller.callBusiness();
+							
+							performerWebSocketClient.removeWebSocketClientListener(this);
+							break;
+					}
+				}
+			};
+			
+			performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
+			
+			//重连
+			try
+			{
+				boolean isSuccessful = performerWebSocketClient.connectBlocking();
+				
+				if (!isSuccessful)
+				{
+					businessCaller.setSuccessful(false);
+					businessCaller.callBusiness();
+				}
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			
+			PerformerRebackCommand performerRebackCommand = new PerformerRebackCommand();
+			performerRebackCommand.setPerformerId(appUser.getUserId());
+			
+			SocketMessage socketMessage = PerformerSocketMessageFactory
+					.processPerformerRebackCommandSocketMessage(performerRebackCommand);
+			performerWebSocketClient.sendSocketMessage(socketMessage);
+		});
 	}
 	
 }
