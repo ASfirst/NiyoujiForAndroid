@@ -19,6 +19,8 @@ public interface PerformingBusiness
 	
 	void uploadVideoFile(Context context, String filename, String videoFilePath,
 			BusinessCaller businessCaller);
-
 	
+	void saveCurrentPageCount(Context context, int count);
+	
+	int getPageCountBefore(Context context);
 }

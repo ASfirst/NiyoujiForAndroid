@@ -130,24 +130,23 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		viewPagerTravelnotePages.setAdapter(adapter);
 		
 		this.recycleLastPage();
-		
-		//一些模拟操作，到时候会删掉的
-		/*for (int i = 0; i < 7; i++)
+	}
+	
+	@Override
+	public void onStop()
+	{
+		performingBusiness.saveCurrentPageCount(getContext(), liveTravelnotePageViews.size());
+	}
+	
+	@Override
+	public void onResume()
+	{
+		int pageCountBefore = performingBusiness.getPageCountBefore(getContext());
+		if (pageCountBefore > viewPagerTravelnotePages.getChildCount())
 		{
-			int finalI = i;
-			appraisalAreaView.postDelayed(() ->
-			{
-				if (finalI % 2 == 0)
-				{
-					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 1);
-				}
-				else
-				{
-					appraisalAreaView.addAppraisal("JeramTough", finalI + "dfasdfsa", 2);
-				}
-			}, 1500 * i);
-		}*/
-		
+			Toast.makeText(getContext(), "直播以失效，请重新开始！", Toast.LENGTH_SHORT).show();
+			getActivity().finish();
+		}
 	}
 	
 	@Override
@@ -253,8 +252,9 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 						
 						//回调当上传完成page内容资源
 						String imageUrl = ProcessNameOfCloud.processImageFileUrl(
-								ProcessNameOfCloud.processImageFileName(performingBusiness.getUserId(),
-										liveTravelnotePageView1));
+								ProcessNameOfCloud
+										.processImageFileName(performingBusiness.getUserId(),
+												liveTravelnotePageView1));
 						liveTravelnoteEventsCaller.onPageSetPicture(position, imageUrl);
 					}
 					else
@@ -298,8 +298,9 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 						
 						//回调当上传完成page内容资源
 						String videoUrl = ProcessNameOfCloud.processVideoFileUrl(
-								ProcessNameOfCloud.processVideoFileName(performingBusiness.getUserId(),
-										liveTravelnotePageView2));
+								ProcessNameOfCloud
+										.processVideoFileName(performingBusiness.getUserId(),
+												liveTravelnotePageView2));
 						liveTravelnoteEventsCaller.onPageSetVideo(position, videoUrl);
 					}
 					else
@@ -469,7 +470,8 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 				
 				//生成云图片文件名
 				String ossImageFileName = ProcessNameOfCloud
-						.processImageFileName(performingBusiness.getUserId(), liveTravelnotePageView);
+						.processImageFileName(performingBusiness.getUserId(),
+								liveTravelnotePageView);
 				
 				//上传图片到云端
 				this.performingBusiness.uploadImageFile(getContext(), ossImageFileName, path,
@@ -521,7 +523,8 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 				
 				//生成云视频文件名
 				String ossVideoFileName = ProcessNameOfCloud
-						.processVideoFileName(performingBusiness.getUserId(), liveTravelnotePageView);
+						.processVideoFileName(performingBusiness.getUserId(),
+								liveTravelnotePageView);
 				
 				//上传视频到云端
 				this.performingBusiness.uploadVideoFile(getContext(), ossVideoFileName, path,
@@ -727,8 +730,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	
 	private void addPageViewToList()
 	{
-		LiveTravelnotePageView page =
-				new LiveTravelnotePageView(getContext(), this);
+		LiveTravelnotePageView page = new LiveTravelnotePageView(getContext(), this);
 		liveTravelnotePageViews.add(page);
 	}
 	

@@ -12,6 +12,7 @@ import com.jeramtough.jtandroid.adapter.ViewsAdapter;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectView;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
@@ -105,8 +106,8 @@ public class DiscoverFragment extends AppBaseFragment
 							IntentUtil.toTheOtherActivity(getActivity(),
 									PerformingActivity.class);
 							
-							Thread.sleep(5000);
-							performerWebSocketClient.closeBlocking();
+							//							Thread.sleep(5000);
+							//							performerWebSocketClient.closeBlocking();
 						}
 						catch (InterruptedException e)
 						{

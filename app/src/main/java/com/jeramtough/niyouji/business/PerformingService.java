@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.business;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
@@ -37,8 +38,8 @@ public class PerformingService implements PerformingBusiness
 	private final boolean debugUploadMode = true;
 	
 	@IocAutowire
-	public PerformingService(NiyoujiStsManager niyoujiStsManager,
-			AliOssManager aliOssManager, AppUser appUser, NetworkIsAble networkIsAble)
+	public PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
+			AppUser appUser, NetworkIsAble networkIsAble)
 	{
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
@@ -104,6 +105,25 @@ public class PerformingService implements PerformingBusiness
 			});
 		}
 	}
+	
+	@Override
+	public void saveCurrentPageCount(Context context, int count)
+	{
+		SharedPreferences sharedPreferences =
+				context.getSharedPreferences("how many there pages", 0);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putInt("pageCount", count);
+		editor.apply();
+	}
+	
+	@Override
+	public int getPageCountBefore(Context context)
+	{
+		SharedPreferences sharedPreferences =
+				context.getSharedPreferences("how many there pages", 0);
+		return sharedPreferences.getInt("pageCount", 0);
+	}
+	
 	
 	//*******************************
 	private boolean checkTheNetwork(Context context, BusinessCaller businessCaller)

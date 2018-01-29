@@ -36,6 +36,11 @@ public class JtBaseHandler extends Handler implements View.OnClickListener
 		return activity;
 	}
 	
+	public void onStop()
+	{
+	
+	}
+	
 	public void onDestroy()
 	{
 	

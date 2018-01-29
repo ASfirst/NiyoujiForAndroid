@@ -326,7 +326,12 @@ public class PerformingService1 implements PerformingBusiness1
 			public void onClose(int code, String reason, boolean remote)
 			{
 				super.onClose(code, reason, remote);
-				businessCaller.callBusiness();
+				
+				if (code==1006)
+				{
+					businessCaller.callBusiness();
+				}
+				
 			}
 		};
 		
@@ -380,6 +385,8 @@ public class PerformingService1 implements PerformingBusiness1
 				{
 					businessCaller.setSuccessful(false);
 					businessCaller.callBusiness();
+					
+					performerWebSocketClient.removeWebSocketClientListener(webSocketClientListener);
 				}
 			}
 			catch (InterruptedException e)

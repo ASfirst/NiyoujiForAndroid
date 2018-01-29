@@ -80,10 +80,17 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	}
 	
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		performerLiveTravelnoteHandler.onResume();
+	}
+	
+	@Override
 	protected void onStop()
 	{
 		super.onStop();
-		P.arrive();
+		performerLiveTravelnoteHandler.onStop();
 	}
 	
 	@Override
@@ -91,7 +98,6 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	{
 		super.onDestroy();
 		performerLiveTravelnoteHandler.onDestroy();
-		P.arrive();
 	}
 	
 	@Override
@@ -106,22 +112,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		switch (message.what)
 		{
 			case BUSINESS_CODE_WHEN_PERFORMER_LEAVE:
-				AlertDialog dialog =
-						new AlertDialog.Builder(this).setMessage("与服务器失去连接," + "点击确定进行重连")
-								.setPositiveButton("确定", (dialog1, which) ->
-								{
-									performingBusiness1.performerReback(
-											new BusinessCaller(getActivityHandler(),
-													BUSINESS_CODE_WHEN_PERFORMER_REBACK));
-									
-									timedCloseTextView.setPrimaryMessage("等待重连中...");
-									timedCloseTextView.visible();
-									
-								}).setNegativeButton("取消", (dialog12, which) ->
-						{
-							PerformingActivity.this.finish();
-						}).create();
-				dialog.show();
+				popupReconnectDialog();
 				break;
 			
 			case BUSINESS_CODE_WHEN_PERFORMER_REBACK:
@@ -137,10 +128,10 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 									(PerformerRebackCommand) message.getData()
 											.getSerializable("command");
 							
-							textViewAudiencesCount.setText(performerRebackCommand
-									.getAudiencesCount()+"");
-							textViewAttentionsCount.setText(performerRebackCommand
-									.getAttentionsCount()+"");
+							textViewAudiencesCount
+									.setText(performerRebackCommand.getAudiencesCount() + "");
+							textViewAttentionsCount
+									.setText(performerRebackCommand.getAttentionsCount() + "");
 							
 							timedCloseTextView.setNiceMessage("重连成功！");
 							timedCloseTextView.closeDelayed(3000);
@@ -149,8 +140,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 				}
 				else
 				{
-					timedCloseTextView.setErrorMessage("重连失败！");
-					timedCloseTextView.closeDelayed(3000);
+					popupReconnectDialog();
 				}
 				break;
 		}
@@ -214,5 +204,25 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	public void onTravelnoteEnd()
 	{
 		performingBusiness1.spreadTravelnoteEnd();
+	}
+	
+	//*************************************
+	private void popupReconnectDialog()
+	{
+		AlertDialog dialog = new AlertDialog.Builder(this).setMessage("与服务器连接失败," + "点击确定进行重连")
+				.setPositiveButton("确定", (dialog1, which) ->
+				{
+					performingBusiness1.performerReback(
+							new BusinessCaller(getActivityHandler(),
+									BUSINESS_CODE_WHEN_PERFORMER_REBACK));
+					
+					timedCloseTextView.setPrimaryMessage("等待重连中...");
+					timedCloseTextView.visible();
+					
+				}).setNegativeButton("取消", (dialog12, which) ->
+				{
+					PerformingActivity.this.finish();
+				}).create();
+		dialog.show();
 	}
 }
