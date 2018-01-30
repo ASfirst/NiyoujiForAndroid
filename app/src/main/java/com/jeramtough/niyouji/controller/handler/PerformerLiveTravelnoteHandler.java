@@ -66,7 +66,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	public final static int BUSINESS_CODE_UPDATE_VIDEO_FILE = 0X31;
 	
 	private JtViewPager viewPagerTravelnotePages;
-	
+	private TextView textViewPerformerNickname;
 	private TextView textViewPagesCount;
 	private LinearLayout layoutShutdownForLive;
 	private ProgressBar progressBarWaitTakephotoOrVideo;
@@ -108,6 +108,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		textViewShutdownReminder = findViewById(R.id.textView_shutdown_reminder);
 		buttonShutdownForLive = findViewById(R.id.button_shutdown_for_live);
 		buttonBugDelete = findViewById(R.id.button_bug_delete);
+		textViewPerformerNickname = findViewById(R.id.textView_performer_nickname);
 		
 		textViewNotification.setVisibility(View.GONE);
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
@@ -122,6 +123,9 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	
 	protected void initResources()
 	{
+		//更新主播昵称
+		textViewPerformerNickname.setText(performingBusiness.getNicknameOfPerformer());
+		
 		liveTravelnotePageViews = new ArrayList<>();
 		
 		this.addPageViewToList();
