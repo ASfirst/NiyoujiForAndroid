@@ -101,6 +101,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	@InjectComponent
 	private VideoCacheServer videoCacheServer;
 	
+	private final boolean debugDownloadMode = true;
 	private boolean isFollowMode = true;
 	private String performerId;
 	private int clickCount = 0;
@@ -592,9 +593,12 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	{
 		timedCloseTextViewShowMessage.invisible();
 		
-		//暂时先设置一张静态的图片
-		pageSetImageCommand.setImageUrl(
-				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/img_0_172641769.jpg");
+		if (debugDownloadMode)
+		{
+			//暂时先设置一张静态的图片
+			pageSetImageCommand.setImageUrl(
+					"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/img_0_172641769.jpg");
+		}
 		
 		liveTravelnotePageViews.get(pageSetImageCommand.getPosition())
 				.setResourcePath(pageSetImageCommand.getImageUrl());
@@ -609,9 +613,12 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	{
 		timedCloseTextViewShowMessage.invisible();
 		
-		//暂时先设置静态视频
-		pageSetVideoCommand.setVideoUrl(
-				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4");
+		if (debugDownloadMode)
+		{
+			//暂时先设置静态视频
+			pageSetVideoCommand.setVideoUrl(
+					"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4");
+		}
 		
 		AudienceLiveTravelnotePageView audienceLiveTravelnotePageView =
 				liveTravelnotePageViews.get(pageSetVideoCommand.getPosition());

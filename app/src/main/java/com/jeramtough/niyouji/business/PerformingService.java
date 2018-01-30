@@ -13,6 +13,7 @@ import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppUser;
+import com.jeramtough.niyouji.component.travelnote.PageCounter;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
@@ -33,17 +34,19 @@ public class PerformingService implements PerformingBusiness
 	private AliOssManager aliOssManager;
 	
 	private AppUser appUser;
+	private PageCounter pageCounter;
 	private NetworkIsAble networkIsAble;
 	
 	private final boolean debugUploadMode = true;
 	
 	@IocAutowire
 	public PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
-			AppUser appUser, NetworkIsAble networkIsAble)
+			AppUser appUser, PageCounter pageCounter, NetworkIsAble networkIsAble)
 	{
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
 		this.appUser = appUser;
+		this.pageCounter = pageCounter;
 		this.networkIsAble = networkIsAble;
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
@@ -109,19 +112,13 @@ public class PerformingService implements PerformingBusiness
 	@Override
 	public void saveCurrentPageCount(Context context, int count)
 	{
-		SharedPreferences sharedPreferences =
-				context.getSharedPreferences("how many there pages", 0);
-		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putInt("pageCount", count);
-		editor.apply();
+		pageCounter.setPageCount(count);
 	}
 	
 	@Override
 	public int getPageCountBefore(Context context)
 	{
-		SharedPreferences sharedPreferences =
-				context.getSharedPreferences("how many there pages", 0);
-		return sharedPreferences.getInt("pageCount", 0);
+		return pageCounter.getPageCount();
 	}
 	
 	

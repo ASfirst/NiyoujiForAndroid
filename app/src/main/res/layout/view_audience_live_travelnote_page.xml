@@ -61,7 +61,8 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="40dp"
                     android:textSize="21sp"
-                    android:maxLength="@integer/max_picandword_content_length"/>
+                    android:maxLength="@integer/max_picandword_content_length"
+                    android:gravity="center"/>
 
 
         </LinearLayout>

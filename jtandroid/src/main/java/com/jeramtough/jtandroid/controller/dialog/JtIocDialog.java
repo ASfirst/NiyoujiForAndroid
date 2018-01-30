@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.jeramtough.jtandroid.ioc.IocContainer;
-import com.jeramtough.jtandroid.ioc.JtIocContainer;
+import com.jeramtough.jtandroid.ioc.ioc.IocContainer;
+import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
 import com.jeramtough.jtandroid.ioc.annotation.JtController;
 
 /**

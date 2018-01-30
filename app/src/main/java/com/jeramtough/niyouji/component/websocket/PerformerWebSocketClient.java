@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 public class PerformerWebSocketClient extends BaseWebSocketClient implements Cloneable
 {
 	private static final String socketHandlerUrl =
-			"ws://" + AppConfig.SERVER_HOST + "/niyouji/performerHandler" + ".do";
+			"ws://" + AppConfig.SOCKET_SERVER_HOST + "/niyouji/performerHandler" + ".do";
 	
 	public PerformerWebSocketClient() throws URISyntaxException
 	{

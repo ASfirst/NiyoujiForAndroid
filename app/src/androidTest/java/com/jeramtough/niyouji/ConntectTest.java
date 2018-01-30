@@ -3,21 +3,13 @@ package com.jeramtough.niyouji;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.util.AsyncListUtil;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.app.AppConfig;
-import com.jeramtough.niyouji.component.httpclient.NiyoujiHttpClient;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
-import com.koushikdutta.async.ByteBufferList;
-import com.koushikdutta.async.DataEmitter;
 import com.koushikdutta.async.http.AsyncHttpClient;
-import com.koushikdutta.async.http.AsyncHttpRequest;
-import com.koushikdutta.async.http.AsyncHttpResponse;
 import com.koushikdutta.async.http.WebSocket;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.net.Socket;
 
 import static com.koushikdutta.async.http.AsyncHttpClient.*;
 
@@ -39,7 +31,7 @@ public class ConntectTest
 		Context appContext = InstrumentationRegistry.getTargetContext();
 		
 		String socketHandlerUrl =
-				"ws://" + AppConfig.SERVER_HOST + "/niyouji/performerHandler" + ".do";
+				"ws://" + AppConfig.SOCKET_SERVER_HOST + "/niyouji/performerHandler" + ".do";
 		
 		AsyncHttpClient.getDefaultInstance()
 				.websocket(socketHandlerUrl, "8080", new WebSocketConnectCallback()

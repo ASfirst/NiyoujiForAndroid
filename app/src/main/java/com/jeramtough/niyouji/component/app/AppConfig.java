@@ -15,7 +15,9 @@ public class AppConfig
 {
 	public static final String APP_DIRECTORY_NAME = "niyouji";
 	
-	public static final String SERVER_HOST="192.168.0.117:8080";
+	public static final String SOCKET_SERVER_HOST = "192.168.0.120:8080";
+	public static final String NIYOUJI_SERVER_HOST = "192.168.0.120:8080";
+	public static final String RANDL_SERVER_HOST = "192.168.0.120:8666";
 	
 	public static String getAppDirecotry(Context context)
 	{
@@ -23,7 +25,8 @@ public class AppConfig
 				.equals(android.os.Environment.MEDIA_MOUNTED);
 		if (sdCardExist)
 		{
-			return Environment.getExternalStorageDirectory() + File.separator + APP_DIRECTORY_NAME;
+			return Environment.getExternalStorageDirectory() + File.separator +
+					APP_DIRECTORY_NAME;
 		}
 		else
 		{

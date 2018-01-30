@@ -1,7 +1,6 @@
 package com.jeramtough.niyouji.component.httpclient;
 
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.app.AppConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,7 +16,7 @@ import java.io.IOException;
 public class NiyoujiHttpClient
 {
 	private OkHttpClient client;
-	private final String baseUrl = "http://" + AppConfig.SERVER_HOST + "/niyouji/";
+	private final String baseUrl = "http://" + AppConfig.NIYOUJI_SERVER_HOST + "/niyouji/";
 	
 	public NiyoujiHttpClient()
 	{

@@ -1,6 +1,5 @@
 package com.jeramtough.niyouji.component.httpclient;
 
-import android.app.Application;
 import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
@@ -8,6 +7,7 @@ import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtlog3.WithLogger;
 import com.jeramtough.niyouji.bean.landr.*;
 import com.jeramtough.niyouji.bean.user.PrimaryInfoOfUser;
+import com.jeramtough.niyouji.component.app.AppConfig;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -21,8 +21,8 @@ public class RandLHttpClient implements WithLogger
 {
 	private OkHttpClient client;
 	private String sessionId;
-	private final String baseUrl = "http://192.168.0.117:8666/randl/";
-	//	private final String baseUrl = "http://112.74.51.247:8666/randl/";
+	private final String baseUrl = "http://"+ AppConfig.RANDL_SERVER_HOST+"/randl/";
+	private final boolean debugSendVerificationCodeMode=true;
 	
 	@IocAutowire
 	public RandLHttpClient()
@@ -35,14 +35,19 @@ public class RandLHttpClient implements WithLogger
 	{
 		String url =
 				baseUrl + "sendVerificationCode?phoneNumber=" + phoneNumber + "&sessionId=" +
-						sessionId;
+						sessionId+"&isTest="+debugSendVerificationCodeMode;
 		//&isTest=true
 		Request request = new Request.Builder().url(url).build();
 		try
 		{
 			Response response = client.newCall(request).execute();
 			String result = response.body().string();
-			P.debug(result);
+			
+			if (debugSendVerificationCodeMode)
+			{
+				P.debug(result);
+			}
+			
 			if (result.contains("666"))
 			{
 				getP().info("sent the sms verification code to phone[" + phoneNumber +

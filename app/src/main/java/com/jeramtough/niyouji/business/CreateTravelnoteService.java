@@ -5,6 +5,7 @@ import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
@@ -14,12 +15,12 @@ import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppUser;
+import com.jeramtough.niyouji.component.travelnote.PageCounter;
 import com.jeramtough.niyouji.component.travelnote.ProcessNameOfCloud;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 
-import java.net.URISyntaxException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 @JtService
 public class CreateTravelnoteService implements CreateTravelnoteBusiness
 {
+	private PageCounter pageCounter;
 	private AppUser appUser;
 	private NiyoujiStsManager niyoujiStsManager;
 	private AliOssManager aliOssManager;
@@ -42,15 +44,14 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 	private Executor executor;
 	
 	@IocAutowire
-	public CreateTravelnoteService(AppUser appUser, NiyoujiStsManager niyoujiStsManager,
+	public CreateTravelnoteService(PageCounter pageCounter, AppUser appUser, NiyoujiStsManager niyoujiStsManager,
 			AliOssManager aliOssManager, PerformerWebSocketClient performerWebSocketClient)
 	{
+		this.pageCounter = pageCounter;
 		this.appUser = appUser;
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
 		this.performerWebSocketClient = performerWebSocketClient;
-		
-		P.debug(performerWebSocketClient.hashCode());
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
@@ -61,14 +62,23 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 			BusinessCaller createBusinessCaller, BusinessCaller connectBusinessCaller,
 			BusinessCaller uploadBusinessCaller)
 	{
+		//归零
+		pageCounter.setPageCount(0);
+		
 		//先与服务器连接，然后上传封面，然后发送创建游记的命令
 		executor.execute(() ->
 		{
 			try
 			{
+				P.debug(performerWebSocketClient.hashCode());
+				
 				//初始化socket客户端对象
 				performerWebSocketClient =
 						(PerformerWebSocketClient) performerWebSocketClient.clone();
+				
+				//更新ioc容器的client对象
+				JtIocContainer.getContainerUpdateValues()
+						.updateComponentValueOfContainer(performerWebSocketClient);
 				
 				//连接服务器
 				boolean connectSuccessfully = performerWebSocketClient.connectBlocking();

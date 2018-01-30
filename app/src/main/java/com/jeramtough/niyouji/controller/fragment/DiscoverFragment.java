@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.jeramtough.jtandroid.adapter.ViewsAdapter;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectView;
+import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
@@ -19,6 +20,7 @@ import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
 import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
+import com.jeramtough.niyouji.component.travelnote.PageCounter;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
@@ -49,6 +51,8 @@ public class DiscoverFragment extends AppBaseFragment
 	
 	@InjectComponent
 	private AppUser appUser;
+	@InjectComponent
+	private PageCounter pageCounter;
 	@InjectComponent
 	private PerformerWebSocketClient performerWebSocketClient;
 	
@@ -83,9 +87,15 @@ public class DiscoverFragment extends AppBaseFragment
 						//模拟创建房间操作
 						try
 						{
-							/*performerWebSocketClient =
+							pageCounter.setPageCount(0);
+							
+							performerWebSocketClient =
 									(PerformerWebSocketClient) performerWebSocketClient
-											.clone();*/
+											.clone();
+							
+							JtIocContainer.getContainerUpdateValues()
+									.updateComponentValueOfContainer(performerWebSocketClient);
+							
 							performerWebSocketClient.reconnectBlocking();
 							
 							CreatePerformingRoomCommand createPerformingRoomCommand =

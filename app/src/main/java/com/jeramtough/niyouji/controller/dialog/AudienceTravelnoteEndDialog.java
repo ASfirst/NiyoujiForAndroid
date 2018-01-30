@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
+import com.jeramtough.jtandroid.controller.dialog.NoActionBarDialog;
 import com.jeramtough.niyouji.R;
 
 /**
@@ -13,7 +14,7 @@ import com.jeramtough.niyouji.R;
  *         on 2018  January 24 Wednesday 01:58.
  */
 
-public class AudienceTravelnoteEndDialog extends Dialog implements View.OnClickListener
+public class AudienceTravelnoteEndDialog extends NoActionBarDialog implements View.OnClickListener
 {
 	private Activity activity;
 	private Button buttonDone;
@@ -29,6 +30,8 @@ public class AudienceTravelnoteEndDialog extends Dialog implements View.OnClickL
 		buttonDone = findViewById(R.id.button_done);
 		
 		buttonDone.setOnClickListener(this);
+		
+		this.setCancelable(false);
 	}
 	
 	@Override

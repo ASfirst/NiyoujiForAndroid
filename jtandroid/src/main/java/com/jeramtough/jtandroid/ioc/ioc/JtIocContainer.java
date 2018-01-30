@@ -1,7 +1,9 @@
-package com.jeramtough.jtandroid.ioc;
+package com.jeramtough.jtandroid.ioc.ioc;
 
 import android.app.Activity;
 import android.content.Context;
+import com.jeramtough.jtandroid.ioc.IocUtil;
+import com.jeramtough.jtandroid.ioc.JtField;
 import com.jeramtough.jtandroid.ioc.annotation.*;
 import com.jeramtough.jtandroid.ioc.exception.InjectFailedException;
 import com.jeramtough.jtandroid.ioc.filter.FieldsFilter;
@@ -20,16 +22,17 @@ import java.util.Map;
  * @author 11718 on 2017 December 05 Tuesday 22:42.
  */
 
-public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededComponentCaller
+public class JtIocContainer implements IocContainer, ContainerUpdateValues,
+		ServiceInterpreter.NeededComponentCaller
 {
 	public static final String JTLOG2_TAG_NAME = "JtIocContainer";
 	
-	private static volatile IocContainer iocContainer;
+	private static volatile JtIocContainer jtIocContainer;
 	
 	private Map<String, Object> injectedComponents;
 	private Map<String, Object> injectedServices;
 	
-	private final boolean isPrintedLog =false;
+	private final boolean isPrintedLog = false;
 	
 	private JtIocContainer()
 	{
@@ -38,7 +41,7 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 		
 		if (!isPrintedLog)
 		{
-//			JtLogConfig.getJtLog2Config().addTagFilter(JTLOG2_TAG_NAME);
+			//			JtLogConfig.getJtLog2Config().addTagFilter(JTLOG2_TAG_NAME);
 		}
 		
 	}
@@ -122,19 +125,48 @@ public class JtIocContainer implements IocContainer, ServiceInterpreter.NeededCo
 		}
 	}
 	
+	@Override
+	public void updateServiceValueOfContainer(Object newServerValue)
+	{
+		JtService jtService = newServerValue.getClass().getAnnotation(JtService.class);
+		if (jtService != null)
+		{
+			String fieldKeyName = IocUtil.processKeyName(newServerValue.getClass());
+			injectedServices.put(fieldKeyName, newServerValue);
+		}
+	}
+	
+	
+	@Override
+	public void updateComponentValueOfContainer(Object newComponentValue)
+	{
+		JtComponent jtComponent =
+				newComponentValue.getClass().getAnnotation(JtComponent.class);
+		if (jtComponent != null)
+		{
+			String fieldKeyName = IocUtil.processKeyName(newComponentValue.getClass());
+			injectedComponents.put(fieldKeyName, newComponentValue);
+		}
+	}
+	
+	public static ContainerUpdateValues getContainerUpdateValues()
+	{
+		return jtIocContainer;
+	}
+	
 	public static IocContainer getIocContainer()
 	{
-		if (iocContainer == null)
+		if (jtIocContainer == null)
 		{
 			synchronized (JtIocContainer.class)
 			{
-				if (iocContainer == null)
+				if (jtIocContainer == null)
 				{
-					iocContainer = new JtIocContainer();
+					jtIocContainer = new JtIocContainer();
 				}
 			}
 		}
-		return iocContainer;
+		return jtIocContainer;
 	}
 	
 	@Override

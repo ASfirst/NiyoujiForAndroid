@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
@@ -60,6 +61,10 @@ public class AudienceService implements AudienceBusiness
 				//初始化WebSocket客户端对象
 				audienceWebSocketClient =
 						(AudienceWebSocketClient) audienceWebSocketClient.clone();
+				
+				//更新ioc容器的client对象
+				JtIocContainer.getContainerUpdateValues()
+						.updateComponentValueOfContainer(audienceWebSocketClient);
 				
 				boolean connectSuccessfully = audienceWebSocketClient.connectBlocking();
 				enterRoomBusinessCaller.getData()
