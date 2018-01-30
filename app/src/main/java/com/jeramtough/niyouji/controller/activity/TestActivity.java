@@ -41,24 +41,6 @@ public class TestActivity extends AppBaseActivity
 		videoViewTravelnotePage = findViewById(R.id.videoView_travelnote_page);
 		layoutVideoCachingReminder = findViewById(R.id.layout_video_caching_reminder);
 		
-		videoViewTravelnotePage.setVisibility(View.INVISIBLE);
-		layoutVideoCachingReminder.setVisibility(View.INVISIBLE);
-		textViewTravelnotePageContent.setText
-				("fgfdgsdfgdf" +
-						"大范甘迪供电所覆盖打发时光打发时光打发时光放多少搞的撒光的反射个的方式个法大使馆得放光的反射广泛大概打发时光打发时光打发时光东风公司的方式鬼地方个的方式个打发时光的方式给对方是个打发时光打发时光打发时光打手犯规第三个打手犯规法大使馆打算");
-		
-		GlideApp.with(this).load("http://niyouji.oss-cn-shenzhen.aliyuncs" +
-				".com/images/img_0_172641769.jpg").fitCenter().skipMemoryCache(true)
-				.into(viewPictureOfPage);
-		
-		PwResourcePosition pwResourcePosition =
-				picAndWordResourcesHandler.getPwResourcePositions().get(0);
-		PwResourceCache pwResourceCache =
-				pwResourcesCacheManager.getPwResourceCache(pwResourcePosition);
-		PicAndWordTheme picAndWordTheme = new PicAndWordThemeImpl(this, pwResourceCache);
-		
-		picAndWordTheme.setMainBackground(layoutAudienceLiveTravelnotePage);
-		picAndWordTheme.setFrame(imageViewFrame);
 	}
 	
 	

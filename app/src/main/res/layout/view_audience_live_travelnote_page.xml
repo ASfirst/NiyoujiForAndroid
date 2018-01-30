@@ -36,7 +36,7 @@
                         android:id="@+id/view_picture_of_page"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ic_image_green_large"
+                        app:srcCompat="@drawable/ic_image_green_large"
                         android:scaleType="fitCenter"
                         android:layout_margin="10dp"/>
 
