@@ -417,7 +417,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	public void loadTravelnote(Travelnote travelnote)
 	{
 		List<TravelnotePage> travelnotePages = travelnote.getTravelnotePages();
-		P.debug(travelnote.getTravelnotePages().size());
 		
 		for (TravelnotePage travelnotePage : travelnotePages)
 		{
