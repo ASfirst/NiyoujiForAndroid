@@ -46,8 +46,6 @@ public class PerformingService1 implements PerformingBusiness1
 	public PerformingService1(PerformerWebSocketClient performerWebSocketClient,
 			AppUser appUser)
 	{
-		P.debug(performerWebSocketClient.hashCode());
-		
 		this.performerWebSocketClient = performerWebSocketClient;
 		this.appUser = appUser;
 		

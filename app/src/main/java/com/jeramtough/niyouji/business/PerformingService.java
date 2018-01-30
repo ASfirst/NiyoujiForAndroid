@@ -37,7 +37,7 @@ public class PerformingService implements PerformingBusiness
 	private PageCounter pageCounter;
 	private NetworkIsAble networkIsAble;
 	
-	private final boolean debugUploadMode = true;
+	private final boolean debugUploadMode = false;
 	
 	@IocAutowire
 	public PerformingService(NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,

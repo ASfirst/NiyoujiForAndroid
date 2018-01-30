@@ -146,7 +146,8 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	public void onResume()
 	{
 		int pageCountBefore = performingBusiness.getPageCountBefore(getContext());
-		if (pageCountBefore > viewPagerTravelnotePages.getChildCount())
+		
+		if (pageCountBefore > liveTravelnotePageViews.size())
 		{
 			Toast.makeText(getContext(), "直播以失效，请重新开始！", Toast.LENGTH_SHORT).show();
 			getActivity().finish();
