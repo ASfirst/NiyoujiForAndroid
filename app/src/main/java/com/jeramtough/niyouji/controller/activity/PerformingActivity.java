@@ -155,6 +155,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	@Override
 	public void onTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView)
 	{
+		P.arrive();
 		performingBusiness1.spreadTravelnoteAddedPage(liveTravelnotePageView);
 	}
 	

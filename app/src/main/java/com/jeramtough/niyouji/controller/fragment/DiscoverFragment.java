@@ -56,6 +56,8 @@ public class DiscoverFragment extends AppBaseFragment
 	@InjectComponent
 	private PerformerWebSocketClient performerWebSocketClient;
 	
+	
+	
 	@Override
 	public int loadFragmentLayoutId()
 	{
@@ -96,7 +98,7 @@ public class DiscoverFragment extends AppBaseFragment
 							JtIocContainer.getContainerUpdateValues()
 									.updateComponentValueOfContainer(performerWebSocketClient);
 							
-							performerWebSocketClient.reconnectBlocking();
+							performerWebSocketClient.connectBlocking();
 							
 							CreatePerformingRoomCommand createPerformingRoomCommand =
 									new CreatePerformingRoomCommand();

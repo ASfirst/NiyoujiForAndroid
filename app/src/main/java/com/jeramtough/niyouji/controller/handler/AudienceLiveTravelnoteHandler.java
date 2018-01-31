@@ -101,7 +101,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	@InjectComponent
 	private VideoCacheServer videoCacheServer;
 	
-	private final boolean debugDownloadMode = false;
+	private final boolean debugDownloadMode = true;
 	private boolean isFollowMode = true;
 	private String performerId;
 	private int clickCount = 0;
