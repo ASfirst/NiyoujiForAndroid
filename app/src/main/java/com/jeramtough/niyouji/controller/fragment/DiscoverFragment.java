@@ -23,6 +23,7 @@ import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessa
 import com.jeramtough.niyouji.component.travelnote.PageCounter;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
+import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.Test1Activity;
 import com.jeramtough.niyouji.controller.activity.TestActivity;
@@ -54,8 +55,7 @@ public class DiscoverFragment extends AppBaseFragment
 	@InjectComponent
 	private PageCounter pageCounter;
 	@InjectComponent
-	private PerformerWebSocketClient performerWebSocketClient;
-	
+	private WebSocketClientProxy webSocketClientProxy;
 	
 	
 	@Override
@@ -91,14 +91,10 @@ public class DiscoverFragment extends AppBaseFragment
 						{
 							pageCounter.setPageCount(0);
 							
-							performerWebSocketClient =
-									(PerformerWebSocketClient) performerWebSocketClient
-											.clone();
+							webSocketClientProxy.resetPerformerWebSocketClient();
 							
-							JtIocContainer.getContainerUpdateValues()
-									.updateComponentValueOfContainer(performerWebSocketClient);
 							
-							performerWebSocketClient.connectBlocking();
+							webSocketClientProxy.getPerformerWebSocketClient().connectBlocking();
 							
 							CreatePerformingRoomCommand createPerformingRoomCommand =
 									new CreatePerformingRoomCommand();
@@ -113,7 +109,7 @@ public class DiscoverFragment extends AppBaseFragment
 							SocketMessage socketMessage = PerformerSocketMessageFactory
 									.processCreatePerformingRoomSocketMessage(
 											createPerformingRoomCommand);
-							performerWebSocketClient.sendSocketMessage(socketMessage);
+							webSocketClientProxy.getPerformerWebSocketClient().sendSocketMessage(socketMessage);
 							Thread.sleep(500);
 							IntentUtil.toTheOtherActivity(getActivity(),
 									PerformingActivity.class);

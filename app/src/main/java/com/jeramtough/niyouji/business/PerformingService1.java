@@ -3,7 +3,6 @@ package com.jeramtough.niyouji.business;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
@@ -17,11 +16,10 @@ import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.communicate.parser.AudienceCommandParser;
 import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
-import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
-import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
+import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -35,19 +33,15 @@ import java.util.concurrent.TimeUnit;
 @JtService
 public class PerformingService1 implements PerformingBusiness1
 {
-	private PerformerWebSocketClient performerWebSocketClient;
 	private ExecutorService executorService;
 	private AppUser appUser;
-	
-	private WebSocketClientListener webSocketClientListener;
-	private WebSocketClientListener webSocketClientListener1;
+	private WebSocketClientProxy webSocketClientProxy;
 	
 	@IocAutowire
-	public PerformingService1(PerformerWebSocketClient performerWebSocketClient,
-			AppUser appUser)
+	public PerformingService1(AppUser appUser, WebSocketClientProxy webSocketClientProxy)
 	{
-		this.performerWebSocketClient = performerWebSocketClient;
 		this.appUser = appUser;
+		this.webSocketClientProxy = webSocketClientProxy;
 		
 		executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 				new LinkedBlockingQueue<Runnable>());
@@ -65,7 +59,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -81,7 +76,8 @@ public class PerformingService1 implements PerformingBusiness1
 				PerformerSocketMessageFactory.processAddedPageSocketMessage(addPageCommand);
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -97,7 +93,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -114,7 +111,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -131,7 +129,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -151,7 +150,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -168,7 +168,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -187,7 +188,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -208,7 +210,8 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -223,12 +226,13 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService.submit(() ->
 		{
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 			
 			//结束socket连接
 			try
 			{
-				performerWebSocketClient.closeBlocking();
+				webSocketClientProxy.getPerformerWebSocketClient().closeBlocking();
 			}
 			catch (InterruptedException e)
 			{
@@ -241,12 +245,8 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void callAudienceActions(BusinessCaller audienceActionsBusinessCaller)
 	{
-		if (webSocketClientListener != null)
-		{
-			performerWebSocketClient.removeWebSocketClientListener(webSocketClientListener);
-		}
 		
-		webSocketClientListener = new WebSocketClientListener()
+		WebSocketClientListener webSocketClientListener = new WebSocketClientListener()
 		{
 			@Override
 			public void onMessage(SocketMessage socketMessage)
@@ -309,25 +309,21 @@ public class PerformingService1 implements PerformingBusiness1
 				}
 			}
 		};
-		performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
+		webSocketClientProxy.getPerformerWebSocketClient()
+				.addWebSocketClientListener(webSocketClientListener);
 	}
 	
 	@Override
 	public void whenPerformerLeave(BusinessCaller businessCaller)
 	{
-		if (webSocketClientListener1 != null)
-		{
-			performerWebSocketClient.removeWebSocketClientListener(webSocketClientListener1);
-		}
-		
-		webSocketClientListener1 = new WebSocketClientListener()
+		WebSocketClientListener webSocketClientListener1 = new WebSocketClientListener()
 		{
 			@Override
 			public void onClose(int code, String reason, boolean remote)
 			{
 				super.onClose(code, reason, remote);
 				
-				if (code==1006)
+				if (code == 1006)
 				{
 					businessCaller.callBusiness();
 				}
@@ -335,7 +331,8 @@ public class PerformingService1 implements PerformingBusiness1
 			}
 		};
 		
-		performerWebSocketClient.addWebSocketClientListener(webSocketClientListener1);
+		webSocketClientProxy.getPerformerWebSocketClient()
+				.addWebSocketClientListener(webSocketClientListener1);
 	}
 	
 	
@@ -344,8 +341,7 @@ public class PerformingService1 implements PerformingBusiness1
 	{
 		executorService.submit(() ->
 		{
-			performerWebSocketClient =
-					(PerformerWebSocketClient) performerWebSocketClient.clone();
+			webSocketClientProxy.resetPerformerWebSocketClient();
 			WebSocketClientListener webSocketClientListener = new WebSocketClientListener()
 			{
 				@Override
@@ -368,25 +364,24 @@ public class PerformingService1 implements PerformingBusiness1
 							businessCaller.setSuccessful(true);
 							businessCaller.callBusiness();
 							
-							performerWebSocketClient.removeWebSocketClientListener(this);
 							break;
 					}
 				}
 			};
 			
-			performerWebSocketClient.addWebSocketClientListener(webSocketClientListener);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.addWebSocketClientListener(webSocketClientListener);
 			
 			//重连
 			try
 			{
-				boolean isSuccessful = performerWebSocketClient.connectBlocking();
+				boolean isSuccessful =
+						webSocketClientProxy.getPerformerWebSocketClient().connectBlocking();
 				
 				if (!isSuccessful)
 				{
 					businessCaller.setSuccessful(false);
 					businessCaller.callBusiness();
-					
-					performerWebSocketClient.removeWebSocketClientListener(webSocketClientListener);
 				}
 			}
 			catch (InterruptedException e)
@@ -399,7 +394,8 @@ public class PerformingService1 implements PerformingBusiness1
 			
 			SocketMessage socketMessage = PerformerSocketMessageFactory
 					.processPerformerRebackCommandSocketMessage(performerRebackCommand);
-			performerWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.sendSocketMessage(socketMessage);
 		});
 	}
 	

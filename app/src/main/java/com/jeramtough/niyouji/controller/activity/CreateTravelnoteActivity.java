@@ -192,7 +192,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 						message.getData().getBoolean("connectSuccessfully");
 				if (connectSuccessfully)
 				{
-					textViewCreateTravelnoteInfo.setText("连接服务器成功");
+					textViewCreateTravelnoteInfo.setText("连接服务器成功！\n正在创建房间...");
 				}
 				else
 				{

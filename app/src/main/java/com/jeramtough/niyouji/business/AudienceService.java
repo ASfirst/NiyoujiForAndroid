@@ -23,6 +23,7 @@ import com.jeramtough.niyouji.component.communicate.parser.AudienceCommandParser
 import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
 import com.jeramtough.niyouji.component.websocket.AudienceWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
+import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
 
 import java.util.concurrent.*;
 
@@ -33,17 +34,14 @@ import java.util.concurrent.*;
 @JtService
 public class AudienceService implements AudienceBusiness
 {
-	private AudienceWebSocketClient audienceWebSocketClient;
+	private WebSocketClientProxy webSocketClientProxy;
 	private ExecutorService executorService;
 	private AppUser appUser;
 	
-	private WebSocketClientListener webSocketClientListener;
-	private WebSocketClientListener webSocketClientListener1;
-	
 	@IocAutowire
-	public AudienceService(AudienceWebSocketClient audienceWebSocketClient, AppUser appUser)
+	public AudienceService(WebSocketClientProxy webSocketClientProxy, AppUser appUser)
 	{
-		this.audienceWebSocketClient = audienceWebSocketClient;
+		this.webSocketClientProxy = webSocketClientProxy;
 		this.appUser = appUser;
 		
 		executorService = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
@@ -59,47 +57,39 @@ public class AudienceService implements AudienceBusiness
 			try
 			{
 				//初始化WebSocket客户端对象
-				audienceWebSocketClient =
-						(AudienceWebSocketClient) audienceWebSocketClient.clone();
+				webSocketClientProxy.resetgetAudienceWebSocketClient();
 				
-				//更新ioc容器的client对象
-				JtIocContainer.getContainerUpdateValues()
-						.updateComponentValueOfContainer(audienceWebSocketClient);
-				
-				boolean connectSuccessfully = audienceWebSocketClient.connectBlocking();
+				boolean connectSuccessfully =
+						webSocketClientProxy.getAudienceWebSocketClient().connectBlocking();
 				enterRoomBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				enterRoomBusinessCaller.callBusiness();
 				P.debug(connectSuccessfully);
 				if (connectSuccessfully)
 				{
-					if (webSocketClientListener != null)
-					{
-						audienceWebSocketClient
-								.removeWebSocketClientListener(webSocketClientListener);
-					}
-					
-					webSocketClientListener = new WebSocketClientListener()
-					{
-						@Override
-						public void onMessage(SocketMessage socketMessage)
-						{
-							int action = socketMessage.getCommandAction();
-							switch (action)
+					WebSocketClientListener webSocketClientListener =
+							new WebSocketClientListener()
 							{
-								case ServerCommandActions.RETURN_LIVE_TRAVELNOTE:
-									Travelnote travelnote =
-											JSON.parseObject(socketMessage.getCommand(),
+								@Override
+								public void onMessage(SocketMessage socketMessage)
+								{
+									int action = socketMessage.getCommandAction();
+									switch (action)
+									{
+										case ServerCommandActions.RETURN_LIVE_TRAVELNOTE:
+											Travelnote travelnote = JSON.parseObject(
+													socketMessage.getCommand(),
 													Travelnote.class);
-									obtainingLiveTravelnoteBusinessCaller.getData()
-											.putSerializable("travelnote", travelnote);
-									obtainingLiveTravelnoteBusinessCaller.callBusiness();
-									break;
-							}
-						}
-					};
+											obtainingLiveTravelnoteBusinessCaller.getData()
+													.putSerializable("travelnote", travelnote);
+											obtainingLiveTravelnoteBusinessCaller
+													.callBusiness();
+											break;
+									}
+								}
+							};
 					
-					audienceWebSocketClient
+					webSocketClientProxy.getAudienceWebSocketClient()
 							.addWebSocketClientListener(webSocketClientListener);
 					
 					//发送进入房间命令，并且等待游记资源返回
@@ -109,7 +99,8 @@ public class AudienceService implements AudienceBusiness
 					SocketMessage socketMessage = AudienceSocketMessageFactory
 							.processEnterPerformingRoomSocketMessage(
 									enterPerformingRoomCommand);
-					audienceWebSocketClient.sendSocketMessage(socketMessage);
+					webSocketClientProxy.getAudienceWebSocketClient()
+							.sendSocketMessage(socketMessage);
 				}
 			}
 			catch (InterruptedException e)
@@ -125,12 +116,8 @@ public class AudienceService implements AudienceBusiness
 	public void callPerformerActions(String performerId,
 			BusinessCaller performerActionsBusinessCaller)
 	{
-		if (webSocketClientListener1 != null)
-		{
-			audienceWebSocketClient.removeWebSocketClientListener(webSocketClientListener1);
-		}
 		
-		webSocketClientListener1 = new WebSocketClientListener()
+		WebSocketClientListener webSocketClientListener1 = new WebSocketClientListener()
 		{
 			@Override
 			public void onMessage(SocketMessage socketMessage)
@@ -297,75 +284,85 @@ public class AudienceService implements AudienceBusiness
 				}
 			}
 		};
-		audienceWebSocketClient.addWebSocketClientListener(webSocketClientListener1);
+		webSocketClientProxy.getAudienceWebSocketClient()
+				.addWebSocketClientListener(webSocketClientListener1);
 	}
 	
 	@Override
 	public void callAudienceActions(BusinessCaller audienceActionsBusinessCaller)
 	{
-		audienceWebSocketClient.addWebSocketClientListener(new WebSocketClientListener()
-		{
-			@Override
-			public void onMessage(SocketMessage socketMessage)
-			{
-				int action = socketMessage.getCommandAction();
-				switch (action)
+		webSocketClientProxy.getAudienceWebSocketClient()
+				.addWebSocketClientListener(new WebSocketClientListener()
 				{
-					case AudienceCommandActions.ENTER_PERFORMING_ROOM:
-						audienceActionsBusinessCaller.getData()
-								.putInt("audienceAction", socketMessage.getCommandAction());
-						
-						EnterPerformingRoomCommand enterPerformingRoomCommand =
-								AudienceCommandParser
-										.parseEnterPerformingRoomCommand(socketMessage);
-						
-						audienceActionsBusinessCaller.getData()
-								.putSerializable("command", enterPerformingRoomCommand);
-						
-						audienceActionsBusinessCaller.callBusiness();
-						break;
-					
-					case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
-						audienceActionsBusinessCaller.getData()
-								.putInt("audienceAction", socketMessage.getCommandAction());
-						
-						SendAudienceBarrageCommand sendAudienceBarrageCommand =
-								AudienceCommandParser
-										.parseSendAudienceBarrageCommand(socketMessage);
-						
-						audienceActionsBusinessCaller.getData()
-								.putSerializable("command", sendAudienceBarrageCommand);
-						
-						audienceActionsBusinessCaller.callBusiness();
-						break;
-					case AudienceCommandActions.LIGHT_ATTENTION_COUNT:
-						audienceActionsBusinessCaller.getData()
-								.putInt("audienceAction", socketMessage.getCommandAction());
-						
-						LightAttentionCountCommand lightAttentionCountCommand =
-								AudienceCommandParser
-										.parseLightAttentionCountCommand(socketMessage);
-						
-						audienceActionsBusinessCaller.getData()
-								.putSerializable("command", lightAttentionCountCommand);
-						
-						audienceActionsBusinessCaller.callBusiness();
-						break;
-					case AudienceCommandActions.AUDIENCE_LEAVE:
-						audienceActionsBusinessCaller.getData()
-								.putInt("audienceAction", socketMessage.getCommandAction());
-						
-						AudienceLeaveCommand audienceLeaveCommand =
-								AudienceCommandParser.parseAudienceLeaveCommand(socketMessage);
-						
-						audienceActionsBusinessCaller.getData()
-								.putSerializable("command", audienceLeaveCommand);
-						
-						audienceActionsBusinessCaller.callBusiness();
-						break;
-				}
-			}
-		});
+					@Override
+					public void onMessage(SocketMessage socketMessage)
+					{
+						int action = socketMessage.getCommandAction();
+						switch (action)
+						{
+							case AudienceCommandActions.ENTER_PERFORMING_ROOM:
+								audienceActionsBusinessCaller.getData()
+										.putInt("audienceAction",
+												socketMessage.getCommandAction());
+								
+								EnterPerformingRoomCommand enterPerformingRoomCommand =
+										AudienceCommandParser.parseEnterPerformingRoomCommand(
+												socketMessage);
+								
+								audienceActionsBusinessCaller.getData()
+										.putSerializable("command",
+												enterPerformingRoomCommand);
+								
+								audienceActionsBusinessCaller.callBusiness();
+								break;
+							
+							case AudienceCommandActions.SEND_AUDIENCE_BARRAGE:
+								audienceActionsBusinessCaller.getData()
+										.putInt("audienceAction",
+												socketMessage.getCommandAction());
+								
+								SendAudienceBarrageCommand sendAudienceBarrageCommand =
+										AudienceCommandParser.parseSendAudienceBarrageCommand(
+												socketMessage);
+								
+								audienceActionsBusinessCaller.getData()
+										.putSerializable("command",
+												sendAudienceBarrageCommand);
+								
+								audienceActionsBusinessCaller.callBusiness();
+								break;
+							case AudienceCommandActions.LIGHT_ATTENTION_COUNT:
+								audienceActionsBusinessCaller.getData()
+										.putInt("audienceAction",
+												socketMessage.getCommandAction());
+								
+								LightAttentionCountCommand lightAttentionCountCommand =
+										AudienceCommandParser.parseLightAttentionCountCommand(
+												socketMessage);
+								
+								audienceActionsBusinessCaller.getData()
+										.putSerializable("command",
+												lightAttentionCountCommand);
+								
+								audienceActionsBusinessCaller.callBusiness();
+								break;
+							case AudienceCommandActions.AUDIENCE_LEAVE:
+								audienceActionsBusinessCaller.getData()
+										.putInt("audienceAction",
+												socketMessage.getCommandAction());
+								
+								AudienceLeaveCommand audienceLeaveCommand =
+										AudienceCommandParser
+												.parseAudienceLeaveCommand(socketMessage);
+								
+								audienceActionsBusinessCaller.getData()
+										.putSerializable("command", audienceLeaveCommand);
+								
+								audienceActionsBusinessCaller.callBusiness();
+								break;
+						}
+					}
+				});
 	}
 	
 	@Override
@@ -395,7 +392,7 @@ public class AudienceService implements AudienceBusiness
 					.processSendAudienceBarrageCommandSocketMessage(
 							sendAudienceBarrageCommand);
 			
-			audienceWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getAudienceWebSocketClient().sendSocketMessage(socketMessage);
 		});
 		
 	}
@@ -413,7 +410,7 @@ public class AudienceService implements AudienceBusiness
 					.processLightAttentionCountCommandSocketMessage(
 							lightAttentionCountCommand);
 			
-			audienceWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getAudienceWebSocketClient().sendSocketMessage(socketMessage);
 		});
 	}
 	
@@ -428,12 +425,12 @@ public class AudienceService implements AudienceBusiness
 			SocketMessage socketMessage = AudienceSocketMessageFactory
 					.processAudienceLeaveCommandSocketMessage(audienceLeaveCommand);
 			
-			audienceWebSocketClient.sendSocketMessage(socketMessage);
+			webSocketClientProxy.getAudienceWebSocketClient().sendSocketMessage(socketMessage);
 			
 			//发送完退出房间信息再关闭session
 			try
 			{
-				audienceWebSocketClient.closeBlocking();
+				webSocketClientProxy.getAudienceWebSocketClient().closeBlocking();
 			}
 			catch (InterruptedException e)
 			{

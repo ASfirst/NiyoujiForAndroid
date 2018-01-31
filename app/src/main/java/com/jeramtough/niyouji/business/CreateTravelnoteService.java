@@ -20,6 +20,7 @@ import com.jeramtough.niyouji.component.travelnote.ProcessNameOfCloud;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
+import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
@@ -37,21 +38,20 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 	private AppUser appUser;
 	private NiyoujiStsManager niyoujiStsManager;
 	private AliOssManager aliOssManager;
-	private PerformerWebSocketClient performerWebSocketClient;
-	
-	private WebSocketClientListener webSocketClientListener;
+	private WebSocketClientProxy webSocketClientProxy;
 	
 	private Executor executor;
 	
 	@IocAutowire
-	public CreateTravelnoteService(PageCounter pageCounter, AppUser appUser, NiyoujiStsManager niyoujiStsManager,
-			AliOssManager aliOssManager, PerformerWebSocketClient performerWebSocketClient)
+	public CreateTravelnoteService(PageCounter pageCounter, AppUser appUser,
+			NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
+			WebSocketClientProxy webSocketClientProxy)
 	{
 		this.pageCounter = pageCounter;
 		this.appUser = appUser;
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
-		this.performerWebSocketClient = performerWebSocketClient;
+		this.webSocketClientProxy = webSocketClientProxy;
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
@@ -70,18 +70,12 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 		{
 			try
 			{
-				P.debug(performerWebSocketClient.hashCode());
-				
 				//初始化socket客户端对象
-				performerWebSocketClient =
-						(PerformerWebSocketClient) performerWebSocketClient.clone();
-				
-				//更新ioc容器的client对象
-				JtIocContainer.getContainerUpdateValues()
-						.updateComponentValueOfContainer(performerWebSocketClient);
+				webSocketClientProxy.resetPerformerWebSocketClient();
 				
 				//连接服务器
-				boolean connectSuccessfully = performerWebSocketClient.connectBlocking();
+				boolean connectSuccessfully =
+						webSocketClientProxy.getPerformerWebSocketClient().connectBlocking();
 				connectBusinessCaller.getData()
 						.putBoolean("connectSuccessfully", connectSuccessfully);
 				connectBusinessCaller.callBusiness();
@@ -118,26 +112,21 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 					
 					if (uploadSuccessfully)
 					{
-						if (webSocketClientListener != null)
-						{
-							performerWebSocketClient
-									.removeWebSocketClientListener(webSocketClientListener);
-						}
-						
-						webSocketClientListener = new WebSocketClientListener()
-						{
-							@Override
-							public void onMessage(SocketMessage socketMessage)
-							{
-								if (socketMessage.getCommandAction() ==
-										ServerCommandActions.CREATING_PERFORMING_ROOM_FINISH)
+						WebSocketClientListener webSocketClientListener =
+								new WebSocketClientListener()
 								{
-									createBusinessCaller.callBusiness();
-								}
-							}
-						};
+									@Override
+									public void onMessage(SocketMessage socketMessage)
+									{
+										if (socketMessage.getCommandAction() ==
+												ServerCommandActions.CREATING_PERFORMING_ROOM_FINISH)
+										{
+											createBusinessCaller.callBusiness();
+										}
+									}
+								};
 						
-						performerWebSocketClient
+						webSocketClientProxy.getPerformerWebSocketClient()
 								.addWebSocketClientListener(webSocketClientListener);
 						
 						CreatePerformingRoomCommand createPerformingRoomCommand =
@@ -153,7 +142,8 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 								.processCreatePerformingRoomSocketMessage(
 										createPerformingRoomCommand);
 						
-						performerWebSocketClient.sendSocketMessage(socketMessage);
+						webSocketClientProxy.getPerformerWebSocketClient()
+								.sendSocketMessage(socketMessage);
 					}
 				}
 			}

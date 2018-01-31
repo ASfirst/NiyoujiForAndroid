@@ -77,11 +77,18 @@ public class AudienceActivity extends AppBaseActivity
 	
 	protected void initResources()
 	{
+		liveTravelnoteCover =
+				(LiveTravelnoteCover) getIntent().getSerializableExtra("liveTravelnoteCover");
+		
+		//观众开始进入直播间
+		audienceBusiness.enterPerformingRoom(liveTravelnoteCover.getPerformerId(),
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_ENTER_PERFORMING_ROOM),
+				new BusinessCaller(getActivityHandler(),
+						BUSINESS_CODE_OBTAINING_LIVE_TRAVELNOTE));
+		
 		timedCloseTextViewShowMessage.setPrimaryMessage("正在连接服务器...");
 		timedCloseTextViewShowMessage.visible();
 		
-		liveTravelnoteCover =
-				(LiveTravelnoteCover) getIntent().getSerializableExtra("liveTravelnoteCover");
 		
 		audienceLiveTravelnoteHandler =
 				new AudienceLiveTravelnoteHandler(this, liveTravelnoteCover.getPerformerId());
@@ -89,10 +96,6 @@ public class AudienceActivity extends AppBaseActivity
 		textViewPerformerNickname.setText(liveTravelnoteCover.getPerformerNickname());
 		textViewAudiencesCount.setText(liveTravelnoteCover.getAudiencesCount() + "");
 		
-		audienceBusiness.enterPerformingRoom(liveTravelnoteCover.getPerformerId(),
-				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_ENTER_PERFORMING_ROOM),
-				new BusinessCaller(getActivityHandler(),
-						BUSINESS_CODE_OBTAINING_LIVE_TRAVELNOTE));
 	}
 	
 	@Override
