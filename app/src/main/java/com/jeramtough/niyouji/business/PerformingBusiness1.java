@@ -1,5 +1,7 @@
 package com.jeramtough.niyouji.business;
 
+import android.app.Activity;
+import android.content.Context;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 
@@ -10,6 +12,8 @@ import com.jeramtough.niyouji.component.travelnote.LiveTravelnotePageView;
 
 public interface PerformingBusiness1
 {
+	void pingTest(Activity activity);
+	
 	void spreadTravelnoteSelectedPage(int position);
 	
 	void spreadTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView);

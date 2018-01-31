@@ -107,6 +107,13 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 	public void onMessage(ByteBuffer bytes)
 	{
 		pingPongCount--;
+		if (webSocketClientListeners.size() != 0)
+		{
+			for (WebSocketClientListener webSocketClientListener : webSocketClientListeners)
+			{
+				webSocketClientListener.onPong();
+			}
+		}
 	}
 	
 	public void sendSocketMessage(SocketMessage socketMessage)
@@ -129,7 +136,7 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 					{
 						P.debug(pingPongCount);
 						pingPongCount++;
-						send(pingBytes);
+						myPing();
 						try
 						{
 							Thread.sleep(pingInterval);
@@ -144,6 +151,11 @@ public class BaseWebSocketClient extends WebSocketClient implements WithLogger
 			}
 		}.start();
 		
+	}
+	
+	public void myPing()
+	{
+		send(pingBytes);
 	}
 	
 	

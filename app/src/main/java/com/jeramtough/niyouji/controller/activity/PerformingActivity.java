@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
@@ -33,6 +35,7 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	private TimedCloseTextView timedCloseTextView;
 	private TextView textViewAttentionsCount;
 	private TextView textViewAudiencesCount;
+	private Button buttonPing;
 	
 	private PerformerLiveTravelnoteHandler performerLiveTravelnoteHandler;
 	private TravelnoteWithAudiencesHandler travelnoteWithAudiencesHandler;
@@ -50,12 +53,20 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		timedCloseTextView = findViewById(R.id.textView_notification);
 		textViewAttentionsCount = findViewById(R.id.textView_attentions_count);
 		textViewAudiencesCount = findViewById(R.id.textView_audiences_count);
+		buttonPing = findViewById(R.id.button_ping);
 		
 		performerLiveTravelnoteHandler = new PerformerLiveTravelnoteHandler(this);
 		travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
 		
 		performerLiveTravelnoteHandler.setLiveTravelnoteEventsCaller(this);
 		
+		buttonPing.setOnClickListener(this);
+		
+		initResources();
+	}
+	
+	protected void initResources()
+	{
 		performingBusiness1.whenPerformerLeave(
 				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_WHEN_PERFORMER_LEAVE));
 	}
@@ -104,6 +115,17 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	public void onBackPressed()
 	{
 		performerLiveTravelnoteHandler.shutdownForLiveByUseingDialog();
+	}
+	
+	@Override
+	public void onClick(View view, int viewId)
+	{
+		switch (viewId)
+		{
+			case R.id.button_ping:
+				performingBusiness1.pingTest(this);
+				break;
+		}
 	}
 	
 	@Override

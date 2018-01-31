@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatImageButton;
 import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -81,6 +82,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private BoomMenuButton boomMenuButton;
 	private FrameLayout layoutDoubleClick;
 	private TextView textViewNoPage;
+	private AppCompatImageButton imageButtonBack;
+	
 	
 	private ArrayList<AudienceLiveTravelnotePageView> liveTravelnotePageViews;
 	
@@ -127,11 +130,13 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		boomMenuButton = findViewById(R.id.boomMenuButton);
 		layoutDoubleClick = findViewById(R.id.layout_double_click);
 		textViewNoPage = findViewById(R.id.textView_no_page);
+		imageButtonBack = findViewById(R.id.imageButton_back);
 		
 		boomMenuButton.setVisibility(View.INVISIBLE);
 		textViewNoPage.setVisibility(View.GONE);
 		
 		viewPagerTravelnotePages.setScrollble(false);
+		imageButtonBack.setOnClickListener(this);
 		
 		layoutDoubleClick.setOnTouchListener(this);
 		viewPagerTravelnotePages.addOnPageChangeListener(this);
@@ -348,6 +353,17 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		}
 	}
 	
+	
+	@Override
+	public void onClick(View view, int viewId)
+	{
+		switch (viewId)
+		{
+			case R.id.imageButton_back:
+				leaveByUseingDialog();
+				break;
+		}
+	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event)

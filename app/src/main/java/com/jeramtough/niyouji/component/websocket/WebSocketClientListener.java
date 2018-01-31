@@ -25,4 +25,7 @@ public abstract class WebSocketClientListener
 	public void onError(Exception e)
 	{
 	}
+	
+	public void onPong()
+	{}
 }

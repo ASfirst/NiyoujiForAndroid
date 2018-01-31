@@ -1,5 +1,8 @@
 package com.jeramtough.niyouji.business;
 
+import android.app.Activity;
+import android.content.Context;
+import android.widget.Toast;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
@@ -45,6 +48,33 @@ public class PerformingService1 implements PerformingBusiness1
 		
 		executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 				new LinkedBlockingQueue<Runnable>());
+	}
+	
+	
+	@Override
+	public void pingTest(Activity activity)
+	{
+		executorService.submit(() ->
+		{
+			WebSocketClientListener webSocketClientListener = new WebSocketClientListener()
+			{
+				@Override
+				public void onPong()
+				{
+					webSocketClientProxy.getPerformerWebSocketClient()
+							.removeWebSocketClientListener(this);
+					activity.runOnUiThread(() ->
+					{
+						Toast.makeText(activity, "ping成功", Toast.LENGTH_SHORT).show();
+					});
+				}
+			};
+			
+			webSocketClientProxy.getPerformerWebSocketClient()
+					.addWebSocketClientListener(webSocketClientListener);
+			
+			webSocketClientProxy.getPerformerWebSocketClient().myPing();
+		});
 	}
 	
 	@Override
