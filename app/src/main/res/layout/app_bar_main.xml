@@ -33,7 +33,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:button="@null"
-                    android:text="发现"
+                    android:text="广场"
                     android:gravity="center"
                     android:textSize="23sp"
                     android:textStyle="bold"

@@ -35,7 +35,6 @@ public abstract class OnScreenBottomOrTopListener implements AbsListView.OnScrol
 			if (lastVisibleItemView != null &&
 					lastVisibleItemView.getBottom() == view.getHeight())
 			{
-				
 				onScreenBottom();
 			}
 		}
@@ -58,8 +57,12 @@ public abstract class OnScreenBottomOrTopListener implements AbsListView.OnScrol
 		}
 	}
 	
-	public abstract void onScreenBottom();
+	public void onScreenBottom()
+	{
+	}
 	
-	public abstract void onScreenTop();
+	public void onScreenTop()
+	{
+	}
 	
 }

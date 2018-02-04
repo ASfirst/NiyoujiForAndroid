@@ -8,10 +8,12 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtlog3.WithLogger;
+import com.jeramtough.niyouji.bean.travelnote.FinishedTravelnoteCover;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.component.httpclient.NiyoujiHttpClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -69,5 +71,33 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 				businessCaller.callBusiness();
 			}
 		});
+	}
+	
+	@Override
+	public void getFinishedTravelnoteCovers(BusinessCaller businessCaller)
+	{
+		ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers = new ArrayList<>();
+		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
+		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
+		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
+		
+		businessCaller.getData()
+				.putSerializable("finishedTravelnoteCovers", finishedTravelnoteCovers);
+		businessCaller.setSuccessful(true);
+		businessCaller.callBusiness();
+	}
+	
+	@Override
+	public void getMoreFinishedTravelnoteCovers(BusinessCaller businessCaller,
+			int endTravelnoteId)
+	{
+		ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers = new ArrayList<>();
+		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
+		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
+		
+		businessCaller.getData()
+				.putSerializable("finishedTravelnoteCovers", finishedTravelnoteCovers);
+		businessCaller.setSuccessful(true);
+		businessCaller.callBusiness();
 	}
 }

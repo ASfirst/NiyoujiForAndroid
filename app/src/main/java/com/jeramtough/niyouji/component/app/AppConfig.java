@@ -15,9 +15,13 @@ public class AppConfig
 {
 	public static final String APP_DIRECTORY_NAME = "niyouji";
 	
-	public static final String SOCKET_SERVER_HOST = "192.168.0.120:8080";
+	/*public static final String SOCKET_SERVER_HOST = "192.168.0.120:8080";
 	public static final String NIYOUJI_SERVER_HOST = "192.168.0.120:8080";
-	public static final String RANDL_SERVER_HOST = "192.168.0.120:8666";
+	public static final String RANDL_SERVER_HOST = "192.168.0.120:8666";*/
+	
+	public static final String SOCKET_SERVER_HOST = "112.74.51.247:8080";
+	public static final String NIYOUJI_SERVER_HOST = "112.74.51.247:8080";
+	public static final String RANDL_SERVER_HOST = "112.74.51.247:8666";
 	
 	public static String getAppDirecotry(Context context)
 	{

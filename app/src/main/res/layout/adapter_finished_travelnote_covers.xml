@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="--◆  "
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="22sp"/>
+
+        <TextView
+                android:id="@+id/textView_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="2012-08-21"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="22sp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="  ◆--"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="22sp"/>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/textView_travelnote_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="这是标题"
+            android:gravity="center"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:shadowRadius="15"
+            android:shadowColor="#43d4f1"
+            android:layout_marginBottom="10dp"/>
+
+    <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="horizontal"
+            android:scrollbarAlwaysDrawHorizontalTrack="false">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@mipmap/temp2"
+                    android:scaleType="centerCrop"
+                    android:layout_marginLeft="5dp"/>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/imageView_first_page"
+                        android:layout_width="wrap_content"
+                        android:layout_height="250dp"
+                        app:srcCompat="@mipmap/temp1"
+                        android:scaleType="centerCrop"
+                        android:alpha="0.85"/>
+
+                <TextView
+                        android:id="@+id/textView_first_page_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="08:11"
+                        android:textColor="#181818"
+                        android:gravity="center"/>
+
+                <TextView
+                        android:id="@+id/textView_first_page_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="dsfsafsdaf环境将很快就会结婚后看asdffhjkj巩固加快版共和国感觉好怪和价格根据计划就会看见"
+                        android:textColor="#6c6b6b"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/imageView_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="250dp"
+                        app:srcCompat="@mipmap/temp"
+                        android:scaleType="centerCrop"
+                        android:alpha="0.7"/>
+
+                <TextView
+                        android:id="@+id/textView_second_page_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="08:11"
+                        android:textColor="#181818"
+                        android:gravity="center"/>
+
+                <TextView
+                        android:id="@+id/textView_second_page_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="dsfsafsdaf环境将很快就会结婚后看asdffhjkj巩固加快版共和国感觉好怪和价格根据计划就会看见"
+                        android:textColor="#6c6b6b"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+        <com.jeramtough.jtandroid.ui.RoundImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/surface_image"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="2dp"/>
+
+        <TextView
+                android:id="@+id/textView_performer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="#616161"
+                android:text="用户名"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_favorite"/>
+
+        <TextView
+                android:id="@+id/textView_attentions_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="#616161"
+                android:text="10000"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/background10"/>
+</LinearLayout>

@@ -14,4 +14,8 @@ public interface TravelnoteBusiness
 	boolean checkTheNetwork(Context context);
 	
 	void getTravelnoteCovers(BusinessCaller businessCaller);
+	
+	void getFinishedTravelnoteCovers(BusinessCaller businessCaller);
+	
+	void getMoreFinishedTravelnoteCovers(BusinessCaller businessCaller,int endTravelnoteId);
 }

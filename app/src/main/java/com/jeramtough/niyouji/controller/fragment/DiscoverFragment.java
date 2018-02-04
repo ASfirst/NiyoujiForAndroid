@@ -1,32 +1,20 @@
 package com.jeramtough.niyouji.controller.fragment;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import com.jeramtough.jtandroid.adapter.ViewsAdapter;
-import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
-import com.jeramtough.jtandroid.ioc.annotation.InjectView;
-import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
-import com.jeramtough.jtandroid.util.IntentUtil;
+import android.widget.*;
+import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.listener.OnScreenBottomOrTopListener;
+import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtlog3.P;
-import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.R;
-import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
-import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
-import com.jeramtough.niyouji.component.app.AppUser;
-import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
-import com.jeramtough.niyouji.component.travelnote.PageCounter;
-import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
-import com.jeramtough.niyouji.component.websocket.PerformerWebSocketClient;
-import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
-import com.jeramtough.niyouji.controller.activity.PerformingActivity;
-import com.jeramtough.niyouji.controller.activity.Test1Activity;
-import com.jeramtough.niyouji.controller.activity.TestActivity;
+import com.jeramtough.niyouji.bean.travelnote.FinishedTravelnoteCover;
+import com.jeramtough.niyouji.business.TravelnoteBusiness;
+import com.jeramtough.niyouji.business.TravelnoteService;
+import com.jeramtough.niyouji.component.adapter.FinishedTravelnoteCoverAdapter;
 import com.jeramtough.pullrefreshing.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -37,26 +25,23 @@ import java.util.ArrayList;
  */
 
 public class DiscoverFragment extends AppBaseFragment
+		implements PullToRefreshView.OnRefreshListener
 {
-	@InjectView(R.id.btn_test1)
-	private Button btnTest1;
+	private static final int BUSINESS_CODE_OBTAIN_FINISHED_TRAVELNOTE_COVERS = 0;
+	private static final int BUSINESS_CODE_OBTAIN_MORE_FINISHED_TRAVELNOTE_COVERS = 1;
 	
-	@InjectView(R.id.btn_test2)
-	private Button btnTest2;
+	private PullToRefreshView pullToRefresh;
+	private ListView listViewTravelnotes;
+	private TimedCloseTextView timedCloseTextView;
+	private LinearLayout layoutProgress;
 	
-	@InjectView(R.id.btn_test3)
-	private Button btnTest3;
+	private FinishedTravelnoteCoverAdapter finishedTravelnoteCoverAdapter;
 	
-	@InjectView(R.id.btn_test4)
-	private Button btnTest4;
+	@InjectService(service = TravelnoteService.class)
+	private TravelnoteBusiness travelnoteBusiness;
 	
-	@InjectComponent
-	private AppUser appUser;
-	@InjectComponent
-	private PageCounter pageCounter;
-	@InjectComponent
-	private WebSocketClientProxy webSocketClientProxy;
-	
+	private int endTravelnoteId = 0;
+	private boolean isObtaining = false;
 	
 	@Override
 	public int loadFragmentLayoutId()
@@ -67,81 +52,113 @@ public class DiscoverFragment extends AppBaseFragment
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
 	{
-		getIocContainer().injectView(getContext(), this);
-		btnTest1.setOnClickListener(this);
-		btnTest2.setOnClickListener(this);
-		btnTest3.setOnClickListener(this);
-		btnTest4.setOnClickListener(this);
+		//getIocContainer().injectView(getContext(), this);
+		pullToRefresh = findViewById(R.id.pull_to_refresh);
+		listViewTravelnotes = findViewById(R.id.listView_travelnotes);
+		timedCloseTextView = findViewById(R.id.timedCloseTextView);
+		layoutProgress = findViewById(R.id.layout_progress);
 		
+		pullToRefresh.setOnRefreshListener(this);
+		listViewTravelnotes.setOnScrollListener(new MyScreenBottomOrTopListener());
+		initResources();
+	}
+	
+	protected void initResources()
+	{
+		finishedTravelnoteCoverAdapter = new FinishedTravelnoteCoverAdapter(getContext());
+		listViewTravelnotes.setAdapter(finishedTravelnoteCoverAdapter);
+		
+		layoutProgress.setVisibility(View.GONE);
 	}
 	
 	@Override
-	public void onClick(View v, int viewId)
+	public void onRefresh()
 	{
-		switch (viewId)
+		obtainFinishedTravelnoteCovers();
+	}
+	
+	public class MyScreenBottomOrTopListener extends OnScreenBottomOrTopListener
+	{
+		@Override
+		public void onScreenBottom()
 		{
-			case R.id.btn_test1:
-				new Thread()
+			if (!isObtaining)
+			{
+				layoutProgress.setVisibility(View.VISIBLE);
+				isObtaining=true;
+				obtainMoreFinishedTravelnoteCovers();
+			}
+		}
+	}
+	
+	@Override
+	public void handleFragmentMessage(Message message)
+	{
+		switch (message.what)
+		{
+			case BUSINESS_CODE_OBTAIN_FINISHED_TRAVELNOTE_COVERS:
+				finishedTravelnoteCoverAdapter.clearAllDataSource();
+			
+			case BUSINESS_CODE_OBTAIN_MORE_FINISHED_TRAVELNOTE_COVERS:
+				if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL))
 				{
-					@Override
-					public void run()
-					{
-						//模拟创建房间操作
-						try
-						{
-							pageCounter.setPageCount(0);
-							
-							webSocketClientProxy.resetPerformerWebSocketClient();
-							
-							
-							webSocketClientProxy.getPerformerWebSocketClient().connectBlocking();
-							
-							CreatePerformingRoomCommand createPerformingRoomCommand =
-									new CreatePerformingRoomCommand();
-							createPerformingRoomCommand.setCoverResourceUrl(
-									"http://niyouji.oss-cn-shenzhen.aliyuncs.com/images/cover_1516105481681.jpg");
-							createPerformingRoomCommand
-									.setCoverType(TravelnoteResourceTypes.IMAGE.toString());
-							createPerformingRoomCommand
-									.setCreateTime(DateTimeUtil.getCurrentDateTime());
-							createPerformingRoomCommand.setPerformerId(appUser.getUserId());
-							createPerformingRoomCommand.setTravelnoteTitle("这是测试游记");
-							SocketMessage socketMessage = PerformerSocketMessageFactory
-									.processCreatePerformingRoomSocketMessage(
-											createPerformingRoomCommand);
-							webSocketClientProxy.getPerformerWebSocketClient().sendSocketMessage(socketMessage);
-							Thread.sleep(500);
-							IntentUtil.toTheOtherActivity(getActivity(),
-									PerformingActivity.class);
-							
-							//							Thread.sleep(5000);
-							//							performerWebSocketClient.closeBlocking();
-						}
-						catch (InterruptedException e)
-						{
-							e.printStackTrace();
-						}
-					}
-				}.start();
-				
-				break;
-			case R.id.btn_test2:
-				IntentUtil.toTheOtherActivity(this.getActivity(), TestActivity.class);
-				break;
-			case R.id.btn_test3:
-				IntentUtil.toTheOtherActivity(this.getActivity(), Test1Activity.class);
-				break;
-			case R.id.btn_test4:
-				new Thread()
+					ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers =
+							(ArrayList<FinishedTravelnoteCover>) message.getData()
+									.getSerializable("finishedTravelnoteCovers");
+					
+					endTravelnoteId =
+							finishedTravelnoteCovers.get(finishedTravelnoteCovers.size() - 1)
+									.getTravelnoteId();
+					
+					finishedTravelnoteCoverAdapter
+							.addFinishedTravelnoteCovers(finishedTravelnoteCovers);
+					finishedTravelnoteCoverAdapter.notifyDataSetChanged();
+				}
+				else
 				{
-					@Override
-					public void run()
-					{
-					}
-				}.start();
-				
+					timedCloseTextView.setErrorMessage("获取失败！");
+					timedCloseTextView.closeDelayed(3000);
+				}
+				isObtaining = false;
+				pullToRefresh.setRefreshing(false);
+				layoutProgress.setVisibility(View.GONE);
 				break;
 		}
 	}
-	//***********************************************
+	
+	//********************************
+	private void obtainFinishedTravelnoteCovers()
+	{
+		if (travelnoteBusiness.checkTheNetwork(this.getContext()))
+		{
+			travelnoteBusiness.getFinishedTravelnoteCovers(
+					new BusinessCaller(getFragmentHandler(),
+							BUSINESS_CODE_OBTAIN_FINISHED_TRAVELNOTE_COVERS));
+			pullToRefresh.setRefreshing(true);
+		}
+		else
+		{
+			timedCloseTextView.setErrorMessage("目前没有可用网络！");
+			timedCloseTextView.closeDelayed(3000);
+			pullToRefresh.setRefreshing(false);
+		}
+	}
+	
+	private void obtainMoreFinishedTravelnoteCovers()
+	{
+		if (travelnoteBusiness.checkTheNetwork(this.getContext()))
+		{
+			travelnoteBusiness.getMoreFinishedTravelnoteCovers(
+					new BusinessCaller(getFragmentHandler(),
+							BUSINESS_CODE_OBTAIN_MORE_FINISHED_TRAVELNOTE_COVERS),
+					endTravelnoteId);
+			pullToRefresh.setRefreshing(true);
+		}
+		else
+		{
+			timedCloseTextView.setErrorMessage("目前没有可用网络！");
+			timedCloseTextView.closeDelayed(3000);
+			pullToRefresh.setRefreshing(false);
+		}
+	}
 }

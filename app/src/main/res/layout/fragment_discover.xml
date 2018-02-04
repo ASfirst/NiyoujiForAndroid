@@ -1,33 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00ffff"
-        >
+        android:layout_height="match_parent">
 
-    <Button
-            android:id="@+id/btn_test1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test1"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <Button
-            android:id="@+id/btn_test2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test2"/>
+        <com.jeramtough.pullrefreshing.PullToRefreshView
+                android:id="@+id/pull_to_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white">
 
-    <Button
-            android:id="@+id/btn_test3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test3"/>
+            <ListView
+                    android:id="@+id/listView_travelnotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:horizontalSpacing="7dp"
+                    android:verticalSpacing="7dp"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    />
 
-    <Button
-            android:id="@+id/btn_test4"
-            android:layout_width="wrap_content"
+        </com.jeramtough.pullrefreshing.PullToRefreshView>
+
+        <LinearLayout
+                android:id="@+id/layout_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="#ffffff"
+                android:layout_marginTop="4dp">
+
+            <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.ProgressBar.Small"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="加载更多"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.jeramtough.jtandroid.ui.TimedCloseTextView
+            android:id="@+id/timedCloseTextView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="break"/>
-</LinearLayout>
+            android:gravity="center"
+            android:textSize="21sp"/>
+
+</FrameLayout>

@@ -1,8 +1,9 @@
 package com.jeramtough.niyouji.bean.travelnote;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TravelnotePage
+public class TravelnotePage implements Serializable
 {
 	private String pageId;
 	private String travelnoteId;
