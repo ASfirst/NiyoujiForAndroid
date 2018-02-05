@@ -25,7 +25,7 @@ import com.jeramtough.niyouji.controller.activity.TestActivity;
  *         on 2017  November 20 Monday 12:00.
  */
 
-public class Discover1Fragment extends AppBaseFragment
+public class TestFragment extends AppBaseFragment
 {
 	@InjectView(R.id.btn_test1)
 	private Button btnTest1;
@@ -50,7 +50,7 @@ public class Discover1Fragment extends AppBaseFragment
 	@Override
 	public int loadFragmentLayoutId()
 	{
-		return R.layout.fragment_discover1;
+		return R.layout.fragment_test;
 	}
 	
 	@Override

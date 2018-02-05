@@ -126,6 +126,8 @@
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
+        <activity android:name=".controller.activity.FinishedTravelnoteActivity">
+        </activity>
     </application>
 
 </manifest>

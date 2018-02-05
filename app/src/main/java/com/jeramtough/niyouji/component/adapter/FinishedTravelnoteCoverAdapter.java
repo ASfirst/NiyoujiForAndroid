@@ -1,11 +1,15 @@
 package com.jeramtough.niyouji.component.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
@@ -13,6 +17,7 @@ import com.jeramtough.niyouji.bean.travelnote.FinishedTravelnoteCover;
 import com.jeramtough.niyouji.bean.travelnote.Travelnote;
 import com.jeramtough.niyouji.component.app.GlideApp;
 import com.jeramtough.niyouji.component.travelnote.TravelnotePageType;
+import com.jeramtough.niyouji.controller.activity.FinishedTravelnoteActivity;
 
 import java.util.ArrayList;
 
@@ -23,12 +28,12 @@ import java.util.ArrayList;
 
 public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 {
-	private Context context;
+	private Activity activity;
 	private ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers;
 	
-	public FinishedTravelnoteCoverAdapter(Context context)
+	public FinishedTravelnoteCoverAdapter(Activity activity)
 	{
-		this.context = context;
+		this.activity = activity;
 		this.finishedTravelnoteCovers = new ArrayList<>();
 	}
 	
@@ -58,7 +63,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 		{
 			viewsHolder = new ViewsHolder();
 			
-			convertView = LayoutInflater.from(context)
+			convertView = LayoutInflater.from(activity)
 					.inflate(R.layout.adapter_finished_travelnote_covers, null);
 			
 			viewsHolder.textViewDate = convertView.findViewById(R.id.textView_date);
@@ -81,6 +86,8 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 					convertView.findViewById(R.id.textView_attentions_count);
 			viewsHolder.imageViewTravelnoteCover =
 					convertView.findViewById(R.id.imageView_travelnote_cover);
+			viewsHolder.horizontalScrollView =
+					convertView.findViewById(R.id.horizontalScrollView);
 			
 			convertView.setTag(viewsHolder);
 		}
@@ -88,6 +95,8 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 		{
 			viewsHolder = (ViewsHolder) convertView.getTag();
 		}
+		
+		setHorizontalScrollViewClickListener(viewsHolder.horizontalScrollView,position);
 		
 		FinishedTravelnoteCover finishedTravelnoteCover =
 				finishedTravelnoteCovers.get(position);
@@ -100,7 +109,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 		viewsHolder.textViewPerformerName
 				.setText(finishedTravelnoteCover.getPerformerNickname());
 		
-		GlideApp.with(context).load(finishedTravelnoteCover.getCoverResourceUrl())
+		GlideApp.with(activity).load(finishedTravelnoteCover.getCoverResourceUrl())
 				.skipMemoryCache(true).placeholder(R.drawable.ic_image_green)
 				.error(R.drawable.ic_broken_image).centerCrop()
 				.into(viewsHolder.imageViewTravelnoteCover);
@@ -116,7 +125,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			if (finishedTravelnoteCover.getFirstTravelnotePage().getPageType()
 					.equals(TravelnotePageType.PICANDWORD.toString()))
 			{
-				GlideApp.with(context).load(finishedTravelnoteCover.getFirstTravelnotePage()
+				GlideApp.with(activity).load(finishedTravelnoteCover.getFirstTravelnotePage()
 						.getResourceUrl()).skipMemoryCache(true)
 						.placeholder(R.drawable.ic_image_green)
 						.error(R.drawable.ic_broken_image).centerCrop()
@@ -124,8 +133,8 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			}
 			else
 			{
-				GlideApp.with(context).asGif().load(R.drawable.video_instance)
-						.skipMemoryCache(true).placeholder(R.drawable.ic_image_green)
+				GlideApp.with(activity).asGif().load(R.drawable.video_instance)
+						.skipMemoryCache(false).placeholder(R.drawable.ic_image_green)
 						.error(R.drawable.ic_broken_image).centerCrop()
 						.into(viewsHolder.imageViewFirstPage);
 			}
@@ -142,7 +151,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			if (finishedTravelnoteCover.getSecondTravelnotePage().getPageType()
 					.equals(TravelnotePageType.PICANDWORD.toString()))
 			{
-				GlideApp.with(context).load(finishedTravelnoteCover.getSecondTravelnotePage()
+				GlideApp.with(activity).load(finishedTravelnoteCover.getSecondTravelnotePage()
 						.getResourceUrl()).skipMemoryCache(true)
 						.placeholder(R.drawable.ic_image_green)
 						.error(R.drawable.ic_broken_image).centerCrop()
@@ -150,8 +159,8 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			}
 			else
 			{
-				GlideApp.with(context).asGif().load(R.drawable.video_instance)
-						.skipMemoryCache(true).placeholder(R.drawable.ic_image_green)
+				GlideApp.with(activity).asGif().load(R.drawable.video_instance)
+						.skipMemoryCache(false).placeholder(R.drawable.ic_image_green)
 						.error(R.drawable.ic_broken_image).centerCrop()
 						.into(viewsHolder.imageViewSecond);
 			}
@@ -185,5 +194,38 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 		TextView textViewPerformerName;
 		TextView textViewAttentionsCount;
 		AppCompatImageView imageViewTravelnoteCover;
+		HorizontalScrollView horizontalScrollView;
+	}
+	
+	//****************************************************
+	private void setHorizontalScrollViewClickListener(HorizontalScrollView horizontalScrollView,int position)
+	{
+		horizontalScrollView.setOnTouchListener(new View.OnTouchListener()
+		{
+			private long downTime;
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					downTime = System.currentTimeMillis();
+				}
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+				{
+					long upTime = System.currentTimeMillis();
+					long intervalTime = upTime - downTime;
+					if (intervalTime < 100)
+					{
+						Intent intent =
+								new Intent(activity, FinishedTravelnoteActivity.class);
+						intent.putExtra("finishedTravelnoteCover",
+								finishedTravelnoteCovers.get(position));
+						activity.startActivity(intent);
+					}
+				}
+				return false;
+			}
+		});
 	}
 }

@@ -1,10 +1,12 @@
 package com.jeramtough.niyouji.controller.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.*;
+import com.jeramtough.jtandroid.adapter.JtTextItemAdapter;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.listener.OnScreenBottomOrTopListener;
@@ -15,6 +17,7 @@ import com.jeramtough.niyouji.bean.travelnote.FinishedTravelnoteCover;
 import com.jeramtough.niyouji.business.TravelnoteBusiness;
 import com.jeramtough.niyouji.business.TravelnoteService;
 import com.jeramtough.niyouji.component.adapter.FinishedTravelnoteCoverAdapter;
+import com.jeramtough.niyouji.controller.activity.FinishedTravelnoteActivity;
 import com.jeramtough.pullrefreshing.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import java.util.ArrayList;
  */
 
 public class DiscoverFragment extends AppBaseFragment
-		implements PullToRefreshView.OnRefreshListener
+		implements PullToRefreshView.OnRefreshListener, AdapterView.OnItemClickListener
 {
 	private static final int BUSINESS_CODE_OBTAIN_FINISHED_TRAVELNOTE_COVERS = 0;
 	private static final int BUSINESS_CODE_OBTAIN_MORE_FINISHED_TRAVELNOTE_COVERS = 1;
@@ -64,13 +67,15 @@ public class DiscoverFragment extends AppBaseFragment
 		textViewNoMoreTravelnote.setVisibility(View.GONE);
 		
 		pullToRefresh.setOnRefreshListener(this);
+		listViewTravelnotes.setOnItemClickListener(this);
 		listViewTravelnotes.setOnScrollListener(new MyScreenBottomOrTopListener());
 		initResources();
 	}
 	
 	protected void initResources()
 	{
-		finishedTravelnoteCoverAdapter = new FinishedTravelnoteCoverAdapter(getContext());
+		finishedTravelnoteCoverAdapter = new FinishedTravelnoteCoverAdapter(getActivity());
+		
 		listViewTravelnotes.setAdapter(finishedTravelnoteCoverAdapter);
 	}
 	
@@ -78,6 +83,16 @@ public class DiscoverFragment extends AppBaseFragment
 	public void onRefresh()
 	{
 		obtainFinishedTravelnoteCovers();
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		FinishedTravelnoteCover finishedTravelnoteCover =
+				(FinishedTravelnoteCover) finishedTravelnoteCoverAdapter.getItem(position);
+		Intent intent = new Intent(this.getContext(), FinishedTravelnoteActivity.class);
+		intent.putExtra("finishedTravelnoteCover", finishedTravelnoteCover);
+		startActivity(intent);
 	}
 	
 	public class MyScreenBottomOrTopListener extends OnScreenBottomOrTopListener
