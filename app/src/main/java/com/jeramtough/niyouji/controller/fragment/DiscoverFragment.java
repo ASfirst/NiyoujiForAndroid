@@ -133,12 +133,18 @@ public class DiscoverFragment extends AppBaseFragment
 								.addFinishedTravelnoteCovers(finishedTravelnoteCovers);
 						finishedTravelnoteCoverAdapter.notifyDataSetChanged();
 						
-						textViewNoMoreTravelnote.setVisibility(View.GONE);
 					}
 					else
 					{
 						//暂时没有更多了
 						textViewNoMoreTravelnote.setVisibility(View.VISIBLE);
+						textViewNoMoreTravelnote.postDelayed(() ->
+						{
+							if (textViewNoMoreTravelnote.getVisibility() == View.VISIBLE)
+							{
+								textViewNoMoreTravelnote.setVisibility(View.GONE);
+							}
+						}, 2000);
 					}
 				}
 				else
