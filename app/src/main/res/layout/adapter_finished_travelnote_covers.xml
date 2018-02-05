@@ -65,7 +65,8 @@
                 android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/imageView_travelnote_cover"
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
                     app:srcCompat="@mipmap/temp2"
                     android:scaleType="centerCrop"
@@ -80,7 +81,7 @@
 
                 <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/imageView_first_page"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="250dp"
                         app:srcCompat="@mipmap/temp1"
                         android:scaleType="centerCrop"
@@ -99,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="dsfsafsdaf环境将很快就会结婚后看asdffhjkj巩固加快版共和国感觉好怪和价格根据计划就会看见"
+                        android:text="-"
                         android:textColor="#6c6b6b"/>
 
             </LinearLayout>
@@ -111,9 +112,8 @@
 
                 <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/imageView_second"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="250dp"
-                        app:srcCompat="@mipmap/temp"
                         android:scaleType="centerCrop"
                         android:alpha="0.7"/>
 
@@ -130,7 +130,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="dsfsafsdaf环境将很快就会结婚后看asdffhjkj巩固加快版共和国感觉好怪和价格根据计划就会看见"
                         android:textColor="#6c6b6b"/>
 
             </LinearLayout>

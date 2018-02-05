@@ -23,14 +23,40 @@ public class NiyoujiHttpClient
 		client = new OkHttpClient();
 	}
 	
-	public String getLiveTravelnotesBlocking() throws IOException
+	public String getLiveTravelnoteCoversBlocking() throws IOException
 	{
 		String jsonStr = null;
-		String url = baseUrl + "getLiveTravelnotes.do";
+		String url = baseUrl + "getLiveTravelnoteCovers.do";
 		Request request = new Request.Builder().url(url).build();
 		
-			Response response = client.newCall(request).execute();
-			jsonStr = response.body().string();
+		Response response = client.newCall(request).execute();
+		jsonStr = response.body().string();
+		
+		return jsonStr;
+	}
+	
+	public String getFinishedTravelnoteCoversBlocking() throws IOException
+	{
+		String jsonStr = null;
+		String url = baseUrl + "getFinishedTravelnoteCovers.do";
+		Request request = new Request.Builder().url(url).build();
+		
+		Response response = client.newCall(request).execute();
+		jsonStr = response.body().string();
+		
+		return jsonStr;
+	}
+	
+	public String getFinishedTravelnoteCoversFromEndTravelnoteIdBlocking(String endTravelnote)
+			throws IOException
+	{
+		String jsonStr = null;
+		String url =
+				baseUrl + "getFinishedTravelnoteCovers.do?fromTravelnoteId=" + endTravelnote;
+		Request request = new Request.Builder().url(url).build();
+		
+		Response response = client.newCall(request).execute();
+		jsonStr = response.body().string();
 		
 		return jsonStr;
 	}

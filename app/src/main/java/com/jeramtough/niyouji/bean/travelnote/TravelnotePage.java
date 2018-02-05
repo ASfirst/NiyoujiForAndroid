@@ -106,4 +106,8 @@ public class TravelnotePage implements Serializable
 		barrages.add(barrage);
 	}
 	
+	public ArrayList<Barrage> getBarrages()
+	{
+		return barrages;
+	}
 }

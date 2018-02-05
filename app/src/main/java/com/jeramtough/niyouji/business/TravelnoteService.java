@@ -52,7 +52,7 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 		{
 			try
 			{
-				String responseStr = niyoujiHttpClient.getLiveTravelnotesBlocking();
+				String responseStr = niyoujiHttpClient.getLiveTravelnoteCoversBlocking();
 				List<LiveTravelnoteCover> liveTravelnoteCoverList =
 						JSON.parseArray(responseStr, LiveTravelnoteCover.class);
 				LiveTravelnoteCover[] liveTravelnoteCovers = liveTravelnoteCoverList
@@ -65,7 +65,7 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 			}
 			catch (IOException e)
 			{
-				getP().error("get travelnote covers " + e.getMessage());
+				getP().error("get finished travelnote covers " + e.getMessage());
 				
 				businessCaller.getData().putBoolean("isSuccessful", false);
 				businessCaller.callBusiness();
@@ -76,28 +76,62 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 	@Override
 	public void getFinishedTravelnoteCovers(BusinessCaller businessCaller)
 	{
-		ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers = new ArrayList<>();
-		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
-		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
-		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
+		executorService.submit(() ->
+		{
+			try
+			{
+				String responseStr = niyoujiHttpClient.getFinishedTravelnoteCoversBlocking();
+				List<FinishedTravelnoteCover> finishedTravelnoteCovers =
+						JSON.parseArray(responseStr, FinishedTravelnoteCover.class);
+				ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers1 =
+						new ArrayList<>();
+				finishedTravelnoteCovers1.addAll(finishedTravelnoteCovers);
+				
+				businessCaller.getData().putSerializable("finishedTravelnoteCovers",
+						finishedTravelnoteCovers1);
+				businessCaller.setSuccessful(true);
+				businessCaller.callBusiness();
+			}
+			catch (IOException e)
+			{
+				getP().error("get more finished travelnote covers " + e.getMessage());
+				
+				businessCaller.getData().putBoolean("isSuccessful", false);
+				businessCaller.callBusiness();
+			}
+		});
 		
-		businessCaller.getData()
-				.putSerializable("finishedTravelnoteCovers", finishedTravelnoteCovers);
-		businessCaller.setSuccessful(true);
-		businessCaller.callBusiness();
 	}
 	
 	@Override
 	public void getMoreFinishedTravelnoteCovers(BusinessCaller businessCaller,
-			int endTravelnoteId)
+			String endTravelnoteId)
 	{
-		ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers = new ArrayList<>();
-		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
-		finishedTravelnoteCovers.add(new FinishedTravelnoteCover());
-		
-		businessCaller.getData()
-				.putSerializable("finishedTravelnoteCovers", finishedTravelnoteCovers);
-		businessCaller.setSuccessful(true);
-		businessCaller.callBusiness();
+		executorService.submit(() ->
+		{
+			try
+			{
+				String responseStr = niyoujiHttpClient
+						.getFinishedTravelnoteCoversFromEndTravelnoteIdBlocking(endTravelnoteId);
+				List<FinishedTravelnoteCover> finishedTravelnoteCovers =
+						JSON.parseArray(responseStr, FinishedTravelnoteCover.class);
+				
+				ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers1 =
+						new ArrayList<>();
+				finishedTravelnoteCovers1.addAll(finishedTravelnoteCovers);
+				
+				businessCaller.getData().putSerializable("finishedTravelnoteCovers",
+						finishedTravelnoteCovers1);
+				businessCaller.setSuccessful(true);
+				businessCaller.callBusiness();
+			}
+			catch (IOException e)
+			{
+				getP().error("get travelnote covers " + e.getMessage());
+				
+				businessCaller.getData().putBoolean("isSuccessful", false);
+				businessCaller.callBusiness();
+			}
+		});
 	}
 }

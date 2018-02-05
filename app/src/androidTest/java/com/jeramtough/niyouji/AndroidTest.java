@@ -8,8 +8,6 @@ import com.jeramtough.niyouji.component.httpclient.NiyoujiHttpClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
-
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -26,7 +24,7 @@ public class AndroidTest
 		Context appContext = InstrumentationRegistry.getTargetContext();
 		
 		NiyoujiHttpClient niyoujiHttpClient=new NiyoujiHttpClient();
-		niyoujiHttpClient.getLiveTravelnotesBlocking();
+		niyoujiHttpClient.getLiveTravelnoteCoversBlocking();
 
 	}
 }

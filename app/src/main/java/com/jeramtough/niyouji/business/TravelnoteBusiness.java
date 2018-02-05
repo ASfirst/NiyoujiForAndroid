@@ -17,5 +17,6 @@ public interface TravelnoteBusiness
 	
 	void getFinishedTravelnoteCovers(BusinessCaller businessCaller);
 	
-	void getMoreFinishedTravelnoteCovers(BusinessCaller businessCaller,int endTravelnoteId);
+	void getMoreFinishedTravelnoteCovers(BusinessCaller businessCaller,
+			String endTravelnoteId);
 }

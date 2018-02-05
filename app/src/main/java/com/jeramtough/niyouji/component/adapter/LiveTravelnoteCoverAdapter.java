@@ -70,8 +70,8 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 					convertView.findViewById(R.id.textView_performer_name);
 			viewsHolder.textViewAttentionsCount =
 					convertView.findViewById(R.id.textView_attentions_count);
-			viewsHolder.viewNoLiveTravelnote = convertView.findViewById(R.id
-					.view_no_live_travelnote);
+			viewsHolder.viewNoLiveTravelnote =
+					convertView.findViewById(R.id.view_no_live_travelnote);
 			
 			convertView.setTag(viewsHolder);
 		}
@@ -80,24 +80,30 @@ public class LiveTravelnoteCoverAdapter extends BaseAdapter
 			viewsHolder = (ViewsHolder) convertView.getTag();
 		}
 		
-		if (liveTravelnoteCovers.length!=0)
+		if (liveTravelnoteCovers.length != 0)
 		{
 			//移除提示
-			((FrameLayout)convertView).removeView(viewsHolder.viewNoLiveTravelnote);
+			((FrameLayout) convertView).removeView(viewsHolder.viewNoLiveTravelnote);
 			
 			LiveTravelnoteCover liveTravelnoteCover = liveTravelnoteCovers[position];
-			viewsHolder.textViewPerformerName.setText(liveTravelnoteCover.getPerformerNickname());
-			viewsHolder.textViewTravelnoteTitle.setText(liveTravelnoteCover.getTravelnoteTitle());
+			viewsHolder.textViewPerformerName
+					.setText(liveTravelnoteCover.getPerformerNickname());
+			viewsHolder.textViewTravelnoteTitle
+					.setText(liveTravelnoteCover.getTravelnoteTitle());
 			viewsHolder.textViewAttentionsCount
 					.setText(liveTravelnoteCover.getAttentionsCount() + "");
 			
-			if (Objects.equals(liveTravelnoteCover.getCoverType(), TravelnoteResourceTypes.IMAGE.toString()))
+			if (Objects.equals(liveTravelnoteCover.getCoverType(),
+					TravelnoteResourceTypes.IMAGE.toString()))
 			{
 				//load image
-				GlideApp.with(context).load(liveTravelnoteCover.getCoverResourceUrl()).placeholder(R.drawable.ic_image).error(R.drawable.ic_broken_image)
-						.centerCrop().into(viewsHolder.imageViewTravelnoteCover);
+				GlideApp.with(context).load(liveTravelnoteCover.getCoverResourceUrl())
+						.skipMemoryCache(true).placeholder(R.drawable.ic_image_green)
+						.error(R.drawable.ic_broken_image).centerCrop()
+						.into(viewsHolder.imageViewTravelnoteCover);
 			}
-			else if (Objects.equals(liveTravelnoteCover.getCoverType(), TravelnoteResourceTypes.VIDEO.toString()))
+			else if (Objects.equals(liveTravelnoteCover.getCoverType(),
+					TravelnoteResourceTypes.VIDEO.toString()))
 			{
 				//load video
 				//估计是用不上了，不想做视频封面了

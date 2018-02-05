@@ -1,11 +1,13 @@
 package com.jeramtough.niyouji.bean.travelnote;
 
+import java.io.Serializable;
+
 /**
  * @author 11718
  */
 public class FinishedTravelnoteCover extends LiveTravelnoteCover
 {
-	private int travelnoteId;
+	private String travelnoteId;
 	private TravelnotePage firstTravelnotePage, secondTravelnotePage;
 	
 	public TravelnotePage getFirstTravelnotePage()
@@ -28,12 +30,12 @@ public class FinishedTravelnoteCover extends LiveTravelnoteCover
 		this.secondTravelnotePage = secondTravelnotePage;
 	}
 	
-	public int getTravelnoteId()
+	public String getTravelnoteId()
 	{
 		return travelnoteId;
 	}
 	
-	public void setTravelnoteId(int travelnoteId)
+	public void setTravelnoteId(String travelnoteId)
 	{
 		this.travelnoteId = travelnoteId;
 	}

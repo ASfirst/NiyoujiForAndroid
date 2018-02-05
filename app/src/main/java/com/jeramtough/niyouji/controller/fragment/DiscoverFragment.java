@@ -34,13 +34,14 @@ public class DiscoverFragment extends AppBaseFragment
 	private ListView listViewTravelnotes;
 	private TimedCloseTextView timedCloseTextView;
 	private LinearLayout layoutProgress;
+	private TextView textViewNoMoreTravelnote;
 	
 	private FinishedTravelnoteCoverAdapter finishedTravelnoteCoverAdapter;
 	
 	@InjectService(service = TravelnoteService.class)
 	private TravelnoteBusiness travelnoteBusiness;
 	
-	private int endTravelnoteId = 0;
+	private String endTravelnoteId;
 	private boolean isObtaining = false;
 	
 	@Override
@@ -57,6 +58,10 @@ public class DiscoverFragment extends AppBaseFragment
 		listViewTravelnotes = findViewById(R.id.listView_travelnotes);
 		timedCloseTextView = findViewById(R.id.timedCloseTextView);
 		layoutProgress = findViewById(R.id.layout_progress);
+		textViewNoMoreTravelnote = findViewById(R.id.textView_no_more_travelnote);
+		
+		layoutProgress.setVisibility(View.GONE);
+		textViewNoMoreTravelnote.setVisibility(View.GONE);
 		
 		pullToRefresh.setOnRefreshListener(this);
 		listViewTravelnotes.setOnScrollListener(new MyScreenBottomOrTopListener());
@@ -67,8 +72,6 @@ public class DiscoverFragment extends AppBaseFragment
 	{
 		finishedTravelnoteCoverAdapter = new FinishedTravelnoteCoverAdapter(getContext());
 		listViewTravelnotes.setAdapter(finishedTravelnoteCoverAdapter);
-		
-		layoutProgress.setVisibility(View.GONE);
 	}
 	
 	@Override
@@ -85,7 +88,7 @@ public class DiscoverFragment extends AppBaseFragment
 			if (!isObtaining)
 			{
 				layoutProgress.setVisibility(View.VISIBLE);
-				isObtaining=true;
+				isObtaining = true;
 				obtainMoreFinishedTravelnoteCovers();
 			}
 		}
@@ -106,13 +109,22 @@ public class DiscoverFragment extends AppBaseFragment
 							(ArrayList<FinishedTravelnoteCover>) message.getData()
 									.getSerializable("finishedTravelnoteCovers");
 					
-					endTravelnoteId =
-							finishedTravelnoteCovers.get(finishedTravelnoteCovers.size() - 1)
-									.getTravelnoteId();
-					
-					finishedTravelnoteCoverAdapter
-							.addFinishedTravelnoteCovers(finishedTravelnoteCovers);
-					finishedTravelnoteCoverAdapter.notifyDataSetChanged();
+					if (finishedTravelnoteCovers.size() > 0)
+					{
+						endTravelnoteId = finishedTravelnoteCovers
+								.get(finishedTravelnoteCovers.size() - 1).getTravelnoteId();
+						
+						finishedTravelnoteCoverAdapter
+								.addFinishedTravelnoteCovers(finishedTravelnoteCovers);
+						finishedTravelnoteCoverAdapter.notifyDataSetChanged();
+						
+						textViewNoMoreTravelnote.setVisibility(View.GONE);
+					}
+					else
+					{
+						//暂时没有更多了
+						textViewNoMoreTravelnote.setVisibility(View.VISIBLE);
+					}
 				}
 				else
 				{
@@ -122,6 +134,7 @@ public class DiscoverFragment extends AppBaseFragment
 				isObtaining = false;
 				pullToRefresh.setRefreshing(false);
 				layoutProgress.setVisibility(View.GONE);
+				
 				break;
 		}
 	}
