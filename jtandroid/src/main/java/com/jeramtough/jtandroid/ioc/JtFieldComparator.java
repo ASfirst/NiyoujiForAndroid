@@ -3,6 +3,7 @@ package com.jeramtough.jtandroid.ioc;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ioc.annotation.InjectView;
+import com.jeramtough.jtandroid.ioc.bean.JtField;
 
 import java.lang.annotation.Annotation;
 import java.util.Comparator;

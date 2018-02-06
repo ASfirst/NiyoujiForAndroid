@@ -1,8 +1,8 @@
 package com.jeramtough.jtandroid.controller.handler;
 
 import android.app.Activity;
-import com.jeramtough.jtandroid.ioc.ioc.IocContainer;
-import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
+import com.jeramtough.jtandroid.ioc.iocimpl.IocContainer;
+import com.jeramtough.jtandroid.ioc.iocimpl.JtIocContainer;
 import com.jeramtough.jtandroid.ioc.annotation.JtController;
 
 /**

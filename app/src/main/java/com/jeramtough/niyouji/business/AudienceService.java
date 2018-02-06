@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
-import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
@@ -21,7 +20,6 @@ import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.communicate.factory.AudienceSocketMessageFactory;
 import com.jeramtough.niyouji.component.communicate.parser.AudienceCommandParser;
 import com.jeramtough.niyouji.component.communicate.parser.PerformerCommandParser;
-import com.jeramtough.niyouji.component.websocket.AudienceWebSocketClient;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
 
@@ -382,7 +380,7 @@ public class AudienceService implements AudienceBusiness
 			}
 			else
 			{
-				sendAudienceBarrageCommand.setNickname("观众");
+				sendAudienceBarrageCommand.setNickname("匿名观众");
 			}
 			sendAudienceBarrageCommand.setPerformers(false);
 			sendAudienceBarrageCommand.setPerformerId(performerId);

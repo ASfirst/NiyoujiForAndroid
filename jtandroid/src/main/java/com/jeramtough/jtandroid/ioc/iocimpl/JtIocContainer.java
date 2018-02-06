@@ -1,9 +1,9 @@
-package com.jeramtough.jtandroid.ioc.ioc;
+package com.jeramtough.jtandroid.ioc.iocimpl;
 
 import android.app.Activity;
 import android.content.Context;
 import com.jeramtough.jtandroid.ioc.IocUtil;
-import com.jeramtough.jtandroid.ioc.JtField;
+import com.jeramtough.jtandroid.ioc.bean.JtField;
 import com.jeramtough.jtandroid.ioc.annotation.*;
 import com.jeramtough.jtandroid.ioc.exception.InjectFailedException;
 import com.jeramtough.jtandroid.ioc.filter.FieldsFilter;

@@ -7,7 +7,6 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.jtandroid.java.ExtractedZip;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.component.app.AppConfig;
 import org.apache.commons.io.IOUtils;
 
@@ -54,7 +53,7 @@ public class LaunchService implements LaunchBusiness
 	@Override
 	public void createAppDirectory(Activity activity)
 	{
-		Directory appDirectory = new Directory(AppConfig.getAppDirecotry(activity));
+		Directory appDirectory = new Directory(AppConfig.getAppDirectory(activity));
 		
 		Directory filtersDirectory = new Directory(AppConfig.getFiltersDirectory(activity));
 		Directory musicsDirectory = new Directory(AppConfig.getMusicsDirectory(activity));
@@ -97,7 +96,7 @@ public class LaunchService implements LaunchBusiness
 		resourceDirectory.mkdirs();
 		
 		File zipFile =
-				new File(AppConfig.getAppDirecotry(activity) + File.separator + zipFileName);
+				new File(AppConfig.getAppDirectory(activity) + File.separator + zipFileName);
 		try
 		{
 			zipFile.createNewFile();

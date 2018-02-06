@@ -1,4 +1,4 @@
-package com.jeramtough.jtandroid.ioc;
+package com.jeramtough.jtandroid.ioc.bean;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

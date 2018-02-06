@@ -1,7 +1,5 @@
 package com.jeramtough.niyouji.bean.travelnote;
 
-import java.io.Serializable;
-
 /**
  * @author 11718
  */
@@ -9,6 +7,7 @@ public class FinishedTravelnoteCover extends LiveTravelnoteCover
 {
 	private String travelnoteId;
 	private TravelnotePage firstTravelnotePage, secondTravelnotePage;
+	private int appraiseCount;
 	
 	public TravelnotePage getFirstTravelnotePage()
 	{
@@ -38,5 +37,15 @@ public class FinishedTravelnoteCover extends LiveTravelnoteCover
 	public void setTravelnoteId(String travelnoteId)
 	{
 		this.travelnoteId = travelnoteId;
+	}
+	
+	public int getAppraiseCount()
+	{
+		return appraiseCount;
+	}
+	
+	public void setAppraiseCount(int appraiseCount)
+	{
+		this.appraiseCount = appraiseCount;
 	}
 }

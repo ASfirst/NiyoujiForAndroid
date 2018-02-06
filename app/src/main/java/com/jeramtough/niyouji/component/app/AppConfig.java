@@ -2,7 +2,6 @@ package com.jeramtough.niyouji.component.app;
 
 import android.content.Context;
 import android.os.Environment;
-import com.jeramtough.jtlog3.P;
 
 import java.io.File;
 
@@ -23,7 +22,7 @@ public class AppConfig
 	public static final String NIYOUJI_SERVER_HOST = "192.168.31.204:8080";
 	public static final String RANDL_SERVER_HOST = "112.74.51.247:8666";
 	
-	public static String getAppDirecotry(Context context)
+	public static String getAppDirectory(Context context)
 	{
 		boolean sdCardExist = Environment.getExternalStorageState()
 				.equals(android.os.Environment.MEDIA_MOUNTED);
@@ -40,12 +39,12 @@ public class AppConfig
 	
 	public static String getImagesDirectory(Context context)
 	{
-		return getAppDirecotry(context) + File.separator + "images";
+		return getAppDirectory(context) + File.separator + "images";
 	}
 	
 	public static String getVideosDirectory(Context context)
 	{
-		return getAppDirecotry(context) + File.separator + "videos";
+		return getAppDirectory(context) + File.separator + "videos";
 	}
 	
 	public static String getFiltersDirectory(Context context)

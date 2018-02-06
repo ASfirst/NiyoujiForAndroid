@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.jeramtough.jtandroid.ioc.ioc.IocContainer;
-import com.jeramtough.jtandroid.ioc.ioc.JtIocContainer;
+import com.jeramtough.jtandroid.ioc.iocimpl.IocContainer;
+import com.jeramtough.jtandroid.ioc.iocimpl.JtIocContainer;
 import com.jeramtough.jtandroid.ioc.annotation.JtController;
 
 /**

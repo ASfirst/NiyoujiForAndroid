@@ -1,6 +1,6 @@
 package com.jeramtough.jtandroid.ioc.filter;
 
-import com.jeramtough.jtandroid.ioc.JtField;
+import com.jeramtough.jtandroid.ioc.bean.JtField;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 
