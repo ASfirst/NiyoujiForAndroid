@@ -15,13 +15,16 @@ public class Travelnote implements Serializable
 	private String coverType;
 	private String coverResourceUrl;
 	private String travelnoteTitle;
-	private int attentionsCount=0;
+	private int attentionsCount = 0;
+	
+	private ArrayList<Appraise> appraises;
 	
 	private ArrayList<TravelnotePage> travelnotePages;
 	
 	public Travelnote()
 	{
 		travelnotePages = new ArrayList<>();
+		appraises = new ArrayList<>();
 	}
 	
 	public void addTravelnotePage(TravelnotePage travelnotePage)
@@ -112,5 +115,20 @@ public class Travelnote implements Serializable
 	public void setAttentionsCount(int attentionsCount)
 	{
 		this.attentionsCount = attentionsCount;
+	}
+	
+	public ArrayList<Appraise> getAppraises()
+	{
+		return appraises;
+	}
+	
+	public void setAppraises(ArrayList<Appraise> appraises)
+	{
+		this.appraises = appraises;
+	}
+	
+	public void setTravelnotePages(ArrayList<TravelnotePage> travelnotePages)
+	{
+		this.travelnotePages = travelnotePages;
 	}
 }

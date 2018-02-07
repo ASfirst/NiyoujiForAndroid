@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.component.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtlog3.WithLogger;
@@ -21,11 +22,19 @@ public class NiyoujiWebView extends WebView implements WithLogger
 	public NiyoujiWebView(Context context)
 	{
 		super(context);
+		this.initResources();
 	}
 	
 	public NiyoujiWebView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		this.initResources();
+	}
+	
+	protected void initResources()
+	{
+		WebSettings webSettings = this.getSettings();
+		webSettings.setJavaScriptEnabled(true);
 	}
 	
 	public void loadTravelnoteWebpage(String travelnoteId)
