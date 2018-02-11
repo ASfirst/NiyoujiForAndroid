@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.component.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.jeramtough.jtlog3.P;
@@ -16,8 +17,8 @@ import com.jeramtough.niyouji.component.app.AppConfig;
 public class NiyoujiWebView extends WebView implements WithLogger
 {
 	
-	private final String baseUrl = "http://"+AppConfig.NIYOUJI_SERVER_HOST +
-			"/niyouji/travelnote.html";
+	private final String baseUrl =
+			"http://" + AppConfig.NIYOUJI_SERVER_HOST + "/niyouji/travelnote.html";
 	
 	public NiyoujiWebView(Context context)
 	{
@@ -35,12 +36,20 @@ public class NiyoujiWebView extends WebView implements WithLogger
 	{
 		WebSettings webSettings = this.getSettings();
 		webSettings.setJavaScriptEnabled(true);
+		webSettings.setAllowFileAccess(true);
 	}
 	
 	public void loadTravelnoteWebpage(String travelnoteId)
 	{
-		String url=baseUrl + "?travelnoteId=" + travelnoteId;
-		getP().info("loading "+url);
+		String url = baseUrl + "?travelnoteId=" + travelnoteId;
+		getP().info("loading " + url);
 		this.loadUrl(url);
+	}
+	
+	public void focusToAppraiseArea()
+	{
+		this.evaluateJavascript("javascript:View.appraiseArea.focusToHere()", value ->
+		{
+		});
 	}
 }

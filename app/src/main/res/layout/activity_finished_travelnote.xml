@@ -49,7 +49,8 @@
                 android:padding="3dp"
                 android:layout_marginTop="5dp"
                 android:textSize="18sp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:maxLength="50"/>
 
         <LinearLayout
                 android:id="@+id/layout_appraise_and_favorite"

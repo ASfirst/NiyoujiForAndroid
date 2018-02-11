@@ -78,8 +78,6 @@ public class RandLHttpClient implements WithLogger
 		message.setPhoneNumber(phoneNumber);
 		registerRequest.setMessage(message);
 		
-		P.debug(JSON.toJSONString(registerRequest));
-		
 		RequestBody body = RequestBody.create(MediaType.parse("application/json"),
 				JSON.toJSONString(registerRequest));
 		
@@ -88,8 +86,6 @@ public class RandLHttpClient implements WithLogger
 		{
 			Response response = client.newCall(request).execute();
 			String result = response.body().string();
-			
-			P.debug(result);
 			
 			com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(result);
 			
