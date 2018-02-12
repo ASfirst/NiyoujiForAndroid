@@ -1,6 +1,8 @@
 package com.jeramtough.niyouji.bean.travelnote;
 
-public class Appraise
+import java.io.Serializable;
+
+public class Appraise implements Serializable
 {
 	private String appraiseId;
 	private String travelnoteId;

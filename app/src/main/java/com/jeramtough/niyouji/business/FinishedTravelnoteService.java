@@ -51,6 +51,7 @@ public class FinishedTravelnoteService implements FinishedTravelnoteBusiness
 					appraise.setCreateTime(DateTimeUtil.getCurrentDateTime());
 					
 					boolean isSuccessful = niyoujiHttpClient.publishAppraise(appraise);
+					businessCaller.getData().putSerializable("appraise",appraise);
 					businessCaller.setSuccessful(isSuccessful);
 					businessCaller.callBusiness();
 				}

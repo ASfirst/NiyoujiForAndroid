@@ -7,6 +7,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtlog3.WithLogger;
+import com.jeramtough.niyouji.bean.travelnote.Appraise;
 import com.jeramtough.niyouji.component.app.AppConfig;
 
 /**
@@ -51,5 +52,18 @@ public class NiyoujiWebView extends WebView implements WithLogger
 		this.evaluateJavascript("javascript:View.appraiseArea.focusToHere()", value ->
 		{
 		});
+	}
+	
+	public void addAppraise(Appraise appraise)
+	{
+		String jsObject =
+				String.format("{nickname:'%s',content:'%s',createTime:'%s'}", appraise.getNickname(),
+						appraise.getContent(), appraise.getCreateTime());
+		this.evaluateJavascript("javascript:View.appraiseArea.addAppraise(" + jsObject + ")",
+				value ->
+				{
+				});
+		
+		focusToAppraiseArea();
 	}
 }

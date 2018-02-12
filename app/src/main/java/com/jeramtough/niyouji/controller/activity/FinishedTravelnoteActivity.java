@@ -1,16 +1,19 @@
 package com.jeramtough.niyouji.controller.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
+import com.jeramtough.niyouji.bean.travelnote.Appraise;
 import com.jeramtough.niyouji.bean.travelnote.FinishedTravelnoteCover;
 import com.jeramtough.niyouji.business.FinishedTravelnoteBusiness;
 import com.jeramtough.niyouji.business.FinishedTravelnoteService;
@@ -111,6 +114,17 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 							.publishAppraise(finishedTravelnoteCover.getTravelnoteId(),
 									appraiseContent, new BusinessCaller(getActivityHandler(),
 											BUSINESS_CODE_PUBLISH_APPRAISE));
+					
+					editAppraise.setText("");
+					
+					editAppraise.clearFocus();
+					//让输入框消失
+					InputMethodManager imm = (InputMethodManager) this
+							.getSystemService(Context.INPUT_METHOD_SERVICE);
+					if (imm != null)
+					{
+						imm.hideSoftInputFromWindow(editAppraise.getWindowToken(), 0);
+					}
 				}
 				else
 				{
@@ -188,11 +202,20 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				if (isSuccessful)
 				{
 					Toast.makeText(this, "发表成功~", Toast.LENGTH_SHORT).show();
+					
+					int appraisesCount=Integer.parseInt(textViewAppraiseCount.getText()
+							.toString())+1;
+					textViewAppraiseCount.setText(appraisesCount+"");
+					
+					Appraise appraise =
+							(Appraise) message.getData().getSerializable("appraise");
+					niyoujiWebView.addAppraise(appraise);
 				}
 				else
 				{
 					Toast.makeText(this, "发表失败！", Toast.LENGTH_SHORT).show();
 				}
+				
 				break;
 			case BUSINESS_CODE_OBTAIN_APPRAISES_COUNT:
 				if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL))
