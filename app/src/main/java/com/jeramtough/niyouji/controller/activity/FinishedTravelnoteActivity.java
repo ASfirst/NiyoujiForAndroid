@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtlog3.P;
@@ -31,12 +32,13 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 	
 	private NiyoujiWebView niyoujiWebView;
 	private AppCompatImageButton imageButtonBack;
+	private AppCompatImageButton imageButtonShare;
 	private EditText editAppraise;
+	private LinearLayout layoutAppraiseAndFavorite;
 	private FrameLayout layoutAppraise;
 	private TextView textViewAppraiseCount;
 	private AppCompatImageView imageButtonFavorite;
 	private TextView textViewDone;
-	private LinearLayout layoutAppraiseAndFavorite;
 	
 	private FinishedTravelnoteCover finishedTravelnoteCover;
 	
@@ -51,18 +53,21 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_finished_travelnote);
 		
+		
 		niyoujiWebView = findViewById(R.id.webView);
 		imageButtonBack = findViewById(R.id.imageButton_back);
+		imageButtonShare = findViewById(R.id.imageButton_share);
 		editAppraise = findViewById(R.id.edit_appraise);
+		layoutAppraiseAndFavorite = findViewById(R.id.layout_appraise_and_favorite);
 		layoutAppraise = findViewById(R.id.layout_appraise);
 		textViewAppraiseCount = findViewById(R.id.textView_appraise_count);
 		imageButtonFavorite = findViewById(R.id.imageButton_favorite);
 		textViewDone = findViewById(R.id.textView_done);
-		layoutAppraiseAndFavorite = findViewById(R.id.layout_appraise_and_favorite);
 		
 		textViewDone.setVisibility(View.GONE);
 		
 		imageButtonBack.setOnClickListener(this);
+		imageButtonShare.setOnClickListener(this);
 		textViewDone.setOnClickListener(this);
 		layoutAppraise.setOnClickListener(this);
 		imageButtonFavorite.setOnClickListener(this);
@@ -147,6 +152,9 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				}
 				isFavorite = !isFavorite;
 				break;
+			case R.id.imageButton_share:
+				showShare();
+				break;
 		}
 	}
 	
@@ -203,9 +211,9 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				{
 					Toast.makeText(this, "发表成功~", Toast.LENGTH_SHORT).show();
 					
-					int appraisesCount=Integer.parseInt(textViewAppraiseCount.getText()
-							.toString())+1;
-					textViewAppraiseCount.setText(appraisesCount+"");
+					int appraisesCount =
+							Integer.parseInt(textViewAppraiseCount.getText().toString()) + 1;
+					textViewAppraiseCount.setText(appraisesCount + "");
 					
 					Appraise appraise =
 							(Appraise) message.getData().getSerializable("appraise");
@@ -225,5 +233,31 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				}
 				break;
 		}
+	}
+	
+	//************************************************
+	private void showShare()
+	{
+		OnekeyShare oks = new OnekeyShare();
+		//关闭sso授权
+		oks.disableSSOWhenAuthorize();
+		
+		// title标题，微信、QQ和QQ空间等平台使用
+		oks.setTitle(finishedTravelnoteCover.getTravelnoteTitle());
+		// titleUrl QQ和QQ空间跳转链接
+		String url=niyoujiWebView.getUrl()+"&&isShared=1";
+		P.debug(url);
+		oks.setTitleUrl(url);
+		// text是分享文本，所有平台都需要这个字段
+		oks.setText(finishedTravelnoteCover.getFirstTravelnotePage().getTextContent());
+		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+		//		oks.setImagePath();//确保SDcard下面存在此张图片
+		oks.setImageUrl(finishedTravelnoteCover.getCoverResourceUrl());
+		// url在微信、微博，Facebook等平台中使用
+		oks.setUrl(url);
+		// comment是我对这条分享的评论，仅在人人网使用
+		//oks.setComment("我是测试评论文本");
+		// 启动分享GUI
+		oks.show(this);
 	}
 }
