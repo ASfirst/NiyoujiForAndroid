@@ -1,6 +1,5 @@
 package com.jeramtough.jtandroid.controller.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -17,18 +16,21 @@ import com.jeramtough.jtandroid.R;
  *         on 2018  January 12 Friday 08:43.
  */
 
-public class CourseDialog extends JtIocDialog implements View.OnClickListener
+public class TutorialDialog extends JtIocDialog implements View.OnClickListener
 {
 	private ImageView imageView;
 	private Button understandButton;
 	
-	public CourseDialog(@NonNull Context context)
+	private OnUnderstandListener onUnderstandListener;
+	
+	
+	public TutorialDialog(@NonNull Context context)
 	{
 		this(context, R.style.NoBackGroundDialog);
 		
 	}
 	
-	public CourseDialog(@NonNull Context context, int themeResId)
+	public TutorialDialog(@NonNull Context context, int themeResId)
 	{
 		super(context, themeResId);
 		initViews();
@@ -55,7 +57,7 @@ public class CourseDialog extends JtIocDialog implements View.OnClickListener
 						LinearLayout.LayoutParams.WRAP_CONTENT));
 		linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
 		linearLayout1.setGravity(Gravity.CENTER);
-		linearLayout1.setPadding(10,15,10,30);
+		linearLayout1.setPadding(10, 15, 10, 30);
 		
 		understandButton = new Button(getContext());
 		understandButton.setText("明白了");
@@ -70,9 +72,9 @@ public class CourseDialog extends JtIocDialog implements View.OnClickListener
 	
 	protected void initResources()
 	{
-		WindowManager.LayoutParams lp=this.getWindow().getAttributes();
-		lp.dimAmount=0.3f;
-//		lp.alpha=0.5f;
+		WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+		lp.dimAmount = 0.3f;
+		//		lp.alpha=0.5f;
 		// 模糊度getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
 		this.getWindow().setAttributes(lp);
 	}
@@ -80,8 +82,13 @@ public class CourseDialog extends JtIocDialog implements View.OnClickListener
 	@Override
 	public void onClick(View v)
 	{
-		if (v==understandButton)
+		if (v == understandButton)
 		{
+			if (onUnderstandListener != null)
+			{
+				onUnderstandListener.onUnderstand();
+			}
+			
 			this.cancel();
 		}
 	}
@@ -89,5 +96,16 @@ public class CourseDialog extends JtIocDialog implements View.OnClickListener
 	public ImageView getImageView()
 	{
 		return imageView;
+	}
+	
+	public void setOnUnderstandListener(OnUnderstandListener onUnderstandListener)
+	{
+		this.onUnderstandListener = onUnderstandListener;
+	}
+	
+	//{{{{{{{{{{{{{}}}}}}}}}}}}}
+	public interface OnUnderstandListener
+	{
+		void onUnderstand();
 	}
 }

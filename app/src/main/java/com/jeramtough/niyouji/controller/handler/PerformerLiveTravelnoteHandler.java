@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.*;
 import com.jeramtough.jtandroid.adapter.ViewsPagerAdapter;
 import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.controller.dialog.TutorialDialog;
 import com.jeramtough.jtandroid.controller.handler.JtIocHandler;
 import com.jeramtough.jtandroid.function.MusicPlayer;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
@@ -134,6 +135,9 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		viewPagerTravelnotePages.setAdapter(adapter);
 		
 		this.recycleLastPage();
+		
+		//如果需要就弹出新建页的教程
+		popupTheNewTutorialIf();
 	}
 	
 	@Override
@@ -445,6 +449,9 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	
 	public void setPageResourcePath(String path)
 	{
+		//弹出操作教程如果需要
+		popupTheOptionsTutoriaIf();
+		
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
 		
 		LiveTravelnotePageView liveTravelnotePageView =
@@ -788,6 +795,33 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		textViewNotification.closeDelayed(3000);
 		
 		uploadTestView.setText("上传失败！");
+	}
+	
+	private void popupTheNewTutorialIf()
+	{
+		if (!performingBusiness.hasFinishedTutorial())
+		{
+			TutorialDialog dialog = new TutorialDialog(getContext());
+			dialog.getImageView().setBackgroundResource(R.drawable.tutorial);
+			dialog.show();
+		}
+	}
+	
+	private void popupTheOptionsTutoriaIf()
+	{
+		if (!performingBusiness.hasFinishedTutorial())
+		{
+			TutorialDialog dialog = new TutorialDialog(getContext());
+			
+			dialog.setOnUnderstandListener(() ->
+			{
+				performingBusiness.hasFinishedTutorial();
+			});
+			
+			dialog.getImageView().setBackgroundResource(R.drawable.tutoria2);
+			dialog.show();
+			
+		}
 	}
 	
 }

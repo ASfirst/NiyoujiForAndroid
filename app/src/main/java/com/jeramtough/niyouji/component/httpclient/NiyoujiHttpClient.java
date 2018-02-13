@@ -33,6 +33,8 @@ public class NiyoujiHttpClient implements WithLogger
 		String url = baseUrl + "getLiveTravelnoteCovers.do";
 		Request request = new Request.Builder().url(url).build();
 		
+		getP().info("obtaining the cover of live travelnote");
+		
 		Response response = client.newCall(request).execute();
 		jsonStr = response.body().string();
 		
@@ -44,6 +46,8 @@ public class NiyoujiHttpClient implements WithLogger
 		String jsonStr = null;
 		String url = baseUrl + "getFinishedTravelnoteCovers.do";
 		Request request = new Request.Builder().url(url).build();
+		
+		getP().info("obtaining the cover of finished travelnote");
 		
 		Response response = client.newCall(request).execute();
 		jsonStr = response.body().string();

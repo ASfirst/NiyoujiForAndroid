@@ -60,6 +60,18 @@ public class PerformingService implements PerformingBusiness
 	}
 	
 	@Override
+	public boolean hasFinishedTutorial()
+	{
+		return !appUser.isFreshmen();
+	}
+	
+	@Override
+	public void finishedTutorial()
+	{
+		appUser.setFreshmen(false);
+	}
+	
+	@Override
 	public String getNicknameOfPerformer()
 	{
 		return appUser.getNickname();

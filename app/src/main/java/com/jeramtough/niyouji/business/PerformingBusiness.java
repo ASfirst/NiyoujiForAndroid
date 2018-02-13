@@ -12,6 +12,10 @@ public interface PerformingBusiness
 {
 	String getUserId();
 	
+	boolean hasFinishedTutorial();
+	
+	void finishedTutorial();
+	
 	String getNicknameOfPerformer();
 	
 	void uploadImageFile(Context context, String filename, String imageFilePath,

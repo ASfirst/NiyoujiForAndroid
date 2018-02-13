@@ -74,4 +74,15 @@ public class AppUser
 		primaryInfoOfUser.setSurfaceImageUrl(getSurfaceImageUrl());
 		return primaryInfoOfUser;
 	}
+	
+	public void setFreshmen(boolean isFreshmen)
+	{
+		editor.putBoolean("isFreshmen", isFreshmen);
+		editor.commit();
+	}
+	
+	public boolean isFreshmen()
+	{
+		return sharedPreferences.getBoolean("isFreshmen", true);
+	}
 }

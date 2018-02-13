@@ -55,6 +55,9 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		textViewAudiencesCount = findViewById(R.id.textView_audiences_count);
 		buttonPing = findViewById(R.id.button_ping);
 		
+		//取消注释这行代码则会有ping按钮
+		buttonPing.setVisibility(View.GONE);
+		
 		performerLiveTravelnoteHandler = new PerformerLiveTravelnoteHandler(this);
 		travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
 		

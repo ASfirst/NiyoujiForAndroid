@@ -13,7 +13,7 @@ public interface TravelnoteBusiness
 {
 	boolean checkTheNetwork(Context context);
 	
-	void getTravelnoteCovers(BusinessCaller businessCaller);
+	void getLiveTravelnoteCovers(BusinessCaller businessCaller);
 	
 	void getFinishedTravelnoteCovers(BusinessCaller businessCaller);
 	

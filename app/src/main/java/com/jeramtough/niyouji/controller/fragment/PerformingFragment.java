@@ -10,8 +10,6 @@ import android.widget.GridView;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
-import com.jeramtough.jtandroid.util.IntentUtil;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.bean.travelnote.LiveTravelnoteCover;
 import com.jeramtough.niyouji.business.TravelnoteBusiness;
@@ -61,7 +59,6 @@ public class PerformingFragment extends AppBaseFragment
 	
 	protected void initResources()
 	{
-	
 	}
 	
 	@Override
@@ -142,7 +139,7 @@ public class PerformingFragment extends AppBaseFragment
 	{
 		if (travelnoteBusiness.checkTheNetwork(this.getContext()))
 		{
-			travelnoteBusiness.getTravelnoteCovers(new BusinessCaller(getFragmentHandler(),
+			travelnoteBusiness.getLiveTravelnoteCovers(new BusinessCaller(getFragmentHandler(),
 					BUSINESS_CODE_OBTAIN_TRAVELNOTE_COVERS));
 			pullToRefresh.setRefreshing(true);
 		}

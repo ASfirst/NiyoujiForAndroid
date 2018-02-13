@@ -88,6 +88,8 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 					convertView.findViewById(R.id.imageView_travelnote_cover);
 			viewsHolder.horizontalScrollView =
 					convertView.findViewById(R.id.horizontalScrollView);
+			viewsHolder.textViewAppraisesCount =
+					convertView.findViewById(R.id.textView_appraises_count);
 			
 			convertView.setTag(viewsHolder);
 		}
@@ -96,7 +98,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			viewsHolder = (ViewsHolder) convertView.getTag();
 		}
 		
-		setHorizontalScrollViewClickListener(viewsHolder.horizontalScrollView,position);
+		setHorizontalScrollViewClickListener(viewsHolder.horizontalScrollView, position);
 		
 		FinishedTravelnoteCover finishedTravelnoteCover =
 				finishedTravelnoteCovers.get(position);
@@ -108,6 +110,8 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 				.setText(finishedTravelnoteCover.getTravelnoteTitle());
 		viewsHolder.textViewPerformerName
 				.setText(finishedTravelnoteCover.getPerformerNickname());
+		viewsHolder.textViewAppraisesCount
+				.setText(finishedTravelnoteCover.getAppraiseCount() + "");
 		
 		GlideApp.with(activity).load(finishedTravelnoteCover.getCoverResourceUrl())
 				.skipMemoryCache(true).placeholder(R.drawable.ic_image_green)
@@ -195,10 +199,12 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 		TextView textViewAttentionsCount;
 		AppCompatImageView imageViewTravelnoteCover;
 		HorizontalScrollView horizontalScrollView;
+		TextView textViewAppraisesCount;
 	}
 	
 	//****************************************************
-	private void setHorizontalScrollViewClickListener(HorizontalScrollView horizontalScrollView,int position)
+	private void setHorizontalScrollViewClickListener(
+			HorizontalScrollView horizontalScrollView, int position)
 	{
 		horizontalScrollView.setOnTouchListener(new View.OnTouchListener()
 		{
@@ -217,8 +223,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 					long intervalTime = upTime - downTime;
 					if (intervalTime < 100)
 					{
-						Intent intent =
-								new Intent(activity, FinishedTravelnoteActivity.class);
+						Intent intent = new Intent(activity, FinishedTravelnoteActivity.class);
 						intent.putExtra("finishedTravelnoteCover",
 								finishedTravelnoteCovers.get(position));
 						activity.startActivity(intent);

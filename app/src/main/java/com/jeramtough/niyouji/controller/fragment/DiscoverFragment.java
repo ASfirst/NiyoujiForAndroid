@@ -75,8 +75,14 @@ public class DiscoverFragment extends AppBaseFragment
 	protected void initResources()
 	{
 		finishedTravelnoteCoverAdapter = new FinishedTravelnoteCoverAdapter(getActivity());
-		
 		listViewTravelnotes.setAdapter(finishedTravelnoteCoverAdapter);
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		obtainFinishedTravelnoteCovers();
 	}
 	
 	@Override

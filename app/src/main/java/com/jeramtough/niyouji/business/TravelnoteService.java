@@ -34,7 +34,7 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 		this.niyoujiHttpClient = niyoujiHttpClient;
 		this.networkIsAble = networkIsAble;
 		
-		executorService = new ThreadPoolExecutor(0, 1, 60L, TimeUnit.SECONDS,
+		executorService = new ThreadPoolExecutor(0, 10, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>(), new ThreadPoolExecutor.DiscardPolicy());
 	}
 	
@@ -46,7 +46,7 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 	}
 	
 	@Override
-	public void getTravelnoteCovers(BusinessCaller businessCaller)
+	public void getLiveTravelnoteCovers(BusinessCaller businessCaller)
 	{
 		executorService.submit(() ->
 		{
@@ -81,6 +81,7 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 			try
 			{
 				String responseStr = niyoujiHttpClient.getFinishedTravelnoteCoversBlocking();
+				
 				List<FinishedTravelnoteCover> finishedTravelnoteCovers =
 						JSON.parseArray(responseStr, FinishedTravelnoteCover.class);
 				ArrayList<FinishedTravelnoteCover> finishedTravelnoteCovers1 =
@@ -96,7 +97,7 @@ public class TravelnoteService implements TravelnoteBusiness, WithLogger
 			{
 				getP().error("get more finished travelnote covers " + e.getMessage());
 				
-				businessCaller.getData().putBoolean("isSuccessful", false);
+				businessCaller.setSuccessful(false);
 				businessCaller.callBusiness();
 			}
 		});

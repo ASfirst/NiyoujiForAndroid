@@ -91,7 +91,7 @@ public class LeftPanelHandler extends JtIocHandler
 			imageViewSurface.setVisibility(View.VISIBLE);
 			
 			//将这句注释掉就是自动登录了
-			//loginFinally();
+			loginFinally();
 		}
 		else
 		{
