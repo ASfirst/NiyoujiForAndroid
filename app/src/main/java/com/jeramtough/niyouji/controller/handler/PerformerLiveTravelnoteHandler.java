@@ -450,7 +450,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	public void setPageResourcePath(String path)
 	{
 		//弹出操作教程如果需要
-		popupTheOptionsTutoriaIf();
+		popupTheOptionsTutorialIf();
 		
 		progressBarWaitTakephotoOrVideo.setVisibility(View.INVISIBLE);
 		
@@ -807,7 +807,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		}
 	}
 	
-	private void popupTheOptionsTutoriaIf()
+	private void popupTheOptionsTutorialIf()
 	{
 		if (!performingBusiness.hasFinishedTutorial())
 		{
@@ -815,7 +815,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 			
 			dialog.setOnUnderstandListener(() ->
 			{
-				performingBusiness.hasFinishedTutorial();
+				performingBusiness.finishedTutorial();
 			});
 			
 			dialog.getImageView().setBackgroundResource(R.drawable.tutoria2);

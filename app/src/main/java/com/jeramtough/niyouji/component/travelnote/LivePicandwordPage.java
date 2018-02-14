@@ -29,7 +29,8 @@ import com.nightonke.boommenu.BoomMenuButton;
 
 public class LivePicandwordPage
 		implements View.OnClickListener, SelectPwThemeDialog.SelectPwthemeListener,
-		OnClickEmojiListener, RecognizerPanelView.RecognizerPanelListener
+		OnClickEmojiListener, RecognizerPanelView.RecognizerPanelListener,
+		View.OnFocusChangeListener
 {
 	private Handler handler;
 	private FragmentManager fragmentManager;
@@ -53,8 +54,8 @@ public class LivePicandwordPage
 	private SelectPwThemeDialog selectPwThemeDialog;
 	
 	private int currentThemePosition = 0;
-	private boolean isInitTheme=true;
-	private boolean isResetTheme=false;
+	private boolean isInitTheme = true;
+	private boolean isResetTheme = false;
 	
 	
 	public LivePicandwordPage(ViewGroup viewGroupPicandwordPage, Handler handler)
@@ -85,9 +86,11 @@ public class LivePicandwordPage
 		viewPictureOfPage.setClickable(false);
 		btnDeletePage.setOnClickListener(this);
 		viewPictureOfPage.setOnClickListener(this);
+		boomMenuButton.setOnClickListener(this);
 		layoutWordFunction1.setOnClickListener(this);
 		layoutWordFunction2.setOnClickListener(this);
 		editTravelnotePageContent.addTextChangedListener(new MyTextChangedListenter());
+		editTravelnotePageContent.setOnFocusChangeListener(this);
 		
 		initResources();
 	}
@@ -164,6 +167,9 @@ public class LivePicandwordPage
 	{
 		switch (v.getId())
 		{
+			case R.id.boomMenuButton:
+				boomMenuButton.setAlpha(1.0f);
+				break;
 			case R.id.view_picture_of_page:
 				handler.sendEmptyMessage(PerformerLiveTravelnoteHandler.TAKE_PHOTO_ACTION);
 				break;
@@ -222,7 +228,7 @@ public class LivePicandwordPage
 		picAndWordTheme.setTextViewOrEditText(editTravelnotePageContent);
 		picAndWordTheme.setFrame(imageViewFrame);
 		
-		if (!isInitTheme&&!isResetTheme)
+		if (!isInitTheme && !isResetTheme)
 		{
 			Message message = new Message();
 			message.what = PerformerLiveTravelnoteHandler.SELECT_PICANDWORD_THEME_ACTION;
@@ -231,8 +237,8 @@ public class LivePicandwordPage
 		}
 		else
 		{
-			isInitTheme=false;
-			isResetTheme=false;
+			isInitTheme = false;
+			isResetTheme = false;
 		}
 	}
 	
@@ -261,13 +267,29 @@ public class LivePicandwordPage
 	@Override
 	public void onRecognizeFinish(String text)
 	{
-		editTravelnotePageContent.append(text+"，");
+		editTravelnotePageContent.append(text + "，");
 	}
 	
 	@Override
 	public void onRecognizeCancel()
 	{
 		cancelFunctionsLayout();
+	}
+	
+	@Override
+	public void onFocusChange(View v, boolean hasFocus)
+	{
+		if (v == editTravelnotePageContent)
+		{
+			if (hasFocus)
+			{
+				boomMenuButton.setAlpha(0.45f);
+			}
+			else
+			{
+				boomMenuButton.setAlpha(1f);
+			}
+		}
 	}
 	
 	public class MyTextChangedListenter extends OnTextChangedListner
@@ -357,7 +379,7 @@ public class LivePicandwordPage
 	
 	public void resetTheme()
 	{
-		isResetTheme=true;
+		isResetTheme = true;
 		selectPwThemeDialog.selectTheme(currentThemePosition);
 	}
 	

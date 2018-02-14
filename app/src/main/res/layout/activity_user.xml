@@ -10,8 +10,45 @@
 
     <Button
             android:id="@+id/button_logout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="退出登录"/>
+            android:background="@drawable/background7"
+            android:text="退出登录"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"/>
+
+    <Button
+            android:id="@+id/button_owned_travelnotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background7"
+            android:text="个人游记                          (功能建设中)"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"/>
+
+    <Button
+            android:id="@+id/button_personal_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background7"
+            android:text="修改/查看个人资料      (功能建设中)"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background7"
+            android:text="签到                                   (功能建设中)"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"/>
 
 </LinearLayout>

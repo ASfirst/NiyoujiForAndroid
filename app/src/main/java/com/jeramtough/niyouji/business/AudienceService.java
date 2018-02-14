@@ -380,7 +380,7 @@ public class AudienceService implements AudienceBusiness
 			}
 			else
 			{
-				sendAudienceBarrageCommand.setNickname("匿名观众");
+				sendAudienceBarrageCommand.setNickname("观众");
 			}
 			sendAudienceBarrageCommand.setPerformers(false);
 			sendAudienceBarrageCommand.setPerformerId(performerId);
