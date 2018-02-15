@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background7"
-            android:text="个人游记                          (功能建设中)"
+            android:text="我的游记                          (功能建设中)"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:gravity="left|center"

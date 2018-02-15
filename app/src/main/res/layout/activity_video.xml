@@ -220,15 +220,29 @@
                     app:srcCompat="@drawable/ic_effects"
                     />
 
-            <android.support.v7.widget.AppCompatImageView
-                    android:layout_gravity="bottom"
-                    android:id="@+id/view_recorder"
+            <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:alpha="0.7"
-                    app:srcCompat="@drawable/ic_recorder"
-                    />
+                    android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatImageView
+                        android:layout_gravity="bottom"
+                        android:id="@+id/view_recorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:alpha="0.7"
+                        app:srcCompat="@drawable/ic_recorder"
+                        />
+
+                <TextView
+                        android:id="@+id/textView_video_reminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="按住录"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"/>
+
+            </FrameLayout>
 
             <android.support.v7.widget.AppCompatImageView
                     android:layout_gravity="bottom"

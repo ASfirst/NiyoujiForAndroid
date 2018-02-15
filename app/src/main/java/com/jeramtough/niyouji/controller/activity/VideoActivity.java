@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.niyouji.R;
@@ -23,8 +24,8 @@ public class VideoActivity extends AliCameraActivity
 		implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener,
 		SelectMusicDialog.SelectMusicListener, MyRecorder.RecorderListener
 {
-	public static final int VIDEO_RESULT_CODE=0X333;
-	public static final String VIDEO_PATH_NAME="videoPath";
+	public static final int VIDEO_RESULT_CODE = 0X333;
+	public static final String VIDEO_PATH_NAME = "videoPath";
 	
 	private AppCompatImageView viewMusic;
 	private AppCompatImageView viewDone;
@@ -37,6 +38,7 @@ public class VideoActivity extends AliCameraActivity
 	private RecordTimelineView recordTimeLineView;
 	private AppCompatImageView viewUndoRecord;
 	private AppCompatImageView viewRecorder;
+	private TextView textVideoReminder;
 	
 	@InjectComponent
 	private MusicsHandler musicsHandler;
@@ -78,6 +80,7 @@ public class VideoActivity extends AliCameraActivity
 		viewDone = findViewById(R.id.view_done);
 		viewUndoRecord = findViewById(R.id.view_undo_record);
 		viewRecorder = findViewById(R.id.view_recorder);
+		textVideoReminder = findViewById(R.id.textView_video_reminder);
 		
 		radioButtonSpeed3.setChecked(true);
 		viewUndoRecord.setVisibility(View.INVISIBLE);
@@ -113,9 +116,11 @@ public class VideoActivity extends AliCameraActivity
 				case MotionEvent.ACTION_DOWN:
 					this.uiOfPressRecorderButton();
 					myRecorder.startRecoding(this);
+					textVideoReminder.setVisibility(View.INVISIBLE);
 					break;
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_CANCEL:
+					textVideoReminder.setVisibility(View.VISIBLE);
 					this.stopRecoding();
 					break;
 			}
@@ -234,7 +239,7 @@ public class VideoActivity extends AliCameraActivity
 	public void onRecodingFinished(String outputPath)
 	{
 		myRecorder.clearVideoParts();
-		Intent intent=getIntent();
+		Intent intent = getIntent();
 		intent.putExtra(VIDEO_PATH_NAME, outputPath);
 		setResult(VIDEO_RESULT_CODE, intent);
 		this.finish();
