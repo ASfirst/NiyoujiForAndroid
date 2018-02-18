@@ -15,10 +15,7 @@ import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppUser;
 import com.jeramtough.niyouji.component.travelnote.PageCounter;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author 11718
@@ -48,9 +45,10 @@ public class PerformingService implements PerformingBusiness
 		this.appUser = appUser;
 		this.pageCounter = pageCounter;
 		this.networkIsAble = networkIsAble;
-		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
+		
+		
 	}
 	
 	@Override

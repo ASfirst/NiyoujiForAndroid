@@ -13,6 +13,8 @@ public class CreatePerformingRoomCommand extends PerformerCommand
 	
 	private String travelnoteTitle;
 	
+	private String location;
+	
 	public String getCreateTime()
 	{
 		return createTime;
@@ -53,4 +55,13 @@ public class CreatePerformingRoomCommand extends PerformerCommand
 		this.travelnoteTitle = travelnoteTitle;
 	}
 	
+	public String getLocation()
+	{
+		return location;
+	}
+	
+	public void setLocation(String location)
+	{
+		this.location = location;
+	}
 }

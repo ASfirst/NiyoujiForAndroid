@@ -62,7 +62,7 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 		//归零
 		pageCounter.setPageCount(0);
 		
-		//先与服务器连接，然后上传封面，然后发送创建游记的命令
+		//先与服务器连接，然后上传封面，然后获取当前地理位置，然后发送创建游记的命令
 		executor.execute(() ->
 		{
 			try

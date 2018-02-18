@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.ioc.annotation.InjectView;
 import com.jeramtough.jtandroid.ui.JtVideoView;
 import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
@@ -23,6 +24,7 @@ import java.util.TimerTask;
  */
 public class Test1Activity extends AppBaseActivity
 {
+	@InjectView(R.id.videoView_travelnote_page)
 	private JtVideoView videoView;
 	
 	@InjectComponent
@@ -31,39 +33,15 @@ public class Test1Activity extends AppBaseActivity
 	@InjectService(service = PerformingService.class)
 	private PerformingBusiness performingBusiness;
 	
-	//@InjectService(service = PerformingService1.class)
-	//private PerformingBusiness1 performingBusiness1;
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test1);
+		getIocContainer().injectView(this, this);
 		
-		new Thread()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					PerformerWebSocketClient performerWebSocketClient=new PerformerWebSocketClient();
-					performerWebSocketClient.connectBlocking();
-					performerWebSocketClient.closeBlocking();
-					performerWebSocketClient=
-							(PerformerWebSocketClient) performerWebSocketClient.clone();
-					performerWebSocketClient.connectBlocking();
-				}
-				catch (URISyntaxException | InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}.start();
-		
-		
-		
+		videoCacheServer.toCacheUrl("");
 	}
 	
 }
