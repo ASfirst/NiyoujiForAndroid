@@ -1,11 +1,15 @@
 package com.jeramtough.niyouji.business;
 
+import android.location.Location;
+import com.alibaba.fastjson.JSON;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.function.LocationHolder;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtutil.DateTimeUtil;
+import com.jeramtough.niyouji.bean.locaiton.TencentLocationServiceResponse;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.component.communicate.factory.PerformerSocketMessageFactory;
 import com.jeramtough.niyouji.bean.socketmessage.command.performer.CreatePerformingRoomCommand;
@@ -13,6 +17,7 @@ import com.jeramtough.niyouji.bean.socketmessage.action.ServerCommandActions;
 import com.jeramtough.niyouji.component.ali.oss.AliOssManager;
 import com.jeramtough.niyouji.component.ali.sts.NiyoujiStsManager;
 import com.jeramtough.niyouji.component.app.AppUser;
+import com.jeramtough.niyouji.component.httpclient.TencentHttpClient;
 import com.jeramtough.niyouji.component.travelnote.PageCounter;
 import com.jeramtough.niyouji.component.travelnote.ProcessNameOfCloud;
 import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
@@ -36,19 +41,21 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 	private NiyoujiStsManager niyoujiStsManager;
 	private AliOssManager aliOssManager;
 	private WebSocketClientProxy webSocketClientProxy;
+	private LocationHolder locationHolder;
 	
 	private Executor executor;
 	
 	@IocAutowire
 	public CreateTravelnoteService(PageCounter pageCounter, AppUser appUser,
 			NiyoujiStsManager niyoujiStsManager, AliOssManager aliOssManager,
-			WebSocketClientProxy webSocketClientProxy)
+			WebSocketClientProxy webSocketClientProxy, LocationHolder locationHolder)
 	{
 		this.pageCounter = pageCounter;
 		this.appUser = appUser;
 		this.niyoujiStsManager = niyoujiStsManager;
 		this.aliOssManager = aliOssManager;
 		this.webSocketClientProxy = webSocketClientProxy;
+		this.locationHolder = locationHolder;
 		
 		executor = new ThreadPoolExecutor(0, 20, 60L, TimeUnit.SECONDS,
 				new SynchronousQueue<Runnable>());
@@ -57,7 +64,7 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 	@Override
 	public void createTravelnote(String travelnoteTitle, String coverResourcePath,
 			BusinessCaller createBusinessCaller, BusinessCaller connectBusinessCaller,
-			BusinessCaller uploadBusinessCaller)
+			BusinessCaller uploadBusinessCaller, BusinessCaller obtainLocationBusinessCaller)
 	{
 		//归零
 		pageCounter.setPageCount(0);
@@ -107,6 +114,35 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 							.putBoolean("uploadSuccessfully", uploadSuccessfully);
 					uploadBusinessCaller.callBusiness();
 					
+					//获取地理位置
+					boolean isShowedLocation = obtainLocationBusinessCaller.getData()
+							.getBoolean("isShowedLocation");
+					String currentLocation = null;
+					Location location = locationHolder.getLocation();
+					if (isShowedLocation && location != null)
+					{
+						TencentHttpClient tencentHttpClient = new TencentHttpClient();
+						String locationJs = tencentHttpClient
+								.getLocation(location.getLatitude() + "",
+										location.getLongitude() + "");
+						TencentLocationServiceResponse tencentLocationServiceResponse =
+								JSON.parseObject(locationJs,
+										TencentLocationServiceResponse.class);
+						if (tencentLocationServiceResponse.getStatus() == 0)
+						{
+							currentLocation =
+									tencentLocationServiceResponse.getResult().getAddress();
+							obtainLocationBusinessCaller.setSuccessful(true);
+							obtainLocationBusinessCaller.getData()
+									.putString("currentLocation", currentLocation);
+						}
+						else
+						{
+							obtainLocationBusinessCaller.setSuccessful(false);
+						}
+						obtainLocationBusinessCaller.callBusiness();
+					}
+					
 					if (uploadSuccessfully)
 					{
 						WebSocketClientListener webSocketClientListener =
@@ -134,6 +170,7 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 								.setCreateTime(DateTimeUtil.getCurrentDateTime());
 						createPerformingRoomCommand.setPerformerId(appUser.getUserId());
 						createPerformingRoomCommand.setTravelnoteTitle(travelnoteTitle);
+						createPerformingRoomCommand.setLocation(currentLocation);
 						
 						SocketMessage socketMessage = PerformerSocketMessageFactory
 								.processCreatePerformingRoomSocketMessage(

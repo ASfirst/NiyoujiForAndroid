@@ -90,6 +90,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 					convertView.findViewById(R.id.horizontalScrollView);
 			viewsHolder.textViewAppraisesCount =
 					convertView.findViewById(R.id.textView_appraises_count);
+			viewsHolder.textViewLocation = convertView.findViewById(R.id.textView_location);
 			
 			convertView.setTag(viewsHolder);
 		}
@@ -112,6 +113,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 				.setText(finishedTravelnoteCover.getPerformerNickname());
 		viewsHolder.textViewAppraisesCount
 				.setText(finishedTravelnoteCover.getAppraiseCount() + "");
+		viewsHolder.textViewLocation.setText(finishedTravelnoteCover.getLocation());
 		
 		GlideApp.with(activity).load(finishedTravelnoteCover.getCoverResourceUrl())
 				.skipMemoryCache(true).placeholder(R.drawable.ic_image_green)
@@ -200,6 +202,7 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 		AppCompatImageView imageViewTravelnoteCover;
 		HorizontalScrollView horizontalScrollView;
 		TextView textViewAppraisesCount;
+		TextView textViewLocation;
 	}
 	
 	//****************************************************

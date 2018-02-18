@@ -16,6 +16,7 @@ public class Travelnote implements Serializable
 	private String coverResourceUrl;
 	private String travelnoteTitle;
 	private int attentionsCount = 0;
+	private String location;
 	
 	private ArrayList<Appraise> appraises;
 	
@@ -130,5 +131,15 @@ public class Travelnote implements Serializable
 	public void setTravelnotePages(ArrayList<TravelnotePage> travelnotePages)
 	{
 		this.travelnotePages = travelnotePages;
+	}
+	
+	public String getLocation()
+	{
+		return location;
+	}
+	
+	public void setLocation(String location)
+	{
+		this.location = location;
 	}
 }

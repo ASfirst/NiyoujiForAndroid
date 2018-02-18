@@ -11,5 +11,5 @@ public interface CreateTravelnoteBusiness
 {
 	void createTravelnote(String travelnoteTitle, String coverResourcePath,
 			BusinessCaller createBusinessCaller, BusinessCaller connectBusinessCaller,
-			BusinessCaller uploadBusinessCaller);
+			BusinessCaller uploadBusinessCaller,BusinessCaller obtainLocationBusinessCaller);
 }

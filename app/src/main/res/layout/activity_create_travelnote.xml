@@ -87,6 +87,29 @@
                         android:maxLength="13"
                         />
 
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                    <TextView
+                            android:id="@+id/textView_is_showed_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="#3e76e7"
+                            android:text="是否显示当前位置"
+                            android:textSize="15sp"
+                            />
+
+                    <CheckBox
+                            android:id="@+id/checkBox_is_showed_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                </LinearLayout>
+
             </LinearLayout>
 
 

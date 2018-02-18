@@ -73,6 +73,9 @@
                     android:text="10000"/>
 
         </LinearLayout>
+
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -81,6 +84,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
+            android:visibility="invisible"
             android:background="@drawable/background8"
            >
 

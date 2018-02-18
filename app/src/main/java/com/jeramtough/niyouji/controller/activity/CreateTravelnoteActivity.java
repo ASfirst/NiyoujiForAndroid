@@ -36,6 +36,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private static final int BUSINESS_CODE_CREATE_TRAVELNOTE = 0;
 	private static final int BUSINESS_CODE_CONNECT_SERVER = 1;
 	private static final int BUSINESS_CODE_UPLOAD_COVER_RESOURCE = 2;
+	private static final int BUSINESS_CODE_OBTAIN_LOCATION = 3;
 	
 	private TextView textViewTjyjfm;
 	private ImageView imageViewAddTravelnoteCover;
@@ -46,6 +47,8 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private AppCompatImageView viewBack;
 	private LinearLayout layoutWaitingCreateTravelnote;
 	private TextView textViewCreateTravelnoteInfo;
+	private TextView textViewIsShowedLocation;
+	private CheckBox checkBoxIsShowedLocation;
 	
 	private String coverPath;
 	private String title;
@@ -69,10 +72,13 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 		viewBack = findViewById(R.id.view_back);
 		layoutWaitingCreateTravelnote = findViewById(R.id.layout_waiting_create_travelnote);
 		textViewCreateTravelnoteInfo = findViewById(R.id.textView_create_travelnote_info);
+		textViewIsShowedLocation = findViewById(R.id.textView_is_showed_location);
+		checkBoxIsShowedLocation = findViewById(R.id.checkBox_is_showed_location);
 		
 		imageViewTravelnoteCover.setClickable(false);
 		layoutWaitingCreateTravelnote.setVisibility(View.INVISIBLE);
 		
+		textViewIsShowedLocation.setOnClickListener(this);
 		imageViewAddTravelnoteCover.setOnClickListener(this);
 		imageViewTravelnoteCover.setOnClickListener(this);
 		btnStartPerforming.setOnClickListener(this);
@@ -121,9 +127,20 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				BusinessCaller uploadBusinessCaller = new BusinessCaller(getActivityHandler(),
 						BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
 				
+				BusinessCaller obtainLocationBusinessCaller =
+						new BusinessCaller(getActivityHandler(),
+								BUSINESS_CODE_OBTAIN_LOCATION);
+				obtainLocationBusinessCaller.getData()
+						.putBoolean("isShowedLocation", checkBoxIsShowedLocation.isChecked());
+				
 				createTravelnoteBusiness
 						.createTravelnote(title, coverPath, createBusinessCaller,
-								connectBusinessCaller, uploadBusinessCaller);
+								connectBusinessCaller, uploadBusinessCaller,
+								obtainLocationBusinessCaller);
+				break;
+			
+			case R.id.textView_is_showed_location:
+				checkBoxIsShowedLocation.setChecked(!checkBoxIsShowedLocation.isChecked());
 				break;
 		}
 	}
@@ -223,6 +240,17 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 							PerformingActivity.class);
 					CreateTravelnoteActivity.this.finish();
 				}, 500);
+				break;
+			case BUSINESS_CODE_OBTAIN_LOCATION:
+				if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL))
+				{
+					String currentLocation = message.getData().getString("currentLocation");
+					textViewCreateTravelnoteInfo.setText("获取地理位置成功:\n" + currentLocation);
+				}
+				else
+				{
+					textViewCreateTravelnoteInfo.setText("获取地理位置失败！");
+				}
 				break;
 		}
 	}
