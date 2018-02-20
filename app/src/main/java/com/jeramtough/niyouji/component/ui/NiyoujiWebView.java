@@ -2,13 +2,11 @@ package com.jeramtough.niyouji.component.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.webkit.ValueCallback;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtlog3.WithLogger;
 import com.jeramtough.niyouji.bean.travelnote.Appraise;
 import com.jeramtough.niyouji.component.app.AppConfig;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
 
 /**
  * @author 11718

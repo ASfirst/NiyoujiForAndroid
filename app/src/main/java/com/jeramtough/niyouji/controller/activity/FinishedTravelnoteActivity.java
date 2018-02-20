@@ -138,9 +138,8 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				break;
 			case R.id.imageButton_favorite:
 				//刷新，到时会删掉
-				niyoujiWebView.clearCache(true);
-				niyoujiWebView
-						.loadTravelnoteWebpage(finishedTravelnoteCover.getTravelnoteId());
+				//				niyoujiWebView.clearCache(true);
+				//niyoujiWebView.reload();
 				
 				if (isFavorite)
 				{
@@ -245,7 +244,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 		// title标题，微信、QQ和QQ空间等平台使用
 		oks.setTitle(finishedTravelnoteCover.getTravelnoteTitle());
 		// titleUrl QQ和QQ空间跳转链接
-		String url=niyoujiWebView.getUrl()+"&&isShared=1";
+		String url = niyoujiWebView.getUrl() + "&&isShared=1";
 		P.debug(url);
 		oks.setTitleUrl(url);
 		// text是分享文本，所有平台都需要这个字段
