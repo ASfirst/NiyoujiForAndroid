@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.function.DblclickExit;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;

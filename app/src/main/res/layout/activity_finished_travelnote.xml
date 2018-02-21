@@ -76,10 +76,9 @@
 
         <LinearLayout
                 android:id="@+id/layout_appraise_and_favorite"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                android:orientation="horizontal">
 
             <FrameLayout
                     android:id="@+id/layout_appraise"
@@ -117,6 +116,14 @@
                     app:srcCompat="@drawable/ic_favorite_gray"
                     android:layout_gravity="center"/>
 
+            <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imageButton_pay_love"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:srcCompat="@drawable/ic_pay_love_gray"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"/>
         </LinearLayout>
 
         <TextView

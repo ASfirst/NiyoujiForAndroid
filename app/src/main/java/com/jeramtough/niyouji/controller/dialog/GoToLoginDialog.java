@@ -19,12 +19,13 @@ public class GoToLoginDialog extends Dialog implements View.OnClickListener
 {
 	private Button buttonGoToLogin;
 	private Activity activity;
+	private boolean isFinishActivity = false;
 	
 	
 	public GoToLoginDialog(@NonNull Activity activity)
 	{
 		super(activity);
-		this.activity=activity;
+		this.activity = activity;
 		this.setContentView(R.layout.dialog_go_to_the_login);
 		buttonGoToLogin = findViewById(R.id.button_go_to_login);
 		
@@ -39,7 +40,21 @@ public class GoToLoginDialog extends Dialog implements View.OnClickListener
 			case R.id.button_go_to_login:
 				IntentUtil.toTheOtherActivity(activity, LoginActivity.class);
 				this.cancel();
+				if (isFinishActivity)
+				{
+					activity.finish();
+				}
 				break;
 		}
+	}
+	
+	public boolean isFinishActivity()
+	{
+		return isFinishActivity;
+	}
+	
+	public void setFinishActivity(boolean finishActivity)
+	{
+		isFinishActivity = finishActivity;
 	}
 }

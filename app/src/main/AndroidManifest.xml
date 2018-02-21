@@ -4,6 +4,7 @@
         package="com.jeramtough.niyouji"
         >
 
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -126,8 +127,10 @@
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
-        <activity android:name=".controller.activity.FinishedTravelnoteActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+                android:name=".controller.activity.FinishedTravelnoteActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                >
         </activity>
     </application>
 

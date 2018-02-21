@@ -39,6 +39,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 	private TextView textViewAppraiseCount;
 	private AppCompatImageView imageButtonFavorite;
 	private TextView textViewDone;
+	private AppCompatImageView imageButtonPayLove;
 	
 	private FinishedTravelnoteCover finishedTravelnoteCover;
 	
@@ -63,6 +64,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 		textViewAppraiseCount = findViewById(R.id.textView_appraise_count);
 		imageButtonFavorite = findViewById(R.id.imageButton_favorite);
 		textViewDone = findViewById(R.id.textView_done);
+		imageButtonPayLove = findViewById(R.id.imageButton_pay_love);
 		
 		textViewDone.setVisibility(View.GONE);
 		
@@ -72,6 +74,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 		layoutAppraise.setOnClickListener(this);
 		imageButtonFavorite.setOnClickListener(this);
 		editAppraise.setOnFocusChangeListener(this);
+		imageButtonPayLove.setOnClickListener(this);
 		
 		niyoujiWebView.setOnTouchListener(this);
 		initResources();
@@ -139,7 +142,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 			case R.id.imageButton_favorite:
 				//刷新，到时会删掉
 				//				niyoujiWebView.clearCache(true);
-				//niyoujiWebView.reload();
+				niyoujiWebView.reload();
 				
 				if (isFavorite)
 				{
@@ -153,6 +156,9 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				break;
 			case R.id.imageButton_share:
 				showShare();
+				break;
+			case R.id.imageButton_pay_love:
+				Toast.makeText(this, "打赏功能建设中", Toast.LENGTH_SHORT).show();
 				break;
 		}
 	}
@@ -173,6 +179,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 					else
 					{
 						GoToLoginDialog goToLoginDialog = new GoToLoginDialog(this);
+						goToLoginDialog.setFinishActivity(true);
 						goToLoginDialog.show();
 					}
 				}

@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import com.jeramtough.jtandroid.function.DblclickExit;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.jtlog3.P;
@@ -31,6 +33,9 @@ public class MainActivity extends AppBaseActivity
 	
 	@InjectService(service = MainService.class)
 	private MainBusiness mainBusiness;
+	
+	@InjectComponent
+	private DblclickExit dblclickExit;
 	
 	private LeftPanelHandler leftPanelHandler;
 	
@@ -64,7 +69,8 @@ public class MainActivity extends AppBaseActivity
 		}
 		else
 		{
-			super.onBackPressed();
+			dblclickExit.clickExit();
+//			super.onBackPressed();
 		}
 	}
 	

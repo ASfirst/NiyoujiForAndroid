@@ -179,7 +179,6 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					});
 					break;
 				case 1:
-					
 					builder.normalImageRes(R.drawable.ic_send_voice);
 					builder.normalColorRes(R.color.menu_color4);
 					builder.normalText("发送弹幕");
@@ -198,6 +197,17 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 						{
 							editBarrageDialog.show();
 						}
+					});
+					break;
+				
+				case 2:
+					builder.normalImageRes(R.drawable.ic_pay_love);
+					builder.normalColorRes(R.color.menu_color2);
+					builder.normalText("打赏");
+					builder.listener(index ->
+					{
+						timedCloseTextViewShowMessage.setPrimaryMessage("打赏主播功能建设中。。。");
+						timedCloseTextViewShowMessage.closeDelayed(2000);
 					});
 					break;
 			}
