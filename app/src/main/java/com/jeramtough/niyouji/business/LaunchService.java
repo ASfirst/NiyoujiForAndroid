@@ -8,6 +8,7 @@ import com.jeramtough.jtandroid.ioc.annotation.JtService;
 import com.jeramtough.jtandroid.java.Directory;
 import com.jeramtough.jtandroid.java.ExtractedZip;
 import com.jeramtough.niyouji.component.app.AppConfig;
+import com.jeramtough.niyouji.component.app.AppUser;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -22,11 +23,25 @@ import java.io.IOException;
 public class LaunchService implements LaunchBusiness
 {
 	private final PermissionManager permissionManager;
+	private final AppUser appUser;
 	
 	@IocAutowire
-	public LaunchService(PermissionManager permissionManager)
+	public LaunchService(PermissionManager permissionManager, AppUser appUser)
 	{
 		this.permissionManager = permissionManager;
+		this.appUser = appUser;
+	}
+	
+	@Override
+	public boolean isFirstBoot()
+	{
+		return appUser.isFirstBoot();
+	}
+	
+	@Override
+	public void hasBootFinally()
+	{
+		appUser.setFirstBoot(false);
 	}
 	
 	@Override

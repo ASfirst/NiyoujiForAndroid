@@ -3,7 +3,10 @@ package com.jeramtough.niyouji.controller.activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.BaseAdapter;
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
@@ -11,13 +14,16 @@ import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LaunchBusiness;
 import com.jeramtough.niyouji.business.LaunchService;
+import com.jeramtough.niyouji.component.adapter.BragAdapter;
 
 /**
  * @author 11718
  */
-public class LaunchActivity extends AppBaseActivity
+public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToAppIndexCaller
 {
 	private final int REQUEST_NEEDED_PERMISSIONS_CALLER_CODE = 0;
+	
+	private ViewPager viewPageBrag;
 	
 	@InjectService(service = LaunchService.class)
 	private LaunchBusiness launchBusiness;
@@ -28,10 +34,27 @@ public class LaunchActivity extends AppBaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
 		
-		if (launchBusiness
-				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
+		viewPageBrag = findViewById(R.id.viewPage_brag);
+		
+		initResources();
+	}
+	
+	protected void initResources()
+	{
+		if (!launchBusiness.isFirstBoot())
 		{
-			this.whenGetAllNeededPermissions();
+			viewPageBrag.setVisibility(View.GONE);
+			if (launchBusiness
+					.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
+			{
+				this.whenGetAllNeededPermissions();
+			}
+		}
+		else
+		{
+			BragAdapter bragAdapter = new BragAdapter(this);
+			bragAdapter.setGoToAppIndexCaller(this);
+			viewPageBrag.setAdapter(bragAdapter);
 		}
 	}
 	
@@ -56,6 +79,18 @@ public class LaunchActivity extends AppBaseActivity
 				whenGetAllNeededPermissions();
 			}
 			
+		}
+	}
+	
+	@Override
+	public void goToIndex()
+	{
+		launchBusiness.hasBootFinally();
+		
+		if (launchBusiness
+				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
+		{
+			this.whenGetAllNeededPermissions();
 		}
 	}
 	

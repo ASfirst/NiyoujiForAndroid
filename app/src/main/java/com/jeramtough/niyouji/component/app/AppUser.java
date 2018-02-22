@@ -85,4 +85,15 @@ public class AppUser
 	{
 		return sharedPreferences.getBoolean("isFreshmen", true);
 	}
+	
+	public boolean isFirstBoot()
+	{
+		return sharedPreferences.getBoolean("isFirstBoot", true);
+	}
+	
+	public void setFirstBoot(boolean isFirstBoot)
+	{
+		editor.putBoolean("isFirstBoot", isFirstBoot);
+		editor.commit();
+	}
 }

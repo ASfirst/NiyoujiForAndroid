@@ -132,6 +132,11 @@
                 android:theme="@style/AppTheme.NoActionBar"
                 >
         </activity>
+        <activity
+                android:name=".controller.activity.AboutAppActivity"
+                android:label="@string/about_app"
+                >
+        </activity>
     </application>
 
 </manifest>

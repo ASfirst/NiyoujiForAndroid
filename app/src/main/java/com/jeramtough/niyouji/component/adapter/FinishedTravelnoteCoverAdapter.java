@@ -131,11 +131,15 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			if (finishedTravelnoteCover.getFirstTravelnotePage().getPageType()
 					.equals(TravelnotePageType.PICANDWORD.toString()))
 			{
-				GlideApp.with(activity).load(finishedTravelnoteCover.getFirstTravelnotePage()
-						.getResourceUrl()).skipMemoryCache(true)
-						.placeholder(R.drawable.ic_image_green)
-						.error(R.drawable.ic_broken_image).centerCrop()
-						.into(viewsHolder.imageViewFirstPage);
+				if (finishedTravelnoteCover.getFirstTravelnotePage().getResourceUrl() != null)
+				{
+					GlideApp.with(activity)
+							.load(finishedTravelnoteCover.getFirstTravelnotePage()
+									.getResourceUrl()).skipMemoryCache(true)
+							.placeholder(R.drawable.ic_image_green)
+							.error(R.drawable.ic_broken_image).centerCrop()
+							.into(viewsHolder.imageViewFirstPage);
+				}
 			}
 			else
 			{
@@ -157,11 +161,15 @@ public class FinishedTravelnoteCoverAdapter extends BaseAdapter
 			if (finishedTravelnoteCover.getSecondTravelnotePage().getPageType()
 					.equals(TravelnotePageType.PICANDWORD.toString()))
 			{
-				GlideApp.with(activity).load(finishedTravelnoteCover.getSecondTravelnotePage()
-						.getResourceUrl()).skipMemoryCache(true)
-						.placeholder(R.drawable.ic_image_green)
-						.error(R.drawable.ic_broken_image).centerCrop()
-						.into(viewsHolder.imageViewSecond);
+				if (finishedTravelnoteCover.getSecondTravelnotePage().getResourceUrl() != null)
+				{
+					GlideApp.with(activity)
+							.load(finishedTravelnoteCover.getSecondTravelnotePage()
+									.getResourceUrl()).skipMemoryCache(true)
+							.placeholder(R.drawable.ic_image_green)
+							.error(R.drawable.ic_broken_image).centerCrop()
+							.into(viewsHolder.imageViewSecond);
+				}
 			}
 			else
 			{
