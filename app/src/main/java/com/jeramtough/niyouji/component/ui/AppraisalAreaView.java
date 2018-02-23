@@ -48,9 +48,10 @@ public class AppraisalAreaView extends ScrollView implements View.OnTouchListene
 	protected void initResources()
 	{
 		this.setOnTouchListener(this);
-		linearLayout=new LinearLayout(getContext());
-		ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams
-				.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		linearLayout = new LinearLayout(getContext());
+		ViewGroup.LayoutParams params =
+				new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+						ViewGroup.LayoutParams.MATCH_PARENT);
 		linearLayout.setLayoutParams(params);
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		this.addView(linearLayout);
@@ -76,7 +77,8 @@ public class AppraisalAreaView extends ScrollView implements View.OnTouchListene
 		TextView textViewContent = new TextView(getContext());
 		
 		LinearLayout.LayoutParams params =
-				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+						LayoutParams.WRAP_CONTENT);
 		frameLayout.setLayoutParams(params);
 		params.setMargins(0, 0, 0, 10);
 		
@@ -101,7 +103,7 @@ public class AppraisalAreaView extends ScrollView implements View.OnTouchListene
 			textViewContent.setPadding(10, 5, 10, 5);
 			textViewContent.setShadowLayer(1, 1, 1, Color.BLACK);
 		}
-		else if (style==STYLE_2)
+		else if (style == STYLE_2)
 		{
 			textViewName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 			textViewName.setPadding(10, 5, 10, 5);
@@ -123,10 +125,28 @@ public class AppraisalAreaView extends ScrollView implements View.OnTouchListene
 			this.fullScroll(View.FOCUS_DOWN);
 		});
 		
-		//开始定时，当五秒无弹幕后自动淡化
+		//开始点亮并且定时，当五秒无弹幕后自动淡化
 		startTiming();
 	}
 	
+	public void addSystemMessage(String content)
+	{
+		TextView textViewContent = new TextView(getContext());
+		textViewContent.setPadding(10, 5, 10, 5);
+		textViewContent.setTextColor(0xFF4D4C4C);
+		textViewContent.setShadowLayer(1, 1, 1, Color.WHITE);
+		textViewContent.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+		textViewContent.setText(content);
+		
+		linearLayout.addView(textViewContent);
+		this.post(() ->
+		{
+			this.fullScroll(View.FOCUS_DOWN);
+		});
+		
+		//开始点亮并且定时，当五秒无弹幕后自动淡化
+		startTiming();
+	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event)

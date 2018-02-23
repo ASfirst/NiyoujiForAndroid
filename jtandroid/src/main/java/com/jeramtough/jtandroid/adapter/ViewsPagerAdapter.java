@@ -1,6 +1,7 @@
 package com.jeramtough.jtandroid.adapter;
 
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class ViewsPagerAdapter extends PagerAdapter
 {
 	private List<? extends View> views;
-	private boolean isForceUpdateMode=false;
+	private boolean isForceUpdateMode = false;
 	
 	public ViewsPagerAdapter(List<? extends View> views)
 	{
@@ -43,9 +44,14 @@ public class ViewsPagerAdapter extends PagerAdapter
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object)
 	{
-		if (position < views.size())
+		/*if (position < views.size())
 		{
 			container.removeView(views.get(position));
+		}*/
+		if (object!=null)
+		{
+			View view = (View) object;
+			container.removeView(view);
 		}
 	}
 	

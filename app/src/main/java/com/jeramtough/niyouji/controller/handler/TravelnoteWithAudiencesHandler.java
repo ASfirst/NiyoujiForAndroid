@@ -115,6 +115,17 @@ public class TravelnoteWithAudiencesHandler extends JtIocHandler
 	{
 		int count = Integer.valueOf(textViewAudiencesCount.getText().toString());
 		textViewAudiencesCount.setText((count + 1) + "");
+		
+		//系统通知
+		if (enterPerformingRoomCommand.getAudienceNickname() != null)
+		{
+			appraisalAreaView.addSystemMessage(
+					enterPerformingRoomCommand.getAudienceNickname() + "进入直播间");
+		}
+		else
+		{
+			appraisalAreaView.addSystemMessage("一名观众进入直播间");
+		}
 	}
 	
 	private void audienceLeavePerformingRoom(AudienceLeaveCommand audienceLeaveCommand)
@@ -125,6 +136,17 @@ public class TravelnoteWithAudiencesHandler extends JtIocHandler
 			audiencesCount--;
 		}
 		textViewAudiencesCount.setText(audiencesCount + "");
+		
+		//系统通知
+		if (audienceLeaveCommand.getAudienceNickname() != null)
+		{
+			appraisalAreaView
+					.addSystemMessage(audienceLeaveCommand.getAudienceNickname() + "离开直播间");
+		}
+		else
+		{
+			appraisalAreaView.addSystemMessage("一名观众离开直播间");
+		}
 	}
 	
 	private void sentAudienceBarrage(SendAudienceBarrageCommand sendAudienceBarrageCommand)

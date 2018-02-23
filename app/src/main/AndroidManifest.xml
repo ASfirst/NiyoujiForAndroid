@@ -137,6 +137,7 @@
                 android:label="@string/about_app"
                 >
         </activity>
+
     </application>
 
 </manifest>

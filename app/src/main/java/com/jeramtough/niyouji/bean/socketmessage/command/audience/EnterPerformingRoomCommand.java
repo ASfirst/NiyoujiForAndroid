@@ -5,5 +5,15 @@ package com.jeramtough.niyouji.bean.socketmessage.command.audience;
  */
 public class EnterPerformingRoomCommand extends AudienceCommand
 {
-
+	private String audienceNickname;
+	
+	public String getAudienceNickname()
+	{
+		return audienceNickname;
+	}
+	
+	public void setAudienceNickname(String audienceNickname)
+	{
+		this.audienceNickname = audienceNickname;
+	}
 }

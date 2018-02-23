@@ -94,6 +94,9 @@ public class AudienceService implements AudienceBusiness
 					EnterPerformingRoomCommand enterPerformingRoomCommand =
 							new EnterPerformingRoomCommand();
 					enterPerformingRoomCommand.setPerformerId(performerId);
+					enterPerformingRoomCommand.setAudienceNickname(appUser.getNickname());
+					
+					
 					SocketMessage socketMessage = AudienceSocketMessageFactory
 							.processEnterPerformingRoomSocketMessage(
 									enterPerformingRoomCommand);
@@ -419,6 +422,7 @@ public class AudienceService implements AudienceBusiness
 		{
 			AudienceLeaveCommand audienceLeaveCommand = new AudienceLeaveCommand();
 			audienceLeaveCommand.setPerformerId(performerId);
+			audienceLeaveCommand.setAudienceNickname(appUser.getNickname());
 			
 			SocketMessage socketMessage = AudienceSocketMessageFactory
 					.processAudienceLeaveCommandSocketMessage(audienceLeaveCommand);

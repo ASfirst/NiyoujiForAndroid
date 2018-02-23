@@ -201,8 +201,17 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					break;
 				
 				case 2:
-					builder.normalImageRes(R.drawable.ic_pay_love);
+					builder.normalImageRes(R.drawable.ic_favorite_red);
 					builder.normalColorRes(R.color.menu_color2);
+					builder.normalText("点亮 (双击游记页也可点亮哦)");
+					builder.listener(index ->
+					{
+						lightPerformer();
+					});
+					break;
+				case 3:
+					builder.normalImageRes(R.drawable.ic_pay_love);
+					builder.normalColorRes(R.color.menu_color1);
 					builder.normalText("打赏");
 					builder.listener(index ->
 					{
@@ -389,16 +398,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					{
 						if (clickCount == 2)
 						{
-							lightAttentionCount++;
-							if (lightAttentionCount <= 10)
-							{
-								audienceBusiness.broadcastLightAttentionCount(performerId);
-							}
-							else
-							{
-								Toast.makeText(this.getContext(), "点亮以到最大限额",
-										Toast.LENGTH_SHORT).show();
-							}
+							lightPerformer();
 						}
 						clickCount = 0;
 					}, 300);
@@ -455,8 +455,18 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 			liveTravelnotePageView.setResourcePath(travelnotePage.getResourceUrl());
 			liveTravelnotePageView.setTravelnotePageType(
 					TravelnotePageType.toTravelnotePageType(travelnotePage.getPageType()));
-			liveTravelnotePageView.getTextViewTravelnotePageContent()
-					.setText(travelnotePage.getTextContent());
+			
+			if (travelnotePage.getTextContent()!=null)
+			{
+				//翻译表情字符
+				SpannableString spannableString = JtEmojiUtils.getEmotionContent(getContext(),
+						liveTravelnotePageView.getTextViewTravelnotePageContent(),
+						JtEmojisHandler.getJtEmojisHandler(), travelnotePage.getTextContent());
+				liveTravelnotePageView.getTextViewTravelnotePageContent().setText(spannableString);
+			}
+			
+			
+			
 		}
 		
 		ViewsPagerAdapter adapter = new ViewsPagerAdapter(liveTravelnotePageViews);
@@ -749,6 +759,18 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	{
 		int audiencesCount = Integer.parseInt(textViewAudiencesCount.getText().toString()) + 1;
 		textViewAudiencesCount.setText(audiencesCount + "");
+		
+		//系统通知
+		if (enterPerformingRoomCommand.getAudienceNickname() != null)
+		{
+			appraisalAreaView.addSystemMessage(
+					enterPerformingRoomCommand.getAudienceNickname() + "进入直播间");
+		}
+		else
+		{
+			appraisalAreaView.addSystemMessage("一名观众进入直播间");
+			
+		}
 	}
 	
 	private void otherAudienceLeavePerformingRoom(AudienceLeaveCommand audienceLeaveCommand)
@@ -759,6 +781,18 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 			audiencesCount--;
 		}
 		textViewAudiencesCount.setText(audiencesCount + "");
+		
+		//系统通知
+		if (audienceLeaveCommand.getAudienceNickname() != null)
+		{
+			appraisalAreaView.addSystemMessage(
+					audienceLeaveCommand.getAudienceNickname() + "退出直播间");
+		}
+		else
+		{
+			appraisalAreaView.addSystemMessage("一名观众退出直播间");
+		}
+		
 	}
 	
 	private void travelnoteEnd(TravelnoteEndCommand travelnoteEndCommand)
@@ -820,6 +854,19 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		
 		textViewPagesCount
 				.setText((getCurrentPosition() + 1) + "/" + (liveTravelnotePageViews.size()));
+	}
+	
+	private void lightPerformer()
+	{
+		lightAttentionCount++;
+		if (lightAttentionCount <= 10)
+		{
+			audienceBusiness.broadcastLightAttentionCount(performerId);
+		}
+		else
+		{
+			Toast.makeText(this.getContext(), "点亮以到最大限额", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 }
