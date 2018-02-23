@@ -17,6 +17,10 @@ public class PerformerWebSocketClient extends BaseWebSocketClient implements Clo
 		super(new URI(socketHandlerUrl));
 	}
 	
+	/**
+	 * 克隆
+	 * @return
+	 */
 	@Override
 	public Object clone()
 	{

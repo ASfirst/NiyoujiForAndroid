@@ -55,7 +55,7 @@ public class AudienceService implements AudienceBusiness
 			try
 			{
 				//初始化WebSocket客户端对象
-				webSocketClientProxy.resetgetAudienceWebSocketClient();
+				webSocketClientProxy.resetAudienceWebSocketClient();
 				
 				boolean connectSuccessfully =
 						webSocketClientProxy.getAudienceWebSocketClient().connectBlocking();

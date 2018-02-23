@@ -180,7 +180,6 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	@Override
 	public void onTravelnoteAddedPage(LiveTravelnotePageView liveTravelnotePageView)
 	{
-		P.arrive();
 		performingBusiness1.spreadTravelnoteAddedPage(liveTravelnotePageView);
 	}
 	
@@ -249,6 +248,9 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 				{
 					PerformingActivity.this.finish();
 				}).create();
+		
+		dialog.setCancelable(false);
+		
 		dialog.show();
 	}
 }

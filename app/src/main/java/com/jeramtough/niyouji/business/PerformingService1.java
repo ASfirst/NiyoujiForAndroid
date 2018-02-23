@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
 import com.jeramtough.niyouji.bean.socketmessage.action.AudienceCommandActions;
@@ -346,23 +347,20 @@ public class PerformingService1 implements PerformingBusiness1
 	@Override
 	public void whenPerformerLeave(BusinessCaller businessCaller)
 	{
-		WebSocketClientListener webSocketClientListener1 = new WebSocketClientListener()
-		{
-			@Override
-			public void onClose(int code, String reason, boolean remote)
-			{
-				super.onClose(code, reason, remote);
-				
-				if (code == 1006)
-				{
-					businessCaller.callBusiness();
-				}
-				
-			}
-		};
-		
 		webSocketClientProxy.getPerformerWebSocketClient()
-				.addWebSocketClientListener(webSocketClientListener1);
+				.addWebSocketClientListener(new WebSocketClientListener()
+				{
+					@Override
+					public void onClose(int code, String reason, boolean remote)
+					{
+						P.debug(code + ":" + reason);
+						
+						if (code != 1000)
+						{
+							businessCaller.callBusiness();
+						}
+					}
+				});
 	}
 	
 	
@@ -371,7 +369,8 @@ public class PerformingService1 implements PerformingBusiness1
 	{
 		executorService.submit(() ->
 		{
-			webSocketClientProxy.resetPerformerWebSocketClient();
+			webSocketClientProxy.resetPerformerWebSocketClientWithOldListeners();
+			
 			WebSocketClientListener webSocketClientListener = new WebSocketClientListener()
 			{
 				@Override

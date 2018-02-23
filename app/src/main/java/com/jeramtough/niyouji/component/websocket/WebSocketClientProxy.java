@@ -41,7 +41,14 @@ public class WebSocketClientProxy
 			e.printStackTrace();
 		}
 	}
-	public void resetgetAudienceWebSocketClient()
+	
+	public void resetPerformerWebSocketClientWithOldListeners()
+	{
+		performerWebSocketClient =
+				(PerformerWebSocketClient) performerWebSocketClient.clone();
+	}
+	
+	public void resetAudienceWebSocketClient()
 	{
 		try
 		{
