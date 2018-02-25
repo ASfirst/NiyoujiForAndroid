@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.jeramtough.heartlayout.HeartLayout;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
@@ -108,11 +109,8 @@ public class AudienceActivity extends AppBaseActivity
 						message.getData().getBoolean("connectSuccessfully");
 				if (connectSuccessfully)
 				{
-					timedCloseTextViewShowMessage.setNiceMessage("连接服务器成功！");
-					timedCloseTextViewShowMessage.postDelayed(() ->
-					{
-						timedCloseTextViewShowMessage.setPrimaryMessage("正在获取游记资源...");
-					}, 1000);
+					timedCloseTextViewShowMessage.setNiceMessage("连接服务器成功！获取游记资源中...");
+					timedCloseTextViewShowMessage.visible();
 				}
 				else
 				{
@@ -123,16 +121,31 @@ public class AudienceActivity extends AppBaseActivity
 				break;
 			
 			case BUSINESS_CODE_OBTAINING_LIVE_TRAVELNOTE:
-				Travelnote travelnote =
-						(Travelnote) message.getData().getSerializable("travelnote");
-				timedCloseTextViewShowMessage.setNiceMessage("获取资源成功！");
-				
-				audienceLiveTravelnoteHandler.loadTravelnote(travelnote);
-				
-				timedCloseTextViewShowMessage.postDelayed(() ->
+				if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL))
 				{
-					timedCloseTextViewShowMessage.setPrimaryMessage("正在初始化资源...");
-				}, 1000);
+					Travelnote travelnote =
+							(Travelnote) message.getData().getSerializable("travelnote");
+					timedCloseTextViewShowMessage.setNiceMessage("获取资源成功！");
+					
+					audienceLiveTravelnoteHandler.loadTravelnote(travelnote);
+					
+					timedCloseTextViewShowMessage.postDelayed(() ->
+					{
+						timedCloseTextViewShowMessage.setPrimaryMessage("正在初始化资源...");
+					}, 1000);
+				}
+				else
+				{
+					timedCloseTextViewShowMessage.setErrorMessage("该直播以结束");
+					timedCloseTextViewShowMessage.visible();
+					
+					timedCloseTextViewShowMessage.postDelayed(() ->
+					{
+						Toast.makeText(this, "该直播以结束", Toast.LENGTH_SHORT).show();
+						AudienceActivity.this.finish();
+					}, 2000);
+					
+				}
 				break;
 			
 			default:

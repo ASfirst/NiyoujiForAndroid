@@ -78,8 +78,17 @@ public class AudienceService implements AudienceBusiness
 											Travelnote travelnote = JSON.parseObject(
 													socketMessage.getCommand(),
 													Travelnote.class);
+											
+											obtainingLiveTravelnoteBusinessCaller
+													.setSuccessful(true);
 											obtainingLiveTravelnoteBusinessCaller.getData()
 													.putSerializable("travelnote", travelnote);
+											obtainingLiveTravelnoteBusinessCaller
+													.callBusiness();
+											break;
+										case ServerCommandActions.DONT_EXIST_LIVE_TRAVELNOTE:
+											obtainingLiveTravelnoteBusinessCaller
+													.setSuccessful(false);
 											obtainingLiveTravelnoteBusinessCaller
 													.callBusiness();
 											break;

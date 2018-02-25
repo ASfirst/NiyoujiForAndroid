@@ -60,7 +60,7 @@ public class TimedCloseTextView extends android.support.v7.widget.AppCompatTextV
 	
 	public void setNiceMessage(String message)
 	{
-		this.setBackgroundColor(Color.GREEN);
+		this.setBackgroundColor(0xFF34b103);
 		this.setTextColor(Color.WHITE);
 		this.setText(message);
 	}
