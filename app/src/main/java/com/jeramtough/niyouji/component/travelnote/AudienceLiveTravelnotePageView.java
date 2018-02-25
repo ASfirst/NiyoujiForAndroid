@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -148,7 +149,7 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		{
 			videoViewTravelnotePage.setVisibility(VISIBLE);
 			layoutVideoCachingReminder.setVisibility(View.VISIBLE);
-			viewPictureOfPage.setVisibility(View.INVISIBLE);
+			viewPictureOfPage.setImageResource(R.mipmap.brag1);
 		}
 	}
 	

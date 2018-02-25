@@ -68,10 +68,10 @@ public class JtViewPager extends ViewPager
 	@Override
 	public boolean onTouchEvent(MotionEvent ev)
 	{
-		if (!scrollble)
+		/*if (!scrollble)
 		{
 			return true;
-		}
+		}*/
 		return super.onTouchEvent(ev);
 	}
 	

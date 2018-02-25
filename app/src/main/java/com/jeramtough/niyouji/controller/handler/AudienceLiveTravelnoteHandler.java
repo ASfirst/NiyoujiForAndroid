@@ -420,10 +420,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		{
 			SelectPageCommand selectPageCommand = new SelectPageCommand();
 			selectPageCommand.setPosition(position);
+			
 			this.selectPage(selectPageCommand);
 		}
-		
-		lastAudienceLiveTravelnotePageView = getCurrentAudienceLiveTravelnoteView();
 	}
 	
 	@Override
@@ -456,15 +455,15 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 			liveTravelnotePageView.setTravelnotePageType(
 					TravelnotePageType.toTravelnotePageType(travelnotePage.getPageType()));
 			
-			if (travelnotePage.getTextContent()!=null)
+			if (travelnotePage.getTextContent() != null)
 			{
 				//翻译表情字符
 				SpannableString spannableString = JtEmojiUtils.getEmotionContent(getContext(),
 						liveTravelnotePageView.getTextViewTravelnotePageContent(),
 						JtEmojisHandler.getJtEmojisHandler(), travelnotePage.getTextContent());
-				liveTravelnotePageView.getTextViewTravelnotePageContent().setText(spannableString);
+				liveTravelnotePageView.getTextViewTravelnotePageContent()
+						.setText(spannableString);
 			}
-			
 			
 			
 		}
@@ -612,6 +611,13 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 				this.pageSetTheme(pageSetThemeCommand);
 				
 				//恢复文字，因为视频页切换到图文页的乱象bug
+				if (lastAudienceLiveTravelnotePageView != null &&
+						lastAudienceLiveTravelnotePageView.getTravelnotePageType() ==
+								TravelnotePageType.VIDEO)
+				{
+					viewPagerTravelnotePages.getAdapter().notifyDataSetChanged();
+				}
+				
 			}
 			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
 					TravelnotePageType.VIDEO)
@@ -624,6 +630,9 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 				this.pageSetVideo(pageSetVideoCommand);
 			}
 		}
+		
+		//上个page作用域以结束
+		lastAudienceLiveTravelnotePageView = getCurrentAudienceLiveTravelnoteView();
 	}
 	
 	private void pageSetImage(PageSetImageCommand pageSetImageCommand)
@@ -685,6 +694,7 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		picAndWordTheme.setMainBackground(
 				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
 						.getLayoutAudienceLiveTravelnotePage());
+		
 		picAndWordTheme.setTextViewOrEditText(
 				liveTravelnotePageViews.get(pageSetThemeCommand.getPosition())
 						.getTextViewTravelnotePageContent());
@@ -791,8 +801,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 		//系统通知
 		if (audienceLeaveCommand.getAudienceNickname() != null)
 		{
-			appraisalAreaView.addSystemMessage(
-					audienceLeaveCommand.getAudienceNickname() + "退出直播间");
+			appraisalAreaView
+					.addSystemMessage(audienceLeaveCommand.getAudienceNickname() + "退出直播间");
 		}
 		else
 		{
