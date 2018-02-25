@@ -610,6 +610,8 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 						getCurrentAudienceLiveTravelnoteView().getCurrentThemePosition());
 				
 				this.pageSetTheme(pageSetThemeCommand);
+				
+				//恢复文字，因为视频页切换到图文页的乱象bug
 			}
 			else if (getCurrentAudienceLiveTravelnoteView().getTravelnotePageType() ==
 					TravelnotePageType.VIDEO)
@@ -655,11 +657,15 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 					"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4");
 		}
 		
+		liveTravelnotePageViews.get(pageSetVideoCommand.getPosition())
+				.setResourcePath(pageSetVideoCommand.getVideoUrl());
+		
 		AudienceLiveTravelnotePageView audienceLiveTravelnotePageView =
 				liveTravelnotePageViews.get(pageSetVideoCommand.getPosition());
 		String videoCacheUrl = videoCacheServer.toCacheUrl(pageSetVideoCommand.getVideoUrl());
 		audienceLiveTravelnotePageView.getVideoViewTravelnotePage()
 				.setVideoPath(videoCacheUrl);
+		
 		audienceLiveTravelnotePageView.getVideoViewTravelnotePage().start();
 	}
 	

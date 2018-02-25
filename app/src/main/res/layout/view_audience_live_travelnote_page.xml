@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="21sp"
-                    android:text="正在缓冲视频中..."/>
+                    android:text="等待加载视频中..."/>
 
         </LinearLayout>
 

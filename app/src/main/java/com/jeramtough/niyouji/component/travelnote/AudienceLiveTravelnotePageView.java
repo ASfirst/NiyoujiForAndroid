@@ -152,6 +152,11 @@ public class AudienceLiveTravelnotePageView extends FrameLayout
 		}
 	}
 	
+	public ScrollView getScrollViewPicandword()
+	{
+		return scrollViewPicandword;
+	}
+	
 	public void scrollToBottom()
 	{
 		scrollViewPicandword.post(() ->

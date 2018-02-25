@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LaunchBusiness;
@@ -24,6 +25,7 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 	private final int REQUEST_NEEDED_PERMISSIONS_CALLER_CODE = 0;
 	
 	private ViewPager viewPageBrag;
+	private TimedCloseTextView timedCloseTextView;
 	
 	@InjectService(service = LaunchService.class)
 	private LaunchBusiness launchBusiness;
@@ -35,6 +37,8 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 		setContentView(R.layout.activity_launch);
 		
 		viewPageBrag = findViewById(R.id.viewPage_brag);
+		timedCloseTextView = findViewById(R.id.timedCloseTextView);
+		
 		
 		initResources();
 	}
@@ -98,6 +102,10 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 	protected void whenGetAllNeededPermissions()
 	{
 		IntentUtil.toTheOtherActivity(this, MainActivity.class);
+		
+		timedCloseTextView.setPrimaryMessage("正在初始化资源中。。。");
+		timedCloseTextView.visible();
+		
 		launchBusiness.createAppDirectory(this);
 		this.finish();
 	}
@@ -109,6 +117,7 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 				new AlertDialog.Builder(this).setMessage("没有授权应用将不发正常使用，请重启应用进行重新授权").create();
 		dialog.setButton(AlertDialog.BUTTON_POSITIVE, "确定", (dialog1, which) ->
 		{
+			this.finish();
 			System.exit(0);
 		});
 		dialog.show();

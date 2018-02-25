@@ -20,10 +20,7 @@ import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LeftPanelBusiness;
 import com.jeramtough.niyouji.business.LeftPanelService;
-import com.jeramtough.niyouji.controller.activity.AboutAppActivity;
-import com.jeramtough.niyouji.controller.activity.AppBaseActivity;
-import com.jeramtough.niyouji.controller.activity.LoginActivity;
-import com.jeramtough.niyouji.controller.activity.UserActivity;
+import com.jeramtough.niyouji.controller.activity.*;
 
 /**
  * @author 11718
@@ -120,6 +117,10 @@ public class LeftPanelHandler extends JtIocHandler
 		else if (id == R.id.nav_clear_caches)
 		{
 			leftPanelBusiness.clearTravelnoteCaches(getContext(), this);
+		}
+		else if (id == R.id.nav_help)
+		{
+			IntentUtil.toTheOtherActivity(this.getActivity(), Test1Activity.class);
 		}
 		else if (id == R.id.nav_about_app)
 		{

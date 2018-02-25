@@ -2,6 +2,7 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ioc.annotation.InjectView;
@@ -41,7 +42,19 @@ public class Test1Activity extends AppBaseActivity
 		setContentView(R.layout.activity_test1);
 		getIocContainer().injectView(this, this);
 		
-		videoCacheServer.toCacheUrl("");
+		String cacheUrl = videoCacheServer.toCacheUrl(
+				"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_2_25816732.mp4");
+		videoView.setVideoPath(cacheUrl);
+		videoView.setRepeated(true);
+		videoView.start();
+		
+		videoView.postDelayed(()->{
+			P.arrive();
+			Toast.makeText(this,"a",Toast.LENGTH_SHORT).show();
+			videoView.stopPlayback();
+			videoView.setVideoPath(cacheUrl);
+			videoView.start();
+		},8000);
 	}
 	
 }
