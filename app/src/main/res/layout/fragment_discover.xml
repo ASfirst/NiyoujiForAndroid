@@ -48,13 +48,16 @@
                     android:layout_marginTop="5dp"/>
         </LinearLayout>
 
-        <TextView
-                android:id="@+id/textView_no_more_travelnote"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="暂时没有更多了~"/>
+
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/textView_no_more_travelnote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="暂时没有更多了~"
+            android:layout_gravity="bottom"/>
 
     <com.jeramtough.jtandroid.ui.TimedCloseTextView
             android:id="@+id/timedCloseTextView"
