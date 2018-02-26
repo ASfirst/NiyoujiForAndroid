@@ -173,4 +173,11 @@
                 android:layout_gravity="center"/>
 
     </LinearLayout>
+
+    <com.jeramtough.jtandroid.ui.TimedCloseTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/timedCloseTextView"/>
+
 </FrameLayout>

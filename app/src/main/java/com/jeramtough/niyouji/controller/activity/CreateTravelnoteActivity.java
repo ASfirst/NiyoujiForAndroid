@@ -16,6 +16,7 @@ import android.widget.*;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtVideoView;
+import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.BitmapUtil;
 import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
@@ -49,6 +50,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	private TextView textViewCreateTravelnoteInfo;
 	private TextView textViewIsShowedLocation;
 	private CheckBox checkBoxIsShowedLocation;
+	private TimedCloseTextView timedCloseTextView;
 	
 	private String coverPath;
 	private String title;
@@ -74,6 +76,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 		textViewCreateTravelnoteInfo = findViewById(R.id.textView_create_travelnote_info);
 		textViewIsShowedLocation = findViewById(R.id.textView_is_showed_location);
 		checkBoxIsShowedLocation = findViewById(R.id.checkBox_is_showed_location);
+		timedCloseTextView = findViewById(R.id.timedCloseTextView);
 		
 		imageViewTravelnoteCover.setClickable(false);
 		layoutWaitingCreateTravelnote.setVisibility(View.INVISIBLE);
@@ -183,17 +186,27 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 			
 			if (coverPath != null)
 			{
-				recycleTheCoverResource();
-				
-				Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
-				imageViewTravelnoteCover.setImageBitmap(bitmap);
-				imageViewTravelnoteCover.setVisibility(View.VISIBLE);
-				
-				textViewTjyjfm.setVisibility(View.INVISIBLE);
-				imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
-				imageViewTravelnoteCover.setClickable(true);
-				
-				coverType = COVER_TYPE_PHOTO;
+				Bundle bundle = createTravelnoteBusiness.checkCustomCoverImage(coverPath);
+				if (bundle.getBoolean("isPassed"))
+				{
+					recycleTheCoverResource();
+					
+					Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
+					imageViewTravelnoteCover.setImageBitmap(bitmap);
+					imageViewTravelnoteCover.setVisibility(View.VISIBLE);
+					
+					textViewTjyjfm.setVisibility(View.INVISIBLE);
+					imageViewAddTravelnoteCover.setVisibility(View.INVISIBLE);
+					imageViewTravelnoteCover.setClickable(true);
+					
+					coverType = COVER_TYPE_PHOTO;
+				}
+				else
+				{
+					String message = bundle.getString("message");
+					timedCloseTextView.setErrorMessage(message);
+					timedCloseTextView.closeDelayed(3000);
+				}
 			}
 		}
 	}

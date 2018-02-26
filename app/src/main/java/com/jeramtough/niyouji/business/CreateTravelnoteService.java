@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.business;
 
 import android.location.Location;
+import android.os.Bundle;
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
@@ -8,6 +9,7 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.LocationHolder;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.jtutil.DateTimeUtil;
 import com.jeramtough.niyouji.bean.locaiton.TencentLocationServiceResponse;
 import com.jeramtough.niyouji.bean.socketmessage.SocketMessage;
@@ -24,6 +26,7 @@ import com.jeramtough.niyouji.component.travelnote.TravelnoteResourceTypes;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientListener;
 import com.jeramtough.niyouji.component.websocket.WebSocketClientProxy;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -195,5 +198,31 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 				e.printStackTrace();
 			}
 		});
+	}
+	
+	@Override
+	public Bundle checkCustomCoverImage(String imagePath)
+	{
+		Bundle bundle=new Bundle();
+		String fileSuffix =
+				imagePath.substring(imagePath.length() - 3);
+		if (!"jpg".equals(fileSuffix))
+		{
+			bundle.putString("message","暂时只支持jpg格式图片，请检查您选择的图片格式！");
+			bundle.putBoolean("isPassed",false);
+			return bundle;
+		}
+		
+		File file=new File(imagePath);
+		long maxLeng=1024*500;
+		if (file.length()>maxLeng)
+		{
+			bundle.putString("message","图片大小不能超过512kb，请检查您选择的图片大小！");
+			bundle.putBoolean("isPassed",false);
+			return bundle;
+		}
+		
+		bundle.putBoolean("isPassed",true);
+		return bundle;
 	}
 }
