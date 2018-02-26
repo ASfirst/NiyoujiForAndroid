@@ -96,4 +96,15 @@ public class AppUser
 		editor.putBoolean("isFirstBoot", isFirstBoot);
 		editor.commit();
 	}
+	
+	public boolean isPerformingJustNow()
+	{
+		return sharedPreferences.getBoolean("isPerformingJustNow", false);
+	}
+	
+	public void setPerformingJustNow(boolean isPerformingJustNow)
+	{
+		editor.putBoolean("isPerformingJustNow", isPerformingJustNow);
+		editor.commit();
+	}
 }

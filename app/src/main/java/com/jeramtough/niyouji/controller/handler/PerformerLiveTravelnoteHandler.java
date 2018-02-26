@@ -144,6 +144,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	public void onStop()
 	{
 		performingBusiness.saveCurrentPageCount(getContext(), liveTravelnotePageViews.size());
+		performingBusiness.saveUserIsPerformingState();
 	}
 	
 	@Override
@@ -154,7 +155,6 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 		if (pageCountBefore > liveTravelnotePageViews.size())
 		{
 			Toast.makeText(getContext(), "直播以失效，请重新开始！", Toast.LENGTH_SHORT).show();
-			P.arrive();
 			getActivity().finish();
 		}
 	}

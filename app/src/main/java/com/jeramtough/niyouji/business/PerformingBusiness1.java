@@ -39,4 +39,6 @@ public interface PerformingBusiness1
 	void whenPerformerLeave(BusinessCaller businessCaller);
 	
 	void performerReback(BusinessCaller businessCaller);
+	
+	boolean userIsPerformingJustNow();
 }

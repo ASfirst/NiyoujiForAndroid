@@ -131,6 +131,12 @@ public class PerformingService implements PerformingBusiness
 		return pageCounter.getPageCount();
 	}
 	
+	@Override
+	public void saveUserIsPerformingState()
+	{
+		appUser.setPerformingJustNow(true);
+	}
+	
 	
 	//*******************************
 	private boolean checkTheNetwork(Context context, BusinessCaller businessCaller)

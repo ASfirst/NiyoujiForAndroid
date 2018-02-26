@@ -27,4 +27,9 @@ public interface PerformingBusiness
 	void saveCurrentPageCount(Context context, int count);
 	
 	int getPageCountBefore(Context context);
+	
+	/**
+	 * 当应用切换到后台时，保存主播正在直播状态
+	 */
+	void saveUserIsPerformingState();
 }

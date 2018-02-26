@@ -7,6 +7,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
@@ -58,11 +59,6 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 		//取消注释这行代码则会有ping按钮
 		buttonPing.setVisibility(View.GONE);
 		
-		performerLiveTravelnoteHandler = new PerformerLiveTravelnoteHandler(this);
-		travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
-		
-		performerLiveTravelnoteHandler.setLiveTravelnoteEventsCaller(this);
-		
 		buttonPing.setOnClickListener(this);
 		
 		initResources();
@@ -70,8 +66,22 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	
 	protected void initResources()
 	{
-		performingBusiness1.whenPerformerLeave(
-				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_WHEN_PERFORMER_LEAVE));
+		
+		if (!performingBusiness1.userIsPerformingJustNow())
+		{
+			performerLiveTravelnoteHandler = new PerformerLiveTravelnoteHandler(this);
+			travelnoteWithAudiencesHandler = new TravelnoteWithAudiencesHandler(this);
+			
+			performerLiveTravelnoteHandler.setLiveTravelnoteEventsCaller(this);
+			
+			performingBusiness1.whenPerformerLeave(new BusinessCaller(getActivityHandler(),
+					BUSINESS_CODE_WHEN_PERFORMER_LEAVE));
+		}
+		else
+		{
+			Toast.makeText(this, "资源已被回收,直播以失效！", Toast.LENGTH_SHORT).show();
+			this.finish();
+		}
 	}
 	
 	@Override
@@ -97,21 +107,30 @@ public class PerformingActivity extends AppBaseActivity implements LiveTravelnot
 	protected void onResume()
 	{
 		super.onResume();
-		performerLiveTravelnoteHandler.onResume();
+		if (performerLiveTravelnoteHandler != null)
+		{
+			performerLiveTravelnoteHandler.onResume();
+		}
 	}
 	
 	@Override
 	protected void onStop()
 	{
 		super.onStop();
-		performerLiveTravelnoteHandler.onStop();
+		if (performerLiveTravelnoteHandler != null)
+		{
+			performerLiveTravelnoteHandler.onStop();
+		}
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		performerLiveTravelnoteHandler.onDestroy();
+		if (performerLiveTravelnoteHandler != null)
+		{
+			performerLiveTravelnoteHandler.onDestroy();
+		}
 	}
 	
 	@Override

@@ -428,4 +428,10 @@ public class PerformingService1 implements PerformingBusiness1
 		});
 	}
 	
+	@Override
+	public boolean userIsPerformingJustNow()
+	{
+		return appUser.isPerformingJustNow();
+	}
+	
 }
