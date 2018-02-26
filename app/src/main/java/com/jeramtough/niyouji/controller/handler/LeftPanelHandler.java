@@ -120,7 +120,7 @@ public class LeftPanelHandler extends JtIocHandler
 		}
 		else if (id == R.id.nav_help)
 		{
-			IntentUtil.toTheOtherActivity(this.getActivity(), Test1Activity.class);
+			IntentUtil.toTheOtherActivity(this.getActivity(), HelpActivity.class);
 		}
 		else if (id == R.id.nav_about_app)
 		{

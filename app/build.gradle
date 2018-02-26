@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.jeramtough.niyouji"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,8 @@ android {
     sourceSets.main {
         jni.srcDirs = []
         jniLibs.srcDir "jniLibs"
+    }
+    productFlavors {
     }
 }
 
@@ -83,7 +85,6 @@ dependencies {
     implementation project(':pullrefreshing')
     implementation project(':heartlayout')
     implementation project(':jtemoji')
-
     //java开源jar
     implementation 'com.google.code.findbugs:jsr305:3.0.0'
     implementation 'pub.devrel:easypermissions:0.2.1'
@@ -93,13 +94,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'commons-io:commons-io:2.6'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.4.5'
-    implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.44'
-//    implementation "org.java-websocket:Java-WebSocket:1.3.7"
+    implementation 'com.alibaba:fastjson:1.2.44'
+    //    implementation "org.java-websocket:Java-WebSocket:1.3.7"
     implementation 'com.koushikdutta.async:androidasync:2.2.1'
-
     //阿里云短视频SDK
     implementation(name: 'AliyunSdk-RC', ext: 'aar')
-
     //第三方控件
     //卫星菜单
     implementation 'com.nightonke:boommenu:2.1.1'
@@ -108,5 +107,4 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     //视频缓存
     implementation 'com.danikula:videocache:2.7.0'
-
 }
