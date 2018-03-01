@@ -217,8 +217,19 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				{
 					Toast.makeText(this, "发表成功~", Toast.LENGTH_SHORT).show();
 					
-					int appraisesCount =
-							Integer.parseInt(textViewAppraiseCount.getText().toString()) + 1;
+					int appraisesCount = 0;
+					if (textViewAppraiseCount.getVisibility()==View.VISIBLE)
+					{
+						appraisesCount =
+								Integer.parseInt(textViewAppraiseCount.getText().toString()) +
+										1;
+					}
+					else
+					{
+						appraisesCount++;
+						textViewAppraiseCount.setVisibility(View.VISIBLE);
+					}
+					
 					textViewAppraiseCount.setText(appraisesCount + "");
 					
 					Appraise appraise =

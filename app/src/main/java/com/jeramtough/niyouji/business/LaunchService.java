@@ -2,6 +2,8 @@ package com.jeramtough.niyouji.business;
 
 import android.Manifest;
 import android.app.Activity;
+import com.aliyun.common.httpfinal.QupaiHttpFinal;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.PermissionManager;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtService;
@@ -103,6 +105,32 @@ public class LaunchService implements LaunchBusiness
 			unZipFile(activity, pwThemesDirectory, pwthemesFileName);
 		}
 		
+	}
+	
+	@Override
+	public void initAppdate(BusinessCaller businessCaller)
+	{
+		//初始化阿里短视频SDK库
+		QupaiHttpFinal.getInstance().initOkHttpFinal();
+		System.loadLibrary("QuCore-ThirdParty");
+		System.loadLibrary("QuCore");
+		
+		new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(1000);
+					businessCaller.callBusiness();
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}.start();
 	}
 	
 	//***************************

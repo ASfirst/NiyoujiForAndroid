@@ -104,9 +104,9 @@ public abstract class AliCameraActivity extends AppBaseActivity
 	protected void initAliRecorder()
 	{
 		//初始化阿里短视频SDK库
-		QupaiHttpFinal.getInstance().initOkHttpFinal();
+		/*QupaiHttpFinal.getInstance().initOkHttpFinal();
 		System.loadLibrary("QuCore-ThirdParty");
-		System.loadLibrary("QuCore");
+		System.loadLibrary("QuCore");*/
 		
 		AliyunIRecorder aliRecorder = AliyunRecorderCreator.getRecorderInstance(this);
 		aliRecorder.setDisplayView(glSurfaceViewCamera);

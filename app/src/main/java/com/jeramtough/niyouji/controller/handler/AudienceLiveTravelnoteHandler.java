@@ -658,12 +658,11 @@ public class AudienceLiveTravelnoteHandler extends JtIocHandler
 	private void pageSetVideo(PageSetVideoCommand pageSetVideoCommand)
 	{
 		timedCloseTextViewShowMessage.invisible();
-		
 		if (debugDownloadMode)
 		{
 			//暂时先设置静态视频
 			pageSetVideoCommand.setVideoUrl(
-					"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_1_251934020.mp4");
+					"http://niyouji.oss-cn-shenzhen.aliyuncs.com/videos/vdo_2_224281219.mp4");
 		}
 		
 		liveTravelnotePageViews.get(pageSetVideoCommand.getPosition())

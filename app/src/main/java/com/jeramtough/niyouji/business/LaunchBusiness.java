@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.business;
 
 import android.app.Activity;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 
 /**
  * @author 11718
@@ -34,4 +35,9 @@ public interface LaunchBusiness
 	 * @param activity 请求权限的activity实例
 	 */
 	void createAppDirectory(Activity activity);
+	
+	/**
+	 * 初始化app需要的数据
+	 */
+	void initAppdate(BusinessCaller businessCaller);
 }

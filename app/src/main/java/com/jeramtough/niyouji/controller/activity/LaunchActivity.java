@@ -2,16 +2,19 @@ package com.jeramtough.niyouji.controller.activity;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.BaseAdapter;
 import com.aliyun.common.httpfinal.QupaiHttpFinal;
+import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;
+import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LaunchBusiness;
 import com.jeramtough.niyouji.business.LaunchService;
@@ -23,6 +26,8 @@ import com.jeramtough.niyouji.component.adapter.BragAdapter;
 public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToAppIndexCaller
 {
 	private final int REQUEST_NEEDED_PERMISSIONS_CALLER_CODE = 0;
+	
+	private final int BUSINESS_CODE_INIT_APP_DATE = 1;
 	
 	private ViewPager viewPageBrag;
 	private TimedCloseTextView timedCloseTextView;
@@ -87,12 +92,24 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 	}
 	
 	@Override
+	public void handleActivityMessage(Message message)
+	{
+		switch (message.what)
+		{
+			case BUSINESS_CODE_INIT_APP_DATE:
+				this.finish();
+				break;
+		}
+	}
+	
+	@Override
 	public void goToIndex()
 	{
 		launchBusiness.hasBootFinally();
 		
-		if (launchBusiness
-				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE))
+		boolean isHasAllPermissions = launchBusiness
+				.requestNeededPermission(this, REQUEST_NEEDED_PERMISSIONS_CALLER_CODE);
+		if (isHasAllPermissions)
 		{
 			this.whenGetAllNeededPermissions();
 		}
@@ -107,7 +124,9 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 		timedCloseTextView.visible();
 		
 		launchBusiness.createAppDirectory(this);
-		this.finish();
+		launchBusiness.initAppdate(
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_INIT_APP_DATE));
+		
 	}
 	
 	//*************************************************
