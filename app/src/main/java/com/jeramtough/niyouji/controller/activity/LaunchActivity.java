@@ -7,14 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.BaseAdapter;
-import com.aliyun.common.httpfinal.QupaiHttpFinal;
 import com.jeramtough.jtandroid.business.BusinessCaller;
-import com.jeramtough.jtandroid.controller.activity.JtIocActivity;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtandroid.util.IntentUtil;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.LaunchBusiness;
 import com.jeramtough.niyouji.business.LaunchService;
@@ -124,7 +120,7 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 		timedCloseTextView.visible();
 		
 		launchBusiness.createAppDirectory(this);
-		launchBusiness.initAppdate(
+		launchBusiness.initAppData(
 				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_INIT_APP_DATE));
 		
 	}

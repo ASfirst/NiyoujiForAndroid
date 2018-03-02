@@ -108,7 +108,7 @@ public class LaunchService implements LaunchBusiness
 	}
 	
 	@Override
-	public void initAppdate(BusinessCaller businessCaller)
+	public void initAppData(BusinessCaller businessCaller)
 	{
 		//初始化阿里短视频SDK库
 		QupaiHttpFinal.getInstance().initOkHttpFinal();

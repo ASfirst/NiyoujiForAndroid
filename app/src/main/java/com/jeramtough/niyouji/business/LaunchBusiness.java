@@ -39,5 +39,5 @@ public interface LaunchBusiness
 	/**
 	 * 初始化app需要的数据
 	 */
-	void initAppdate(BusinessCaller businessCaller);
+	void initAppData(BusinessCaller businessCaller);
 }
