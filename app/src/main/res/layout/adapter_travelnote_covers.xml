@@ -39,10 +39,10 @@
 
 
             <com.jeramtough.jtandroid.ui.RoundImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/surface_image"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="2dp"/>
 
             <TextView
@@ -59,8 +59,8 @@
                     android:layout_weight="1"/>
 
             <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_favorite_red"/>
 
