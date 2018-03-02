@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.controller.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.CreateTravelnoteBusiness;
 import com.jeramtough.niyouji.business.CreateTravelnoteService;
+import com.jeramtough.niyouji.controller.dialog.IntroduceEnterRoomDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrAlbumDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectTakephotoOrVideoDialog;
 
@@ -121,25 +123,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 					break;
 				}
 				
-				layoutWaitingCreateTravelnote.setVisibility(View.VISIBLE);
-				
-				BusinessCaller createBusinessCaller = new BusinessCaller(getActivityHandler(),
-						BUSINESS_CODE_CREATE_TRAVELNOTE);
-				BusinessCaller connectBusinessCaller =
-						new BusinessCaller(getActivityHandler(), BUSINESS_CODE_CONNECT_SERVER);
-				BusinessCaller uploadBusinessCaller = new BusinessCaller(getActivityHandler(),
-						BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
-				
-				BusinessCaller obtainLocationBusinessCaller =
-						new BusinessCaller(getActivityHandler(),
-								BUSINESS_CODE_OBTAIN_LOCATION);
-				obtainLocationBusinessCaller.getData()
-						.putBoolean("isShowedLocation", checkBoxIsShowedLocation.isChecked());
-				
-				createTravelnoteBusiness
-						.createTravelnote(title, coverPath, createBusinessCaller,
-								connectBusinessCaller, uploadBusinessCaller,
-								obtainLocationBusinessCaller);
+				startCreatingPerformerRoom();
 				break;
 			
 			case R.id.textView_is_showed_location:
@@ -249,9 +233,7 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 				textViewCreateTravelnoteInfo.setText("开始您的游记直播！！！");
 				layoutWaitingCreateTravelnote.postDelayed(() ->
 				{
-					IntentUtil.toTheOtherActivity(CreateTravelnoteActivity.this,
-							PerformingActivity.class);
-					CreateTravelnoteActivity.this.finish();
+					enterRoomOrIntroduceDialog();
 				}, 500);
 				break;
 			case BUSINESS_CODE_OBTAIN_LOCATION:
@@ -276,6 +258,54 @@ public class CreateTravelnoteActivity extends AppBaseActivity implements View.On
 	}
 	
 	//************************************
+	
+	private void startCreatingPerformerRoom()
+	{
+		BusinessCaller createBusinessCaller =
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_CREATE_TRAVELNOTE);
+		BusinessCaller connectBusinessCaller =
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_CONNECT_SERVER);
+		BusinessCaller uploadBusinessCaller =
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_UPLOAD_COVER_RESOURCE);
+		
+		BusinessCaller obtainLocationBusinessCaller =
+				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_OBTAIN_LOCATION);
+		obtainLocationBusinessCaller.getData()
+				.putBoolean("isShowedLocation", checkBoxIsShowedLocation.isChecked());
+		
+		
+		layoutWaitingCreateTravelnote.setVisibility(View.VISIBLE);
+		
+		
+		createTravelnoteBusiness.createTravelnote(title, coverPath, createBusinessCaller,
+				connectBusinessCaller, uploadBusinessCaller, obtainLocationBusinessCaller);
+	}
+	
+	private void enterRoomOrIntroduceDialog()
+	{
+		IntroduceEnterRoomDialog introduceEnterRoomDialog =
+				new IntroduceEnterRoomDialog(this, coverPath,
+						editTravelnoteTitle.getText().toString(),
+						createTravelnoteBusiness.getUserNickname());
+		
+		if (introduceEnterRoomDialog.isDontRemind())
+		{
+			IntentUtil.toTheOtherActivity(CreateTravelnoteActivity.this,
+					PerformingActivity.class);
+			CreateTravelnoteActivity.this.finish();
+		}
+		else
+		{
+			introduceEnterRoomDialog.setOnUnderstandListener(() ->
+			{
+				IntentUtil.toTheOtherActivity(CreateTravelnoteActivity.this,
+						PerformingActivity.class);
+				CreateTravelnoteActivity.this.finish();
+			});
+			introduceEnterRoomDialog.show();
+		}
+	}
+	
 	private void recycleTheCoverResource()
 	{
 		if (coverType == COVER_TYPE_PHOTO)

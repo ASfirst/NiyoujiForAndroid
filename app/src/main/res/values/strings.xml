@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">你游记</string>
     <string name="about_app">关于App</string>
+    <string name="introduce_enter_room_key">is popped the introduce enter room dialog</string>
+    <string name="introduce_enter_room">记得告诉你的小伙伴\n围观你的游记直播哦</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

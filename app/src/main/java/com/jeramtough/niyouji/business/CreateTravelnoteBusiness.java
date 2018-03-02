@@ -15,4 +15,6 @@ public interface CreateTravelnoteBusiness
 			BusinessCaller uploadBusinessCaller,BusinessCaller obtainLocationBusinessCaller);
 	
 	Bundle checkCustomCoverImage(String imagePath);
+	
+	String getUserNickname();
 }

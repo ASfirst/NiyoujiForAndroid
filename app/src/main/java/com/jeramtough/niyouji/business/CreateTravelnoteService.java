@@ -225,4 +225,10 @@ public class CreateTravelnoteService implements CreateTravelnoteBusiness
 		bundle.putBoolean("isPassed",true);
 		return bundle;
 	}
+	
+	@Override
+	public String getUserNickname()
+	{
+		return appUser.getNickname();
+	}
 }
