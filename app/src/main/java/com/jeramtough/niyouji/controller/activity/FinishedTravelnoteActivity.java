@@ -1,6 +1,7 @@
 package com.jeramtough.niyouji.controller.activity;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.AppCompatImageButton;
@@ -42,6 +43,8 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 	private AppCompatImageView imageButtonFavorite;
 	private TextView textViewDone;
 	private AppCompatImageView imageButtonPayLove;
+	private LinearLayout layoutLoading;
+	private TextView textViewLoading;
 	
 	private FinishedTravelnoteCover finishedTravelnoteCover;
 	
@@ -67,6 +70,8 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 		imageButtonFavorite = findViewById(R.id.imageButton_favorite);
 		textViewDone = findViewById(R.id.textView_done);
 		imageButtonPayLove = findViewById(R.id.imageButton_pay_love);
+		layoutLoading = findViewById(R.id.layout_loading);
+		textViewLoading = findViewById(R.id.textView_loading);
 		
 		textViewDone.setVisibility(View.GONE);
 		
@@ -90,7 +95,18 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 			@Override
 			public void onProgressChanged(WebView webView, int progress)
 			{
-			
+				if (progress == 100)
+				{
+					textViewLoading.postDelayed(() ->
+					{
+						layoutLoading.setVisibility(View.GONE);
+					}, 1000);
+				}
+				else
+				{
+					textViewLoading.setText(progress + "%\n加载中。。。");
+				}
+				
 			}
 		});
 		
