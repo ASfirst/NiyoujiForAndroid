@@ -38,6 +38,7 @@ import com.jeramtough.niyouji.component.ui.UploadTestView;
 import com.jeramtough.niyouji.controller.activity.PerformingActivity;
 import com.jeramtough.niyouji.controller.activity.TakePhotoActivity;
 import com.jeramtough.niyouji.controller.activity.VideoActivity;
+import com.jeramtough.niyouji.controller.dialog.MyTutorialDialog;
 import com.jeramtough.niyouji.controller.dialog.SelectMusicDialog;
 
 import java.util.ArrayList;
@@ -802,7 +803,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	{
 		if (!performingBusiness.hasFinishedTutorial())
 		{
-			TutorialDialog dialog = new TutorialDialog(getContext());
+			MyTutorialDialog dialog = new MyTutorialDialog(getContext());
 			dialog.getImageView().setBackgroundResource(R.drawable.tutorial);
 			dialog.show();
 		}
@@ -812,7 +813,7 @@ public class PerformerLiveTravelnoteHandler extends JtIocHandler
 	{
 		if (!performingBusiness.hasFinishedTutorial())
 		{
-			TutorialDialog dialog = new TutorialDialog(getContext());
+			MyTutorialDialog dialog = new MyTutorialDialog(getContext());
 			
 			dialog.setOnUnderstandListener(() ->
 			{

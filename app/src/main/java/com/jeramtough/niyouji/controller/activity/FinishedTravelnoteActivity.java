@@ -20,6 +20,8 @@ import com.jeramtough.niyouji.business.FinishedTravelnoteBusiness;
 import com.jeramtough.niyouji.business.FinishedTravelnoteService;
 import com.jeramtough.niyouji.component.ui.NiyoujiWebView;
 import com.jeramtough.niyouji.controller.dialog.GoToLoginDialog;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
 
 /**
  * @author 11718
@@ -82,6 +84,16 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 	
 	protected void initResources()
 	{
+		//设置html加载监听
+		niyoujiWebView.setWebChromeClient(new WebChromeClient()
+		{
+			@Override
+			public void onProgressChanged(WebView webView, int progress)
+			{
+			
+			}
+		});
+		
 		finishedTravelnoteCover = (FinishedTravelnoteCover) getIntent()
 				.getSerializableExtra("finishedTravelnoteCover");
 		if (finishedTravelnoteCover.getAppraiseCount() > 0)
@@ -218,7 +230,7 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 					Toast.makeText(this, "发表成功~", Toast.LENGTH_SHORT).show();
 					
 					int appraisesCount = 0;
-					if (textViewAppraiseCount.getVisibility()==View.VISIBLE)
+					if (textViewAppraiseCount.getVisibility() == View.VISIBLE)
 					{
 						appraisesCount =
 								Integer.parseInt(textViewAppraiseCount.getText().toString()) +

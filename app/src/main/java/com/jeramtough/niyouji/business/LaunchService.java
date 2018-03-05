@@ -110,11 +110,6 @@ public class LaunchService implements LaunchBusiness
 	@Override
 	public void initAppData(BusinessCaller businessCaller)
 	{
-		//初始化阿里短视频SDK库
-		QupaiHttpFinal.getInstance().initOkHttpFinal();
-		System.loadLibrary("QuCore-ThirdParty");
-		System.loadLibrary("QuCore");
-		
 		new Thread()
 		{
 			@Override

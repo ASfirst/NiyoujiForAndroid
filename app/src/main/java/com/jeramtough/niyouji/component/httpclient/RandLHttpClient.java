@@ -22,7 +22,7 @@ public class RandLHttpClient implements WithLogger
 	private OkHttpClient client;
 	private String sessionId;
 	private final String baseUrl = "http://"+ AppConfig.RANDL_SERVER_HOST+"/randl/";
-	private final boolean debugSendVerificationCodeMode=true;
+	private final boolean debugSendVerificationCodeMode=false;
 	
 	@IocAutowire
 	public RandLHttpClient()

@@ -20,6 +20,7 @@ import com.jeramtough.niyouji.R;
 import com.jeramtough.niyouji.business.MainBusiness;
 import com.jeramtough.niyouji.business.MainService;
 import com.jeramtough.niyouji.controller.dialog.GoToLoginDialog;
+import com.jeramtough.niyouji.controller.dialog.MyTutorialDialog;
 import com.jeramtough.niyouji.controller.handler.LeftPanelHandler;
 import com.jeramtough.niyouji.controller.handler.MainNavigation;
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppBaseActivity
 		else
 		{
 			dblclickExit.clickExit();
-//			super.onBackPressed();
+			//			super.onBackPressed();
 		}
 	}
 	
@@ -104,7 +105,7 @@ public class MainActivity extends AppBaseActivity
 				}
 				else
 				{
-					GoToLoginDialog goToLoginDialog=new GoToLoginDialog(this);
+					GoToLoginDialog goToLoginDialog = new GoToLoginDialog(this);
 					goToLoginDialog.show();
 					
 				}

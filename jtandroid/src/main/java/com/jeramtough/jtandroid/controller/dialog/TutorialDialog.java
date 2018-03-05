@@ -27,7 +27,6 @@ public class TutorialDialog extends JtIocDialog implements View.OnClickListener
 	public TutorialDialog(@NonNull Context context)
 	{
 		this(context, R.style.NoBackGroundDialog);
-		
 	}
 	
 	public TutorialDialog(@NonNull Context context, int themeResId)
@@ -96,6 +95,11 @@ public class TutorialDialog extends JtIocDialog implements View.OnClickListener
 	public ImageView getImageView()
 	{
 		return imageView;
+	}
+	
+	public Button getUnderstandButton()
+	{
+		return understandButton;
 	}
 	
 	public void setOnUnderstandListener(OnUnderstandListener onUnderstandListener)

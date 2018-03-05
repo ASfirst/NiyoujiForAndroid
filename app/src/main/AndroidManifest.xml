@@ -136,7 +136,7 @@
                 android:name=".controller.activity.AboutAppActivity"
                 android:label="@string/about_app"
                 android:theme="@style/AppTheme.NoActionBar"
-                >
+               >
         </activity>
         <activity
                 android:name=".controller.activity.HelpActivity"
