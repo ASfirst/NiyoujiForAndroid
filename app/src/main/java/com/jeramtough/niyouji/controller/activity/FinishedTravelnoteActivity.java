@@ -169,8 +169,8 @@ public class FinishedTravelnoteActivity extends AppBaseActivity
 				break;
 			case R.id.imageButton_favorite:
 				//刷新，到时会删掉
-				//				niyoujiWebView.clearCache(true);
-				niyoujiWebView.reload();
+				//niyoujiWebView.clearCache(true);
+				//niyoujiWebView.reload();
 				
 				if (isFavorite)
 				{

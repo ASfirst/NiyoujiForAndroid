@@ -24,6 +24,7 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 	private final int REQUEST_NEEDED_PERMISSIONS_CALLER_CODE = 0;
 	
 	private final int BUSINESS_CODE_INIT_APP_DATE = 1;
+	private final int BUSINESS_CODE_CREATE_DIRECTORY = 2;
 	
 	private ViewPager viewPageBrag;
 	private TimedCloseTextView timedCloseTextView;
@@ -93,6 +94,12 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 		switch (message.what)
 		{
 			case BUSINESS_CODE_INIT_APP_DATE:
+				launchBusiness.createAppDirectory(new BusinessCaller(getActivityHandler(),
+						BUSINESS_CODE_CREATE_DIRECTORY), this);
+				break;
+			
+			case BUSINESS_CODE_CREATE_DIRECTORY:
+				IntentUtil.toTheOtherActivity(this, MainActivity.class);
 				this.finish();
 				break;
 		}
@@ -114,15 +121,11 @@ public class LaunchActivity extends AppBaseActivity implements BragAdapter.GoToA
 	//-----------------------------------------------------
 	protected void whenGetAllNeededPermissions()
 	{
-		IntentUtil.toTheOtherActivity(this, MainActivity.class);
-		
 		timedCloseTextView.setPrimaryMessage("正在初始化资源中。。。");
 		timedCloseTextView.visible();
 		
-		launchBusiness.createAppDirectory(this);
 		launchBusiness.initAppData(
 				new BusinessCaller(getActivityHandler(), BUSINESS_CODE_INIT_APP_DATE));
-		
 	}
 	
 	//*************************************************

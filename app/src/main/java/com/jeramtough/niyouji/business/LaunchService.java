@@ -68,7 +68,7 @@ public class LaunchService implements LaunchBusiness
 	}
 	
 	@Override
-	public void createAppDirectory(Activity activity)
+	public void createAppDirectory(BusinessCaller businessCaller, Activity activity)
 	{
 		Directory appDirectory = new Directory(AppConfig.getAppDirectory(activity));
 		
@@ -105,27 +105,15 @@ public class LaunchService implements LaunchBusiness
 			unZipFile(activity, pwThemesDirectory, pwthemesFileName);
 		}
 		
+		businessCaller.setSuccessful(true);
+		businessCaller.callBusiness();
 	}
 	
 	@Override
 	public void initAppData(BusinessCaller businessCaller)
 	{
-		new Thread()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					Thread.sleep(1000);
-					businessCaller.callBusiness();
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}.start();
+		businessCaller.setSuccessful(true);
+		businessCaller.callBusiness();
 	}
 	
 	//***************************

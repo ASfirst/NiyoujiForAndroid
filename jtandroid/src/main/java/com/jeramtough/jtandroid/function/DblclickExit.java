@@ -38,8 +38,6 @@ public class DblclickExit
 		{
 			long intervalTime = System.currentTimeMillis() - firstClickTime;
 			
-			System.out.println("arrive " + intervalTime);
-			
 			if (intervalTime <= minIntervalTime)
 			{
 				try

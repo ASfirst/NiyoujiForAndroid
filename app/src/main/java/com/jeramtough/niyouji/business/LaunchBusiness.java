@@ -12,6 +12,7 @@ public interface LaunchBusiness
 {
 	/**
 	 * 是否启动过app并看过介绍。
+	 *
 	 * @return true if no boot.
 	 */
 	boolean isFirstBoot();
@@ -32,9 +33,9 @@ public interface LaunchBusiness
 	
 	
 	/**
-	 * @param activity 请求权限的activity实例
+	 * 创建app所需要的资源目录
 	 */
-	void createAppDirectory(Activity activity);
+	void createAppDirectory(BusinessCaller businessCaller, Activity activity);
 	
 	/**
 	 * 初始化app需要的数据
