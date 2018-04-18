@@ -39,6 +39,7 @@ public abstract class JtBaseActivity extends AppCompatActivity implements View.O
 	{
 	}
 	
+	
 	public Handler getActivityHandler()
 	{
 		return activityHandler;
